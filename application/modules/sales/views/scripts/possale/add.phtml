@@ -2,6 +2,7 @@
 	$url_new = $this->url(array('module'=>'sales','controller'=>'index','action'=>'add',));
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$base_url = $this->baseUrl();
+	$url_back = $this->url(array('module'=>'sales','controller'=>'index','action'=>'index',));
 ?>
 <style>
 table.calculate td,table.calculate th{padding:0px 3px !important; line-height: 20px; }
@@ -45,30 +46,23 @@ white-space: nowrap;font-size: 14px;line-height:33px;}
 	                                            <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
 	                                        </div>
 	                                        <label class="control-label col-md-4" style="margin-top:10px;float:right">
-	                                          <label class="control-label col-md-7"><i class="fa fa-clock-o" aria-hidden="true"></i> កាលបរិច្ឆេទ : <?php echo date("d-M-Y");?></label>
-	                                          <label class="control-label col-md-5"><div id="time"></div></label>
+	                                          <lable class="col-md-13">
+												    <a href="<?php echo $url_back;?>" class="btn btn-bg blue  pull-right">
+														<i class="fa fa-back"></i>&nbsp;<?php echo $tr->translate("GO_BACK");?>
+													</a>
+												 </lable>
 	                                          </label>
 	                                    </div>
 	                                    <div class="portlet-body">
 	                                        <div class="table-responsive">
-	                                        	<label class="control-label col-md-8" style="margin-left: -4px;">
+	                                        	<label class="control-label col-md-12" style="margin-left: -4px;">
 				                                    <div style="background: #cccccc;padding: 10px;">
 											    		<input id="product_id" />
-										    		</div>
-								    			</label>
-								    			<label class="control-label col-md-4" style="background: #cccccc;">
-								    				<div style="padding: 10px;">
-										    			<select class="fullside" onchange="addTermcondition();" name="term_condition" id="term_condition" dojoType="dijit.form.FilteringSelect" onchange="addProductRow();">
-															<option value="-1">ជ្រើសរើសលក្ខខ័ណ្ឌ</option>
-															<?php if(!empty($this->term_opt)){ foreach($this->term_opt as $rs){?>
-																<option <?php echo $rs['id']?>><?php echo $rs['con_khmer']?></option>
-															<?php }}?>
-										    			</select>
-									    				<input type="hidden" name="identity" id="identity" />
+											    		<input type="hidden" name="identity" id="identity" />
 									    				<input type="hidden" name="identity_term" id="identity_term" />
 									    				<input type="hidden" name="branch_id" id="branch_id" value="1" />
 									    				<input type="hidden" name="invoice" id="invoice" value="<?php echo $this->invoice;?>" /> 
-								    				</div>
+										    		</div>
 								    			</label>
 		                                        <table id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
 													<thead>
@@ -91,18 +85,10 @@ white-space: nowrap;font-size: 14px;line-height:33px;}
 												</table><br />
 												 <div style="clear:both;"></div>
 												  <label class="control-label col-md-12" >
-												 <table id="table_rowterm" border="1px" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
-														<thead>
-															<tr id="head-title" class="table table-bordered" align="right" style="">
-																<th class="aligncenter">#</th>
-																<th class="aligncenter">លក្ខខណ្ឌ</th>
-																<th class="aligncenter">លុប</th>
-															</tr>
-														</thead>
-														<tr>
-															<td colspan="11" id="lbl_termcondition" align="center">មិនមានសម្គាល់ទេ!</td>
-														</tr>
-													</table>
+												  	Term Condition
+												  	<div style="border:1px solid #ccc;">
+														<textarea style="height: 120px;width:100%;" name="term_condition" id="term_condition" data-dojo-type="dijit/Editor"></textarea>
+													</div>
 												</label>
 	                                        </div>
 	                                    </div>
@@ -117,7 +103,6 @@ white-space: nowrap;font-size: 14px;line-height:33px;}
 	                                        <div class="caption">
 	                                            <i class="fa fa-cogs"></i>អតិថិជន/ការទូទាត់</div>
 	                                        <div class="tools">
-	                                        
 	                                        </div>
 	                                    </div>
 	                                    <label class="control-label col-md-12" style="background: #eee;">
@@ -127,8 +112,8 @@ white-space: nowrap;font-size: 14px;line-height:33px;}
 		                                    <label class="control-label col-md-6" style="background: #eee;">
 	                                    		<select class="fullside" name="agreement_no" id="agreement_no" dojoType="dijit.form.FilteringSelect" onchange="addProductRow();">
 													<option value="-1">ជ្រើសរើសលេខ កិច្ចសន្យា</option>
-													<?php if(!empty($this->term_opt)){ foreach($this->term_opt as $rs){?>
-														<option <?php echo $rs['id']?>><?php echo $rs['con_khmer']?></option>
+													<?php if(!empty($this->rs_agreement)){ foreach($this->rs_agreement as $rs){?>
+														<option <?php echo $rs['id']?>><?php echo $rs['agreement_no'].'-'.$rs['customer_name']?></option>
 													<?php }}?>
 								    			</select>
 		                                    </label>
@@ -141,9 +126,15 @@ white-space: nowrap;font-size: 14px;line-height:33px;}
 	                                            <table class="table table-bordered calculate" style="font-size:14px;">
 	                                                <tr>
 	                                                <thead>
+	                                                	 <tr>
+	                                                        <th style="white-space: nowrap;"><strong>ថ្ងៃលក់ចេញ</strong></th>
+	                                                        <th><input dojoType="dijit.form.DateTextBox" required="1" constraints="{datePattern:'dd/MM/yyyy'}"
+		                                                        class="full_width" value="<?php echo date("Y-m-d");?>" type="text" name="sale_date" id="sale_date" />
+	                                                        </th>
+	                                                    </tr>
 	                                                	<tr >
-	                                                	<th style="white-space: nowrap;background:#d84a38;color:#fff;">អាត្រាប្តូរប្រាក់ 1$= </th>
-	                                                    <th><input onkeyup="netTotal();" style="background:#d84a38;color:#fff" dojoType="dijit.form.NumberTextBox" class="full_width" value="<?php echo $this->rsrate;?>" type="text" name="exchange_rate" id="exchange_rate" /></th>
+		                                                	<th style="white-space: nowrap;background:#d84a38;color:#fff;">អាត្រាប្តូរប្រាក់ 1$= </th>
+		                                                    <th><input onkeyup="netTotal();" style="background:#d84a38;color:#fff" dojoType="dijit.form.NumberTextBox" class="full_width" value="<?php echo $this->rsrate;?>" type="text" name="exchange_rate" id="exchange_rate" /></th>
 	                                                    </tr>
 	                                                </thead>
 	                                                <tbody>
@@ -339,7 +330,7 @@ white-space: nowrap;font-size: 14px;line-height:33px;}
 						<tr >
 							<td>&nbsp;ថ្ងៃចេញ</td>
 							<td colspan="1"> :</td>
-							<td><div style="text-align:left;margin-top:-2px;font-size:10px; white-space: nowrap;"><?php echo date('D , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div></td>
+							<td></td>
 						</tr>
 						<tr>
 							<td>&nbsp;អ្នកលក់</td>
@@ -571,7 +562,8 @@ dojo.require("dijit.form.Form");
 dojo.require("dijit.Dialog");
 dojo.require("dojo.number");
 dojo.require("dojo.data.ItemFileWriteStore");  
-
+dojo.require("dijit.Editor");
+dojo.require("dijit.form.DateTextBox");
 
 
 var product_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->rsproduct));?> );
@@ -617,22 +609,8 @@ function checkTime(i) {
 	    i = "0" + i;
 	  }
 	  return i;
-	}
+}
 
-	function startTime() {
-	  var today = new Date();
-	  var h = today.getHours();
-	  var m = today.getMinutes();
-	  var s = today.getSeconds();
-	  // add a zero in front of numbers<10
-	  m = checkTime(m);
-	  s = checkTime(s);
-	  document.getElementById('time').innerHTML ="ម៉ោង : "+ h + ":" + m + ":" + s;
-	  t = setTimeout(function() {
-	    startTime()
-	  }, 500);
-	}
-	startTime();
 function showReceipt(){
 	if(dijit.byId('office_receipt').validate()){
 	balance = dijit.byId("balance").get("value");
@@ -811,43 +789,11 @@ function deleteRecord(index) {
 	dojo.query("#row"+index).forEach(dojo.destroy);
 	netTotal();
 }
-function deleteTermRecord(index) {	
-	var identity = $('#identity_term').val();
-	var arrays = identity.split(',');
-	for(var i=0;i<arrays.length;i++) {
-		if(arrays[i] == index) arrays.splice(i,1);
-	}
-	var strings = arrays.join(',');
-	$('#identity_term').val(strings);
-	dojo.query("#rowterm"+index).forEach(dojo.destroy);
-}
+
 term = 0;
 templateterm='';
 tmpterm = '';
-function addTermcondition(){
-	term_condition = dijit.byId("term_condition").attr("displayedValue");
-	term_conditionid = dijit.byId("term_condition").get('value');
-	if(term_conditionid<0 ){return false;}
-	term++;
-	templateterm='';
-		if(term!=1){    
-			dojo.byId('lbl_termcondition').innerHTML = '';
-		}
-		templateterm+='<td style="min-width:20px">'+term+'</td>';
-		templateterm+='<td style="min-width:200px;font-size:13px;">'+term_condition+'<input type="hidden"  value="'+term_conditionid+'" id="term_id'+term+'" name="term_id'+term+'" /></td>';
-		templateterm+='<td width="60px"><button type="button" onclick="deleteTermRecord('+term+')" name="save_close" class="btn default red">លុប</button></td>';
-		tmpterm='<tr id="rowterm'+term+'" class="hover">';
-		tmpterm+="</tr>";
-		dojo.query("#table_rowterm").append(tmpterm);
 
-		if($("#identity_term").val()!="") {
-			var identity = $("#identity_term").val();
-			$("#identity_term").val(identity+','+term);
-		} else {$("#identity_term").val(term);}
-		dojo.html.set(dojo.byId("rowterm"+term),templateterm , {
-		     parseContent: true,
-		});
-}
 col=0;
 no=0;
 title=0;

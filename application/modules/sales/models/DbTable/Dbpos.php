@@ -29,42 +29,40 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$arr = array(
-					'key_value'=>$data['exchange_rate']
-					);
-			$this->_name='tb_setting';		    
-			$where ="code='exchange_rate'";
-			$this->update($arr, $where);
+// 			$arr = array(
+// 					'key_value'=>$data['exchange_rate']
+// 					);
+// 			$this->_name='tb_setting';		    
+// 			$where ="code='exchange_rate'";
+// 			$this->update($arr, $where);
 			
 			$db_global = new Application_Model_DbTable_DbGlobal();
 			$session_user=new Zend_Session_Namespace('auth');
 			$userName=$session_user->user_name;
 			$GetUserId= $session_user->user_id;
 			$dbc=new Application_Model_DbTable_DbGlobal();
-			$so = $data['invoice'];
+			$so = $dbc->getSalesNumber($data["branch_id"]);
 	
 			$info_purchase_order=array(
 					"customer_id"   => $data['customer_id'],
 					"branch_id"     => $data["branch_id"],
-					"sale_no"       => $so,
-					"exchange_rate" => $data['exchange_rate'],
-					"net_total"     => $data['sub_total'],
-					"tax"			=> $data["tax"],
-					"transport_fee"	=> $data["transport_fee"],
+					"sale_no"       => $so,//$data['txt_order'],
+					"date_sold"     => date("Y-m-d",strtotime($data['sale_date'])),
 					"all_total"     => $data['total_dollar'],
-					"all_total_riel"=> $data['total_riel'],					
-					"paid_dollar"   => $data['receive_dollar'],
-					"paid_riel"	    => $data["receive_riel"],
-					"paid"	        => $data["total_paid"],
-					'return_dollar' => $data["return_amount"],
- 					'return_riel'   => $data["return_amount"],
-					"discount_value" => $data['discount'],
-					//"discount_type" => $data['discount'],
-					"balance"      => $data['balance'],
+					// 				"currency_id"    => 1,//$data['currency'],
+					//"discount_value" => 	$data['dis_value'],
+					//"discount_type"  => 	$data['discount_type'],
+					//"saleagent_id"  => 	$data['saleagent_id'],
+					//"tax"			 =>     $data["total_tax"],
+					//"remark"       => 	$data['remark'],
+					"paid"           => $data['total_paid'],
+					"balance"        => $data['balance'],
+					"net_total"      => $data['total_dollar'],
 					"user_mod"       => $GetUserId,
-					"date_sold"     => 	date("Y-m-d"),
-					"date"     => 	date("Y-m-d"),
-// 					"remark"         => $data['remark'],
+					'term_condition' => $data['term_condition'],
+					'pending_status' =>3,
+					"date"           => date("Y-m-d"),
+					'agreement_id'   => $data['agreement_no'],
 			);
 			$this->_name="tb_sales_order";
 			$sale_id = $this->insert($info_purchase_order);
@@ -84,12 +82,12 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 					"paid_dollar"   => 	$data['receive_dollar'],
 					"paid_riel"     => 	$data['receive_riel'],
 					"balance"       => 	$data['balance'],
-// 					"remark"        => 	$data['remark'],
 					"user_id"       => 	$GetUserId,
 					'status'        =>1,
 					"bank_name"     => 	'',
 					"cheque_number" => 	'',
 					"exchange_rate" => 	$data['exchange_rate'],
+					
 			);
 			$this->_name="tb_receipt";
 			$reciept_id = $this->insert($info_purchase_order);
@@ -129,35 +127,18 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 						'price'		  => $data['price_'.$i],
 						'old_price'   => $data['price_'.$i],
  						'cost_price'  => $data['cost_price'.$i],
-// 						'disc_value'  => str_replace("%",'',$data['dis_value'.$i]),//check it
-// 						'disc_type'	  => $data['discount_type'.$i],//check it
 						'sub_total'	  => $data['sub_total'.$i],
 				);
 				$this->_name='tb_salesorder_item';
 				$this->insert($data_item);
 			}
 
-			$ids=explode(',',$data['identity_term']);
-			if(!empty($data['identity_term'])){
-				foreach ($ids as $i)
-				{
-					$data_item= array(
-							'quoation_id'=> $sale_id,
-							'condition_id'=> $data['term_id'.$i],
-							"user_id"   => 	$GetUserId,
-							"date"      => 	date("Y-m-d"),
-							'term_type'=>1
-	
-					);
-					$this->_name='tb_quoatation_termcondition';
-					$this->insert($data_item);
-				}
-			}
 			$db->commit();
 		}catch(Exception $e){
 			$db->rollBack();
 			Application_Form_FrmMessage::message('INSERT_FAIL');
 			$err =$e->getMessage();
+			echo $err;exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($err);
 		}
 	}

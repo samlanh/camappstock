@@ -760,6 +760,27 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	}
    	return  $db->fetchAll($sql);
    }
+   function getAllSaleAgreement($opt=null,$type=null,$defual=null){
+   	$db = $this->getAdapter();
+   	$sql = " SELECT id,
+			(SELECT  cust_name FROM `tb_customer` AS c WHERE c.id=customer_id ) AS customer_name,
+			agreement_no 
+   		FROM `tb_agreement` WHERE status = 1 ";
+   
+   	$rows =  $db->fetchAll($sql);
+   	if($opt!=null){
+   		$option='';
+   		if(!empty($rows)){
+   			foreach ($rows as $key =>$rs){
+   				$option .= '<option value="'.$rs['id'].'" >'.htmlspecialchars($rs['agreement_no'].'-'.$rs['customer_name'], ENT_QUOTES)
+   				.'</option>';
+   			}
+   			return $option;
+   		}
+   	}else{
+   		return $rows;
+   	}
+   }
    	
 }
 ?>

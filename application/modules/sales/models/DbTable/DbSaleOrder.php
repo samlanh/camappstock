@@ -114,22 +114,6 @@ class Sales_Model_DbTable_DbSaleOrder extends Zend_Db_Table_Abstract
 				}*/
 			 }
 			 
-			 $ids=explode(',',$data['identity_term']);
-			 if(!empty($data['identity_term'])){
-				 foreach ($ids as $i)
-				 {
-				 	$data_item= array(
-				 			'quoation_id'=> $sale_id,
-				 			'condition_id'=> $data['termid_'.$i],
-				 			"user_id"   => 	$GetUserId,
-				 			"date"      => 	date("Y-m-d"),
-							'term_type'=>2
-				 			
-				 	);
-				 	$this->_name='tb_quoatation_termcondition';
-				 	$this->insert($data_item);
-				 }
-			 }
 			 
 			$db->commit();
 		}catch(Exception $e){
