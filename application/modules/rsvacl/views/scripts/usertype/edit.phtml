@@ -1,78 +1,71 @@
-<title>Edit User Type </title>
-<script type="text/javascript">
-$(document).ready(function() { 
-		jQuery('#frm').validationEngine('attach', {promptPosition : "centerRight"});		
-});
-</script>
-<?php $form=$this->form;?>
-<style>
-fieldset.fifthy {	
-	border-right: 0px;
-	width: 50%;
-}
-table.user td{
-	vertical-align: top;  
-}
-</style> 
 <?php 
-$cancel_url=$this->url(array(
-		'module'=>'rsvacl',
-		'controller'=>'usertype',
-		'action'=>'index',
-	));
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$url_cancel = $this->url(array('module'=>'rsvacl','controller'=>'usertype','action'=>'index'));
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$url_cancel = $this->url(array('module'=>'rsvacl','controller'=>'usertype','action'=>'index'));
+	$form=$this->form;
 ?>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="icon-home"></i><?php echo $tr->translate("ADD_USER")?>
-				</div>
-				<div class="tools" >
-					<a href="<?php echo $url_cancel;?>" class="btn btn-sm pull-right" style="color:white;">
-					<i class="fa fa-undo"></i>	&nbsp;<?php echo $tr->translate("GO_BACK");?>
-					</a>
-				</div>
-			</div>
+<title><?php echo $tr->translate("EDIT_USER_TYPE");?></title>
+<script type="text/javascript">
+	$(document).ready(function() { 
+			jQuery('#frm').validationEngine('attach', {promptPosition : "centerRight"});		
+	});
+</script>
+<style>
+	fieldset.fifthy {	
+		border-right: 0px;
+		width: 50%;
+	}
+	table.user td{
+		vertical-align: top;  
+	}
+</style> 
+<div class="portlet box blue">
+<div class="portlet-title">
+	<div class="caption">
+		<i class="icon-home"></i><?php echo $tr->translate("EDIT_USER_TYPE")?>
+	</div>
+	<div class="tools" >
+		<a href="<?php echo $url_cancel;?>" class="btn btn-sm pull-right" style="color:white;">
+			<i class="fa fa-undo"></i>	&nbsp;<?php echo $tr->translate("GO_BACK");?>
+		</a>
+	</div>
+</div>
+	<div class="portlet-body">
+		<div class="tabbable-custom">
 			<div class="portlet-body form">
-				<!-- BEGIN FORM-->
-				<form id="frm" action="<?php //echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post">
-					<div class="form-body">
-						<div class="form-group">
-							<label class="control-label col-md-2"><?php echo strtoupper($tr->translate('USER_TYPE')) ." ".$tr->translate('NAME');?><span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement('user_type');?>
+				<div class="form-body">
+					<form id="frm" class="form-horizontal" enctype="multipart/form-data" method="post">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label col-md-4"><?php echo $tr->translate('USER_TYPE');?><span class="required"></span></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<i class="fa"></i>
+										<?php echo $form->getElement('user_type');?>
+									</div>
 								</div>
 							</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate('PARENT_TYPE') ." ". $tr->translate('NAME');?><span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement('parent_id');?>
+							<div class="form-group">
+								<label class="control-label col-md-4"><?php echo $tr->translate('PARENT');?><span class="required"></span></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<i class="fa"></i>
+										<?php echo $form->getElement('parent_id');?>
+									</div>
 								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-4">
+									<div class="input-icon right">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<button type="submit" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-save"></i> <?php echo $tr->translate("GO_EDIT")?> </button>
+								</div>
+								<div class="col-md-4"></div>
 							</div>
 						</div>
-						<div class="form-group">
-							<div class="col-md-4">
-								<div class="input-icon right">
-								</div>
-							</div>
-							<div class="col-md-4">
-								<button type="submit" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_NEW")?> </button>
-							</div>
-							<div class="col-md-4">
-							</div>
-						</div>
-					</div>
-				</form>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>

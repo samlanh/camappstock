@@ -13,28 +13,32 @@ class Product_Form_FrmBranchFilter extends Zend_Form
     	$request=Zend_Controller_Front::getInstance()->getRequest();
     	$branch_name = new Zend_Form_Element_Text('branch_name');
     	$branch_name->setAttribs(array(
-    		'class'=>'form-control'
+    		'dojoType'=>"dijit.form.TextBox",
+			'class'=>'fullside',
     	));
     	$branch_name->setValue($request->getParam("branch_name"));
     	
     	$addres = new Zend_Form_Element_Text("address");
     	$addres->setAttribs(array(
-    			'class'=>'form-control'
+    		'dojoType'=>"dijit.form.TextBox",
+			'class'=>'fullside',
     	));
     	
     	$contact_name = new Zend_Form_Element_Text("contact");
     	$contact_name->setAttribs(array(
-    			'class'=>'form-control'
+    			'dojoType'=>"dijit.form.TextBox",
+			'class'=>'fullside',
     	));
     	
     	$contact_num = new Zend_Form_Element_Text("contact_num");
     	$contact_num->setAttribs(array(
-    			'class'=>'form-control'
+    			'dojoType'=>"dijit.form.TextBox",
+			'class'=>'fullside',
     	));
     	$status = new Zend_Form_Element_Select("status");
     	$status->setAttribs(array(
-    			'class'=>'form-control',
-    			'required'=>'required'
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
     	));
     	$opt = array('1'=>$tr->translate("ACTIVE"),'0'=>$tr->translate("DEACTIVE"));
     	$status->setMultiOptions($opt);

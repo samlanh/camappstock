@@ -10,30 +10,35 @@ class Purchase_vendorController extends Zend_Controller_Action
 	}
 	public function indexAction()
 	{
-		if($this->getRequest()->isPost()){
-			$search = $this->getRequest()->getPost();
-			$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-			$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
-		}else{
-			$search =array(
-					'text_search'=>'',
-					'start_date'=>1,
-					'end_date'=>date("Y-m-d"),
-					'suppliyer_id'=>0,
-					'status'	=>	-1,
-					);
+		try{
+			if($this->getRequest()->isPost()){
+				$search = $this->getRequest()->getPost();
+				$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
+				$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
+			}else{
+				$search =array(
+						'text_search'=>'',
+						'start_date'=>1,
+						'end_date'=>date("Y-m-d"),
+						'suppliyer_id'=>0,
+						'status'	=>	-1,
+						);
+			}
+			$db = new Purchase_Model_DbTable_DbVendor();
+			$rows = $db->getAllVender($search);
+			$columns=array("COMPANY_NAME","COMPANY_NUMBER","CON_NAME","CON_NUMBER","EMAIL_CAP","WEBSITE_CAP","ADDRESS_CAP","STATUS");
+			$link=array(
+					'module'=>'purchase','controller'=>'vendor','action'=>'edit',
+			);
+			$urlEdit = BASE_URL . "/purchase/vendor/edit";
+			
+			$list = new Application_Form_Frmlist();
+			$this->view->list=$list->getCheckList(0, $columns, $rows, array('v_name'=>$link,'phone_person'=>$link,'v_phone'=>$link,'contact_name'=>$link));
+			
+		}catch (Exception $e){
+			Application_Form_FrmMessage::messageError("INSERT_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$db = new Purchase_Model_DbTable_DbVendor();
-		$rows = $db->getAllVender($search);
-		$columns=array("COMPANY_NAME","COMPANY_NUMBER","CON_NAME","CON_NUMBER","EMAIL_CAP","WEBSITE_CAP","ADDRESS_CAP","STATUS");
-		$link=array(
-				'module'=>'purchase','controller'=>'vendor','action'=>'edit',
-		);
-		$urlEdit = BASE_URL . "/purchase/vendor/edit";
-		
-		$list = new Application_Form_Frmlist();
-		$this->view->list=$list->getCheckList(0, $columns, $rows, array('v_name'=>$link,'phone_person'=>$link,'v_phone'=>$link,'contact_name'=>$link));
-		
 		$formFilter = new Application_Form_Frmsearch();
 		$this->view->formFilter = $formFilter;
 		Application_Model_Decorator::removeAllDecorator($formFilter);
@@ -65,7 +70,6 @@ class Purchase_vendorController extends Zend_Controller_Action
 		$formStockAdd = $formStock->AddVendorForm(null);
 		Application_Model_Decorator::removeAllDecorator($formStockAdd);
 		$this->view->form = $formStockAdd;
-		//.end controller
 	}
 	public function editAction() {
 		$db = new Purchase_Model_DbTable_DbVendor();

@@ -166,7 +166,6 @@ class Product_Model_DbTable_DbDamagedStock extends Zend_Db_Table_Abstract
 				  `tb_product` AS p,
 				  `tb_prolocation` AS pl
 				WHERE p.`id` = pl.`pro_id` AND p.`id`=$id AND pl.`location_id` = $location ";
-		
 		return $db->fetchRow($sql);
 	}
 	

@@ -20,24 +20,10 @@
 				<div class="caption">
 					<i class="fa fa-globe"></i><?php echo $tr->translate("របាយការណ៍៍ប្រវត្តិបង់ប្រាក់អតិថិជន");?>
 				</div>
-					<div class="btn-group pull-right">
-							 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
-							   Actions <i class="fa fa-angle-down"></i>
-							 </button>
-								<ul class="dropdown-menu" role="menu">
-									<li>
-										<a href="#" onclick="doPrint();">
-											<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
-										</a>
-									</li>
-									<li>
-										<a href="#" onClick="exports()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
-									</li>
-								</ul>
-					</div>
+				<?php echo $this->getHeader;?>
 			</div>
 			 <div class="portlet-body form frmfilter">
-				<form method="post" action="<?php //echo $formFilter->getAction(); ?>">
+				<form method="post" autocomplete="off">
 					<div class="form-group" style="padding-top: 6px;">
 						<?php $formFilter = $this->form_purchase; ?>
 						<label class="control-label col-md-3"><?php echo $formFilter->getElement('text_search');?></label>
@@ -158,7 +144,6 @@
 									<?php $counter='<strong style="float:right;padding:5px">Number of record(s): '.count($this->rsreceitp).'</strong>'; 
 								$footer = '<div class="footer_list">'.$stringPagination.$counter.'</div>';?>
 									<?php } ?>
-										 
 										</table></div></form><?php echo $footer?>
 									</td>
 								</tr>

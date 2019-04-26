@@ -1,14 +1,10 @@
 <?php
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$url_submit =  $this->url(array('module'=>'product','controller'=>'adjust','action'=>'add'));
 $url_cancel =  $this->url(array('module'=>'product','controller'=>'adjust','action'=>'index'),null,true);
 $url_getcurrentitem =  $this->url(array('module'=>'product','controller'=>'adjust-stock','action'=>'get-current-quantity'));
-$url_getProduct =  $this->url(array('module'=>'product','controller'=>'damagedstock','action'=>'get-product'),null,true);
 $formFilter = $this->formFilter;
 ?>
 <title><?php echo $tr->translate("ADJUST_STOCK");?></title>
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>-->
-<br/>
 <div class="portlet box blue">
 		<div class="portlet-title">
 			<div class="caption">
@@ -19,14 +15,12 @@ $formFilter = $this->formFilter;
 			</div>
 		</div>
 		<div class="portlet-body form">
-			<form class="form-horizontal" method="post" action="" >
+			<form id="frm" class="form-horizontal" method="post" action="" >
 				<div class="form-body">	
 					<div class="form-group">
-						<label class="col-md-2 control-label"><?php //echo $tr->translate("RECEIVE_FROM");?></label>
+						<label class="col-md-2 control-label"></label>
 						<div class="col-md-4">
-							<?php //echo $formFilter->getElement('to_loc');?>
 						</div>
-						
 						<label class="col-md-2 control-label"><?php echo $tr->translate("BRANCH");?></label>
 						<div class="col-md-4">
 							<?php echo $formFilter->getElement('from_loc');?>
@@ -66,9 +60,7 @@ $formFilter = $this->formFilter;
 									</table>
 								</div>
 								<input type="hidden" name="identity" id="identity" value="<?php //echo $identity;?>" >
-								
 							</div>
-							
 							<div class="form-group">
 								<div  class="col-md-12 col-md-offset-4 col-md-8">
 									<a href="<?php echo $this->baseUrl();?>/product/adjust"><button type="button" class="btn red"><i class="fa fa-times"></i> <?php echo $tr->translate("EXIT")?></button></a>
@@ -83,24 +75,18 @@ $formFilter = $this->formFilter;
 		</div>
 </div>
 <script type="text/javascript">
-
-jQuery(document).ready(function(){
-	//addRow();
-});
 var index=0;
 url_get_qty = '<?php echo $this->url(array('module'=>'product','controller'=>'adjust','action'=>'getproduct'))?>';
 function addNew(){
 	
 	id = $("#pro_name").val();
 	location_ids = $("#from_loc").val();
-	//alert('<?php echo $url_getProduct;?>');
 	index++;
 	$.ajax({
         url: url_get_qty,
         type: "POST",
         data: {id:id,location_ids:location_ids},
         success: function(val){
-			//alert(val);
 			for(i=1; i<index; i++){
 				new_item=parseInt(id);
 				items = parseInt($("#pro_id_"+i).val());
@@ -108,9 +94,7 @@ function addNew(){
 					newqty = parseInt($("#qty_unit_"+i).val());
 					newqty = newqty+1;
 					$("#qty_unit_"+i).val(newqty);
-					//diferQTY(i);
 					return false;
-					
 				}
 			}
 			 data = $.parseJSON(val);
@@ -254,12 +238,10 @@ function AddLocation(index){
 		        type: "post",
 		        data: {'item_id':item_id, 'location_id':location_id},
 		        success: function(data){
-		            //alert(data);
 		            val = $.parseJSON(data);
 		            $("#qty_before_"+ index).val(val.qty);
 		        },
 		        error:function(){
-		           // alert("Please Product Name And Location");
 		            $("#result").html('There is error while submit');
 		        }
 		    });

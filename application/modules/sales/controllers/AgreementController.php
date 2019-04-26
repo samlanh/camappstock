@@ -64,18 +64,18 @@ public function indexAction()
 		$db = new Sales_Model_DbTable_Dbpos();
 		$this->view->rsproduct = $db->getAllProductName();
 		$this->view->rscustomer = $db->getAllCustomerName();
-		$db = new Application_Model_DbTable_DbGlobal();
-		$this->view->term_opt = $db->getAllTermCondition();
+// 		$db = new Application_Model_DbTable_DbGlobal();
+// 		$this->view->term_opt = $db->getAllTermCondition();
 	
 		$formpopup = new Sales_Form_FrmCustomer(null);
 		$formpopup = $formpopup->Formcustomer(null);
 		Application_Model_Decorator::removeAllDecorator($formpopup);
 		$this->view->form_customer = $formpopup;
 		$db = new Application_Model_DbTable_DbGlobal();
-		$this->view->invoice = $db->getSalesNumber(1);
+		$this->view->agreement_no = $db->getAgreementNo(1);
 	
-		$db = new Sales_Model_DbTable_Dbexchangerate();
-		$this->view->rsrate= $db->getExchangeRate();
+// 		$db = new Sales_Model_DbTable_Dbexchangerate();
+// 		$this->view->rsrate= $db->getExchangeRate();
 	}
 	
 	public function editAction()

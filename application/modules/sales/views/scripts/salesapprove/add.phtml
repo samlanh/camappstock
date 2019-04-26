@@ -16,7 +16,7 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 							 </button>
 								<ul class="dropdown-menu" role="menu">
 									<li>
-										<a href="#" onclick="doPrint();">
+										<a href="" onclick="doPrint();">
 											<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
 										</a>
 									</li>
@@ -126,9 +126,9 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 						   <td style="white-space: nowrap;">&nbsp;<?php echo $rs["item_name"];?></td>
 						   <td style="white-space: nowrap;">&nbsp;<?php echo $rs["item_code"];?></td>
 						   <td style="white-space: nowrap;">&nbsp;<?php echo number_format($rs["qty_order"],2);?></td>
-						   <td <?php if($rs["price"]!=$rs["old_price"]){echo"style='background:red;'";}?>>&nbsp;<?php echo $rs["curr_name"]."&nbsp;";echo number_format($rs["old_price"],2);?></td>
-						   <td>&nbsp;<?php echo $rs["curr_name"]."&nbsp;";echo number_format($rs["price"],2);?></td>
-						   <td>&nbsp;<?php echo $rs["curr_name"]."&nbsp;".number_format($rs["sub_total"],2);?></td>
+						   <td <?php if($rs["price"]!=$rs["old_price"]){echo"style='background:red;'";}?>>&nbsp;<?php echo number_format($rs["old_price"],2);?></td>
+						   <td>&nbsp;<?php echo number_format($rs["price"],2);?></td>
+						   <td>&nbsp;<?php echo number_format($rs["sub_total"],2);?></td>
 						</tr>
 						   <?php 
                     }?>
@@ -140,7 +140,7 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 					<tr>
 						<td colspan="4" style="border:1px solid #fff;border-top:1px solid #000;border-right:1px solid #000;"></td>
 						<td colspan="2" style="border-left:1px solid #000;">&nbsp;&nbsp;<?php echo $tr->translate("DISCOUNT");?></td>
-						<td >&nbsp;&nbsp;<?php echo number_format($this->product[0]['discount_real'],2);?></td>
+						<td >&nbsp;&nbsp;<?php echo number_format($this->product[0]['discount_value'],2);?></td>
 					</tr>
 					<tr>
 						<td colspan="4" style="border:1px solid #fff;border-top:1px solid #000;border-right:1px solid #000;"></td>
@@ -190,25 +190,26 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 							   <tr style="font-size: 11px;">
 							        <td style="text-align:center;white-space: nowrap;"></td>
 							        <td></td>
-							        <td style="text-align:center;white-space: nowrap;"><strong>ថ្ងៃខែយល់ព្រម /Approved Date</strong><input name="app_date" id="app_date" value="<?php echo date("m/d/Y");?>" class="form-control form-control-inline date-picker" /></td>
+							        <td style="text-align:center;white-space: nowrap;"><strong>ថ្ងៃខែយល់ព្រម /Approved Date</strong><input name="app_date" id="app_date" value="<?php echo date("d-m-Y");?>" class="form-control form-control-inline date-picker" /></td>
 							        <td></td>
 							        <td style="text-align:center;white-space: nowrap;"></td>
 							   </tr>
 							  
 							</tbody>
 						</table>
+						<div class="form-group">
+							<label class="col-md-2 control-label"></label>
+							<div class="col-md-2"></div>
+							<label class="col-md-4 control-label"><a href="<?php echo $this->baseUrl();?>/sales/salesapprove/" ><button style="width:90%;" type="button" class="btn blue btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a></label>
+							<div class="col-md-4"><button type="submit" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_MAKEINVOICE")?></button></div>
+						</div>
 					</form>	
 		    		</td>
 		    	</tr>
 			</tbody>
 		</table>
 		</div>
-		<div class="form-group">
-				<label class="col-md-2 control-label"></label>
-				<div class="col-md-2"></div>
-				<label class="col-md-4 control-label"><a href="<?php echo $this->baseUrl();?>/sales/salesapprove/" ><button style="width:90%;" type="button" class="btn blue btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a></label>
-				<div class="col-md-4"><button type="submit" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_MAKEINVOICE")?></button></div>
-		</div>
+		
 	  </div>		
 	</div>
 	 </div>

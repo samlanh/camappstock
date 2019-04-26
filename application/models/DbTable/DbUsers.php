@@ -140,10 +140,17 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 	 */
 	public function getArrAcl($user_type_id){
 		$db = $this->getAdapter();
-		$sql = "SELECT aa.module, aa.controller, aa.action FROM tb_acl_user_access AS ua  
-		INNER JOIN tb_acl_acl AS aa ON (ua.acl_id=aa.acl_id) WHERE ua.user_type_id='".$user_type_id."'";
-		$rows = $db->fetchAll($sql);
-		return $rows;
+		$sql = "SELECT aa.module, aa.controller, aa.action,aa.label FROM tb_acl_user_access AS ua  
+		INNER JOIN tb_acl_acl AS aa
+		ON (ua.acl_id=aa.acl_id) WHERE ua.user_type_id='".$user_type_id."'
+		GROUP BY  aa.module ,aa.controller,aa.action
+		ORDER BY aa.ordering ASC ,aa.is_menu ASC ,aa.rank ASC ";
+		return $db->fetchAll($sql);
+// 		$db = $this->getAdapter();
+// 		$sql = "SELECT aa.module, aa.controller, aa.action FROM tb_acl_user_access AS ua  
+// 		INNER JOIN tb_acl_acl AS aa ON (ua.acl_id=aa.acl_id) WHERE ua.user_type_id='".$user_type_id."'";
+// 		$rows = $db->fetchAll($sql);
+// 		return $rows;
 	}
 	
 	public function getArrConMod( $user_type_id, $module){
@@ -152,9 +159,32 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 				FROM tb_acl_user_access AS ua  
 					 INNER JOIN tb_acl_acl AS aa ON (ua.acl_id=aa.acl_id) 
 				WHERE ua.user_type_id='".$user_type_id."' AND aa.module = '" . $module ."' AND aa.status = 1 ORDER BY aa.rank ASC";
-		//echo $sql;exit;
 		$cols = $db->fetchCol($sql);
 		return $cols;
+	}
+	function getArrAclReport($user_type_id,$controller=null){
+		$db = $this->getAdapter();
+		$sql="SELECT aa.label,aa.module, aa.controller, aa.action FROM 
+			tb_acl_user_access AS ua 
+			,tb_acl_acl AS aa
+		WHERE (ua.acl_id=aa.acl_id) AND ua.user_type_id=$user_type_id
+		AND aa.module='report'  ";
+		if($controller!=null){
+			$sql.=" AND aa.controller='".$controller."'";
+		}
+		$sql.=' GROUP BY  aa.module ,aa.controller,aa.action
+		ORDER BY aa.module ,aa.rank ASC ';
+		return $db->fetchAll($sql);
+	}
+	function getAccessUrl($module,$controller,$action){
+		$session_user=new Zend_Session_Namespace('auth');
+		$user_typeid = $session_user->level;
+		if($user_typeid==1){return 1;}
+		$db = $this->getAdapter();
+		$sql = "SELECT aa.module, aa.controller, aa.action FROM tb_acl_user_access AS ua  INNER JOIN tb_acl_acl AS aa
+		ON (ua.acl_id=aa.acl_id) WHERE ua.user_type_id='".$user_typeid."' AND aa.module='".$module."' AND aa.controller='".$controller."' AND aa.action='".$action."' limit 1";
+		$rows = $db->fetchAll($sql);
+		return $rows;
 	}
 }
 

@@ -5,7 +5,7 @@
 	$url_cancel = $this->url(array('module'=>'purchase','controller'=>'index','action'=>'index'));
 	//print_r($this->item);
 ?>
-<title><?php echo $tr->translate("ADD_PURCAHSE_ORDER");?></title>
+<title><?php echo $tr->translate("RECEIVED_ITEM");?></title>
 <style>
 	.left{text-align:left !important;}
 </style>
@@ -14,7 +14,7 @@
 		<div class="portlet box blue">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="icon-home"></i><?php echo $tr->translate("Received Product To Stock")?>
+					<i class="icon-home"></i><?php echo $tr->translate("RECEIVED_ITEM")?>
 				</div>
 				<div class="tools" >
 					<a href="<?php echo $url_cancel;?>" class="btn btn-sm pull-right" style="color:white;">
@@ -178,7 +178,7 @@
 							<table class="table table-striped table-bordered table-hover" id="table_order" style="font-size:12px;">
 								<tr height="33px">
 									<td><?php echo $tr->translate("NUM");?></td>
-									<td style="white-space:nowrap;"><?php echo $tr->translate("ITEM_NAME_CAP");?></td>
+									<td style="white-space:nowrap;"><?php echo $tr->translate("ITEM_NAME");?></td>
 									<td><?php echo $tr->translate("QTY_ORDER");?></td>
 									<td><?php echo $tr->translate("RECIEVE_UNIT");?></td>
 									<td><?php echo $tr->translate("RECIEVE_PER_UNIT");?></td>

@@ -1,7 +1,5 @@
 <?php 
 $tr=Application_Form_FrmLanguages::getCurrentlanguage();
-//$db = new Purchase_Model_DbTable_DbPriceCompare();
-//print_r($this->product);
 ?>
 <title>Purchase Report</title>
 <div class="row">
@@ -9,7 +7,7 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		<div class="portlet box blue">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("PURCHASE_REPORT");?>
+					<i class="fa fa-globe"></i>
 				</div>
 						<div class="btn-group pull-right">
 							 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
@@ -17,14 +15,10 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 							 </button>
 								<ul class="dropdown-menu" role="menu">
 									<li>
-										<a href="#" onclick="doPrint();">
+										<a href="" onclick="doPrint();">
 											<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
 										</a>
 									</li>
-									<!--<li>
-										<a href="javascript:;"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
-									</li>-->
-									
 								</ul>
 					</div>
 			</div>
@@ -45,6 +39,7 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		ul.pur_info li strong{font-weight: bold;}
        .hover:hover{background: #ccc;}
 	   .center{text-align:center;}
+		th{text-align: center;}
 	</style>
 		<table style="font-family: 'Khmer OS Content'; width:100%;">
 			<tbody>
@@ -53,18 +48,14 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		        	<table width="100%" style="font-family: 'Khmer OS Battambang';" cellpadding="0" cellpadding="0">
 		            	<tbody>
 							<tr style="margin-bottom:10px;"> 
-								<td width="20%" valign="top"><img src="<?php //echo $this->baseUrl();?>/images/logo/<?php echo $this->title_reprot["logo"]?>"></td>
+								<td width="20%" valign="top"></td>
 								<td width="60%" valign="top" style="line-height:30px">
 									<ul>
-										<li style="text-align:center; font-size:20px; font-family:'Khmer OS Muol Light'"><?php echo $this->title_reprot["branch_code"]?></li>
-										<li style="text-align:center; font-size:18px; font-family:serif,header-font; font-weight:600;"><?php //echo $this->title_reprot["title_report_en"]?></li>
-										<li style="text-align:center; font-size:15px; margin-top:25px; font-family:'Khmer OS Muol Light';">ប័ណ្ណស្នើផ្ទេរទិញទំនិញ</li>
+										<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'"><?php echo $this->title_reprot["name"]?></li>
+										<li style="text-align:center; font-size:14px; font-family:'Khmer OS Muol Light';">ប័ណ្ណស្នើផ្ទេរទិញទំនិញ</li>
 									</ul>
 								</td>
 								<td width="20%" style="text-align:center; font-size: 11px;white-space: nowrap;">
-									<!--<div  style=" border:1px solid #000; border-radius:5px !important;line-height: 11px;padding: 5px 5px">
-										<p>ក្រុមហ៊ុន កាណាខនគ្រីត </p><p>ផ្នែកបញ្ជាទិញ និងគ្រប់គ្រងតម្លៃ</p>
-									</div>-->
 								</td>
 						</tr>
 		                <tr>
@@ -72,18 +63,15 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		                		<table width="100%" cellpadding="0" cellspacing="0">
 		                			<tbody>
 		                			<tr>
-		                				
-										
 										<td width="70%"></td>
 		                				<td width="30%" style="text-align: left;font-size: 12px;" valign="top">
 											<table width="100%" style="font-size: 12px; font-weight:600;">
-												
 												<tr style="line-height:20px;">
-													<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("REQUEST_FROM");?> :</td>
+													<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("REQUET_TO_FROM");?> :</td>
 													<td style="text-align: right;"><?php echo $this->product[0]['req_location'];?></td>
 												</tr>
 												<tr style="line-height:20px;">
-													<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("REQUEST_TO");?> :</td>
+													<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("REQUET_TO_BRANCH");?> :</td>
 													<td style="text-align: right;"><?php echo $this->product[0]['tran_location'];?></td>
 												</tr>
 												<tr style="line-height:20px;">
@@ -91,7 +79,7 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 													<td style="text-align: right;white-space: nowrap;"><?php echo $this->product[0]['req_no'];?></td>
 												</tr>
 												<tr style="line-height:20px;">
-													<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("REQUEST_DATE");?> :</td>
+													<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("TRANSFER_DATE");?> :</td>
 													<td style="text-align: right;white-space: nowrap;"><?php echo date("d/m/Y",strtotime($this->product[0]['date_tran']));?></td>
 												</tr>
 											</table>
@@ -105,16 +93,15 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		    </tr>
 		    <tr>
 		    	<td>
-		            <table border="1" class="collape tablesorter" style="border-collapse:collapse;border:1px solid #000; font-size:12px !important; margin-top:10px;" width="100%" cellspacing="0">
+		            <table border="1" class="" style="border-collapse:collapse;border:1px solid #000 !important; font-size:12px !important; margin-top:10px;" width="100%" cellspacing="0">
 		                 <tbody>
-						 <tr style="background:#ccc;font-size:13px !important; line-height:40px;">
-							<th class="tdheader" width="5%">&nbsp;<?php echo $tr->translate("NUM");?></th>
-							<th class="tdheader"><?php echo $tr->translate("ITEM_CODE");?></th>
-							<th class="tdheader"><?php echo $tr->translate("ITEM_NAME");?></th>
-							<th class="tdheader">&nbsp;<?php echo $tr->translate("QTY");?></th>
-							<th class="tdheader">&nbsp;<?php echo $tr->translate("NOTE");?></th>
+						 <tr style="font-size:13px !important; line-height:30px;text-align: center !important;background:#ccd9ff;">
+							<th class="" width="5%">&nbsp;<?php echo $tr->translate("NUM");?></th>
+							<th class=""><?php echo $tr->translate("ITEM_CODE");?></th>
+							<th class=""><?php echo $tr->translate("ITEM_NAME");?></th>
+							<th class="">&nbsp;<?php echo $tr->translate("QTY");?></th>
+							<th class="">&nbsp;<?php echo $tr->translate("NOTE");?></th>
 						</tr>
-						
 						<?php 
 							if(!empty($this->product)){ $total = 0;  foreach($this->product as $key=>$rs){$index = $key+1; 
 							$count = count($this->product);
@@ -128,7 +115,7 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 								$qty_req= $qty_unit." ".$rs["measure"];
 							}
 						?>
-							<tr>
+							<tr style="line-height: 25px;">
 								<td class="center"><?php echo $index;?></td>
 								<td>&nbsp;&nbsp;<?php echo $rs["item_code"];?>&nbsp;&nbsp;</td>
 								<td>&nbsp;&nbsp;<?php echo $rs["item_name"];?>&nbsp;&nbsp;</td>
@@ -142,7 +129,7 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 									
 								
 						?>
-							<tr>
+							<tr style="line-height: 25px;">
 								<td class="center"><?php echo $index+$i; ?></td>
 								<td></td>
 								<td></td>
@@ -150,32 +137,26 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 								<td></td>
 							</tr>
 						<?php }}?>
-						<!--<tr>
-							<td colspan="4" style="border-bottom:1px solid #fff; border-left:1px solid #fff;"></td>
-							<td>Total</td>
-							<td><?php echo $total;?></td>
-						</tr>-->
-						
 		                </tbody>
 		           </table>
 		              <br>
 		              <table align="center" width="100%" >
 						   <tbody>
 						   <tr style="font-size: 12px;">
-						        <td style="width:20%;text-align:center; font-family:'Khmer OS Muol Light'">ប្រធានឃ្លាំង</td>
-						        <th></th>
 						        <td style="width:20%;text-align:center; font-family:'Khmer OS Muol Light'">អ្នកប្រគល់</td>
 						        <th></th>
-						        <td style="width:20%;text-align:center; font-family:'Khmer OS Muol Light'">ប្រធានផ្នែក</td>
+						        <td style="width:20%;text-align:center; font-family:'Khmer OS Muol Light'"></td>
+						        <th></th>
+						        <td style="width:20%;text-align:center; font-family:'Khmer OS Muol Light'"></td>
 								<th></th>
 						        <td style="width:20%;text-align:center; font-family:'Khmer OS Muol Light'">អ្នកទទួល</td>
 						   </tr>
 						    <tr style="font-size: 12px; height: 75px;">
 						        <td valign="bottom" style="width:20%;text-align:center;  font-family:'Khmer OS Muol Light'; white-space: nowrap;border-bottom:1px solid #000;"></td>
 						        <td></td>
-						        <td valign="bottom" style="width:20%;text-align:center; font-family:'Khmer OS Muol Light';white-space: nowrap;border-bottom:1px solid #000; "></td>
+						        <td valign="bottom" style="width:20%;text-align:center; font-family:'Khmer OS Muol Light';white-space: nowrap;"></td>
 						        <td></td>
-						        <td valign="bottom" style="width:20%;text-align:center;font-family:'Khmer OS Muol Light';white-space: nowrap;border-bottom:1px solid #000;"></td>
+						        <td valign="bottom" style="width:20%;text-align:center;font-family:'Khmer OS Muol Light';white-space: nowrap;"></td>
 								<td></td>
 						        <td valign="bottom" style="width:20%;text-align:center;font-family:'Khmer OS Muol Light';white-space: nowrap;border-bottom:1px solid #000;"></td>
 						   </tr>

@@ -14,6 +14,8 @@ class Sales_QuoteapproveController extends Zend_Controller_Action
     }
    	public function indexAction()
 	{
+		
+		
 		if($this->getRequest()->isPost()){
 			$search = $this->getRequest()->getPost();
 			$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
@@ -31,7 +33,7 @@ class Sales_QuoteapproveController extends Zend_Controller_Action
 		$db = new Sales_Model_DbTable_Dbquoteapprov();
 		$rows = $db->getAllSaleOrder($search);
 		$columns=array("BRANCH_NAME","Com.Name","CON_NAME","SALE_AGENT","QUOTATION_NO", "QUOATATION_DATE",
-				"CURRENTCY_TYPE","TOTAL","DISCOUNT","TOTAL_AMOUNT","APPROVED_STATUS","PENDING_STATUS","MAKE_SO","STATUS_TOSO","BY_USER");
+				"TOTAL","DISCOUNT","TOTAL_AMOUNT","PENDING_STATUS","MAKE_SO","BY_USER");
 		$link=array('module'=>'sales','controller'=>'quoteapprove','action'=>'add');
 		$link1=array('module'=>'sales','controller'=>'quoteapprove','action'=>'edit');
 		

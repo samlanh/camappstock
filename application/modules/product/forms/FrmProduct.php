@@ -14,27 +14,37 @@ class Product_Form_FrmProduct extends Zend_Form
 		$p_code = $db->getProductCode();
 		$name = new Zend_Form_Element_Text("name");
 		$name->setAttribs(array(
-				'class'=>'form-control',
-				'required'=>'1'
+				'dojoType'=>"dijit.form.ValidationTextBox",
+				'class'=>'fullside',
+				'required'=>"1"
 		));
+		
+		$type = new Zend_Form_Element_Select("type");
+		$opt = array('0'=>$tr->translate("PRODUCT"),'1'=>$tr->translate("SERVICE"));
+		$type->setAttribs(array(
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
+				
+		));
+		$type->setMultiOptions($opt);
+		$type->setValue($request->getParam("type"));
 		
 		$pro_code = new Zend_Form_Element_Text("pro_code");
 		$pro_code->setAttribs(array(
-				'class'=>'form-control',
-				//'required'=>'required'
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside'
 		));
 		$pro_code->setValue($p_code);
 		 
 		$serial = new Zend_Form_Element_Text("serial");
 		$serial->setAttribs(array(
-				'class'=>'form-control',
-				//'required'=>'required'
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside'
 		));
 		 
 		$barcode = new Zend_Form_Element_Text("barcode");
 		$barcode->setAttribs(array(
-				'class'=>'form-control',
-				//'required'=>'required'
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside'
 		));
 		$barcodevalue = $db->getProductbarcode();
 		$barcode->setValue($barcodevalue);
@@ -42,9 +52,8 @@ class Product_Form_FrmProduct extends Zend_Form
 		$opt = array(''=>$tr->translate("SELECT_BRAND"),-1=>$tr->translate("ADD_NEW_BRAND"));
 		$brand = new Zend_Form_Element_Select("brand");
 		$brand->setAttribs(array(
-				'class'=>'form-control select2me',
 				'onChange'=>'getPopupBrand();',
-				//'required'=>'required'
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 		));
 		$row_brand= $db->getBrand();
 		if(!empty($row_brand)){
@@ -57,9 +66,8 @@ class Product_Form_FrmProduct extends Zend_Form
 		$opt = array(''=>$tr->translate("SELECT_MODEL"),-1=>$tr->translate("ADD_NEW_MODEL"));
 		$model = new Zend_Form_Element_Select("model");
 		$model->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 				'onChange'=>'getPopupModel()',
-				//'required'=>'required'
 		));
 		$row_model = $db->getModel();
 		if(!empty($row_model)){
@@ -72,9 +80,8 @@ class Product_Form_FrmProduct extends Zend_Form
 		$opt = array(''=>$tr->translate("SELECT_CATEGORY"),-1=>$tr->translate("ADD_NEW_CATEGORY"));
 		$category = new Zend_Form_Element_Select("category");
 		$category->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 				'onChange'=>'getPopupCategory()',
-				//'required'=>'required'
 		));
 		$row_cat = $db->getCategory();
 		if(!empty($row_cat)){
@@ -87,9 +94,8 @@ class Product_Form_FrmProduct extends Zend_Form
 		$opt = array(''=>$tr->translate("SELECT_COLOR"),-1=>$tr->translate("ADD_NEW_COLOR"));
 		$color = new Zend_Form_Element_Select("color");
 		$color->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 				'onChange'=>'getPopupColor()',
-				//'required'=>'required'
 		));
 		$row_color = $db->getColor();
 		if(!empty($row_color)){
@@ -102,9 +108,8 @@ class Product_Form_FrmProduct extends Zend_Form
 		$opt = array(''=>$tr->translate("SELECT_SIZE"),-1=>$tr->translate("ADD_NEW_SIZE"));
 		$size = new Zend_Form_Element_Select("size");
 		$size->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 				'onChange'=>'getPopupSize()',
-				//'required'=>'required'
 		));
 		$row_size = $db->getSize();
 		if(!empty($row_size)){
@@ -116,7 +121,8 @@ class Product_Form_FrmProduct extends Zend_Form
 		 
 		$unit = new Zend_Form_Element_Text("unit");
 		$unit->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
 				'required'=>'required',
 				'readOnly'=>'readOnly'
 		));
@@ -124,7 +130,8 @@ class Product_Form_FrmProduct extends Zend_Form
 		 
 		$qty_per_unit = new Zend_Form_Element_Text("qty_unit");
 		$qty_per_unit->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
 				'required'=>'required',
 				'onKeyup'=>'doTotalQty()'
 		));
@@ -133,7 +140,7 @@ class Product_Form_FrmProduct extends Zend_Form
 		$opt = array(''=>$tr->translate("SELECT_MEASURE"),-1=>$tr->translate("ADD_NEW_MEASURE"));
 		$measure = new Zend_Form_Element_Select("measure");
 		$measure->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 				//'required'=>'required',
 				'Onchange'	=>	'getMeasureLabel();getPopupMeasure();'
 		));
@@ -147,26 +154,27 @@ class Product_Form_FrmProduct extends Zend_Form
 		 
 		$label = new Zend_Form_Element_Text("label");
 		$label->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.TextBox",'class'=>'fullside'
 				//'required'=>'required'
 		));
 		 
 		$description = new Zend_Form_Element_Text("description");
 		$description->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.TextBox",'class'=>'fullside'
 				//'required'=>'required'
 		));
 		
 		$price = new Zend_Form_Element_Text("price");
 		$price->setAttribs(array(
-				'class'=>'validate[required,custom[number]] form-control',
+				'dojoType'=>"dijit.form.NumberTextBox",
+				'class'=>'fullside',
 				'required'=>'required'
 		));
 		
 		$status = new Zend_Form_Element_Select("status");
 		$opt = array('1'=>$tr->translate("ACTIVE"),'0'=>$tr->translate("DEACTIVE"));
 		$status->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 				'required'=>'required',
 				//'Onchange'	=>	'getMeasureLabel()'
 		));
@@ -181,14 +189,14 @@ class Product_Form_FrmProduct extends Zend_Form
 			}
 		}
 		$branch->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 				//'required'=>'required',
 				'Onchange'	=>	'addNewProLocation()'
 		));
 		$branch->setMultiOptions($opt);
 		
 		$price_type = new Zend_Form_Element_Select("price_type");
-		$opt = array();
+		$opt = array(-1=>$tr->translate("PRICE_LEVEL"));
 		$row_price = $db->getPriceType();
 		if(!empty($row_price)){
 			foreach ($row_price as $rs){
@@ -196,7 +204,7 @@ class Product_Form_FrmProduct extends Zend_Form
 			}
 		}
 		$price_type->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 				//'required'=>'required',
 				'Onchange'	=>	'addNewPriceType()'
 		));
@@ -216,12 +224,12 @@ class Product_Form_FrmProduct extends Zend_Form
 			$label->setValue($data["unit_label"]);
 			$description->setValue($data["note"]);
 			$qty_per_unit->setValue($data["qty_perunit"]);
-			//$qty_unit->setValue($data["qty_perunit"]);
 			$status->setValue($data["status"]);
 			$price->setValue($data["price"]);
+			$type->setValue($data["is_service"]);
 		}
 		
-		$this->addElements(array($price,$price_type,$branch,$status,$pro_code,$name,$serial,$brand,$model,$barcode,$category,$size,$color,$measure,$qty_per_unit,$unit,$label,$description));
+		$this->addElements(array($type,$price,$price_type,$branch,$status,$pro_code,$name,$serial,$brand,$model,$barcode,$category,$size,$color,$measure,$qty_per_unit,$unit,$label,$description));
 		return $this;
 	}
 	function productFilter(){
@@ -230,7 +238,7 @@ class Product_Form_FrmProduct extends Zend_Form
 		$db = new Product_Model_DbTable_DbProduct();
 		$ad_search = new Zend_Form_Element_Text("ad_search");
 		$ad_search->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.TextBox",'class'=>'fullside'
 		));
 		$ad_search->setValue($request->getParam("ad_search"));
 		
@@ -243,15 +251,15 @@ class Product_Form_FrmProduct extends Zend_Form
 			}
 		}
 		$branch->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 		));
 		$branch->setMultiOptions($opt);
 		$branch->setValue($request->getParam("branch"));
 		
 		$status = new Zend_Form_Element_Select("status");
-		$opt = array('-1'=>$tr->translate("ALL"),'1'=>$tr->translate("ACTIVE"),'0'=>$tr->translate("DEACTIVE"));
+		$opt = array('-1'=>$tr->translate("STATUS"),'1'=>$tr->translate("ACTIVE"),'0'=>$tr->translate("DEACTIVE"));
 		$status->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 		));
 		$status->setMultiOptions($opt);
 		$status->setValue($request->getParam("status"));
@@ -259,7 +267,7 @@ class Product_Form_FrmProduct extends Zend_Form
 		$opt = array(''=>$tr->translate("SELECT_BRAND"));
 		$brand = new Zend_Form_Element_Select("brand");
 		$brand->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 		));
 		$row_brand = $db->getBrand();
 		if(!empty($row_brand)){
@@ -273,7 +281,7 @@ class Product_Form_FrmProduct extends Zend_Form
 		$opt = array(''=>$tr->translate("SELECT_MODEL"));
 		$model = new Zend_Form_Element_Select("model");
 		$model->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 		));
 		$row_model = $db->getModel();
 		if(!empty($row_model)){
@@ -287,7 +295,7 @@ class Product_Form_FrmProduct extends Zend_Form
 		$opt = array(''=>$tr->translate("SELECT_CATEGORY"));
 		$category = new Zend_Form_Element_Select("category");
 		$category->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 		));
 		$row_cat = $db->getCategory();
 		if(!empty($row_cat)){
@@ -301,7 +309,7 @@ class Product_Form_FrmProduct extends Zend_Form
 		$opt = array(''=>$tr->translate("SELECT_COLOR"));
 		$color = new Zend_Form_Element_Select("color");
 		$color->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 		));
 		$row_color = $db->getColor();
 		if(!empty($row_color)){
@@ -315,7 +323,7 @@ class Product_Form_FrmProduct extends Zend_Form
 		$opt = array(''=>$tr->translate("SELECT_SIZE"));
 		$size = new Zend_Form_Element_Select("size");
 		$size->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 		));
 		$row_size = $db->getSize();
 		if(!empty($row_size)){
@@ -329,12 +337,20 @@ class Product_Form_FrmProduct extends Zend_Form
 		$status_qty = new Zend_Form_Element_Select("status_qty");
 		$opt = array(-1=>$tr->translate("ទាំងអស់"),1=>$tr->translate("ផលិតផលមានស្តុក"),0=>$tr->translate("ផលិតផលអស់ពីស្តុក"));
 		$status_qty->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 		));
 		$status_qty->setMultiOptions($opt);
 		$status_qty->setValue($request->getParam("status_qty"));
 		
-		$this->addElements(array($status_qty,$ad_search,$branch,$brand,$model,$category,$color,$size,$status));
+		$type = new Zend_Form_Element_Select("type");
+		$opt = array(-1=>$tr->translate("SELECT_TYPE"),'0'=>$tr->translate("PRODUCT"),'1'=>$tr->translate("SERVICE"));
+		$type->setAttribs(array(
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
+		));
+		$type->setMultiOptions($opt);
+		$type->setValue($request->getParam("type"));
+		
+		$this->addElements(array($type,$status_qty,$ad_search,$branch,$brand,$model,$category,$color,$size,$status));
 		return $this;
 	}
 }

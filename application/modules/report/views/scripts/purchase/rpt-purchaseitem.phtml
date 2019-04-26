@@ -1,0 +1,137 @@
+<?php 
+$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+$frm_sales_report = $this->form_search;
+?>
+<title><?php echo $tr->translate("RPT_PURCHASE_DETAIL");?></title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("RPT_PURCHASE_DETAIL");?>
+				</div>
+				<?php echo $this->getHeader;?>
+			</div>
+            <div class="portlet-body form frmfilter">
+				<form method="post" autocomplete="off">
+					<div class="form-group" style="padding-top: 6px;">
+						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement("txt_search");?></label>
+						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement("branch_id");?></label>
+						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement('suppliyer_id');?></label>
+						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement("category_id");?></label>
+					</div>
+					<div class="form-group" style="padding-top: 6px;">
+						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement('item');?></label>
+						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement('start_date');?></label>
+						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement("end_date");?></label>
+						<label class="control-label col-md-3">
+						<input type="submit" value="<?php echo $tr->translate("SEARCH")?>"  class="ui-button ui-widget ui-state-default ui-corner-all ui-state-hover" name="btn_search" name="btn_search" /></label>
+					</div><div style="clear:both;"></div>	
+				</form> 
+	<div style=" min-height:12cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.2cm;overflow: scroll;">
+	<div id="divPrint" style="width: 100%;">
+	<style>
+		.style{
+			line-height: 25px;font-size: 12px !important;
+			font-family: 'Khmer OS Battambang';
+		}
+		ul{margin: 0;padding:0;}
+		table tr td ul li{text-align: center;list-style: none;line-height: 25px; font-weight: bold;}
+		th{padding: 5px;}
+		.hover:hover{background: #ccc;}
+	</style>
+		<table style="font-family: 'Khmer OS Content'; width:100%;">
+			<tbody>
+			<tr>
+		    	<td align="center">
+		        	<table width="100%" style="font-family: 'Khmer OS Battambang';" cellpadding="0" cellpadding="0">
+		            	<tbody><tr>
+		                	<td width="20%" valign="top"><img src="<?php echo $this->baseUrl();?>/images/logo.jpg" height="55px"></td>
+		                	<td width="60%" valign="top">
+		                		<ul>
+		                			<li style="text-align:center; font-size:16px; font-family:'Khmer MEF2'"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
+		                			<li style="text-align:center; font-size:14px; font-family:'Khmer MEF2'"><?php echo $tr->translate("RPT_PURCHASE_DETAIL");?></li>
+		                			<li style="text-align:center; font-size:14px;"><?php echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
+		                		</ul>
+		                	</td>
+		                    <td width="20%"></td>
+		                </tr> 
+		            </tbody></table>
+		        </td>
+		    </tr>
+		    <tr>
+		    	<td class="table2excel" id="exportExcel">
+		            <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
+		                 <tbody>
+		                 <tr bgcolor="#ccc" class="style" align="center" style="font-weight:bold; line-height: 205x; font-size:12px; padding:1px 0px; white-space: nowrap; ">
+		                    <td>&nbsp;<?php echo $tr->translate("NUM");?></td>
+		                    <td><?php echo $tr->translate("BRANCH_NAME");?></td>
+							<td>&nbsp;<?php echo $tr->translate("PURCHASE_ORDER");?></td>
+							<td width="10%">&nbsp;<?php echo $tr->translate("ORDER_DATE");?></td>
+							<td><?php echo $tr->translate("DATE_IN");?></td>
+							<td><?php echo $tr->translate("CATE_NAME");?></td>
+							<td><?php echo $tr->translate("ITEM_NAME");?></td>
+							<td>&nbsp;<?php echo $tr->translate("QTY");?></td>
+							<td width="10%">&nbsp;<?php echo $tr->translate("ITEM_PRICE");?></td>
+							<td><?php echo $tr->translate("TOTAL");?></td>
+		                </tr>
+		                <?php 
+		                $num=1; 
+			            $all_total = 0;
+			            $supplier_name='';
+			            $total_bysupplier=0;
+		                if(!empty($this->product_rs))foreach ($this->product_rs AS $index => $rs){?>
+		                <?php if($supplier_name!=$rs['vendor_name']){?>
+		                	 <?php if($index>0){?>
+		                	<tr>
+			                	<td style="white-space: nowrap;text-align: right;font-size: 16px;border: 1px solid #fff;border-top: 1px solid #000;border-bottom: 1px solid #000;;" colspan="11" >$ &nbsp;<?php echo number_format($total_bysupplier,2);?></td>
+			                </tr>
+			                <?php }?>
+			                <tr>
+			                	<td style="white-space: nowrap;" colspan="11">&nbsp;<?php echo $rs["vendor_name"];?></td>
+			                </tr>
+		                <?php 
+		                	$total_bysupplier=0;
+		                 }
+		                $supplier_name=$rs['vendor_name'];
+		                $total_bysupplier = $total_bysupplier+$rs["sub_total"];
+		                ?>
+						<tr class='row-format<?php echo $num; $num=1-$num;?> hover' style="border:1px solid #000;">
+						   <td align="center" style="white-space: nowrap;">&nbsp;<?php echo $index+1?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo $rs["branch_name"];?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo $rs["order_number"];?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo date("d/m/Y",strtotime($rs["date_order"]));?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo date("d/m/Y",strtotime($rs["date_in"]));?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo $rs["cate_name"];?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo $rs["item_name"];?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo number_format($rs["qty_order"],2);?></td>
+						   <td>&nbsp;<?php echo number_format($rs["price"],2);?></td>
+						   <td>&nbsp;<?php echo number_format($rs["sub_total"],2);?></td>
+						</tr>
+						<?php 
+							$all_total=$all_total+$rs["sub_total"];
+                    	}?>
+                    	<?php if($total_bysupplier>0){?>
+	                    	<tr>
+				                <td style="white-space: nowrap;text-align: right;font-size: 16px;border: 1px solid #fff;border-top: 1px solid #000;" colspan="11" >$ &nbsp;<?php echo number_format($total_bysupplier,2);?></td>
+				            </tr>
+			            <?php }?>
+		                </tbody>
+		           </table>
+		            	<div style="text-align: right; min-width: 100px;float: right; ">សរុបរួម $ <span style="border-bottom: 2px dotted #000;font-weight: bold;"><?php echo number_format($all_total,2);?></span></div>
+		              <br>
+		              <?php echo $this->getFooter;?>
+		    		</td>
+		    	</tr>
+			</tbody>
+		</table>
+		</div>
+	  </div>		
+	</div>
+	 </div>
+   </div>
+</div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script>
+function doPrint() {var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();}
+</script>

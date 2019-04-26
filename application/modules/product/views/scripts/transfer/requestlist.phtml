@@ -3,13 +3,10 @@
 	$url_edit = $this->url(array('module'=>'product','controller'=>'transfer','action'=>'edit',));
 	$url_delete = $this->url(array('module'=>'product','controller'=>'transfer','action'=>'delete',));
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$formFilter = $this->formFilter;
-	
+	$formFilter = $this->formFilter;	
 	$rs = $this->product;
-	//print_r($rs);
 ?>
 <title><?php echo $tr->translate("TRANSFER_LIST");?></title>
-
 	<div class="portlet box blue">
 		<div class="portlet-title">
 			<div class="caption">
@@ -23,10 +20,10 @@
 			<form class="form-horizontal" method="post" action="" >
 				<div class="form-body">
 							<div class="form-group">
-								<div class="col-md-3">
+								<div class="col-md-2">
 									<?php echo $formFilter->getElement('avd_search');?>
 								</div>
-								<div class="col-md-3">
+								<div class="col-md-2">
 									<?php echo $formFilter->getElement('branch');?>
 								</div>
 								<div class="col-md-2">
@@ -35,12 +32,9 @@
 								<div class="col-md-2">
 									<?php echo $formFilter->getElement('end_date');?>
 								</div>
-								<!--<div class="col-md-2">
-									<?php //echo $formFilter->getElement('type');?>
-								</div>
 								<div class="col-md-2">
 									<?php echo $formFilter->getElement('status');?>
-								</div>-->
+								</div>
 								<div class="col-md-2">
 									<button type="submit" class="btn green"><?php echo $tr->translate("SEARCH");?></button>
 								</div>
@@ -48,21 +42,17 @@
 					</div>
 			</form>
 			
-		</div>
-		
-		<!-- Result List -->
-					<!-- BEGIN EXAMPLE TABLE PORTLET-->
-						
+		</div>		
 						<div class="portlet-body">
 							<table class="collape tablesorter" id="table" width="100%">
 						<thead>
 							<tr>
 								<th class="tdheader"><?php echo  $tr->translate("NO");?></th>
-								<th class="tdheader"><?php echo  $tr->translate("REQUEST_NO");?></th>
-								<th class="tdheader"><?php echo  $tr->translate("REQUEST_LOCATION");?></th>
-								<th class="tdheader"><?php echo  $tr->translate("REQUEST_TO");?></th>
-								<th class="tdheader"><?php echo  $tr->translate("REQUEST_DATE");?></th>
-								<th class="tdheader"><?php echo  $tr->translate("APP_STATUS");?></th>
+								<th class="tdheader"><?php echo  $tr->translate("TRANSFER_NUM");?></th>
+								<th class="tdheader"><?php echo  $tr->translate("REQUET_TO_FROM");?></th>
+								<th class="tdheader"><?php echo  $tr->translate("REQUET_TO_BRANCH");?></th>
+								<th class="tdheader"><?php echo  $tr->translate("TRANSFER_DATE");?></th>
+								<th class="tdheader"><?php echo  $tr->translate("STATUS");?></th>
 								<th class="tdheader"><?php echo  $tr->translate("PEDDING");?></th>
 								<th class="tdheader"><?php echo  $tr->translate("STATUS");?></th>
 								<th class="tdheader"><?php echo  $tr->translate("USER");?></th>

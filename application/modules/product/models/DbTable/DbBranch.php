@@ -8,7 +8,6 @@ class Product_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 		return Application_Model_DbTable_DbGlobal::GlobalgetUserId();
 	}
 	public function add($data){
-		//print_r($data);exit();
 		$db = $this->getAdapter();
 		$part= PUBLIC_PATH.'/images/logo/';
 		$photo = $_FILES['logo'];
@@ -30,18 +29,16 @@ class Product_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 			'address'		=>	$data["address"],
 			'user_id'		=>	$this->getUserId(),
 			'last_mod_date'	=>	new Zend_Date(),
-			'status'		=>	$data["status"],
+			'status'		=>	1,
 			'remark'		=>	$data["remark"],
 			'show_by'		=>	$data["show_by"],
 			'logo'			=>	$photo_name,
 		);
 		$this->_name = "tb_sublocation";
 		$this->insert($arr);
-		
 	}
 	
 	public function edit($data){
-		//print_r($data);exit();
 		$db = $this->getAdapter();
 		$part= PUBLIC_PATH.'/images/logo/';
 		$photo = $_FILES['logo'];

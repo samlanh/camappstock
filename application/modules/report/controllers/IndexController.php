@@ -13,66 +13,6 @@ class report_indexController extends Zend_Controller_Action
     	$result = $user_info->getUserInfo();
     	return $result;
     }
-    public function rptPurchaseAction()//purchase report
-    {
-    	if($this->getRequest()->isPost()){
-    		$data = $this->getRequest()->getPost();
-    		$data['start_date']=date("Y-m-d",strtotime($data['start_date']));
-    		$data['end_date']=date("Y-m-d",strtotime($data['end_date']));
-    	}else{
-    		$data = array(
-    				'text_search'=>'',
-    				'start_date'=>date("Y-m-d"),
-    				'end_date'=>date("Y-m-d"),
-    				'suppliyer_id'=>0,
-    				'branch_id'=>-1,
-    				'status_paid'=>-1,
-					'saleagent_id'=>-1
-    		);
-    	}
-    	$this->view->rssearch = $data;
-    	$query = new report_Model_DbQuery();
-    	$this->view->repurchase =  $query->getAllPurchaseReport($data);
-    	$frm = new Application_Form_FrmReport();
-    
-    	$formFilter = new Application_Form_Frmsearch();
-    	$this->view->form_purchase = $formFilter;
-    	Application_Model_Decorator::removeAllDecorator($formFilter);
-    }
-    function purproductdetailAction(){
-    	$id = ($this->getRequest()->getParam('id'))? $this->getRequest()->getParam('id'): '0';
-    	if(empty($id)){
-    		$this->_redirect("/report/index/rpt-purchase");
-    	}
-    	$query = new report_Model_DbQuery();
-    	$this->view->product =  $query->getProductPruchaseById($id);
-    	 
-    }
-    function rptPurchaseitemAction(){
-    	if($this->getRequest()->isPost()){
-    		$search = $this->getRequest()->getPost();
-    		$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-    		$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
-    	}else{
-    		$search = array(
-    				'txt_search'=>'',
-    				'start_date'=>date("Y-m-d"),
-    				'end_date'=>date("Y-m-d"),
-    				'item'=>0,
-    				'category_id'=>0,
-    				'brand_id'=>0,
-    				'branch_id'=>0,
-    		);
-    	}
-    	$this->view->rssearch=$search;
-    	$query = new report_Model_DbQuery();
-    	$this->view->product_rs =  $query->getPruchaseProductDetail($search);
-    	
-    	$frm = new Application_Form_FrmReport();
-    	$form_search=$frm->productDetailReport($search);
-    	Application_Model_Decorator::removeAllDecorator($form_search);
-    	$this->view->form_search = $form_search;
-    }
     public function rptSalesAction()//purchase report
     {
     	if($this->getRequest()->isPost()){
@@ -91,9 +31,13 @@ class report_indexController extends Zend_Controller_Action
     	$this->view->rssearch = $data;
     	$query = new report_Model_DbQuery();
     	$this->view->repurchase =  $query->getAllSaleOrderReport($data);
-			$formFilter = new Sales_Form_FrmSearch();
+		$formFilter = new Sales_Form_FrmSearch();
     	$this->view->form_purchase = $formFilter;
     	Application_Model_Decorator::removeAllDecorator($formFilter);
+    	
+    	$formFilter = new Application_Form_Frmsearch();
+    	$this->view->getHeader = $formFilter->getHeaderAction();
+    	$this->view->getFooter = $formFilter->getFooterAction();
     }
     public function  rptSalebycustomerAction()//purchase report
     {
@@ -142,7 +86,7 @@ class report_indexController extends Zend_Controller_Action
     				'end_date'=>date("Y-m-d"),
     				'item'=>0,
     				'category_id'=>0,
-    				'brand_id'=>0,
+    				'customer_id'=>0,
     				'branch_id'=>0,
     		);
     	}
@@ -155,6 +99,34 @@ class report_indexController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($form_search);
     	$this->view->form_search = $form_search;
     	
+    	$formFilter = new Application_Form_Frmsearch();
+    	$this->view->getHeader = $formFilter->getHeaderAction();
+    	$this->view->getFooter = $formFilter->getFooterAction();
+    }
+    function rptitemcustomerAction(){
+    	if($this->getRequest()->isPost()){
+    		$search = $this->getRequest()->getPost();
+    		$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
+    		$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
+    	}else{
+    		$search = array(
+    				'txt_search'=>'',
+    				'start_date'=>date("Y-m-d"),
+    				'end_date'=>date("Y-m-d"),
+    				'item'=>0,
+    				'category_id'=>0,
+    				'customer_id'=>0,
+    				'branch_id'=>0,
+    		);
+    	}
+    	$this->view->rssearch=$search;
+    	$query = new report_Model_DbQuery();
+    	$this->view->product_rs =  $query->getSaleProductDetail($search);
+    
+    	$frm = new Application_Form_FrmReport();
+    	$form_search=$frm->productDetailReport($search);
+    	Application_Model_Decorator::removeAllDecorator($form_search);
+    	$this->view->form_search = $form_search;
     }
     public function rptCustomerAction()//purchase report
     {
@@ -182,6 +154,10 @@ class report_indexController extends Zend_Controller_Action
     	$formFilter = new Sales_Form_FrmSearch();
 		$this->view->formFilter = $formFilter;
 		Application_Model_Decorator::removeAllDecorator($formFilter);
+		
+		$formFilter = new Application_Form_Frmsearch();
+		$this->view->getHeader = $formFilter->getHeaderAction();
+		$this->view->getFooter = $formFilter->getFooterAction();
     }
     public function rptSalepersonAction()//
     {
@@ -210,130 +186,7 @@ class report_indexController extends Zend_Controller_Action
 	public function indexAction()
 	{
 		
-		
 	}
-	public function rptSummaryAction()
-	{
-		$data = null;
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-		
-			$start_date = $data["start_date"];
-			$end_date = $data["end_date"];
-			
-			$query = new report_Model_DbQuery();
-			$geProducttQty = $query->geProducttQty($data);
-			$this->view->get_product_qty = $geProducttQty;
-			
-			$this->view->start_date = $start_date;
-			$this->view->end_date = $end_date;
-			
-			if(!empty($data["LocationId"])){
-				$brand=$query->getLocationName($data["LocationId"]);
-				$this->view-> branch = $brand;
-			}
-		}
-		$dbuser = new report_Model_DbQuery();
-		$brand=$dbuser->getBrandByUser();
-		if(!empty($brand)){
-			$this->view->branch = $brand;
-		}
-		
-		$frm = new Application_Form_FrmReport();
-		$form_search=$frm->productDetailReport($data);
-		Application_Model_Decorator::removeAllDecorator($form_search);
-		$this->view->form_product = $form_search;
-// 		if($this->getRequest()->isPost()){
-// 			$data = $this->getRequest()->getPost();
-				
-// 			$start_date = $data["start_date"];
-// 			$end_date = $data["end_date"];
-				
-// 			if(strtotime($end_date)+86400 > strtotime($start_date)) {
-// 				$query = new report_Model_DbQuery();
-// 				//$vendor_sql .= " AND p.date_order BETWEEN '$start_date' AND '$end_date'";
-// 				$getSaleItem = $query->getProductSummary($data);
-// 				$this->view->getsales_item = $getSaleItem;
-// 				$this->view->start_date = $start_date;
-// 				$this->view->end_date = $end_date;
-// 				if(!empty($data["LocationId"])){
-// 					$branch=$query->getLocationName($data["LocationId"]);
-// 					$this->view-> branch = $branch;
-// 				}
-// 			}
-// 			else {
-// 				Application_Form_FrmMessage::message("End Date Must Greater Then Start Date");
-// 			}
-// 		}
-// 		$user = $this->GetuserInfo();
-// 		if($user["level"]!=1 AND $user["level"]!=2){
-// 			$this->_redirect("/default/index/home");
-				
-// 		}
-// 		$frm = new Application_Form_FrmReport();
-// 		$form_search=$frm->productDetailReport($data);
-// 		Application_Model_Decorator::removeAllDecorator($form_search);
-// 		$this->view->form_salse = $form_search;
-	
-	}
-	
-// 	public function getItemAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$post=$this->getRequest()->getPost();
-// 			$location_id = $post["location_id"];
-// 			$brand = $post["branch_id"];
-// 			$cate_id = $post["category_id"];
-// 			$sql = " SELECT 
-// 				  p.pro_id,
-// 				  p.`item_code`,
-// 				  p.`item_name`
-// 				FROM
-// 				  tb_product AS p , tb_prolocation AS pl WHERE pl.pro_id = p.pro_id  AND pl.`LocationId` = $location_id
-// 				 ";
-			
-// 			if($post["branch_id"]!="" OR $post["branch_id"]!=0){
-// 				$sql.=" AND p.`brand_id` = $brand";
-// 			}
-// 			if($post["category_id"]!="" OR $post["category_id"]!=0){
-// 				$sql.=" AND p.`cate_id`= $cate_id";
-// 			}
-// 			$sql.="ORDER BY p.`item_name`";
-// 			$db = new Application_Model_DbTable_DbGlobal();
-// 			$row=$db->getGlobalDb($sql);
-// 			echo Zend_Json::encode($row);
-// 			exit();
-// 		}
-// 	}
-// 	public function getItemByBrandAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$post=$this->getRequest()->getPost();
-// 			$location_id = $post["location_id"];
-// 			$brand = $post["branch_id"];
-// // 			$sql = " SELECT
-// // 					p.pro_id,
-// // 					p.`item_code`,
-// // 					p.`item_name`
-// // 					FROM
-// // 					tb_product AS p WHERE p.`brand_id` = $brand ";
-			
-// 			$sql = " SELECT
-// 						p.pro_id,
-// 						p.`item_code`,
-// 						p.`item_name`
-// 					 FROM
-// 						tb_product AS p";
-// 			if($post["location_id"]!="" OR $post["location_id"]!=0){
-// 				$sql.=" INNER JOIN location ON location.pro_id = p.`pro_id` AND location.LocationId=$location_id ";
-// 			}
-// 			$sql.="  WHERE p.`brand_id` = $brand  ORDER BY p.`item_name`";
-			
-// 			$db = new Application_Model_DbTable_DbGlobal();
-// 			$row=$db->getGlobalDb($sql);
-// 			echo Zend_Json::encode($row);
-// 			exit();
-// 		}
-// 	}
-	
 	public function getItemFilterAction(){
 		if($this->getRequest()->isPost()){
 			$post=$this->getRequest()->getPost();
@@ -579,112 +432,6 @@ class report_indexController extends Zend_Controller_Action
 		Application_Model_Decorator::removeAllDecorator($form_search);
 		$this->view->form_transfer = $form_search;
 	}
-	
-	public function sochartAction(){
-	$_db = new report_Model_DbQuery();
-	$_rows=$_db->getTopTenProductSO();$_arr="";
-	foreach ($_rows As $i =>$row){
-		if($i==count($_rows)-1){
-			$_arr.= "['".$row["item_name"]."',".$row["qty"]."]";
-		}
-		else{
-			$_arr.= "['".$row["item_name"]."',".$row["qty"]."],";
-		}
-	}
-	$this->view->top_product = $_arr;
-	
-	}
-	public function pochartAction(){
-		$_db = new report_Model_DbQuery();
-		$_rows=$_db->getTopTenProductPO();
-		$_arr="";
-		foreach ($_rows As $i =>$row){
-			if($i==count($_rows)-1){
-				//$_arr.= $row["item_name"].";".$row["qty"];
-				$_arr.= "['".$row["item_name"]."',".$row["qty"]."]";
-			//	['Work',     11],
-			}
-			else{
-				$_arr.= "['".$row["item_name"]."',".$row["qty"]."],";
-				//$_arr.= $row["item_name"].";".$row["qty"].";";
-					
-			}
-		}
-		$this->view->top_product = $_arr;
-	//echo $_arr;
-	
-	}
-	public function pochartdateAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-				
-			$start_date = $data["start_date"];
-			$end_date = $data["end_date"];
-				
-			if(strtotime($end_date)+86400 > strtotime($start_date)) {
-				$query = new report_Model_DbQuery();
-				//$vendor_sql .= " AND p.date_order BETWEEN '$start_date' AND '$end_date'";
-				$getSaleItem = $query->getQtyTransfer($data);
-				$this->view->getsales_item = $getSaleItem;
-				$this->view->start_date = $start_date;
-				$this->view->end_date = $end_date;
-				if(!empty($data["LocationId"])){
-					$brand=$query->getLocationName($data["LocationId"]);
-					$this->view-> branch = $brand;
-				}
-			}
-			else {
-				Application_Form_FrmMessage::message("End Date Must Greater Then Start Date");
-			}
-		}
-		$dbuser = new report_Model_DbQuery();
-		$brand=$dbuser->getBrandByUser();
-		if(!empty($brand)){
-			$this->view->branch = $brand;
-		}
-		$data = $this->getRequest()->getPost();		
-		$_db = new report_Model_DbQuery();
-		$_rows=$_db->getTopTenProductSO();$_arr="";
-		foreach ($_rows As $i =>$row){
-			if($i==count($_rows)-1){
-				$_arr.= "['".$row["item_name"]."',".$row["qty"]."]";
-			}
-			else{
-				$_arr.= "['".$row["item_name"]."',".$row["qty"]."],";
-			}
-		}
-		$this->view->top_product = $_arr;
-		$frm = new Application_Form_FrmReport();
-		$form_search=$frm->salseReport();
-		Application_Model_Decorator::removeAllDecorator($form_search);
-		$this->view->form_transfer = $form_search;
-	}
-	/* Quotation*/
-	public function rptQuotationissueAction()//purchase report
-	{
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$data['start_date']=date("Y-m-d",strtotime($data['start_date']));
-			$data['end_date']=date("Y-m-d",strtotime($data['end_date']));
-		}else{
-			$data = array(
-					'text_search'=>'',
-					'start_date'=>date("Y-m-d"),
-					'end_date'=>date("Y-m-d"),
-					'suppliyer_id'=>0,
-					'branch_id'=>0,
-					'customer_id'=>0,
-			);
-		}
-		$this->view->rssearch = $data;
-		$query = new report_Model_DbQuery();
-		$this->view->repurchase =  $query->getAllQuotation($data);
-		$frm = new Application_Form_FrmReport();
-		
-		$formFilter = new Sales_Form_FrmSearch();
-		$this->view->form_purchase = $formFilter;
-	    Application_Model_Decorator::removeAllDecorator($formFilter);
-	}
 	public function customerLostAction()//purchase report
 	{
 		if($this->getRequest()->isPost()){
@@ -710,20 +457,6 @@ class report_indexController extends Zend_Controller_Action
 		$formFilter = new Sales_Form_FrmSearch();
 		$this->view->form_purchase = $formFilter;
 		Application_Model_Decorator::removeAllDecorator($formFilter);
-	}
-	public function quotadetailAction(){
-		$id = ($this->getRequest()->getParam('id'))? $this->getRequest()->getParam('id'): '0';
-		if(empty($id)){
-			$this->_redirect("/report/index/rpt-quotationissue");
-		}
-		$query = new report_Model_DbQuery();
-		$this->view->product =  $query->getQuotationById($id);
-		$rs = $query->getQuotationById($id);
-		if(empty($rs)){
-			$this->_redirect("/report/index/rpt-sales");
-		}
-		$db= new Application_Model_DbTable_DbGlobal();
-    	$this->view->rscondition = $db->getTermConditionById(1, $id);
 	}
 	public function rptDeliveryAction()//purchase report
     {
@@ -830,90 +563,7 @@ class report_indexController extends Zend_Controller_Action
     	//$this->view->rscondition = $db->getTermConditionByIdIinvocie(3, null);
 		$this->view->rscondition = $db->getTermConditionById(3, $rs[0]["invoice_id"]);	
     }
-	public function rptExpenseAction(){
-    	try{
-    		if($this->getRequest()->isPost()){
-    			$search=$this->getRequest()->getPost();
-    			$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-    			$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
-    		}
-    		else{
-    			$search = array(
-    					"adv_search"=>'',
-    					"branch_id"=>-1,
-    					'title'=>-1,
-    					"status"=>-1,
-    					'start_date'=> date('Y-m-d'),
-    					'end_date'=>date('Y-m-d'),
-    			);
-    		}
-    		$db = new report_Model_DbQuery();
-    		$this->view->expense = $db->getAllExpense($search);
-			$this->view->expense_po = $db->getAllExpensePurchaseNoSum($search);
-    		$this->view->search = $search;
-    
-    	}catch(Exception $e){
-    		Application_Form_FrmMessage::message("Application Error");
-    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    	}
-		$formFilter = new Application_Form_Frmsearch();
-		$this->view->formFilter = $formFilter;
-		Application_Model_Decorator::removeAllDecorator($formFilter);
-    }
-	public function rptTypeexpenseAction(){
-    	try{
-    		if($this->getRequest()->isPost()){
-    			$search=$this->getRequest()->getPost();
-    			$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-    			$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
-    		}
-    		else{
-    			$search = array(
-    					"adv_search"=>'',
-    					"branch_id"=>-1,
-    					'title'=>-1,
-    					"status"=>-1,
-    					'start_date'=> date('Y-m-d'),
-    					'end_date'=>date('Y-m-d'),
-    			);
-    		}
-    		$db = new report_Model_DbQuery();
-    		$this->view->expense = $db->getAllExpenseType($search);
-			$this->view->expense_po = $db->getAllExpensePurchase($search);
-    		$this->view->search = $search;
-    
-    	}catch(Exception $e){
-    		Application_Form_FrmMessage::message("Application Error");
-    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    	}
-    	$formFilter = new Application_Form_Frmsearch();
-    	$this->view->formFilter = $formFilter;
-    	Application_Model_Decorator::removeAllDecorator($formFilter);
-    }
-	 public function rptVandorbalanceAction()//purchase report
-    {
-    	if($this->getRequest()->isPost()){
-    		$data = $this->getRequest()->getPost();
-    		$data['start_date']=date("Y-m-d",strtotime($data['start_date']));
-    		$data['end_date']=date("Y-m-d",strtotime($data['end_date']));
-    	}else{
-    		$data = array(
-    				'text_search'=>'',
-    				'start_date'=>date("Y-m-d"),
-    				'end_date'=>date("Y-m-d"),
-    				'suppliyer_id'=>0,
-    				'branch_id'=>0,
-    		);
-    	}
-    	$this->view->rssearch = $data;
-    	$query = new report_Model_DbQuery();
-    	$this->view->repurchase =  $query->getVendorBalance($data);
-    	$frm = new Application_Form_FrmReport();
-    
-    	$form_search=$frm->FrmReportPurchase($data);
-    	Application_Model_Decorator::removeAllDecorator($form_search);
-    	$this->view->form_purchase = $form_search;
-    }
+	
 	public function rptchequewithdrawalwarningAction()//purchase report
     {
     	if($this->getRequest()->isPost()){
@@ -1014,6 +664,10 @@ class report_indexController extends Zend_Controller_Action
     	$form_search=$frm->productDetailReport($search);
     	Application_Model_Decorator::removeAllDecorator($form_search);
     	$this->view->form_search = $form_search;
+    	
+    	$formFilter = new Application_Form_Frmsearch();
+    	$this->view->getHeader = $formFilter->getHeaderAction();
+    	$this->view->getFooter = $formFilter->getFooterAction();
     }
 	public function rptReceiptAction()//purchase report
     {
@@ -1032,7 +686,6 @@ class report_indexController extends Zend_Controller_Action
     				'saleagent_id'=>-1
     		);
     	}
-//     	$this->view->rssearch = $data;
     	$query = new report_Model_DbQuery();
     	$this->view->rsreceitp = $query->getAllReceipt($data);
     	
@@ -1040,11 +693,9 @@ class report_indexController extends Zend_Controller_Action
     	$this->view->form_purchase = $formFilter;
     	Application_Model_Decorator::removeAllDecorator($formFilter);
     	
-//     	$frm = new Application_Form_FrmReport();
-    
-//     	$formFilter = new Application_Form_Frmsearch();
-//     	$this->view->form_purchase = $formFilter;
-//     	Application_Model_Decorator::removeAllDecorator($formFilter);
+    	$formFilter = new Application_Form_Frmsearch();
+    	$this->view->getHeader = $formFilter->getHeaderAction();
+    	$this->view->getFooter = $formFilter->getFooterAction();
     }
 	function rptSalebystaffAction(){
     	if($this->getRequest()->isPost()){
@@ -1157,13 +808,16 @@ class report_indexController extends Zend_Controller_Action
     				'branch_id'=>'',
     		);
     	}
-//     	$this->view->rssearch = $data;
     	$query = new report_Model_DbQuery();
     	$this->view->rsreceitp = $query->getCustomer($data);
     	
     	$formFilter = new Sales_Form_FrmSearch();
     	$this->view->form_purchase = $formFilter;
     	Application_Model_Decorator::removeAllDecorator($formFilter);
+    	
+    	$formFilter = new Application_Form_Frmsearch();
+    	$this->view->getHeader = $formFilter->getHeaderAction();
+    	$this->view->getFooter = $formFilter->getFooterAction();
 	}
 	
 	function rptcuinvoicepaymentAction(){
@@ -1221,5 +875,41 @@ class report_indexController extends Zend_Controller_Action
     	$formFilter = new Sales_Form_FrmSearch();
     	$this->view->form_purchase = $formFilter;
     	Application_Model_Decorator::removeAllDecorator($formFilter);
+	}
+	function rptCashflowAction(){
+		if($this->getRequest()->isPost()){
+			$search = $this->getRequest()->getPost();
+			$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
+			$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
+		}else{
+			$search = array(
+					'txt_search'=>'',
+					'start_date'=>date("Y-m-d"),
+					'end_date'=>date("Y-m-d"),
+					'item'=>0,
+					'category_id'=>0,
+					'customer_id'=>0,
+					'branch_id'=>0,
+			);
+		}
+		$this->view->rssearch=$search;
+		$query = new report_Model_DbQuery();
+		$this->view->product_rs =  $query->getSaleCashflow($search);
+		$total_discount  =$query->getSaleDiscountCashflow($search);
+		if($total_discount=='' or empty($total_discount)){$total_discount=0;}
+		$this->view->rs_totaldiscount =  $query->getSaleDiscountCashflow($search);
+	
+		$frm = new Application_Form_FrmReport();
+		$form_search=$frm->productDetailReport($search);
+		Application_Model_Decorator::removeAllDecorator($form_search);
+		$this->view->form_search = $form_search;
+		
+		$search['title']='';
+		$this->view->expense = $query->getAllExpenseType($search);
+		$this->view->expense_po = $query->getAllExpensePurchase($search);
+		
+		$formFilter = new Application_Form_Frmsearch();
+		$this->view->getHeader = $formFilter->getHeaderAction();
+		$this->view->getFooter = $formFilter->getFooterAction();
 	}
 }

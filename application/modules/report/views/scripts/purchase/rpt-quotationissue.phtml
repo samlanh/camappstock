@@ -1,0 +1,125 @@
+<?php 
+$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+$brach_name =  $this->branch;
+?>
+<title>Sale Quotation Report</title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("Sale Quotation Report");?>
+				</div>
+				<?php echo $this->getHeader;?>
+			</div>
+            <div class="portlet-body form frmfilter">
+				<form method="post" autocomplete="off">
+					<div class="form-group" style="padding-top: 6px;">
+						<?php $formFilter = $this->form_purchase; ?>
+						<label class="control-label col-md-2"><?php echo $formFilter->getElement('text_search');?></label>
+						<label class="control-label col-md-2"><?php echo $formFilter->getElement('branch_id');?></label>
+						<label class="control-label col-md-2"><?php echo $formFilter->getElement('customer_id');?></label>
+						<label class="control-label col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i><?php echo $formFilter->getElement('start_date');?></div></label>
+						<label class="control-label col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i><?php echo $formFilter->getElement('end_date');?></div></label>
+						<label class="control-label col-md-2">
+							<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
+						</label>
+					</div><div style="clear:both;"></div>	
+				</form> 
+	<div style=" min-height:28cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.2cm">
+	<div id="divPrint" style="width: 100%;">
+		<style>
+			.style{
+				line-height: 20px;font-size: 12px !important;
+				font-family: 'Khmer OS Battambang';
+			}
+			ul{margin: 0;padding:0;}
+			table tr td ul li{text-align: center;list-style: none;line-height: 25px; font-weight: bold;}
+			th{padding: 5px;}
+			.hover:hover{background: #ccc;}
+			table tr td{line-height: 20px;}
+
+		</style>
+		<table style="font-family: 'Khmer OS Content'; width:100%;">
+			<tbody>
+			<tr>
+		    	<td align="center">
+		        	<table width="100%" style="font-family: 'Khmer OS Battambang';" cellpadding="0" cellpadding="0">
+		            	<tbody><tr>
+		                	<td width="20%" valign="top"></td>
+		                	<td width="60%" valign="top">
+		                		<ul>
+		                			<li style="text-align:center; font-size:16px; font-family:'Khmer MEF2'">Sale Quotation Report</li>
+		                			<li style="text-align:center; font-size:16px;"><?php echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
+		                		</ul>
+		                	</td>
+		                    <td width="20%"></td>
+		                </tr> 
+		                <tr>
+		                	<td colspan="3" valign="top">
+				              </td>
+				           </tr>   
+		            </tbody></table>
+		        </td>
+		    </tr>
+		    <tr>
+		    	<td class="table2excel" id="exportExcel">
+		            <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
+		                 <tbody>
+		                 <tr class="style" align="center" style="background:#ccd9ff;font-weight:bold; line-height: 35px !important; font-size:12px; padding:1px 0px; white-space: nowrap; ">
+		                    <td style="line-height: 30px;">&nbsp;<?php echo $tr->translate("NUM");?></td>
+							<td><?php echo $tr->translate("BRANCH_NAME");?></td>
+							<td>&nbsp;<?php echo $tr->translate("CUSTOMER_NAME");?></td>
+							<td>&nbsp;<?php echo $tr->translate("SALE_AGENT");?></td>
+							<td width="10%">&nbsp;<?php echo $tr->translate("QUOTATION_NO");?></td>
+							<td><?php echo $tr->translate("QUOATATION_DATE");?></td>
+							<td>&nbsp;<?php echo $tr->translate("TOTAL");?></td>
+							<td>&nbsp;<?php echo $tr->translate("DISCOUNT");?></td>
+							<td>&nbsp;<?php echo $tr->translate("TOTAL_AMOUNT");?></td>
+							<td>&nbsp;<?php echo $tr->translate("APPROVED_STATUS");?></td>
+							<td>&nbsp;<?php echo $tr->translate("APPROVED_BY");?></td>
+							<td>&nbsp;<?php echo $tr->translate("PENDING_STATUS");?></td>
+							<td>&nbsp;<?php echo $tr->translate("BY_USER");?></td>
+							<td>&nbsp;<?php echo $tr->translate("PRINT");?></td>
+		                </tr>
+		                <?php $num=1; 
+			                $r_netotal = 0;$r_paid = 0; $r_balance = 0;
+			                $d_netotal = 0;$d_paid = 0; $d_balance = 0;
+			                $b_netotal = 0;$b_paid = 0; $b_balance = 0;
+		                if(!empty($this->repurchase))foreach ($this->repurchase AS $index => $rs){?>
+						<tr class='row-format<?php echo $num; $num=1-$num;?> hover' >
+						   <td align="center" style="white-space: nowrap;">&nbsp;<?php echo $index+1?></td>
+						   <td valign="middle"><span style="width:150px;!important; display: block;padding-left: 1px;"><a style="color:#000;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/report/purchase/quotadetail/id/".$rs["id"];?>">&nbsp;<?php echo $rs["branch_name"];?></a></span></td>
+						   <td><span style="width:150px;!important; display: block;padding-left: 1px;"><a style="color:#000;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/report/purchase/quotadetail/id/".$rs["id"];?>">&nbsp;<?php echo $rs["customer_name"];?></a></span></td>
+						   <td style="white-space: nowrap;"><a style="color:#000;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/report/purchase/quotadetail/id/".$rs["id"];?>">&nbsp;<?php echo $rs["agent_name"];?></a></td>
+						   <td style="white-space: nowrap;"><a style="color:#000;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/report/purchase/quotadetail/id/".$rs["id"];?>">&nbsp;<?php echo $rs["quoat_number"];?></a></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo date("d/m/Y",strtotime($rs["date_order"]));?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo number_format($rs["all_total"],2);?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo number_format($rs["discount_value"],2);?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo number_format($rs["net_total"],2);?></td>
+						   <td>&nbsp;<?php echo $rs["is_approved"];?></td>
+						   <td>&nbsp;<?php echo $rs["approval_by"];?></td>
+						   <td>&nbsp;<?php echo $rs["pending_status"];?></td>
+						   <td>&nbsp;<?php echo $rs["user_name"];?></td>
+						   <td>&nbsp;<a style="color:#000;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/report/index/quotadetail/id/".$rs["id"];?>">&nbsp;<?php echo $tr->translate("PRINT");?></a></td>
+						</tr>
+						   <?php 
+                    }?>
+		                </tbody>
+		           </table>
+		              <br>
+		              <?php echo $this->getFooter;?>
+		    		</td>
+		    	</tr>
+			</tbody>
+		</table>
+		</div>
+	  </div>		
+	</div>
+	 </div>
+   </div>
+</div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script>
+function doPrint() {var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();}
+</script>

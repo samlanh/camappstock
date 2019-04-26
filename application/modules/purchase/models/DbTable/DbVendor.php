@@ -53,19 +53,10 @@ class Purchase_Model_DbTable_DbVendor extends Zend_Db_Table_Abstract
 			if(@$post["is_over_sea"]==1){
 				$data=array(
 						'v_name'		=> $post['txt_name'],
-// 						'v_phone'		=> $post['txt_phone'],
-// 						'contact_name'	=> $post['txt_contact_name'],
-// 						'phone_person'	=> $post['contact_phone'],
-// 						'add_name'		=> $post['txt_address'],
-// 						'email'			=> $post['txt_mail'],
-// 						'website'		=> $post['txt_website'],
-// 						'fax'			=> $post['txt_fax'],
-// 						'note'	=> $post['remark'],
 						'is_over_sea'	=>	$post["is_over_sea"],
 						'last_usermod'	=> $GetUserId,
 						'last_mod_date' => new Zend_Date(),
 						'date'			=>	date("Y-m-d"),
-						'status'			=>	$post["status"],
 				);
 			}else {
 				$data=array(
@@ -82,13 +73,15 @@ class Purchase_Model_DbTable_DbVendor extends Zend_Db_Table_Abstract
 						'last_usermod'	=> $GetUserId,
 						'last_mod_date' => new Zend_Date(),
 						'date'			=>	date("Y-m-d"),
-						'status'			=>	$post["status"],
 				);
 			}
+			
 			if(!empty($post['id'])){
+				$data['status']=$post["status"];
 				$where = "vendor_id = ".$post["id"];
 				$this->update($data, $where);
 			}else{
+				$data['status']=1;
 				$db->insert("tb_vendor", $data);
 			}
 			return $db->commit();

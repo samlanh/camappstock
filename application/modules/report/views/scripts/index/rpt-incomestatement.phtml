@@ -1,8 +1,6 @@
 <?php 
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-// 	$frm = $this->frm_search;
 	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
-// 	$db  = new Report_Model_DbTable_DbParamater();
 ?>
 <script>
 dojo.require("dijit.form.DateTextBox");
@@ -10,7 +8,7 @@ dojo.require("dijit.form.DateTextBox");
 <meta charset="utf-8">
 <title><?php echo $tr->translate("របាយការណ៍ចំណូលចំណាយ");?></title>
 <div class="portlet-body form frmfilter">
-				<form method="post" action="<?php //echo $formFilter->getAction(); ?>">
+				<form method="post" autocomplete="off">
 					<div class="form-group" style="padding-top: 6px;">
 						<?php $formFilter = $this->formFilter; ?>
 						<label class="control-label col-md-2"><?php echo $formFilter->getElement('text_search');?></label>
@@ -36,7 +34,7 @@ dojo.require("dijit.form.DateTextBox");
 							 </button>
 								<ul class="dropdown-menu" role="menu">
 									<li>
-										<a href="#" onclick="doPrint();">
+										<a href="" onclick="doPrint();">
 											<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
 										</a>
 									</li>

@@ -9,7 +9,7 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 	}
 	function getTitleReport($id){
 		$db = $this->getAdapter();
-		$sql ="SELECT s.`branch_code`,s.`logo`,s.`prefix` FROM `tb_sublocation` AS s WHERE s.`id`=$id";
+		$sql ="SELECT s.`branch_code`,s.`logo`,s.`prefix`,name FROM `tb_sublocation` AS s WHERE s.`id`=$id";
 		return $db->fetchRow($sql);
 	}
 	protected function GetuserInfo(){
@@ -40,14 +40,12 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 		
 		return $db->fetchRow($sql);
 	}
-	function getPrefix($id){
-		//$id = $this->GetuserInfo();
+	function getPrefix($id=1){
 		$db = $this->getAdapter();
 		$sql = "SELECT s.prefix FROM `tb_sublocation` AS s WHERE s.`id` =".$id;
-		//echo $sql;
 		return $db->fetchOne($sql);
 	}
-	public function getTransferNo($id){
+	public function getTransferNo($id=1){
 		$db =$this->getAdapter();
 		$prefix = $this->getPrefix($id);
 		$sql=" SELECT id FROM $this->_name ORDER BY id DESC LIMIT 1 ";
@@ -103,7 +101,6 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	function getTransfer($data){
-		$tran_date = $data["tran_date"];
 		$db = $this->getAdapter();
 		$sql = "SELECT 
 				  p.*,
@@ -112,28 +109,27 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
   				  (SELECT u.`fullname` FROM `tb_acl_user` AS u WHERE u.`user_id`=p.`user_mod`) AS user_tran
 				FROM
 				  `tb_product_transfer` AS p 
-				WHERE 1 AND p.`date`<='$tran_date'";
-		$where = '';
-	  	if($data["tran_num"]!=""){
+				WHERE 1 ";
+		$from_date =(empty($data['start_date']))? '1': " p.date >= '".$data['start_date']." 00:00:00'";
+		$to_date = (empty($data['end_date']))? '1': " p.date <= '".$data['end_date']." 23:59:59'";
+		$where = " AND ".$from_date." AND ".$to_date;
+		
+  	if(!empty($data["avd_search"])){
 	  		$s_where=array();
-	  		$s_search = addslashes(trim($data['tran_num']));
+	  		$s_search = addslashes(trim($data['avd_search']));
 	  		$s_where[]= " p.tran_no LIKE '%{$s_search}%'";
-	  		//$s_where[]=" p.user_mod LIKE '%{$s_search}%'";
 	  		$s_where[]= " p.date LIKE '%{$s_search}%'";
 	  		$s_where[]= " p.remark LIKE '%{$s_search}%'";
-	  		//$s_where[]= " cate LIKE '%{$s_search}%'";
 	  		$where.=' AND ('.implode(' OR ', $s_where).')';
 	  	}
-	  	if($data["type"]!=""){
-	  		$where.=' AND p.`type`='.$data["type"];
-	  	}
+	  
 	  	if($data["status"]!=""){
 	  		$where.=' AND p.status='.$data["status"];
 	  	}
-	  	if($data["to_loc"]!=""){
-	  		$where.=' AND p.tran_location='.$data["to_loc"];
-	  	}
-  		//echo $sql.$where;
+// 	  	if($data["to_loc"]!=""){
+// 	  		$where.=' AND p.tran_location='.$data["to_loc"];
+// 	  	}
+	  	$where.=" ORDER BY p.id DESC ";
 		return $db->fetchAll($sql.$where);
 	}
 	function getTransferById($id){
@@ -141,6 +137,7 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 				  p.id,
 				  p.`re_date`,
+				  p.type,
 				  p.`tran_no`,
 				  p.`re_id` AS req_id,
 				  p.`cur_location`,
@@ -236,11 +233,11 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 			
 			$arr = array(
 					'tran_no'		=>	$data["tran_num"],
-					'cur_location'	=>	$result["branch_id"],
+					'cur_location'	=>	$data["from_loc"],
 					'tran_location'	=>	$data["to_loc"],
-					'type'			=>	$data["type"],
-					'date'			=>	$data["tran_date"],
-					'date_mod'		=>	new Zend_Date(),
+					'type'			=>	1,
+					'date'			=>	date("Y-m-d",strtotime($data["tran_date"])),
+					'date_mod'		=>	date("Y-m-d"),
 					'remark'		=>	$data["remark"],
 					'user_mod'		=>	$result["user_id"],
 			);
@@ -258,12 +255,10 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 					);
 					$this->_name="tb_transfer_item";
 					$this->insert($arr_ti);
-	
-					$rs_from = $this->getProductExist($data["pro_id_".$i],$result["branch_id"]);
+
+					$rs_from = $this->getProductExist($data["pro_id_".$i],$data["from_loc"]);
 					$rs_to = $this->getProductExist($data["pro_id_".$i],$data["to_loc"]);
 	
-					//update stock recieve branch
-					//echo $rs_to["qty"]+$data["qty_tran_".$i];
 					if(!empty($rs_to)){
 						$arr_to = array(
 							'qty'	=>	$rs_to["qty"]+$data["qty_tran_".$i],
@@ -271,6 +266,7 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 						$this->_name="tb_prolocation";
 						$where = array('pro_id=?'=>$data["pro_id_".$i],"location_id=?"=>$data["to_loc"]);
 						$this->update($arr_to, $where);
+						
 					}else{
 						$arr_to = array(
 								'pro_id'			=>	$data["pro_id_".$i],
@@ -284,13 +280,12 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 						$this->insert($arr_to);
 					}
 					
-					/// Update transfer branch
 					if(!empty($rs_from)){
 						$arr_fo = array(
 							'qty'	=>	$rs_from["qty"]-$data["qty_tran_".$i],
 						);
 						$this->_name="tb_prolocation";
-						$where = array('pro_id=?'=>$data["pro_id_".$i],"location_id=?"=>$result["branch_id"]);
+						$where = array('pro_id=?'=>$data["pro_id_".$i],"location_id=?"=>$data["from_loc"]);
 						$this->update($arr_fo, $where);
 					}
 				}
@@ -298,8 +293,7 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 			$db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
-			Application_Model_DbTable_DbUserLog::writeMessageError($e);
-			echo $e->getMessage();exit();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	public function edit($data){
@@ -310,53 +304,58 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 			$result = $user_info->getUserInfo();
 				
 			$arr = array(
-					//'tran_no'		=>	$data["tran_num"],
-					//'cur_location'	=>	$result["location_id"],
+					'cur_location'	=>	$data["from_loc"],
 					'tran_location'	=>	$data["to_loc"],
-					'type'			=>	$data["type"],
 					'date'			=>	$data["tran_date"],
-					'date_mod'		=>	new Zend_Date(),
+					'date_mod'		=>	date("Y-m-d",strtotime($data["tran_date"])),
 					'remark'		=>	$data["remark"],
 					'user_mod'		=>	$result["user_id"],
 			);
 			$where = $db->quoteInto("id=?", $data["id"]);
 			$this->update($arr, $where);
-			
-			
-			// Update Tb_prolocation has Transfered to old qty  to old Qty
+						
 			$rs_detail = $this->getCurrentTransfer($data["id"]);
 			if(!empty($rs_detail)){
+				$this->_name="tb_prolocation";
 				foreach ($rs_detail as $rs){
-					//Update Prolocation has transfer to
+					$rs_from = $this->getProductExist($rs["pro_id"],$rs["cur_location"]);//from
+					$rs_to = $this->getProductExist($rs["pro_id"],$rs["tran_location"]);//to
+					
 					$arr_up_to = array(
-						//'' 		=>		$
+						'qty'=>$rs_from['qty']+$rs['qty'],
 					);
+					$where = array('pro_id=?'=>$rs["pro_id"],"location_id=?"=>$rs["cur_location"]);
+					$this->update($arr_up_to, $where);
 					
 					//Update Prolocation has transfer to
 					$arr_up_fr = array(
-					
+							'qty'=>$rs_to['qty']-$rs['qty'],
 					);
+					$where = array('pro_id=?'=>$rs["pro_id"],"location_id=?"=>$rs["tran_location"]);
+					$this->update($arr_up_fr, $where);
 				}
 			}
-				
+			$this->_name="tb_transfer_item";
+			$where = 'tran_id='.$data["id"];
+			$this->delete($where);
+			
 			if(!empty($data['identity'])){
 				$identitys = explode(',',$data['identity']);
 				foreach($identitys as $i)
 				{
 					$arr_ti = array(
-							'tran_id'		=>	$id,
+							'tran_id'		=>	$data["id"],
 							'pro_id'		=>	$data["pro_id_".$i],
 							'qty'			=>	$data["qty_tran_".$i],
 							'remark'		=>	$data["remark_".$i],
 					);
-					$this->_name="tb_transfer_item";
+				
 					$this->insert($arr_ti);
 	
-					$rs_from = $this->getProductExist($data["pro_id_".$i],$result["branch_id"]);
+					$rs_from = $this->getProductExist($data["pro_id_".$i],$data["from_loc"]);
 					$rs_to = $this->getProductExist($data["pro_id_".$i],$data["to_loc"]);
 	
 					//update stock recieve branch
-					//echo $rs_to["qty"]+$data["qty_tran_".$i];
 					if(!empty($rs_to)){
 						$arr_to = array(
 								'qty'	=>	$rs_to["qty"]+$data["qty_tran_".$i],
@@ -383,7 +382,7 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 								'qty'	=>	$rs_from["qty"]-$data["qty_tran_".$i],
 						);
 						$this->_name="tb_prolocation";
-						$where = array('pro_id=?'=>$data["pro_id_".$i],"location_id=?"=>$result["branch_id"]);
+						$where = array('pro_id=?'=>$data["pro_id_".$i],"location_id=?"=>$data["from_loc"]);
 						$this->update($arr_fo, $where);
 					}
 				}
@@ -392,7 +391,6 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 		}catch (Exception $e){
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e);
-			echo $e->getMessage();exit();
 		}
 	}
 	function getProductName(){
@@ -441,24 +439,17 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		$date =new Zend_Date();
-		//print_r($data);exit();
 		try{
 			$user_info = new Application_Model_DbTable_DbGetUserInfo();
 			$result = $user_info->getUserInfo();
 			$sql = "SELECT t.id FROM `tb_request_transfer` AS t WHERE  t.`tran_no`='".$data["tran_num"]."'";
-			$db->getProfiler()->setEnabled(true);
 			$rs = $db->fetchOne($sql);
-			Zend_Debug::dump($db->getProfiler()->getLastQueryProfile()->getQuery());
-Zend_Debug::dump($db->getProfiler()->getLastQueryProfile()->getQueryParams());
-$db->getProfiler()->setEnabled(false);
-			//print_r($rs);
+
 			if(empty($rs)){
-				//print_r($data);exit();
 				$arr = array(
 						'tran_no'		=>	$data["tran_num"],
 						'cur_location'	=>	$data["from_loc"],
 						'tran_location'	=>	$data["to_loc"],
-						//'type'			=>	$data["type"],
 						'date'			=>	date('Y-m-d'),
 						'date_tran'		=>	date("Y-m-d",strtotime($data["tran_date"])),
 						'remark'		=>	$data["remark"],
@@ -467,11 +458,7 @@ $db->getProfiler()->setEnabled(false);
 						'appr_pedding'	=>	1
 				);
 				$this->_name="tb_request_transfer";
-				$db->getProfiler()->setEnabled(true);
 				$id = $this->insert($arr);
-				Zend_Debug::dump($db->getProfiler()->getLastQueryProfile()->getQuery());
-Zend_Debug::dump($db->getProfiler()->getLastQueryProfile()->getQueryParams());
-$db->getProfiler()->setEnabled(false);
 				
 				$arr_history = array(
 						'tran_id'		=>	$id,
@@ -486,13 +473,8 @@ $db->getProfiler()->setEnabled(false);
 						'action'		=>	1,
 						//'appr_pedding'	=>	1
 				);
-				$this->_name="tb_transfer_history";
-				
-				$db->getProfiler()->setEnabled(true);
+				$this->_name="tb_transfer_history";				
 				$his_id = $this->insert($arr_history);
-				Zend_Debug::dump($db->getProfiler()->getLastQueryProfile()->getQuery());
-Zend_Debug::dump($db->getProfiler()->getLastQueryProfile()->getQueryParams());
-$db->getProfiler()->setEnabled(false);
 				
 				if(!empty($data['identity'])){
 					$identitys = explode(',',$data['identity']);
@@ -508,11 +490,7 @@ $db->getProfiler()->setEnabled(false);
 								'remark'		=>	$data["remark_".$i],
 						);
 						$this->_name="tb_request_transfer_item";
-						$db->getProfiler()->setEnabled(true);
 						$this->insert($arr_ti);
-						Zend_Debug::dump($db->getProfiler()->getLastQueryProfile()->getQuery());
-Zend_Debug::dump($db->getProfiler()->getLastQueryProfile()->getQueryParams());
-$db->getProfiler()->setEnabled(false);
 						
 						$arr_ti_his = array(
 								'his_id'		=>	$his_id,
@@ -525,20 +503,14 @@ $db->getProfiler()->setEnabled(false);
 								'remark'		=>	$data["remark_".$i],
 						);
 						$this->_name="tb_transfer_history_item";
-						$db->getProfiler()->setEnabled(true);
 						$this->insert($arr_ti_his);
-						Zend_Debug::dump($db->getProfiler()->getLastQueryProfile()->getQuery());
-Zend_Debug::dump($db->getProfiler()->getLastQueryProfile()->getQueryParams());
-$db->getProfiler()->setEnabled(false);
 					}
 				}
 			}
-			//exit();
 			$db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e);
-			echo $e->getMessage();exit();
 		}
 	}
 	
@@ -619,7 +591,6 @@ $db->getProfiler()->setEnabled(false);
 		}catch (Exception $e){
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e);
-			echo $e->getMessage();exit();
 		}
 	}
 	
@@ -648,7 +619,6 @@ $db->getProfiler()->setEnabled(false);
 		}catch (Exception $e){
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e);
-			echo $e->getMessage();exit();
 		}
 	}
 	
@@ -668,7 +638,6 @@ $db->getProfiler()->setEnabled(false);
 							'cur_location'	=>	$data["from_loc"],
 							'tran_location'	=>	$data["to_loc"],
 							're_id'			=>	$data["id"],
-							//'type'			=>	$data["type"],
 							'date'			=>	$data["tran_date"],
 							're_date'		=>	$data["re_date"],
 							'date_mod'		=>	date('Y-m-d'),
@@ -688,7 +657,6 @@ $db->getProfiler()->setEnabled(false);
 						'remark'		=>	$data["remark"],
 						'user_id'		=>	$result["user_id"],
 						'action'		=>	1,
-							//'appr_pedding'	=>	1
 					);
 					$this->_name="tb_transfer_history";
 					$his_id = $this->insert($arr_history);
@@ -726,45 +694,20 @@ $db->getProfiler()->setEnabled(false);
 						$this->_name="tb_transfer_history_item";
 						$this->insert($arr_ti_his);
 		
-						$rs_from = $this->getProductExist($data["pro_id_".$i],$data["from_loc"]);
-						$rs_to = $this->getProductExist($data["pro_id_".$i],$data["to_loc"]);
+						$rs_from = $this->getProductExist($data["pro_id_".$i],$data["to_loc"]);
 		
-						//update stock recieve branch
-						//echo $rs_to["qty"]+$data["qty_tran_".$i];
-						/*if(!empty($rs_to)){
-							$arr_to = array(
-									'qty'	=>	$rs_to["qty"]-$data["qty_tran_".$i],
-							);
-							$this->_name="tb_prolocation";
-							$where = array('pro_id=?'=>$data["pro_id_".$i],"location_id=?"=>$data["to_loc"]);
-							$this->update($arr_to, $where);
-						}else{
-							$arr_to = array(
-									'pro_id'			=>	$data["pro_id_".$i],
-									'location_id'		=>	$data["to_loc"],
-									'qty'				=>	$data["qty_tran_".$i],
-									'qty_warning'		=>	0,
-									'last_mod_userid'	=>	$result["user_id"],
-									'last_mod_date'		=>	new Zend_Date(),
-							);
-							$this->_name="tb_prolocation";
-							$this->insert($arr_to);
-						}*/
-						
-						/// Update transfer branch
-						//print_r($rs_from);exit();
 						if(!empty($rs_from)){
 							$arr_fo = array(
 								'qty'	=>	$rs_from["qty"]-$data["qty_tran_".$i],
 							);
 							$this->_name="tb_prolocation";
-							$where = array('pro_id=?'=>$data["pro_id_".$i],"location_id=?"=>$data["from_loc"]);
+							$where = array('pro_id=?'=>$data["pro_id_".$i],"location_id=?"=>$data["to_loc"]);
 							$this->update($arr_fo, $where);
 						}else{
 							$arr_to = array(
 									'pro_id'			=>	$data["pro_id_".$i],
-									'location_id'		=>	$data["from_loc"],
-									'qty'				=>	"-".$data["qty_tran_".$i],
+									'location_id'		=>	$data["to_loc"],
+									'qty'				=>	-$data["qty_tran_".$i],
 									'qty_warning'		=>	0,
 									'last_mod_userid'	=>	$result["user_id"],
 									'last_mod_date'		=>	new Zend_Date(),
@@ -788,7 +731,6 @@ $db->getProfiler()->setEnabled(false);
 		}catch (Exception $e){
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e);
-			echo $e->getMessage();exit();
 		}
 	}
 	
@@ -965,7 +907,7 @@ $db->getProfiler()->setEnabled(false);
 				$arr = array(
 						'receive_no'	=>	$data["receive_num"],
 						'tran_id'		=>	$data["id"],
-						'cu_loc'		=>	$data["to_loc"],
+						'cu_loc'		=>	$data["to_loc"],//សាខាទទួល
 						'tran_loc'		=>	$data["from_loc"],
 						'req_id'		=>	$data["id"],
 						//'type'			=>	$data["type"],
@@ -989,7 +931,6 @@ $db->getProfiler()->setEnabled(false);
 						'remark'		=>	$data["remark"],
 						'user_id'		=>	$result["user_id"],
 						'action'		=>	1,
-							//'appr_pedding'	=>	1
 					);
 				$this->_name="tb_transfer_history";
 				$his_id = $this->insert($arr_history);
@@ -1027,12 +968,8 @@ $db->getProfiler()->setEnabled(false);
 						$this->_name="tb_transfer_history_item";
 						$this->insert($arr_ti_his);
 	
-					//$rs_from = $this->getProductExist($data["pro_id_".$i],$result["branch_id"]);
 					$rs_to = $this->getProductExist($data["pro_id_".$i],$data["to_loc"]);
-					//print_r($rs_to);exit();
-	
-					//update stock recieve branch
-					//echo $rs_to["qty"]+$data["qty_tran_".$i];
+					
 					if(!empty($rs_to)){
 						$arr_to = array(
 								'qty'	=>	$rs_to["qty"]+$data["qty_receive_".$i],
@@ -1052,42 +989,17 @@ $db->getProfiler()->setEnabled(false);
 						$this->_name="tb_prolocation";
 						$this->insert($arr_to);
 					}
-					
-					/// Update transfer branch
-					/*if(!empty($rs_from)){
-						$arr_fo = array(
-							'qty'	=>	$rs_from["qty"]-$data["qty_tran_".$i],
-						);
-						$this->_name="tb_prolocation";
-						$where = array('pro_id=?'=>$data["pro_id_".$i],"location_id=?"=>$result["branch_id"]);
-						$this->update($arr_fo, $where);
-					}else{
-						$arr_to = array(
-								'pro_id'			=>	$data["pro_id_".$i],
-								'location_id'		=>	$data["to_loc"],
-								'qty'				=>	"-".$data["qty_tran_".$i],
-								'qty_warning'		=>	0,
-								'last_mod_userid'	=>	$result["user_id"],
-								'last_mod_date'		=>	new Zend_Date(),
-						);
-						$this->_name="tb_prolocation";
-						$this->insert($arr_to);
-					}*/
 				
 				$arr = array(
 					'appr_status'	=>	1,
 					'appr_pedding'	=>	4,
-					//'is_transfer'	=>	$id,
 				);
 				$this->_name="tb_request_transfer";
 				$where = "is_transfer=".$data["id"];
 				$this->update($arr,$where);
 				
 				$arr = array(
-					//'appr_status'	=>	1,
-					//'appr_pedding'	=>	4,
 					'is_receive'	=>	$id,
-					//'is_transfer'	=>	$id,
 				);
 				$this->_name="tb_product_transfer";
 				$where = "id=".$data["id"];
@@ -1098,7 +1010,6 @@ $db->getProfiler()->setEnabled(false);
 		}catch (Exception $e){
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e);
-			echo $e->getMessage();exit();
 		}
 	}
 	
@@ -1254,7 +1165,8 @@ $db->getProfiler()->setEnabled(false);
 				  (SELECT u.`fullname` FROM  `tb_acl_user` AS u WHERE u.`user_id`=rt.`user_id`) AS `user`,
 				  (SELECT `is_receive` FROM `tb_product_transfer` AS p WHERE p.id=rt.`is_transfer`) AS receive_id
 				FROM
-				  `tb_request_transfer` AS rt WHERE rt.`date_tran` BETWEEN '".$start_date."' AND '".$end_date."'";
+				  `tb_request_transfer` AS rt 
+					WHERE rt.`date_tran` BETWEEN '".$start_date."' AND '".$end_date."'";
 		$where = '';
 	  	if($data["avd_search"]!=""){
 	  		$s_where=array();
@@ -1267,7 +1179,7 @@ $db->getProfiler()->setEnabled(false);
 	  	if($data["branch"]!=-1){
 	  		$where.=' AND rt.`cur_location`='.$data["branch"];
 	  	}
-  		//echo $sql.$where;
+	  	$where.=" order by rt.id DESC ";
 		return $db->fetchAll($sql.$where);
 	}
 	

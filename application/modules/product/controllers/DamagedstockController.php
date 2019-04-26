@@ -16,28 +16,31 @@ public function init()
     }
    	public function indexAction()
    	{
-   		$data = $this->getRequest()->getPost();
-   		$list = new Application_Form_Frmlist();
-   		$db = new Product_Model_DbTable_DbDamagedStock();
-		$date =new Zend_Date();
-   		if($this->getRequest()->isPost()){   
-    		$data = $this->getRequest()->getPost();
-    	}else{
-			$data = array(
-    			'ad_search'		=>	'',
-    			'start_date'	=>	date("Y-m-d"),
-				'end_date'		=>	date("Y-m-d"),
-    		);
-		}
-   		$rows=$db->getAllDamagedStock($data);
-   		$columns=array("ITEM_CODE","PRODUCT_NAME","QTY_BEFORE","QTY_ADJUST","DFFER_QTY","MEASURE","LOCATION_NAME","BY_USER","DATE");
-   		$this->view->list=$list->getCheckList(0, $columns, $rows);
+   		try{
+	   		$data = $this->getRequest()->getPost();
+	   		$list = new Application_Form_Frmlist();
+	   		$db = new Product_Model_DbTable_DbDamagedStock();
+			$date =new Zend_Date();
+	   		if($this->getRequest()->isPost()){   
+	    		$data = $this->getRequest()->getPost();
+	    	}else{
+				$data = array(
+	    			'ad_search'		=>	'',
+	    			'start_date'	=>	date("Y-m-d"),
+					'end_date'		=>	date("Y-m-d"),
+	    		);
+			}
+	   		$rows=$db->getAllDamagedStock($data);
+	   		$columns=array("ITEM_CODE","PRODUCT_NAME","QTY_BEFORE","QTY_ADJUST","DFFER_QTY","MEASURE","LOCATION_NAME","BY_USER","DATE");
+	   		$this->view->list=$list->getCheckList(0, $columns, $rows);
+   		}catch(Exception $e){
+   			Application_Form_FrmMessage::messageError("INSERT_ERROR");
+   			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+   		}
    		$frm = new Product_Form_FrmAdjust();
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->formFilter = $frm->filter();
    	}
-   	//26-8-13 add adjust stock //done 27-8-813
-   	//26-8-13 add adjust stock //done 27-8-813
     public function addAction()
     {   
     	if($this->getRequest()->isPost()){   

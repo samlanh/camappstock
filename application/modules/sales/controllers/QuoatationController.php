@@ -14,32 +14,36 @@ class Sales_quoatationController extends Zend_Controller_Action
     } 
    	public function indexAction()
 	{
-		if($this->getRequest()->isPost()){
-			$search = $this->getRequest()->getPost();
-			$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-			$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
+		try{
+			if($this->getRequest()->isPost()){
+				$search = $this->getRequest()->getPost();
+				$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
+				$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
+			}
+			else{
+				$search =array(
+						'text_search'=>'',
+						'start_date'=>date("Y-m-d"),
+						'end_date'=>date("Y-m-d"),
+						'branch_id'=>-1,
+						'customer_id'=>-1,
+						);
+			}
+			$db = new Sales_Model_DbTable_Dbquoatation();
+			$rows = $db->getAllQuoatation($search);
+			$list = new Application_Form_Frmlist();
+			$columns=array("BRANCH_NAME","Com.Name","CON_NAME","SALE_AGENT","QUOTATION_NO", "ORDER_DATE","Order Type",
+				"TOTAL","DISCOUNT","TOTAL_AMOUNT","BY_USER");
+			$link=array(
+					'module'=>'sales','controller'=>'quoatation','action'=>'edit',
+			);
+			$linkview=array(
+					'module'=>'sales','controller'=>'quoatation','action'=>'quotadetail',);
+			$this->view->list=$list->getCheckList(0, $columns, $rows, array('is_approved'=>$linkview,'contact_name'=>$link,'branch_name'=>$link,'customer_name'=>$link,'staff_name'=>$link,'quoat_number'=>$link));
+		}catch (Exception $e){
+			Application_Form_FrmMessage::messageError("INSERT_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		else{
-			$search =array(
-					'text_search'=>'',
-					'start_date'=>date("Y-m-d"),
-					'end_date'=>date("Y-m-d"),
-					'branch_id'=>-1,
-					'customer_id'=>-1,
-					);
-		}
-		$db = new Sales_Model_DbTable_Dbquoatation();
-		$rows = $db->getAllQuoatation($search);
-		$list = new Application_Form_Frmlist();
-		$columns=array("BRANCH_NAME","Com.Name","CON_NAME","SALE_AGENT","QUOTATION_NO", "ORDER_DATE","Order Type",
-			"TOTAL","DISCOUNT","TOTAL_AMOUNT","APPROVED_STATUS","PENDING_STATUS","BY_USER");
-		$link=array(
-				'module'=>'sales','controller'=>'quoatation','action'=>'edit',
-		);
-		$linkview=array(
-				'module'=>'sales','controller'=>'quoatation','action'=>'quotadetail',);
-		$this->view->list=$list->getCheckList(0, $columns, $rows, array('is_approved'=>$linkview,'contact_name'=>$link,'branch_name'=>$link,'customer_name'=>$link,'staff_name'=>$link,'quoat_number'=>$link));
-		
 		$formFilter = new Sales_Form_FrmSearch();
 		$this->view->formFilter = $formFilter;
 	    Application_Model_Decorator::removeAllDecorator($formFilter);

@@ -16,7 +16,7 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 							 </button>
 								<ul class="dropdown-menu" role="menu">
 									<li>
-										<a href="#" onclick="doPrint();">
+										<a href="" onclick="doPrint();">
 											<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
 										</a>
 									</li>
@@ -209,7 +209,7 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 							   <tr style="font-size: 11px;">
 							        <td style="text-align:center;white-space: nowrap;"><strong>ថ្ងៃត្រូវដឹកជញ្ចួន /Delivery Date</strong><div class="input-icon right"><i class="fa fa-calendar"></i><input name="dilivery_date" id="dilivery_date" value="<?php echo date("m/d/Y", strtotime($this->product[0]['deli_date']));?>" class="form-control form-control-inline date-picker" /></div></td>
 							        <td></td>
-							        <td style="text-align:center;white-space: nowrap;"><strong>ថ្ងៃដឹកជញ្ចួនទៅ /Deliverying Date</strong><div class="input-icon right"><i class="fa fa-calendar"></i><input name="app_date" id="app_date" value="<?php echo date("m/d/Y");?>" class="form-control form-control-inline date-picker" /></div></td>
+							        <td style="text-align:center;white-space: nowrap;"><strong>ថ្ងៃដឹកជញ្ចួនទៅ /Deliverying Date</strong><div class="input-icon right"><i class="fa fa-calendar"></i><input name="app_date" id="app_date" value="<?php echo date("d-m-Y");?>" class="form-control form-control-inline date-picker" /></div></td>
 							   </tr>
 							  
 							</tbody>

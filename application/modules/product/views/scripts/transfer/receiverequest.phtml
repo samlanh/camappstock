@@ -4,72 +4,54 @@
 	$url_delete = $this->url(array('module'=>'product','controller'=>'transfer','action'=>'delete',));
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$formFilter = $this->formFilter;
-	
 	$rs = $this->product;
 ?>
 <title><?php echo $tr->translate("TRANSFER_LIST");?></title>
-
 	<div class="portlet box blue">
 		<div class="portlet-title">
 			<div class="caption">
 					<i class="fa fa-globe"></i><?php echo $tr->translate("TRANSFER_LIST");?>
 			</div>
-			<!--<div class="caption" style="float:right">
-					<a href="<?php echo $url_new;?>" class="btn btn-sm red" style="line-height: 35px;">
-						<i class="fa fa-plus"></i>&nbsp;<?php echo $tr->translate("ADD_NEW");?>
-					</a>
-			</div>-->
 		</div>
 		<div class="portlet-body form">
-			<form class="form-horizontal" method="post" action="" >
-				<div class="form-body">
-							<div class="form-group">
-								<div class="col-md-3">
-									<?php echo $formFilter->getElement('avd_search');?>
-								</div>
-								<div class="col-md-3">
-									<?php echo $formFilter->getElement('branch');?>
-								</div>
-								<div class="col-md-2">
-									<?php echo $formFilter->getElement('start_date');?>
-								</div>
-								<div class="col-md-2">
-									<?php echo $formFilter->getElement('end_date');?>
-								</div>
-								<!--<div class="col-md-2">
-									<?php //echo $formFilter->getElement('type');?>
-								</div>
-								<div class="col-md-2">
-									<?php echo $formFilter->getElement('status');?>
-								</div>-->
-								<div class="col-md-2">
-									<button type="submit" class="btn green"><?php echo $tr->translate("SEARCH");?></button>
-								</div>
+					<form class="form-horizontal" method="post" action="" >
+						<div class="form-body">
+									<div class="form-group">
+										<div class="col-md-3">
+											<?php echo $formFilter->getElement('avd_search');?>
+										</div>
+										<div class="col-md-3">
+											<?php echo $formFilter->getElement('branch');?>
+										</div>
+										<div class="col-md-2">
+											<?php echo $formFilter->getElement('start_date');?>
+										</div>
+										<div class="col-md-2">
+											<?php echo $formFilter->getElement('end_date');?>
+										</div>
+										<div class="col-md-2">
+											<button type="submit" class="btn green"><?php echo $tr->translate("SEARCH");?></button>
+										</div>
+									</div>
 							</div>
-					</div>
-			</form>
-			
-		</div>
-		
-		<!-- Result List -->
-					<!-- BEGIN EXAMPLE TABLE PORTLET-->
-						
+					</form>
+				</div>
 						<div class="portlet-body">
 							<table class="collape tablesorter" id="table" width="100%">
-						<thead>
-							<tr>
-								<th class="tdheader"><?php echo  $tr->translate("NO");?></th>
-								<th class="tdheader"><?php echo  $tr->translate("BRANCH");?></th>
-								<th class="tdheader"><?php echo  $tr->translate("REQUEST_NO");?></th>
-								<th class="tdheader"><?php echo  $tr->translate("TRANSFER_FROM");?></th>
-								<th class="tdheader"><?php echo  $tr->translate("REQUEST_DATE");?></th>
-								<th class="tdheader"><?php echo  $tr->translate("APP_STATUS");?></th>
-								<th class="tdheader"><?php echo  $tr->translate("PEDDING");?></th>
-								<th class="tdheader"><?php echo  $tr->translate("STATUS");?></th>
-								<th class="tdheader"><?php echo  $tr->translate("USER");?></th>
-								<th class="tdheader"><?php echo  $tr->translate("ACTION");?></th>
-							</tr>
-						</thead>
+							<thead>
+								<tr>
+									<th class="tdheader"><?php echo  $tr->translate("NO");?></th>
+									<th class="tdheader"><?php echo  $tr->translate("BRANCH");?></th>
+									<th class="tdheader"><?php echo  $tr->translate("REQUEST_NO");?></th>
+									<th class="tdheader"><?php echo  $tr->translate("TRANSFER_FROM");?></th>
+									<th class="tdheader"><?php echo  $tr->translate("REQUEST_DATE");?></th>
+									<th class="tdheader"><?php echo  $tr->translate("APP_STATUS");?></th>
+									<th class="tdheader"><?php echo  $tr->translate("PEDDING");?></th>
+									<th class="tdheader"><?php echo  $tr->translate("STATUS");?></th>
+									<th class="tdheader"><?php echo  $tr->translate("USER");?></th>
+									<th class="tdheader"><?php echo  $tr->translate("ACTION");?></th>
+								</tr>
+							</thead>
 						<tbody>
 							<?php 
 							$id = "table";
@@ -111,10 +93,8 @@
 									$edit_status = '';
 									if($row["ap_pedding"]==4){
 										$edit_status = "style='pointer-events: none;cursor: default;color: #ccc;'";
-									}
-									
+									}									
 							?>
-								
 								<tr class="odd gradeX">
 									<td class="center"><?php echo $key+1;?></td>
 									<td><?php echo $row["re_tran"]?></td>
@@ -134,11 +114,10 @@
 									<td class="center">
 										<?php if($row["receive_id"]>0){?>
 											<a <?php //echo $edit_status;?> href="<?php echo $this->baseUrl();?>/product/transfer/editreceive/id/<?php echo $row["receive_id"]?>"><?php echo  $tr->translate("EDIT_RECEIVE");?></a> | 
-											<a <?php //echo $edit_status;?> href="<?php echo $this->baseUrl();?>/product/transfer/viewreceive/id/<?php echo $row["id"]?>"><?php echo  $tr->translate("PRINT");?></a>
+											<a <?php //echo $edit_status;?> href="<?php echo $this->baseUrl();?>/product/transfer/viewreceive/id/<?php echo $row["receive_id"];//$row["id"]?>"><?php echo  $tr->translate("PRINT");?></a>
 										<?php }else{?>
 										<a <?php echo $edit_status;?> href="<?php echo $this->baseUrl();?>/product/transfer/addreceive/id/<?php echo $row["is_transfer"]?>"><?php echo  $tr->translate("MAKE_RECEIVE");?></a> |  
 										<?php }?>	
-										
 									</td>
 								</tr>
 								<?php $counter='<strong style="float:right;padding:5px">Number of record(s): '.count($this->rs).'</strong>'; 
@@ -146,8 +125,5 @@
 							}}?>
 						</tbody>
 					</table></div></form><?php echo $footer?>
-						</div>
-					<!-- END EXAMPLE TABLE PORTLET-->
-			<!-- End Result list -->
-
+				</div>
 </div>

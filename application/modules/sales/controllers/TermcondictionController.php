@@ -15,7 +15,6 @@ public function init()
     {
 		$db = new Sales_Model_DbTable_DbTermCondiction();
 		$rows = $db->getAllTerm();
-// 		$list = new Application_Form_Frmlist();
 		$glClass = new Application_Model_GlobalClass();
 		$rows = $glClass->getImgStatus($rows, BASE_URL, true);
 		$list = new Application_Form_Frmlist();
@@ -24,8 +23,6 @@ public function init()
 				'module'=>'sales','controller'=>'termcondiction','action'=>'edit',
 		);
 		$this->view->list=$list->getCheckList(0, $columns, $rows, array('con_khmer'=>$link,'con_english'=>$link));
-		
-		
 	}
 	public function addAction()
 	{

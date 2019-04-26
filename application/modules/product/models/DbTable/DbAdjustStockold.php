@@ -63,7 +63,7 @@ class Product_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
 							'qty_after'		=>	$data["new_qty_".$i],
 							'differ_qty'	=>	$data["difer_qty_".$i],
 							'type'			=>	1,
-							'date'			=>	$date->get('MM/d/Y'),
+							'date'			=>	date("d-m-Y"),
 							'Remark'		=>	$data["remark_".$i],
 							'user_mod'		=>	$result["user_id"],
 					);
@@ -86,7 +86,7 @@ class Product_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
 								'qty'				=>	$data["new_qty_".$i],
 								'qty_warning'		=>	0,
 								'last_mod_userid'	=>	$result["user_id"],
-								'last_mod_date'		=>	$date->get('MM/d/Y'),
+								'last_mod_date'		=>	date("d-m-Y"),
 						);
 						$this->_name="tb_prolocation";
 						$this->insert($arr_p);

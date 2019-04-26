@@ -33,14 +33,14 @@ Class report_Model_DbProduct extends Zend_Db_Table_Abstract{
 				  (SELECT c.name FROM `tb_color` AS c WHERE c.id=p.`color_id` LIMIT 1) AS color,
 				  (SELECT m.name FROM `tb_measure` AS m WHERE m.id = p.`measure_id` LIMIT 1) AS measure,
 				  (SELECT pp.`price` FROM `tb_product_price` AS pp WHERE pp.`pro_id`=p.`id` AND `type_id`=1 LIMIT 1) AS master_price,
-				(SELECT pp.`price` FROM `tb_product_price` AS pp WHERE pp.`pro_id`=p.`id` AND `type_id`=2 LIMIT 1) AS dealer_price,
+					(SELECT pp.`price` FROM `tb_product_price` AS pp WHERE pp.`pro_id`=p.`id` AND `type_id`=2 LIMIT 1) AS dealer_price,
 				  SUM(pl.`qty`) AS qty
 				FROM
 				  `tb_product` AS p ,
 				  `tb_prolocation` AS pl
 				WHERE 
-			    p.status=1
-				AND p.`id`=pl.`pro_id` ";
+			    	p.status=1
+					AND p.`id`=pl.`pro_id` ";
 		$where = '';
 		if($data["ad_search"]!=""){
 			$s_where=array();
@@ -63,8 +63,8 @@ Class report_Model_DbProduct extends Zend_Db_Table_Abstract{
 		if($data["category"]!=""){
 			$where.=' AND p.cate_id='.$data["category"];
 		}
-		if($data["model"]!=""){
-			$where.=' AND p.model_id='.$data["model"];
+		if($data["type"]>-0){
+			$where.=' AND p.is_service='.$data["type"];
 		}
 		if($data["size"]!=""){
 			$where.=' AND p.size_id='.$data["size"];
@@ -78,7 +78,6 @@ Class report_Model_DbProduct extends Zend_Db_Table_Abstract{
 			}else{
 				$where.=' AND pl.qty=0';
 			}
-			
 		}
 		$location = $db_globle->getAccessPermission('pl.`location_id`');
 		$group = " GROUP BY p.`id` ORDER BY p.`item_name`";

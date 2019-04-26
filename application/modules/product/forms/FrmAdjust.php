@@ -1,11 +1,8 @@
 <?php 
 class Product_Form_FrmAdjust extends Zend_Form
 {
-	public function init()
-    {
-
-	}
 	function add(){
+		$request=Zend_Controller_Front::getInstance()->getRequest();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$db = new Product_Model_DbTable_DbAdjustStock();
 		$db_global = new Application_Model_DbTable_DbGlobal();
@@ -19,7 +16,7 @@ class Product_Form_FrmAdjust extends Zend_Form
 				'class'=>'form-control select2me',
 				'onChange'=>'addNew();'
 		));
-		$opt= array(''=>$tr->translate("SELECT PRODUCT"));
+		$opt= array(''=>$tr->translate("SELECT_PRODUCT"));
 		$row_product = $db->getProductName();
 		if(!empty($row_product)){
 			foreach ($row_product as $rs){
@@ -34,7 +31,7 @@ class Product_Form_FrmAdjust extends Zend_Form
     			'class'=>'form-control select2me',
     	));
 		
-		$opt = array(''=>$tr->translate("SELECT BRANCH"));
+		$opt = array(''=>$tr->translate("SELECT_BRANCH"));
 		if(!empty($rs_from_loc)){
     		foreach ($rs_from_loc as $rs){
     			$opt[$rs["id"]] = $rs["name"];
@@ -43,10 +40,22 @@ class Product_Form_FrmAdjust extends Zend_Form
     	$from_loc->setMultiOptions($opt);
 		$from_loc->setValue($result["branch_id"]);
 		
+		$start_date = New Zend_Form_Element_Text("start_date");
+		$start_date->setAttribs(array(
+				'class'=>'validate[required] form-control form-control-inline date-picker',
+				'placeholder' => 'Click to Choose Start Date',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+		));
+		$re_start_date = $request->getParam("start_date");
+		if(!empty($re_start_date)){
+			$start_date ->setValue($re_start_date);
+		}else{
+			$start_date ->setValue(date("d-m-Y"));
+		}
+		
 		$this->addElements(array($pro_name,$from_loc));
 		return $this;
 	}
-	
 	function filter(){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$db = new Product_Model_DbTable_DbAdjustStock();
@@ -54,37 +63,38 @@ class Product_Form_FrmAdjust extends Zend_Form
 		$date =new Zend_Date();
 		$pro_name =new Zend_Form_Element_Text("ad_search");
 		$pro_name->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
 		));
 		$pro_name ->setValue($request->getParam("ad_search"));
 		
 		$start_date = New Zend_Form_Element_Text("start_date");
 		$start_date->setAttribs(array(
-				'class'=>'validate[required] form-control form-control-inline date-picker',
-				'placeholder' => 'Click to Choose Start Date'
+				'dojoType'=>"dijit.form.DateTextBox",
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 		));
 		$re_start_date = $request->getParam("start_date");
 		if(!empty($re_start_date)){
 			$start_date ->setValue($re_start_date);
 		}else{
-			$start_date ->setValue($date->get('MM/d/Y'));
+			$start_date ->setValue(date("Y-m-d"));
 		}
 		
 		$end_date = New Zend_Form_Element_Text("end_date");
 		$end_date->setAttribs(array(
-				'class'=>'validate[required] form-control form-control-inline date-picker',
-				'placeholder' => 'Click to Choose End Date'
+				'dojoType'=>"dijit.form.DateTextBox",
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				
 		));
 		$re_end_date = $request->getParam("end_date");
 		if(!empty($re_end_date)){
 			$end_date ->setValue($re_end_date);
 		}else{
-			$end_date ->setValue($date->get('MM/d/Y'));
+			$end_date ->setValue(date("Y-m-d"));
 		}
-		
 		$this->addElements(array($pro_name,$end_date,$start_date));
 		return $this;
 	}
-	
-	
 }

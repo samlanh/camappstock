@@ -354,21 +354,18 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	} 
     }
 	 function getAllLocation($opt=null){
-   		   		$db=$this->getAdapter();
+   		$db=$this->getAdapter();
    		$sql=" SELECT id,`name` FROM `tb_sublocation` WHERE `name`!='' AND status=1  ";
-//    		$sql.=$this->getAccessPermission("id");
    		$result = $this->getUserInfo();
    		$sql.= " AND ".$this->getAllLocationByUser($result['user_id']);
    		$row =  $db->fetchAll($sql);
    		if($opt==null){
    			return $row;
    		}else{
-   			$options=array();
 			$request=Zend_Controller_Front::getInstance()->getRequest();
    			$module = $request->getModuleName();
-   			if($module=='report'){
-   				$options=array(-1=>"Select Location");
-   			}
+   			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+   			$options=array(-1=>$tr->translate('SELECT_BRANCH'));
    			if(!empty($row)) foreach($row as $read) $options[$read['id']]=$read['name'];
    			return $options;
    		}
@@ -760,6 +757,18 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	}
    	return  $db->fetchAll($sql);
    }
+   function getAgreementNo($branch_id=1){
+   		$db = $this->getAdapter();
+   		$sql="SELECT id FROM tb_agreement ORDER BY id DESC";
+   		$acc_no = $db->fetchOne($sql);
+   		$new_acc_no= (int)$acc_no+1;
+   		$acc_no= strlen((int)$acc_no+1);
+   		$pre="";
+   		for($i = $acc_no;$i<5;$i++){
+   			$pre.='0';
+   		}
+   		return $pre.$new_acc_no;
+   }
    function getAllSaleAgreement($opt=null,$type=null,$defual=null){
    	$db = $this->getAdapter();
    	$sql = " SELECT id,
@@ -780,6 +789,43 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	}else{
    		return $rows;
    	}
+   }
+   function resizeImase($image,$part,$new_imagename=null){
+   	$photo = $image;
+   	$temp = explode(".", $photo["name"]);
+   	$new_name = $temp[0].end($temp);
+   	if (!empty($new_imagename)){
+   		$new_name = $new_imagename;
+   	}
+   	move_uploaded_file($image["tmp_name"], $part .$new_name);
+   		
+   	$uploadimage=$part.$new_name;
+   	// 		$newname=$image["name"];
+   	// 		// Load the stamp and the photo to apply the watermark to
+   	if (end($temp) == 'jpg') {
+   		$im = imagecreatefromjpeg($uploadimage);
+   	} else
+   		if (end($temp) == 'jpeg') {
+   		$im = imagecreatefromjpeg($uploadimage);
+   	} else
+   		if (end($temp) == 'png') {
+   		$im = imagecreatefrompng($uploadimage);
+   	} else
+   		if (end($temp) == 'gif') {
+   		$im = imagecreatefromgif($uploadimage);
+   	}
+   
+   	if ($image['size']>(1000000*5)){
+   		// Save the image to file and free memory quality 50%
+   		imagejpeg($im, $uploadimage, 50);
+   	}else if($image['size']>(1000000)){
+   		imagejpeg($im, $uploadimage, 70); //quality 80%
+   	}else if($image['size']>512000){
+   		// Save the image to file and free memory quality 60%
+   		imagejpeg($im, $uploadimage, 80);
+   	}
+   	return $new_name;
+   		
    }
    	
 }

@@ -98,11 +98,10 @@ class Sales_Model_DbTable_Dbsalesapprov extends Zend_Db_Table_Abstract
 		$sql=" SELECT
 		s.id,
 		(SELECT NAME FROM `tb_sublocation` WHERE id=s.branch_id LIMIT 1) AS branch_name,s.all_total ,s.approved_note,
-		s.sale_no,s.date_sold,s.remark,s.approved_note,s.approved_date,s.is_cancel,s.cancel_comment,
+		s.sale_no,s.date_sold,s.remark,s.approved_note,s.approved_date,
 		(SELECT name FROM `tb_sale_agent` WHERE tb_sale_agent.id =s.saleagent_id  LIMIT 1 ) AS staff_name,
 		(SELECT item_name FROM `tb_product` WHERE id= so.pro_id LIMIT 1) AS item_name,
 		(SELECT item_code FROM `tb_product` WHERE id=so.pro_id LIMIT 1 ) AS item_code,
-		(SELECT symbal FROM `tb_currency` WHERE id=s.currency_id LIMIT 1) AS curr_name,
 		(SELECT cust_name FROM `tb_customer` WHERE tb_customer.id=s.customer_id LIMIT 1 ) AS customer_name,
 		(SELECT phone FROM `tb_customer` WHERE tb_customer.id=s.customer_id LIMIT 1 ) AS phone,
 		(SELECT contact_name FROM `tb_customer` WHERE tb_customer.id=s.customer_id LIMIT 1 ) AS contact_name,
@@ -113,7 +112,7 @@ class Sales_Model_DbTable_Dbsalesapprov extends Zend_Db_Table_Abstract
 		(SELECT name_en FROM `tb_view` WHERE type=7 AND key_code=is_approved LIMIT 1) approval_status,
 		(SELECT name_en FROM `tb_view` WHERE type=8 AND key_code=pending_status LIMIT 1) processing,
 		so.qty_order,so.price,so.old_price,so.sub_total,s.net_total,s.quote_id,
-		s.paid,s.discount_real,s.tax,
+		s.paid,s.discount_value,s.tax,
 		s.balance
 		FROM `tb_sales_order` AS s,
 		`tb_salesorder_item` AS so WHERE s.id=so.saleorder_id

@@ -89,8 +89,9 @@ class Dailywork_Form_Frmworkprocess extends Zend_Form
 		
 		$start_date=new Zend_Dojo_Form_Element_TextBox("start_date");
 		$start_date->setAttribs(array(
-				'class'=>'form-control form-control-inline date-picker'));
-		$start_date->setValue(date("m/d/Y"));
+				'class'=>'form-control form-control-inline date-picker',
+				'data-date-format'=>"dd-mm-yyyy"));
+		$start_date->setValue(date("d-m-Y"));
 		
 		$_arr = array(1=>$this->tr->translate("COMPLETED"),2=>$this->tr->translate("INPGROGRESS"),3=>$this->tr->translate("CANCEL"));
 		$_workstatus = new Zend_Dojo_Form_Element_FilteringSelect("work_status");

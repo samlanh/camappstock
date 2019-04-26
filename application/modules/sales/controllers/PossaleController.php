@@ -51,9 +51,9 @@ class Sales_PossaleController extends Zend_Controller_Action
 			$data = $this->getRequest()->getPost();
 			try {
 				if(!empty($data['identity'])){
-					$db->addSaleOrder($data);
+					$sale_id = $db->addSaleOrder($data);
 				}
-				Application_Form_FrmMessage::message("INSERT_SUCESS");
+				Application_Form_FrmMessage::Sucessfull(INSERT_SUCESS, "/sales/possale/invoice/id/".$sale_id);
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message('INSERT_FAIL');
 				$err =$e->getMessage();
@@ -65,16 +65,20 @@ class Sales_PossaleController extends Zend_Controller_Action
 		$this->view->rscustomer = $db->getAllCustomerName();
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_agreement = $db->getAllSaleAgreement();
+		$this->view->rs_staff = $db->getSaleAgent();
+		//print_r($db->getSaleAgent());exit();
+		
+// 		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->invoice = $db->getSalesNumber(1);
+		$this->view->rs_branch = $db->getAllLocation();
 	
+		$db = new Sales_Model_DbTable_Dbexchangerate();
+		$this->view->rsrate= $db->getExchangeRate();
+		
 		$formpopup = new Sales_Form_FrmCustomer(null);
 		$formpopup = $formpopup->Formcustomer(null);
 		Application_Model_Decorator::removeAllDecorator($formpopup);
 		$this->view->form_customer = $formpopup;
-		$db = new Application_Model_DbTable_DbGlobal();
-		$this->view->invoice = $db->getSalesNumber(1);
-	
-		$db = new Sales_Model_DbTable_Dbexchangerate();
-		$this->view->rsrate= $db->getExchangeRate();
 	}
 	
 	public function editAction()
@@ -92,7 +96,7 @@ class Sales_PossaleController extends Zend_Controller_Action
 				if(!empty($data['identity'])){
 					$db->editSale($data);
 				}
-				Application_Form_FrmMessage::message("UPDATE_SUCESS");
+				Application_Form_FrmMessage::Sucessfull("UPDATE_SUCESS", "/sales/index");
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message('INSERT_FAIL');
 				$err =$e->getMessage();
@@ -111,6 +115,7 @@ class Sales_PossaleController extends Zend_Controller_Action
 		$this->view->form_customer = $formpopup;
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->invoice = $db->getSalesNumber(1);
+		$this->view->rs_branch = $db->getAllLocation();
 		
 		$query = new Sales_Model_DbTable_Dbpos();
 		$rs = $query->getInvoiceById($id);
@@ -119,6 +124,10 @@ class Sales_PossaleController extends Zend_Controller_Action
 		if(empty($rs)){
 			$this->_redirect("/sales/index");
 		}
+		
+		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->rs_agreement = $db->getAllSaleAgreement();
+		$this->view->rs_staff = $db->getSaleAgent();
 	}
 	public function deleteAction(){
 		$id = $this->getRequest()->getParam("id");
@@ -153,12 +162,21 @@ class Sales_PossaleController extends Zend_Controller_Action
 		if(empty($rs)){
 			$this->_redirect("/sales/");
 		}
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->header = $frm->frmCustomerHeader();
+		$this->view->footer = $frm->frmCustomerFooter();
 	}		
 	function getproductAction(){
 		if($this->getRequest()->isPost()){
 			$post=$this->getRequest()->getPost();
 			$db = new Sales_Model_DbTable_Dbpos();
-			$rs =$db->getProductById($post['product_id'],$post['branch_id']);
+			$agreement_id=-1;
+			if(!empty($post['agreement_id'])){
+				if($post['agreement_id']>0){
+					$agreement_id = $post['agreement_id'];
+				}
+			}
+			$rs =$db->getProductById($post['product_id'],$post['branch_id'],$agreement_id);
 			print_r(Zend_Json::encode($rs));
 			exit();
 		}

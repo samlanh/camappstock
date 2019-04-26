@@ -2,76 +2,60 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$form=$this->form_purchase;
 	$url_submit = $this->url(array('module'=>'purchase','controller'=>'index','action'=>'edit'));
-	$url_cancel = $this->url(array('module'=>'purchase','controller'=>'index','action'=>'index'));
 ?>
 <title><?php echo $tr->translate("ADD_PURCAHSE_ORDER");?></title>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="icon-home"></i><?php echo $tr->translate("EDIT_PURCAHSE_ORDER")?>
-				</div>
-				<div class="tools">
-					<label><a href="<?php echo $url_cancel;?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i><?php echo $tr->translate("GO_BACK");?></button></a></label>
-				</div>
-			</div>
-			<div class="portlet-body form">
-				<!-- BEGIN FORM-->
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+            <div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_PURCAHSE_ORDER');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right"></div>
+    		</div>
+    	</div>
+		<div class="card-box">
 				<form id="frm" autocomplete="off"  action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post">
 					<div class="form-body">
 						<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("VENDOR_NAME");?> <span class="required">
-								</span>
+							<label class="control-label col-md-2"><?php echo $tr->translate("VENDOR_NAME");?>
 							</label>
 							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement("v_name");?>
-									<?php echo $form->getElement("id");?>
-									<?php echo $form->getElement("old_status");?>
-									<?php echo $form->getElement("old_location");?>
-								</div>
+								<?php echo $form->getElement("v_name");?>
+								<?php echo $form->getElement("id");?>
+								<?php echo $form->getElement("old_status");?>
+								<?php echo $form->getElement("old_location");?>
 							</div>
 							<label class="control-label col-md-2"><?php echo $tr->translate("LOCATION_NAME");?><span class="required">
 								</span>
 							</label>
 							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement('LocationId');?>
-								</div>
+								<?php echo $form->getElement('LocationId');?>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("ORDER_DATE");?><span class="required">
-							* </span>
+							<label class="control-label col-md-2">
+								<?php echo $tr->translate("ORDER_DATE");?>
 							</label>
 							<div class="col-md-4">
-								<div class="input-icon right">
-								<i class="fa fa-calendar"></i><?php echo $form->getElement("order_date");?>
-								</div>
+								<?php echo $form->getElement("order_date");?>
 							</div>
-							<label class="control-label col-md-2"><?php  echo $tr->translate("DATE_IN");?><span class="required">
-								 </span>
+							<label class="control-label col-md-2">
+								<?php  echo $tr->translate("DATE_IN");?>
 							</label>
 							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa fa-calendar"></i>
-									<?php echo $form->getElement("date_in");?>
-								</div>
+								<?php echo $form->getElement("date_in");?>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("PO_NUM");?><span class="required">
-							* </span>
+							<label class="control-label col-md-2">
+								<?php echo $tr->translate("PO_NUM");?>
 							</label>
 							<div class="col-md-4">
-								<div class="input-icon right">
-									<?php echo $form->getElement("txt_order"); ?></div>
+								<?php echo $form->getElement("txt_order"); ?>
 							</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("INVOICE_NO");?><span class="required">
-								 </span>
+							<label class="control-label col-md-2">
+								<?php echo $tr->translate("INVOICE_NO");?>
 							</label>
 							<div class="col-md-4">
 								<?php echo $form->getElement("invoice_no"); ?>
@@ -82,10 +66,7 @@
 								 </span>
 							</label>
 							<div class="col-md-4">
-								<div class="input-icon right">
-									<?php echo $form->getElement("status_use");?>
-									<?php echo $form->getElement("status");?>
-								</div>
+								<?php echo $form->getElement("status");?>
 							</div>
 							<label class="control-label col-md-2"><?php echo $tr->translate("REMARK");?><span class="required">
 								 </span>
@@ -96,23 +77,24 @@
 								</div>
 							</div>
 						</div>
+						<div class="form-group" >
+							<label class="control-label col-md-2"><?php echo $tr->translate("STATUS");?></label>
+							<div class="col-md-4">
+								<?php echo $form->getElement("status_use");?>
+							</div>
+						</div>
 						<div class="form-group">
 						<div class="col-md-12">
 							<label class="control-label col-md-1 col-lg-1">
-								<button type="button" class="btn red delete col-md-12">
-									<i class="fa fa-barcode"></i>
-									<span>Scan </span>	
-								</button>
 							</label>
 							<label class="control-label col-md-8">
-								<select data-placeholder="Select..." class="form-control select2me " style="text-align: left;" id="add_item" name="add_item" Onchange="getItemOrder();" >
+								<select class='fullside' dojoType="dijit.form.FilteringSelect"  id="add_item" name="add_item" Onchange="getItemOrder();" >
 								<?php echo $this->items; ?>
 								</select>
 							</label>
 							<label class="control-label col-md-2 col-lg-2 col-sm-12">
-								<button type="button" onclick="popupProduct();" class="btn red delete col-md-12">
-									<span>&nbsp;&nbsp;បន្ថែមមុខទំនិញថ្មី</span>
-								</button>
+								<input type="button" onclick="popupProduct();" value="btnsavenew"  label="<?php echo $tr->translate("ADD_PRODUCT")?>" dojoType="dijit.form.Button" 
+									iconClass="dijitIconSearch" />
 							</label>
 							<label class="control-label col-md-1 col-lg-1 col-sm-12">
 								<button type="button" class="btn red delete col-md-12">
@@ -139,127 +121,94 @@
 						 </table>
 						 <input type="hidden" id="identity" name="identity" />
 					</div>
-						<div class="form-group">
-						   <label class="control-label col-md-2"><?php //echo $tr->translate("PAYMENT_METHOD");?><span class="required">
-								 </span>
-							</label>
-							<div class="col-md-1">
-								<div class="input-icon right">
-									<?php //echo $form->getElement("payment_name");?>
+						
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label class="control-label col-md-4">កម្រៃ/កម្រៃរ៉ាប់រង</label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+									<?php echo $form->getElement("commission");?>
+									</div>
 								</div>
 							</div>
-							<div class="col-md-1">
-								<div class="input-icon right">
-									<?php //echo $form->getElement("payment_number");?>
+							<div class="form-group">
+								<label class="control-label col-md-4" style="text-align: center;white-space: nowrap;">ឈ្មោះធនាគារ </label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+									<?php echo $form->getElement("bank_name");?>
+									</div>
 								</div>
 							</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("តម្លៃសរុប​ :");?><span class="required">
-							* </span>
-							</label>
-							<div class="col-md-2">
-								<div class="input-icon right">
-								<?php echo $form->getElement("totalAmoun");?>
+							<div class="form-group">
+								<label class="control-label col-md-4"​ >ថ្លៃដឹកជញ្ជួន/ផ្សេងៗ​ </label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+									<?php echo $form->getElement("commission_ensur");?>
+									</div>
 								</div>
 							</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("បញ្ចុះតម្លៃ");?>
-							</label>
-							<div class="col-md-2">
-								<div class="input-icon right">
-									<?php echo $form->getElement("dis_value");?>
-								    <input type="hidden" name="global_disc" id="global_disc"/>
-								</div>
-							</div>
+							
 						</div>
-						<div class="form-group">
-							<label class="control-label col-md-2"><?php //echo $tr->translate("ថ្ងៃត្រូវចេញសែក");?>
-							</label>
-							<div class="col-md-2">
-								<div class="input-icon right">
-								<?php //echo $form->getElement("date_issuecheque");?>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label class="control-label col-md-4"><?php echo $tr->translate("TOTAL");?></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+									<?php echo $form->getElement("totalAmoun");?>
+									</div>
 								</div>
 							</div>
-							<label class="control-label col-md-2">កម្រៃ​/កម្រៃរ៉ាប់រង​
-							</label>
-							<div class="col-md-2">
-								<div class="input-icon right">
-								<?php echo $form->getElement("commission");?>
+							<div class="form-group">
+								<label class="control-label col-md-4"><?php echo $tr->translate("DISCOUNT");?></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<?php echo $form->getElement("dis_value");?>
+									    <input type="hidden" name="global_disc" id="global_disc"/>
+									</div>
 								</div>
 							</div>
-							<label class="control-label col-md-2">ថ្លៃដឹកជញ្ជួន/ផ្សេងៗ​  
-							</label>
-							<div class="col-md-2">
-								<div class="input-icon right">
-								<?php echo $form->getElement("commission_ensur");?>
+							<div class="form-group">
+								<label class="control-label col-md-4"><?php echo $tr->translate("TOTAL_AMOUNT");?>​
+								</label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+									<?php echo $form->getElement("all_total");?>
+									<?php echo $form->getElement("all_totalpayment");?>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							 <label class="control-label col-md-2"><?php //echo $tr->translate("CURRENCY_TYPE");?><span class="required">
-								 </span>
-							</label>
-							<div class="col-md-3">
-								<div class="input-icon right">
-									<?php //echo $form->getElement("currency");?>
+							<div class="form-group">
+								<label class="control-label col-md-4"><?php echo $tr->translate("PAID");?></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<?php echo $form->getElement("paid");?>
+									</div>
 								</div>
 							</div>
-							<label class="control-label col-md-1" style="text-align: center;white-space: nowrap;">ឈ្មោះធនាគារ </label>
-							<div class="col-md-2">
-								<div class="input-icon right">
-								<?php echo $form->getElement("bank_name");?>
-								</div>
-							</div>
-							<label class="control-label col-md-2">សរុបទាំងអស់​
-							</label>
-							<div class="col-md-2">
-								<div class="input-icon right">
-								<?php echo $form->getElement("all_total");?>
-								<?php echo $form->getElement("all_totalpayment");?>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-						<label class="control-label col-md-2">
-						</label>
-						<div class="col-md-2">
-						</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("ប្រាក់បានបង់");?><span class="required">
-								 </span>
-							</label>
-							<div class="col-md-2">
-								<div class="input-icon right">
-									<?php echo $form->getElement("paid");?>
-								</div>
-							</div>
-								<label class="control-label col-md-2"><?php echo $tr->translate("ជំពាក់");?><span class="required">
-							* </span>
-							</label>
-							<div class="col-md-2">
-								<div class="input-icon right">
-								<?php echo $form->getElement("remain");?>
+							<div class="form-group">
+								<label class="control-label col-md-4"><?php echo $tr->translate("BALANCE");?></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+									<?php echo $form->getElement("remain");?>
+									</div>
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
 						    <div class="col-md-3"></div>
-						    <div class="col-md-2">
-								<a href="<?php echo $this->baseUrl();?>/purchase/index/"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
-							</div>
+							<div class="col-md-2"></div>
 							<div class="col-md-2">
-								<div class="input-icon right">
-									<button type="submit" class="btn blue btn-block btn-lg" ><i class="fa fa-close"></i> <?php echo $tr->translate("UPDATE")?></button>
-								</div>
-							</div>
-							<div class="col-md-2">
-								<button type="submit" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-save"></i> <?php echo $tr->translate("UPDATE")?> </button>
+								<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("SAVE_NEW")?>" dojoType="dijit.form.Button" 
+								iconClass="dijitIconSearch" />
 							</div>
 							<div class="col-md-3"></div>
-						</div>
+					   </div>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
-</div>
 <?php $frm_product= $this->form;?>
 <div id="productpopup" class="modal fade" tabindex="-1" data-width="1200">
        <div class="modal-dialog">
@@ -560,7 +509,7 @@ function initList() {
 		template+='<td ><img onClick="deleteRecord('+index5+')" src="<?php echo BASE_URL; ?>/images/icon/delete.gif" /></td>';
 	}
 	template+='<td  width="1%">'+index5+'</td>';
-	template+='<td width="30%"><select class="form-control select2me" Onchange="ShowPopupProduct('+ index5 + ');" id="item_id_'+index5+'" name="item_id_'+index5+'" >'+option5+'<option></option></select>'+inp+'</td>';
+	template+='<td width="30%"><input type="hidden" id="item_id_'+index5+'" name="item_id_'+index5+'" value="'+<?php echo $r['pro_id'];?>+'" /><?php echo $r['item_name'];?></td>';
 	template+='<td ><input type="checkbox" onkeyup="getPriceFree('+index5+')" id="pricefree_'+index5+'" name="pricefree_'+index5+'"/> </td>';
 	template+='<td ><input type="text" onkeyup="totalQty('+index5+')" class="validate[required,custom[number]] input form-control" required="1" value="1" id="qty_unit_'+index5+'" name="qty_unit_'+index5+'" /></td>';
 	template+='<td ><input type="text" onkeyup="totalQty('+index5+')" class="validate[required,custom[number]] input form-control" value="0" id="qty_per_unit_'+index5+'" name="qty_per_unit_'+index5+'" /></td>';
@@ -596,6 +545,7 @@ var value = '';
 pqty = 1;
 var index=1;
 function addRow(item_id) {
+	item_label = dijit.byId("add_item").attr('displayedValue');
 	index5++; //var first = index5;
 	index=index+1;
 	for(i=1; i<index5; i++){
@@ -609,15 +559,15 @@ function addRow(item_id) {
 	} else {
 		template+='<td ><img onClick="deleteRecord('+index5+')" src="<?php echo BASE_URL; ?>/images/icon/delete.gif" /></td>';
 	}
-	template+='<td  width="2%">'+index5+'</td>';
-	template+='<td width="30%"><select class="form-control select2me" Onchange="ShowPopupProduct('+ index5 + ');" id="item_id_'+index5+'" name="item_id_'+index5+'" >'+option5+'<option></option></select>'+inp+'</td>';
-	template+='<td ><input type="checkbox" onkeyup="getPriceFree('+index5+')" id="pricefree_'+index5+'" name="pricefree_'+index5+'"/> </td>';
-	template+='<td ><input type="text" onkeyup="totalQty('+index5+')" class="validate[required,custom[number]] input form-control" required="1" value="1" id="qty_unit_'+index5+'" name="qty_unit_'+index5+'" /></td>';
-	template+='<td ><input type="text" onkeyup="totalQty('+index5+')" class="validate[required,custom[number]] input form-control" value="0" id="qty_per_unit_'+index5+'" name="qty_per_unit_'+index5+'" /></td>';
-	template+='<td ><input type="text" readonly onkeyup="calculatePrice('+index5+')" class="form-control" required="1" id="qty'+index5+'" name="qty'+index5+'"/></td>';
-	template+='<td ><input type="text" onkeyup="calculatePrice('+index5+')" required="1" class="validate[required,custom[number]] input form-control" id="price'+index5+'" name="price'+index5+'" /><input type="hidden" id="oldprice_'+index5+'" name="oldprice_'+index5+'"/></td>';
-	template+='<td  width="5%"><input type="text" onkeyup="calculatePrice('+index5+')" value="0" id="dis_value'+index5+'" name="dis_value'+index5+'" class="form-control" /><input type="hidden" id="olddis_value_'+index5+'" name="olddis_value_'+index5+'"/><input type="hidden" readonly="readonly" class="input70px" id="real-value'+index5+'" name="real-value'+index5+'" /></td>';
-	template+='<td ><input type="text" class="form-control" readonly="readonly" id="total'+index5+'" name="total'+index5+'" /></span></td>';
+		template+='<td width="2%">'+index5+'</td>';
+		template+='<td width="30%"><input type="hidden" value="'+item_id+'"  id="item_id_'+index5+'" name="item_id_'+index5+'" >'+item_label+'</td>';
+		template+='<td><input type="checkbox" onkeyup="getPriceFree('+index5+')" id="pricefree_'+index5+'" name="pricefree_'+index5+'"/> </td>';
+		template+='<td><input type="text" onkeyup="totalQty('+index5+')" class="validate[required,custom[number]] input form-control" required="1" value="1" id="qty_unit_'+index5+'" name="qty_unit_'+index5+'" /></td>';
+		template+='<td><input type="text" onkeyup="totalQty('+index5+')" class="validate[required,custom[number]] input form-control" value="0" id="qty_per_unit_'+index5+'" name="qty_per_unit_'+index5+'" /></td>';
+		template+='<td><input type="text" readonly onkeyup="calculatePrice('+index5+')" class="form-control" required="1" id="qty'+index5+'" name="qty'+index5+'"/></td>';
+		template+='<td><input type="text" onkeyup="calculatePrice('+index5+')" required="1" class="validate[required,custom[number]] input form-control" id="price'+index5+'" name="price'+index5+'" /><input type="hidden" id="oldprice_'+index5+'" name="oldprice_'+index5+'"/></td>';
+		template+='<td width="5%"><input type="text" onkeyup="calculatePrice('+index5+')" value="0" id="dis_value'+index5+'" name="dis_value'+index5+'" class="form-control" /><input type="hidden" id="olddis_value_'+index5+'" name="olddis_value_'+index5+'"/><input type="hidden" readonly="readonly" class="input70px" id="real-value'+index5+'" name="real-value'+index5+'" /></td>';
+		template+='<td><input type="text" class="form-control" readonly="readonly" id="total'+index5+'" name="total'+index5+'" /></span></td>';
 	template+="</tr>";
 	$('#table_order').append(template);
 	if($('#identity').val()!="") {
@@ -637,47 +587,45 @@ function addRow(item_id) {
 		$('#global_disc').val(0);
 		$("#paid").val(0);
 	}
-	 $("#item_id_"+index5).select2();
 	$("#row_order_0").remove();
+	dijit.byId("add_item").attr("value",'');
 }
 <?php $url_qty =  $this->url(array('module'=>'purchase','controller'=>'index','action'=>'getqtybyid')); ?>
 function getQtyById(index){//use
-			item_id=$("#item_id_"+index).val();
-				qty_unit=$("#qty_unit_"+index).val();
-				qty_per_unit=$("#qty_per_unit_"+index).val();
-				branch_id = $("#LocationId").val();
-				if(branch_id=='' || branch_id==-1){alert("Please Select Branch First ");}
-				if(qty_unit==null || qty_unit==""){
-					if(qty_per_unit!==null && qty_per_unit!==""){
-						$("#qty"+index).val(qty_per_unit);
-					}
-				}else{
-					$.ajax({
-						url:"<?php echo $url_qty;?>",
-						type:"post",
-						data:{'item_id':item_id,'branch_id':branch_id},
-						success: function(data){
-							item_qty = $.parseJSON(data);			
-							main_qty =$("#qty_unit_"+index).val();
-							detail_qty =  $("#qty_per_unit_"+index).val();
-							$("#current_qty"+index).val(item_qty.qty);
-							total_qty = parseFloat(main_qty) + parseFloat(detail_qty/(item_qty.qty_perunit));
-							$("#qty"+index).val(total_qty.toFixed(3));
-						},
-						error:function(e){
-							alert(e);
-						}
-				});
+	item_id=$("#item_id_"+index).val();
+	qty_unit=$("#qty_unit_"+index).val();
+	qty_per_unit=$("#qty_per_unit_"+index).val();
+	branch_id = dijit.byId("LocationId").get('value');
+	if(branch_id=='' || branch_id==-1){alert("Please Select Branch First ");}
+	if(qty_unit==null || qty_unit==""){
+		if(qty_per_unit!==null && qty_per_unit!==""){
+			$("#qty"+index).val(qty_per_unit);
+		}
+	}else{
+		$.ajax({
+			url:"<?php echo $url_qty;?>",
+			type:"post",
+			data:{'item_id':item_id,'branch_id':branch_id},
+			success: function(data){
+				item_qty = $.parseJSON(data);			
+				main_qty =$("#qty_unit_"+index).val();
+				detail_qty =  $("#qty_per_unit_"+index).val();
+				$("#current_qty"+index).val(item_qty.qty);
+				total_qty = parseFloat(main_qty) + parseFloat(detail_qty/(item_qty.qty_perunit));
+				$("#qty"+index).val(total_qty.toFixed(3));
+			},
+			error:function(e){
+				alert(e);
 			}
+	});
+}
 }
 function getItemOrder(){
-	item_ids=$("#add_item").val();
-	$('#add_item').val('').trigger("liszt:updated");
+	item_ids=dijit.byId("add_item").get('value');
 	if(item_ids==-1){
 		$('#productpopup').modal('show');
 	}else{
 		addRow(item_ids);
-		$("#add_item").val("");
 	}
 }
 var record_index= 1;
@@ -855,4 +803,6 @@ if(commission==''){commission=0;};
 	$("#remain").val(total);
 	$('#paid').val(0);
 }
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.NumberTextBox");
 </script>	

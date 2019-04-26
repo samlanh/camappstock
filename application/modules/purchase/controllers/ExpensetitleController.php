@@ -3,7 +3,6 @@ class Purchase_ExpensetitleController extends Zend_Controller_Action
 {
 public function init()
     {
-        /* Initialize action controller here */
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
     protected function GetuserInfoAction(){
@@ -13,18 +12,21 @@ public function init()
     }
     public function indexAction()
     {
-		$db = new Purchase_Model_DbTable_Dbexpensetitle();
-		$rows = $db->getAllTerm();
-// 		$list = new Application_Form_Frmlist();
-		$glClass = new Application_Model_GlobalClass();
-		$rows = $glClass->getImgStatus($rows, BASE_URL, true);
-		$list = new Application_Form_Frmlist();
-		$columns=array("TITLE","NAME_ENTITLE","STATUS");
-		$link=array(
-				'module'=>'purchase','controller'=>'expensetitle','action'=>'edit',
-		);
-		$this->view->list=$list->getCheckList(0, $columns, $rows, array('title'=>$link));
-		
+    	try{
+			$db = new Purchase_Model_DbTable_Dbexpensetitle();
+			$rows = $db->getAllTerm();
+			$glClass = new Application_Model_GlobalClass();
+			$rows = $glClass->getImgStatus($rows, BASE_URL, true);
+			$list = new Application_Form_Frmlist();
+			$columns=array("TITLE","NAME_ENTITLE","STATUS");
+			$link=array(
+					'module'=>'purchase','controller'=>'expensetitle','action'=>'edit',
+			);
+			$this->view->list=$list->getCheckList(0, $columns, $rows, array('title'=>$link));
+		}catch (Exception $e){
+			Application_Form_FrmMessage::messageError("INSERT_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
 		
 	}
 	public function addAction()
@@ -34,13 +36,7 @@ public function init()
 			$data = $this->getRequest()->getPost();
 			$db = new Purchase_Model_DbTable_Dbexpensetitle();
 			$db->add($data);
-			if($data['save_close']){
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-				Application_Form_FrmMessage::redirectUrl('/purchase/expensetitle/index');
-			}
-			else{
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-			}
+			Application_Form_FrmMessage::message("INSERT_SUCCESS");
 		}
 	}
 	public function editAction()

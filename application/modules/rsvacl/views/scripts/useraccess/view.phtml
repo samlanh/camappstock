@@ -39,7 +39,6 @@ table.user td{vertical-align: top;}
 		if( $("#img_" + id).attr("src") == tick_src){
 			status = "yes";
 		}
-		alert("id"+id+"user type"+user_type+"status"+status);
 		
 		$.post( url, { 'acl_id': id, 'status': status, 'user_type_id':user_type},
 	      function( data ) {
@@ -83,3 +82,74 @@ table.user td{vertical-align: top;}
 		</div>
 	</div>
 </div>
+<?php 
+	$old_module='';
+?>
+<div class="col-xs-3"> 
+	    <ul class="nav nav-tabs tabs-left">
+		    <?php 
+		    if(!empty($this->rows))foreach($this->rows as $key =>$rs){
+		    	if($old_module!= $rs['module']){ ?>
+		      		<li <?php if($key==0){echo"class='active'";}?>><a href="<?php echo "#".$rs['module'];?>" data-toggle="tab"><?php echo $tr->translate(strtoupper($rs['module']));?></a></li>
+		     	<?php 
+		    	}
+		    	$old_module = $rs['module'];
+		    }
+		    ?>
+	    </ul>
+</div>	   
+   <div class="col-xs-9">
+	    <div class="tab-content">
+				      <?php $old_module='';
+				      if(!empty($this->rows))foreach($this->rows as $key =>$rs){
+				     	 if($old_module!= $rs['module']){?>
+					      	<?php if( $key>0){?>
+					      			 </table>
+					      	     </div>
+				      		<?php }?>
+					      	<div class="tab-pane <?php if($key==0){echo"active";}?>" id="<?php echo $rs['module'];?>">
+					      		<table width="100%" border="1" style="white-space: nowrap;border: 1px solid #ccc;border-collapse: collapse;font-size: 13px;">
+									<tr align="center" style="background: #bcd5f0;">
+										<td width="45%">
+											<?php echo $tr->translate("USER_ACCESS");?>
+										</td>
+										<td width="45%">
+											<?php echo $tr->translate("URL");?>
+										</td>
+										<td width="10%">
+											<?php echo $tr->translate("STATUS");?>
+										</td>
+									</tr>
+					      <?php }?>
+					     <tr>
+					     	<td><?php if($rs['is_menu']==1){echo "<strong>".$tr->translate($rs['label'])."</strong>";}else{echo "&nbsp;&nbsp;&nbsp;".$tr->translate($rs['label'])."</strong>";}?></td>
+					     	<td><?php echo $rs['url'];?></td>
+					     	<td><?php echo $rs['img'];?></td>
+					     </tr>
+				      <?php 
+				       $old_module = $rs['module'];
+					  }?>
+				</table>
+				<div style="clear: both;"></div>
+		   </div>
+	    </div>
+</div>
+
+
+<!-- 
+<div class="col-xs-3"> 
+    <ul class="nav nav-tabs tabs-left">
+      <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
+      <li><a href="#profile" data-toggle="tab">Profile</a></li>
+      <li><a href="#messages" data-toggle="tab">Messages</a></li>
+      <li><a href="#settings" data-toggle="tab">Settings</a></li>
+    </ul>
+</div>
+<div class="col-xs-9">
+    <div class="tab-content">
+      <div class="tab-pane active" id="home">Home Tab.</div>
+      <div class="tab-pane" id="profile">Profile Tab.</div>
+      <div class="tab-pane" id="messages">Messages Tab.</div>
+      <div class="tab-pane" id="settings">Settings Tab.</div>
+    </div>
+</div> -->

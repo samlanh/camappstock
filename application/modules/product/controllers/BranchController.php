@@ -13,22 +13,27 @@ public function init()
     }
     public function indexAction()
     {
-		$db = new Product_Model_DbTable_DbBranch();
-		$formFilter = new Product_Form_FrmBranchFilter();
-		$frmsearch = $formFilter->branchFilter();
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-		}else{
-			$data = array(
-					'branch_name'	=>	'',
-					'status'	=>	1
-			);
-		}
-		$this->view->formFilter = $frmsearch;
-		$list = new Application_Form_Frmlist();
-		$result = $db->getAllBranch($data);
-		$this->view->resulr = $result;
-		Application_Model_Decorator::removeAllDecorator($formFilter);
+    	try{
+			$db = new Product_Model_DbTable_DbBranch();
+			if($this->getRequest()->isPost()){
+				$data = $this->getRequest()->getPost();
+			}else{
+				$data = array(
+					'branch_name'=>	'',
+					'status'=>1
+				);
+			}
+			$list = new Application_Form_Frmlist();
+			$result = $db->getAllBranch($data);
+			$this->view->resulr = $result;
+			}catch (Exception $e){
+				Application_Form_FrmMessage::messageError("INSERT_ERROR");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+			$formFilter = new Product_Form_FrmBranchFilter();
+			$frmsearch = $formFilter->branchFilter();
+			$this->view->formFilter = $frmsearch;
+			Application_Model_Decorator::removeAllDecorator($formFilter);
 	}
 	public function addAction()
 	{

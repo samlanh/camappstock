@@ -13,35 +13,41 @@ class Sales_IndexController extends Zend_Controller_Action
     }
    	public function indexAction()
 	{
-		if($this->getRequest()->isPost()){
-			$search = $this->getRequest()->getPost();
-			$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-			$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
-		}
-		else{
-			$search =array(
-					'text_search'=>'',
-					'start_date'=>date("Y-m-d"),
-					'end_date'=>date("Y-m-d"),
-					'branch_id'=>-1,
-					'customer_id'=>-1,
-					);
-		}
-		$db = new Sales_Model_DbTable_DbSaleOrder();
-		$rows = $db->getAllSaleOrder($search);
-		$columns=array("BRANCH_NAME","Com.Name","CON_NAME","INVOICE_NO","SALE_DATE",
-				"SUB_TOTAL","DISCOUNT","TRANSPORT_FEE","TOTAL_AMOUNT","PAID","BALANCE","PRINT","លុបវិក្កយបត្រ","BY_USER");
-		$link=array(
-				'module'=>'sales','controller'=>'index','action'=>'edit',
-		);
-		$invoice=array(
-				'module'=>'sales','controller'=>'possale','action'=>'invoice',);
-		$delete=array(
-				'module'=>'sales','controller'=>'possale','action'=>'delete',);
+		try{
+			if($this->getRequest()->isPost()){
+				$search = $this->getRequest()->getPost();
+				$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
+				$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
+			}
+			else{
+				$search =array(
+						'text_search'=>'',
+						'start_date'=>date("Y-m-d"),
+						'end_date'=>date("Y-m-d"),
+						'branch_id'=>-1,
+						'customer_id'=>-1,
+						);
+			}
+			$db = new Sales_Model_DbTable_DbSaleOrder();
+			$rows = $db->getAllSaleOrder($search);
+			$columns=array("BRANCH_NAME","Com.Name","CON_NAME","INVOICE_NO","SALE_DATE",
+					"SUB_TOTAL","DISCOUNT","TRANSPORT_FEE","TOTAL_AMOUNT","PAID","BALANCE","PRINT","លុបវិក្កយបត្រ","BY_USER");
+			$link=array(
+					'module'=>'sales','controller'=>'possale','action'=>'edit',
+			);
+			$invoice=array(
+					'module'=>'sales','controller'=>'possale','action'=>'invoice',);
+			$delete=array(
+					'module'=>'sales','controller'=>'possale','action'=>'delete',);
+			
+			$list = new Application_Form_Frmlist();
+			$this->view->list=$list->getCheckList(0, $columns, $rows, array('លុបវិក្កយបត្រ'=>$delete,'វិក្កយបត្រ'=>$invoice,'contact_name'=>$link,'branch_name'=>$link,'customer_name'=>$link,
+					'sale_no'=>$link));
 		
-		$list = new Application_Form_Frmlist();
-		$this->view->list=$list->getCheckList(0, $columns, $rows, array('លុបវិក្កយបត្រ'=>$delete,'វិក្កយបត្រ'=>$invoice,'contact_name'=>$link,'branch_name'=>$link,'customer_name'=>$link,
-				'sale_no'=>$link));
+		}catch (Exception $e){
+			Application_Form_FrmMessage::messageError("INSERT_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
 		
 		$formFilter = new Sales_Form_FrmSearch();
 		$this->view->formFilter = $formFilter;

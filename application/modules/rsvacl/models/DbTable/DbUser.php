@@ -120,7 +120,7 @@ class RsvAcl_Model_DbTable_DbUser extends Zend_Db_Table_Abstract
      			"email"			=>	$arr["email"],
      			"user_type_id"	=>	$arr["user_type_id"],
      			"LocationId"	=>	$arr["LocationId"],
-     			"status"		=>	$arr["status"],
+     			"status"		=>	1,
      			"created_date"	=>	date("Y-m-d H:i:s")
      			);
      	$id=$this->insert($array_data);

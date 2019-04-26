@@ -14,7 +14,10 @@ class Sales_Form_Frmcustomercomment extends Zend_Form
 		
 		$customerid=new Zend_Form_Element_Select('customer_id');
 		$customerid ->setAttribs(array(
-				'class' => 'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
 				'Onchange'=>'getCustomerInfo()',
 		));
 		$options = $db->getAllCustomer(1);
@@ -23,9 +26,10 @@ class Sales_Form_Frmcustomercomment extends Zend_Form
 		
 		$start_date=new Zend_Dojo_Form_Element_TextBox("start_date");
 		$start_date->setAttribs(array(
-				'class'=>'form-control form-control-inline date-picker'));
+				'class'=>'form-control form-control-inline date-picker',
+				'data-date-format'=>"dd-mm-yyyy"));
 		
-		$start_date->setValue(date("m/d/Y"));
+		$start_date->setValue(date("d-m-Y"));
 		
 		$_description = new Zend_Dojo_Form_Element_Textarea('description');
 		$_description->setAttribs(array('dojoType'=>'dijit.form.SimpleTextarea',
@@ -39,12 +43,16 @@ class Sales_Form_Frmcustomercomment extends Zend_Form
 		$_status->setMultiOptions($_arr);
 		$_status->setAttribs(array(
 				'required'=>'true',
-				'class'=>'form-control'));
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
+				));
 		
 		$id=new Zend_Form_Element_Hidden("id");
 		$id->setAttribs(array(
-				'class'=>'form-control'));
-		
+			'class'=>'form-control'
+		));
 		
 		if(!empty($data)){
 			$id->setValue($data['id']);
@@ -55,7 +63,5 @@ class Sales_Form_Frmcustomercomment extends Zend_Form
 		}
 		$this->addElements(array($id,$start_date,$_status,$_description));
 		return $this;
-		
 	}
-	
 }

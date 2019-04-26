@@ -16,8 +16,6 @@ class Sales_Model_DbTable_Dbquoatation extends Zend_Db_Table_Abstract
 			quoat_number,date_order,
 			(SELECT name_en FROM `tb_view` WHERE type=15 AND key_code=order_type LIMIT 1) as order_type,
 			all_total,discount_value,net_total,
-			(SELECT name_en FROM `tb_view` WHERE type=7 AND key_code=is_approved LIMIT 1) as is_approved,
-			(SELECT name_en FROM `tb_view` WHERE type=8 AND key_code=pending_status LIMIT 1),
 			(SELECT u.username FROM tb_acl_user AS u WHERE u.user_id = user_mod) AS user_name
 			FROM `tb_quoatation` ";
 			$order=" ORDER BY id DESC";

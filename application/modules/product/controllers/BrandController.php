@@ -13,21 +13,26 @@ public function init()
     }
     public function indexAction()
     {
-		$db = new Product_Model_DbTable_DbBrand();
-		$formFilter = new Product_Form_FrmBrand();
-		$frmsearch = $formFilter->BrandFilter();
-		$this->view->formFilter = $frmsearch;
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-		}else{
-			$data = array(
+    	try{
+			$db = new Product_Model_DbTable_DbBrand();
+			if($this->getRequest()->isPost()){
+				$data = $this->getRequest()->getPost();
+			}else{
+				$data = array(
 					'name'	=>	'',
 					'brand'		=>	'',
 					'status'	=>	1
-			);
+				);
+			}
+			$result = $db->getAllBrands($data);
+			$this->view->resulr = $result;
+		}catch (Exception $e){
+			Application_Form_FrmMessage::messageError("INSERT_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$result = $db->getAllBrands($data);
-		$this->view->resulr = $result;
+		$formFilter = new Product_Form_FrmBrand();
+		$frmsearch = $formFilter->BrandFilter();
+		$this->view->formFilter = $frmsearch;
 		Application_Model_Decorator::removeAllDecorator($formFilter);
 	}
 	public function addAction()
@@ -37,9 +42,7 @@ public function init()
 			$data = $this->getRequest()->getPost();
 			$db = new Product_Model_DbTable_DbBrand();
 			$db->add($data);
-			if($data['saveclose']){
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", '/product/brand/index');
-			}
+			Application_Form_FrmMessage::message("INSERT_SUCCESS");
 		}
 		$formFilter = new Product_Form_FrmBrand();
 		$formAdd = $formFilter->Brand();
@@ -59,9 +62,7 @@ public function init()
 			$data["id"] = $id;
 			$db = new Product_Model_DbTable_DbBrand();
 			$db->edit($data);
-			if($data['saveclose']){
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", '/product/brand/index');
-			}
+			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", '/product/brand/index');
 		}
 		$rs = $db->getBrand($id);
 		$formFilter = new Product_Form_FrmBrand();

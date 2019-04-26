@@ -24,7 +24,8 @@ class Product_Form_FrmReceive extends Zend_Form
     	$date =new Zend_Date();
     	$tran_date = new Zend_Form_Element_Text('tran_date');
     	$tran_date->setValue($date->get('MM/dd/YYYY'));
-    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',));
+    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'data-date-format'=>"dd-mm-yyyy",
+		'required'=>'required',));
     	
     	$remark = new Zend_Form_Element_Textarea("remark");
     	$remark->setAttribs(array('class'=>'form-control','style'=>'width: 100%;height:35px'));
@@ -98,10 +99,11 @@ class Product_Form_FrmReceive extends Zend_Form
 		$tran_num->setAttribs(array('class'=>'form-control', 'required'=>'required','readOnly'=>true));
 		$tran_num->setValue($db->getRequestTransferNo());
     	
-    	$date =date("m/d/Y");
+    	$date =date("d-m-Y");
     	$tran_date = new Zend_Form_Element_Text('tran_date');
     	$tran_date->setValue($date);
-    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',));
+    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',
+		'data-date-format'=>"dd-mm-yyyy"));
     	
     	$remark = new Zend_Form_Element_Textarea("remark");
     	$remark->setAttribs(array('class'=>'form-control','style'=>'width: 100%;height:35px'));
@@ -171,7 +173,7 @@ class Product_Form_FrmReceive extends Zend_Form
 		$rs_loc = $db->getLocation(2);
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		
-		$date =date("m/d/Y");
+		$date =date("d-m-Y");
 		
 		$receive_num = new Zend_Form_Element_Text('receive_num');
 		$receive_num->setAttribs(array('class'=>'form-control', 'required'=>'required','readOnly'=>true));
@@ -186,14 +188,16 @@ class Product_Form_FrmReceive extends Zend_Form
 		$re_num->setAttribs(array('class'=>'form-control', 'required'=>'required','readOnly'=>true));
 		//$re_num->setValue($db->getRequestTransferNo());
     	
-    	$date =date("m/d/Y");
+    	$date =date("d-m-Y");
     	$tran_date = new Zend_Form_Element_Text('tran_date');
     	$tran_date->setValue($date);
-    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',));
+    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',
+		'data-date-format'=>"dd-mm-yyyy"));
 		
     	$re_date = new Zend_Form_Element_Text('re_date');
     	$re_date->setValue($date);
-    	$re_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',));
+    	$re_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',
+		'data-date-format'=>"dd-mm-yyyy"));
     	
     	$remark = new Zend_Form_Element_Textarea("remark");
     	$remark->setAttribs(array('class'=>'form-control','style'=>'width: 100%;height:35px'));
@@ -274,8 +278,8 @@ class Product_Form_FrmReceive extends Zend_Form
 			}
 			$re_date->setValue($data["re_date"]);
     		$remark->setValue($data["remark"]);
-    		$to_loc->setValue($data["tran_location"]);
-			$from_loc->setValue($data["cur_location"]);
+    		$to_loc->setValue($data["cur_location"]);
+			$from_loc->setValue($data["tran_location"]);
     		$status->setValue(1);
     		//$type->setValue($data["type"]);
     	}

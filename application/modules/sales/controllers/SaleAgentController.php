@@ -1,6 +1,6 @@
 <?php
 
-class Sales_SaleAgentController extends Zend_Controller_Action
+class Sales_SaleagentController extends Zend_Controller_Action
 {
 
 public function init()
@@ -11,34 +11,38 @@ public function init()
 
     public function indexAction()
     {
-    	if($this->getRequest()->isPost()){
-			$search = $this->getRequest()->getPost();
-			$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-			$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
-		}
-		else{
-			$search =array(
-					'text_search'=>'',
-					'start_date'=>1,
-					'end_date'=>date("Y-m-d"),
-					'branch_id'=>-1,
-					'status'=>-1,
-					);
-		}
-		$db = new Sales_Model_DbTable_DbSalesAgent();
-		$rows= $db->getAllSaleAgent($search);
-        $list = new Application_Form_Frmlist();
-    	$columns=array("BRANCH_NAME","AGENT_CODE","SALE_AGENT","CONTACT_NUM","EMAIL","ADDRESS","POSTION","START_WORKING_DATE","DESC_CAP","STATUS");
-    	$link=array(
-    		'module'=>'sales','controller'=>'saleagent','action'=>'edit',
-    	);
-    	$urlEdit = BASE_URL . "/sales/saleagent/edit";
-    	$glClass = new Application_Model_GlobalClass();
-    	$this->view->list=$list->getCheckList(0, $columns, $rows, array('branch_name'=>$link,'name'=>$link,'phone'=>$link));
-    	
-    	$formFilter = new Sales_Form_FrmSearchStaff();
-    	$this->view->formFilter = $formFilter;
-    	Application_Model_Decorator::removeAllDecorator($formFilter);
+    	try{
+	    	if($this->getRequest()->isPost()){
+				$search = $this->getRequest()->getPost();
+				$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
+				$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
+			}
+			else{
+				$search =array(
+						'text_search'=>'',
+						'start_date'=>1,
+						'end_date'=>date("Y-m-d"),
+						'branch_id'=>-1,
+						'status'=>-1,
+						);
+			}
+			$db = new Sales_Model_DbTable_DbSalesAgent();
+			$rows= $db->getAllSaleAgent($search);
+	        $list = new Application_Form_Frmlist();
+	    	$columns=array("BRANCH_NAME","AGENT_CODE","SALE_AGENT","CONTACT_NUM","EMAIL","ADDRESS","POSTION","START_WORKING_DATE","DESC_CAP","STATUS");
+	    	$link=array(
+	    		'module'=>'sales','controller'=>'saleagent','action'=>'edit',
+	    	);
+	    	$urlEdit = BASE_URL . "/sales/saleagent/edit";
+	    	$glClass = new Application_Model_GlobalClass();
+	    	$this->view->list=$list->getCheckList(0, $columns, $rows, array('branch_name'=>$link,'name'=>$link,'phone'=>$link));
+    	}catch (Exception $e){
+    		Application_Form_FrmMessage::messageError("INSERT_ERROR");
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+	    	$formFilter = new Sales_Form_FrmSearchStaff();
+	    	$this->view->formFilter = $formFilter;
+	    	Application_Model_Decorator::removeAllDecorator($formFilter);
 	}
 
 	public function addAction() {

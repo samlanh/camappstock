@@ -13,7 +13,7 @@ class Product_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 				'name'			=>	$data["cat_name"],
 				'parent_id'		=>	$data["parent"],
 				'date'			=>	new Zend_Date(),
-				'status'		=>	$data["status"],
+				'status'		=>	1,
 				'remark'		=>	$data["remark"],
 		);
 		$this->_name = "tb_category";

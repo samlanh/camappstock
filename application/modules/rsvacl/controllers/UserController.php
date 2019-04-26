@@ -4,16 +4,11 @@ class Rsvacl_UserController extends Zend_Controller_Action
 {
     public function init()
     {
-        /* Initialize action controller here */
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
-
     public function indexAction()
     {
-		$formfilter=new Rsvacl_Form_FrmUser();
-		$this->view->formfilter=$formfilter;
     	$where = "";
-		// action body
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
         $getUser = new Rsvacl_Model_DbTable_DbUser();
          $where='';
@@ -23,36 +18,32 @@ class Rsvacl_UserController extends Zend_Controller_Action
 		}
 		if($this->getRequest()->getParam('location')){
 			$location = $this->getRequest()->getParam('location');
-			$where.=" AND LocationId=".$location;
-		}
-		//if($this->getRequest()->getParam('status')){
-			$status = $this->getRequest()->getParam('status_se');
-			//echo "adae".$status;
-			if($status!=""){
-				$where.=" AND status="."'".$status."'";
+			if($location>0){
+				$where.=" AND LocationId=".$location;
 			}
-		//}
+		}
+		$status = $this->getRequest()->getParam('status_se');
+		if($status!=""){
+			$where.=" AND status="."'".$status."'";
+		}
 		if($this->getRequest()->getParam('ad_search')){
 			$ad_search = $this->getRequest()->getParam('ad_search');
 			$s_where=array();
 			$s_search = addslashes(trim($ad_search));
 			$s_where[]= " fullname LIKE '%{$s_search}%'";
 			$s_where[]=" username LIKE '%{$s_search}%'";
-			//$s_where[]= " cate LIKE '%{$s_search}%'";
 			$where.=' AND ('.implode(' OR ', $s_where).')';
 		}
-        $userQuery = "select `user_id`,fullname,`username`,
+        $userQuery = "SELECT `user_id`,
+        (SELECT name FROM `tb_sublocation` WHERE id=LocationId LIMIT 1) AS branch_name,
+        fullname,`username`,
         (SELECT user_type FROM `tb_acl_user_type`  WHERE user_type_id=tb_acl_user.user_type_id) AS user_type,
-        (SELECT name FROM `tb_sublocation` WHERE id=LocationId) AS branch_name,
         `created_date`,`modified_date`,`status` from tb_acl_user WHERE 1";
-		//echo $userQuery.$where;
         $userQuery = $userQuery.$where;
-        
         $rows = $getUser->getUserInfo($userQuery);
         if($rows){
         	$imgnone='<img src="'.BASE_URL.'/images/icon/none.png"/>';
         	$imgtick='<img src="'.BASE_URL.'/images/icon/tick.png"/>';
-        	        	        	
         	foreach ($rows as $i =>$row){
         		if($row['status'] == 1){
         			$rows[$i]['status'] = $imgtick;
@@ -63,13 +54,16 @@ class Rsvacl_UserController extends Zend_Controller_Action
         	}
         	
         	$link = array("rsvacl","user","edit");
-        	$links = array('username'=>$link,'fullname'=>$link);
+        	$links = array('branch_name'=>$link,'username'=>$link,'fullname'=>$link);
         	
         	$list=new Application_Form_Frmlist();
-        	$columns=array("FULL_NAME",$tr->translate('USER_NAME_CAP'),"USER_TYPE","BRANCH_NAME",$tr->translate('CREATED_DATE'),$tr->translate('MODIFIED_DATE'),$tr->translate('STATUS_CAP'));
+        	$columns=array("BRANCH_NAME","FULL_NAME",'USER_NAME',"USER_TYPE",'CREATE_DATE','MODIFY_DATE','STATUS');
         	$this->view->form=$list->getCheckList('radio', $columns, $rows, $links);
-        	
-        }else $this->view->form = $tr->translate('NO_RECORD_FOUND');
+        }else{
+        	$this->view->form = $tr->translate('NO_RECORD_FOUND');
+        }
+        $formfilter=new Rsvacl_Form_FrmUser();
+        $this->view->formfilter=$formfilter;
         Application_Model_Decorator::removeAllDecorator($formfilter);
     }
     
@@ -94,7 +88,7 @@ class Rsvacl_UserController extends Zend_Controller_Action
 			{
 				$id=$db->insertUser($post);
 				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-				$this->_redirect('/rsvacl/user/index');
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", '/rsvacl/user/index');
 			}
 			else {
 				Application_Form_FrmMessage::message('User had existed already');
@@ -107,13 +101,6 @@ class Rsvacl_UserController extends Zend_Controller_Action
 		$items = new Application_Model_GlobalClass();
 		$locationRows = $items->getLocationAssign();
 		$this->view->locations = $locationRows;
-		
-		$popup = new Application_Form_FrmPopup();
-		$frm_poup = $popup->popuLocation(null);
-		Application_Model_Decorator::removeAllDecorator($frm_poup);
-		$this->view->popup_location = $frm_poup;
-		
-		
 	}
 	// Edit user
     public function editAction()
@@ -123,28 +110,22 @@ class Rsvacl_UserController extends Zend_Controller_Action
    		$form = new Rsvacl_Form_FrmUser();
     	$db = new Rsvacl_Model_DbTable_DbUser();
 		$rs = $db->getUserById($user_id);
-		//Application_Model_Decorator::setForm($form, $rs);
-		
     	$this->view->form = $form->init($rs);
     	$this->view->user_id = $user_id;
     	
     	$rsloc = $db->getUserInfo('SELECT * FROM tb_acl_ubranch where user_id='.$user_id ." GROUP BY location_id ");
     	$this->view->branchname = $rsloc;
     	
-    	$items = new Application_Model_GlobalClass();
-    	$locationRows = $items->getLocationAssign();
-    	$this->view->locations = $locationRows;
-    	
     	if($this->getRequest()->isPost())
 		{
 			$post=$this->getRequest()->getPost();
 			$db->updateUser($post,$user_id);
-// 			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-// 			Application_Form_FrmMessage::message($tr->translate('ROW_AFFECTED'));
-// 			Application_Form_FrmMessage::redirector('/Rsvacl/user/index');
-			$this->_redirect('/rsvacl/user/index');
+			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", '/rsvacl/user/index');
 		}
 		Application_Model_Decorator::removeAllDecorator($form);
+		$items = new Application_Model_GlobalClass();
+		$locationRows = $items->getLocationAssign();
+		$this->view->locations = $locationRows;
 		
     }
 

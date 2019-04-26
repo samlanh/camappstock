@@ -5,7 +5,7 @@
  */
 class Application_Form_Frmlist
 {        
-    /*
+ /*
      * Multi cells in one row list
      */    	
     public function getMultiCellList($type,$columns,$rows,$merge_column=NULL,$link=null,$link_difference=false,$icon=0)
@@ -16,7 +16,7 @@ class Application_Form_Frmlist
         //-------------------------Header----------------------
        	$form='';                 
         $counter='<strong>Number of record(s): '.count($rows).'</strong>';
-        $head=$form.'<table class="collape tablesorter" id="table"  width="100%">';
+        $head=$form.'<table class="collape tablesorter" id="exportExcel"  width="100%">';//id="table"
         $col_str="";
         if($type!=null){
     		$col_str='<thead><tr><th class="tdheader">No</th>';
@@ -69,7 +69,7 @@ class Application_Form_Frmlist
 						if(!$link_difference){									     						
     							foreach($link as $column=>$url)
     								if($key==$column){    									
-    									$array=array('tag'=>'a','attribute'=>array('href'=>Application_Form_FrmMessage::redirectorview($url).'?id='.$row[$column]));
+    									$array=array('tag'=>'a','attribute'=>array('href'=>Application_Form_FrmMessage::redirectorview($url).'/id/'.$row[$column]));
     									$read=$this->formSubElement($array,$img.$read);
     									
     								}
@@ -77,7 +77,7 @@ class Application_Form_Frmlist
 						else{
 							foreach($link as $column=>$url)
     								if($key==$column){    									
-    									$array=array('tag'=>'a','attribute'=>array('href'=>Application_Model_Admin::redirector($url).'?id='.$tempvalue));
+    									$array=array('tag'=>'a','attribute'=>array('href'=>Application_Model_Admin::redirector($url).'/id/'.$tempvalue));
     									$read=$this->formSubElement($array,$img.$read);
     								}
 						}
@@ -129,6 +129,19 @@ class Application_Form_Frmlist
     /* @ Desc: show add button
      * @param $url_new
      * */
+    
+    public function showCopyBuntton($url_copy) {
+    	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    
+    	$copyButton = '&nbsp;<a href="#" class="btn-action" onClick="copyRecord(\''.$url_copy.'\')">'
+    	.'<img alt="" src="'.BASE_URL.'/images/icon/copy.png"><b>'
+    	.$tr->translate("COPY")
+    	.'</b></a>';
+    	return $copyButton;
+    }
+    
+    
     public function showAddBuntton($url_new) {
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -160,54 +173,31 @@ class Application_Form_Frmlist
      * @param $link field with its link for access to its detail info EX: array('name'=>$link): name is field, link where u want to access
      * @param $editLink for link edit form 
      */
-    public function getCheckList($delete=0, $columns,$rows,$link=null,$editLink="", $class='items', $textalign= "left", $report=false, $id = "table")
+    public function getCheckList($delete=0, $columns,$rows,$link=null,$editLink="", $class='items', $textalign= "left", $report=false, $id = "exportExcel")
     {
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	/*
      	* Define string of pagination Sophen 27 June 2012
      	*/
     	$stringPagination = '<script type="text/javascript">
-				$(document).ready(function(){
-					$("#'.$id.'").tablesorter();
-					$("#'.$id.'").tablesorter().tablesorterPager({container: $("#pagination_'.$id.'"),size:15});
-					$("#pagedisplay").focus(function(){ this.blur(); 
-                   });
-				});
+				
 		</script>
-		<div id="pagination_'.$id.'" class="pager" >
-					<form >
-						<table  style="width: 200px;"><tr>
-						<td><img src="'.BASE_URL.'/images/first.gif" class="first"/></td>
-						<td><img src="'.BASE_URL.'/images/previous.gif" class="prev"/></td>
-						<td><input id="pagedisplay" type="text" class="pagedisplay"/></td>
-						<td><img src="'.BASE_URL.'/images/next.gif" class="next"/></td>
-						<td><img src="'.BASE_URL.'/images/last.gif" class="last"/></td>
-						<td><select class="pagesize" >
-							<option   value="10">10</option>
-							<option selected="selected"  value="15">15</option>
-							<option value="20">20</option>
-							<option value="30">30</option>
-							<option value="40">40</option>
-							<option value="50">50</option>
-							<option value="60">60</option>
-							<option value="70">70</option>
-							<option value="80">80</option>
-							<option value="90">90</option>
-							<option value="100">100</option>
-							</select>
-					    </td>
-						</tr>
-						</table>
-					</form>
-			</div>	';
+			';
     	/* end define string*/
+    	//$head='<form name="list"><div style="overflow:scroll; max-height:450px; overflow-x:hidden;" ><table class="collape tablesorter" id="'.$id.'" width="100%">';
     	
-    	$head='<form name="list"><div style="overflow:scroll; max-height: 450px; overflow-x:hidden;" ><table class="collape tablesorter" id="'.$id.'" width="100%">';
+    	$head='<form name="list">
+    				<div class="dataTables_scrollBody" style="position: relative;  width: 100%; background:#fff;   ">
+    					<table border="1" id="datatable-responsive" style="  border-collapse: collapse;   border-color: #ddd;"  class="display nowrap dataTable dtr-inline collapsed" cellspacing="0" width="100%" >
+    	';
     	$col_str='';
     	$col_str .='<thead><tr>';
-    	if($delete== 1) {
+    	if($delete== 1 OR $delete== 11) {
+    		$col_str .= '<th class="tdheader tdcheck"></td>';
+    	}elseif($delete==2){
     		$col_str .= '<th class="tdheader tdcheck"></td>';
     	}
+    	
     	$col_str .= '<th class="tdheader">'.$tr->translate("NUM").'</th>';
     	//add columns
     	foreach($columns as $column){
@@ -219,7 +209,7 @@ class Application_Form_Frmlist
     	$col_str.='</tr></thead>';
     	$row_str='<tbody>';
     	//add element rows	
-    	if($rows==NULL) return $head.$col_str.'</table></div><center style="font-size:18pt;">No record</center></form>';
+    	if($rows==NULL) return $head.$col_str.'</table></div><center style="font-size:18pt;"><label id="data_table">No record</label></center></form>';
     	$temp=0;
     	/*------------------------Check param id----------------------------------*/
 
@@ -232,22 +222,32 @@ class Application_Form_Frmlist
 	    		//-------------------check select-----------------
 
     		//-------------------end check select-----------------
-    		$row_str.='<tr class="'.$attb.'"> ';
+    		
+    		$row_str.='<tr  > ';
     				$i=0;
 		  			foreach($row as $key=>$read) {
+		  				$clisc='';
 		  				if($read==null) $read='&nbsp';
 		  				if($i==0) {
 		  					$temp=$read;
-		  					if($delete==1){
-				    			$row_str .= '<td><input type="checkbox" name="del[]" id="del[]" value="'.$temp.'" /></td>';
+		  					if($delete== 10) {
+		  						$clisc='oncontextmenu="setrowdata('.$temp.');return false;" class="context-menu-one" ';
 		  					}
-		  					$row_str.='<td class="items-no">'.$r.'</td>';
+		  					if($delete==2){
+				    			$row_str .= '<td><input type="radio" onclick="setValue('.$temp.')" name="copy" id="copy" value="'.$temp.'" /></td>';
+		  					}else if($delete==1){
+		  						$row_str .= '<td><input type="checkbox" name="del[]" id="del[]" value="'.$temp.'" /></td>';
+		  					}
+		  					else if($delete==11){
+		  						$row_str .= '<td oncontextmenu="setrowdata('.$temp.');return false;" class="context-menu-one"><input onClick="checked_id('.$temp.')" type="checkbox" name="del[]" id="del[]" value="'.$temp.'" /></td>';
+		  					}
+		  					$row_str.='<td style="text-align:center;" >'.$r.'</td>';
 		  				} else {
     						if($link!=null){
     							foreach($link as $column=>$url)
     								if($key==$column){
     									$img='';
-    									$array=array('tag'=>'a','attribute'=>array('href'=>Application_Form_FrmMessage::redirectorview($url).'?id='.$temp));
+    									$array=array('tag'=>'a','attribute'=>array('href'=>Application_Form_FrmMessage::redirectorview($url).'/id/'.$temp));
     									$read=$this->formSubElement($array,$img.$read);
     								}
     						}
@@ -260,13 +260,17 @@ class Application_Form_Frmlist
 	    							$text  = " align=". $textalign;
 	    						}
     						}
-    						$row_str.='<td class="'.$class.'" '.$text.'>'.$read.'</td>';
+    						if($delete== 10 OR $delete== 11) {
+    							$clisc='oncontextmenu="setrowdata('.$temp.');return false;" class="context-menu-one" ';
+    						}
+    						$row_str.='<td '.$clisc.' >'.$read.'</td>';
 			  				if($i == count($columns)) {
 	    						if($editLink != "") {
-									$row_str.='<td class="'.$class.'"><a class="edit" href="'.$editLink.'?id='.$temp.'">'.'</a></td>';
+									$row_str.='<td '.$clisc.' ><a class="edit" href="'.$editLink.'/id/'.$temp.'">'.'</a></td>';
 			    				}
 	    					}
     					}
+    					
     					$i++;
 		  			}
  			$row_str.='</tr>';
@@ -312,9 +316,13 @@ class Application_Form_Frmlist
 		return $stat;
     }
     public function checkValue($value){
-    	//Sophen comment for number format
-    	
-    	if($this->is_date($value)) return @date_format(date_create($value), 'd-M-Y');  	
+    	if(is_numeric($value)){
+    		$real_float	= strpos($value, ".");
+    		if($real_float>0 AND $value>0){
+    			return number_format($value,2);
+    		}
+    	}
+    	if($this->is_date($value)) return date_format(date_create($value), 'd-M-Y');  	
     	return $value;
     }
 	private function textAlign($value){		
@@ -354,4 +362,3 @@ class Application_Form_Frmlist
     	}    	
     }
 }
-

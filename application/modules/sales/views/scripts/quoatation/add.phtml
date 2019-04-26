@@ -22,120 +22,139 @@
 			<div class="portlet-body form">
 				<form id="frm" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post">
 					<div class="form-body">
-						<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("CUSTOMER_NAME");?> <span class="required">
-								</span>
-							</label>
-							<div class="col-md-3">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement("customer_id");?>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label col-md-4"><?php echo $tr->translate("BRANCH_NAME");?><span class="required">
+									</span>
+								</label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<i class="fa"></i>
+										<?php echo $form->getElement('branch_id');?>
+									</div>
 								</div>
 							</div>
-							<div class="col-md-1">
-                                <button type="button" onclick="popupcustomer();" class="btn green delete col-md-12 ">
-									<i class="fa fa-plus" style="margin-left: -11px;"></i>
-									<span>Add New </span>
-								</button>
-							</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("BRANCH_NAME");?><span class="required">
+							<div class="form-group">
+								<label class="control-label col-md-4"><?php echo $tr->translate("CUSTOMER_NAME");?> <span class="required">
 								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement('branch_id');?>
+								</label>
+								<div class="col-md-6">
+									<div class="input-icon right">
+										<i class="fa"></i>
+										<?php echo $form->getElement("customer_id");?>
+									</div>
+								</div>
+								<div class="col-md-2">
+	                                <button type="button" onclick="popupcustomer();" class="btn green delete col-md-12 ">
+										<i class="fa fa-plus" style="margin-left: -11px;"></i>
+										<span>Add New </span>
+									</button>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-4"><?php  echo $tr->translate("SALE_AGENT");?><span class="required">
+									 </span>
+								</label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<?php echo $form->getElement("saleagent_id");?>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-4" style="white-space: nowrap;"><?php echo $tr->translate("Order Type");?></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<select name="pre_order" id="pre_order" class="form-control"><option value="1">Quotation</option><option value="0">Pre-Order</option></select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-4"><?php echo $tr->translate("REMARK");?><span class="required">
+									 </span>
+								</label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<?php echo $form->getElement("remark");?>
+									</div>
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label class="control-label col-md-2"><?php  echo $tr->translate("SALE_AGENT");?><span class="required">
-								 </span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<?php echo $form->getElement("saleagent_id");?>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label col-md-4"><?php echo $tr->translate("QUOTATION_NO");?><span class="required">* </span>
+								</label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<?php echo $form->getElement("txt_order"); ?>
+									</div>
 								</div>
 							</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("QUOATATION_DATE");?><span class="required">
-							* </span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-								<i class="fa fa-calendar"></i><?php echo $form->getElement("order_date");?>
+							<div class="form-group">
+								<label class="control-label col-md-4"><?php echo $tr->translate("QUOATATION_DATE");?><span class="required">
+								* </span>
+								</label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+									<i class="fa fa-calendar"></i><?php echo $form->getElement("order_date");?>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-4"><?php echo $tr->translate("CREDIT_TERM");?>(Days)<span class="required"></span></label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<?php echo $form->getElement("credit_term");?>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-4" style="white-space: nowrap;"><?php echo $tr->translate("CREDIT_LIMIT");?>($)<span class="required">
+									 </span>
+								</label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<?php echo $form->getElement("credit_limit");?>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-4"><span title="Current Credit Term"><?php echo $tr->translate("Current");?>(CT)</span><span class="required"></span>
+								</label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<input type="text" name="currentcredit_term" id="currentcredit_term" value="" readonly="readonly" style="color:red;" class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-4" style="white-space: nowrap;"><span title="Current Credit Limit"><?php echo $tr->translate("Current");?>(CL)$</span><span class="required">
+								 </span>
+								</label>
+								<div class="col-md-8">
+									<div class="input-icon right">
+										<input type="text" name="currcredit_limit" id="currcredit_limit" value="" readonly="readonly" style="color:red;" class="form-control">
+									</div>
 								</div>
 							</div>
 							
 						</div>
-						<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("QUOTATION_NO");?><span class="required">
-							* </span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<?php echo $form->getElement("txt_order"); ?></div>
-							</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("CREDIT_TERM");?>(Days)<span class="required">
-								 </span>
-							</label>
-							<div class="col-md-1">
-								<div class="input-icon right">
-									<?php echo $form->getElement("credit_term");?>
-								</div>
-							</div>
-							<label class="control-label col-md-1" style="white-space: nowrap;"><?php echo $tr->translate("CREDIT_LIMIT");?>($)<span class="required">
-								 </span>
-							</label>
-							<div class="col-md-2">
-								<div class="input-icon right">
-									<?php echo $form->getElement("credit_limit");?>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("REMARK");?><span class="required">
-								 </span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<?php echo $form->getElement("remark");?>
-								</div>
-							</div>
-							<label class="control-label col-md-2"><span title="Current Credit Term"><?php echo $tr->translate("Current");?>(CT)</span><span class="required">
-								 </span>
-							</label>
-							<div class="col-md-1">
-								<div class="input-icon right">
-									<input type="text" name="currentcredit_term" id="currentcredit_term" value="" readonly="readonly" style="color:red;" class="form-control">
-								</div>
-							</div>
-							<label class="control-label col-md-1" style="white-space: nowrap;"><span title="Current Credit Limit"><?php echo $tr->translate("Current");?>(CL)$</span><span class="required">
-								 </span>
-							</label>
-							<div class="col-md-2">
-								<div class="input-icon right">
-									<input type="text" name="currcredit_limit" id="currcredit_limit" value="" readonly="readonly" style="color:red;" class="form-control">
-								</div>
-							</div>
-							<label class="control-label col-md-2" style="white-space: nowrap;"><?php echo $tr->translate("Order Type");?></label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<select name="pre_order" id="pre_order" class="form-control"><option value="1">Quotation</option><option value="0">Pre-Order</option></select>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-md-2">
+						<div class="col-md-2">
+							<div class="form-group">
 								<button type="button" class="btn red delete" style="width:100%;">
 									<i class="fa fa-barcode"></i>
 									<span><?php echo $tr->translate("SCAN");?> </span>
 								</button>
 							</div>
-							<div class="col-md-10">
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
 								<select data-placeholder="Select..." class="form-control select2me" id="add_item" name="add_item" Onchange="getItemOrder();"  style="width:100% ;margin:0 auto;">
 									<?php echo $this->items; ?>
 								</select>
 							</div>
+						</div>
+						<div class="col-md-2">
 						</div>
 						<div class="portlet-body">
 							<table class="table table-striped table-bordered table-hover" id="table_order" style="font-size:12px;">
@@ -457,11 +476,11 @@ $('#frm').submit(function() {
 	currentcredit_term=parseInt($("#currentcredit_term").val());
 	currcredit_limit=parseInt($("#currcredit_limit").val());
 	all_total = $("#all_total").val();
-	currcredit_limit = currcredit_limit+parseInt(all_total);
+	//currcredit_limit = currcredit_limit+parseInt(all_total);
 
 	if(currentcredit_term>=credit_term || currcredit_limit>=credit_limit){
-		alert("អតិថននេះមិនអាចលក់ទៀតបានទេ សូមពិនិត្យលក្ខខ័ណ្ឌប្រាក់ជំពាក់និងរយៈពេលម្តងទៀត");
-        return false;
+		//alert("អតិថននេះមិនអាចលក់ទៀតបានទេ សូមពិនិត្យលក្ខខ័ណ្ឌប្រាក់ជំពាក់និងរយៈពេលម្តងទៀត");
+        //return false;
 	}
 	
 	var r = confirm("\tសូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\t\n \tតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?\t");

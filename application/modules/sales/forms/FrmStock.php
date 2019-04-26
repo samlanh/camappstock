@@ -20,7 +20,7 @@ class Sales_Form_FrmStock extends Zend_Form
     	$this->addElement($phoneElement);
     	
     	$emailElement = new Zend_Form_Element_Text('email');
-    	$emailElement->setAttribs(array('class'=>'form-control','placeholder'=>'Enter Email Address'));
+    	$emailElement->setAttribs(array('class'=>'form-control','required'=>'false','placeholder'=>'Enter Email Address'));
     	$this->addElement($emailElement);
     	
     	$addressElement = new Zend_Form_Element_Text('address');
@@ -46,7 +46,7 @@ class Sales_Form_FrmStock extends Zend_Form
     	$this->addElement($mainStockElement);
     	
     	$user_name = new Zend_Form_Element_Text('user_name');
-    	$user_name->setAttribs(array('placeholder'=>'Enter User Name',"class"=>"form-control",'required'=>'required'));
+    	$user_name->setAttribs(array('placeholder'=>'Enter User Name',"class"=>"form-control",'required'=>'false'));
     	$this->addElement($user_name);
     	
     	$password = new Zend_Form_Element_Password('password');
@@ -58,7 +58,8 @@ class Sales_Form_FrmStock extends Zend_Form
     	$this->addElement($pob);
     	
     	$dob= new Zend_Form_Element_Text('dob');
-    	$dob->setAttribs(array('placeholder'=>'Enter Position',"class"=>"form-control date-picker"));
+    	$dob->setAttribs(array('placeholder'=>'Enter Position',"class"=>"form-control date-picker",
+		'data-date-format'=>"dd-mm-yyyy"));
     	$dob->setValue($date->get('MM/dd/YYYY'));
     	$this->addElement($dob);
     	
@@ -88,7 +89,8 @@ class Sales_Form_FrmStock extends Zend_Form
     	$this->addElement($refer_addres);
     	
     	$satrt_working_date = new Zend_Form_Element_Text("start_working_date");
-    	$satrt_working_date->setAttribs(array('placeholder'=>'Enter Bank Account',"class"=>"form-control date-picker"));
+    	$satrt_working_date->setAttribs(array('placeholder'=>'Enter Bank Account',"class"=>"form-control date-picker",
+		'data-date-format'=>"dd-mm-yyyy"));
     	$satrt_working_date->setValue($date->get('MM/dd/YYYY'));
     	$this->addElement($satrt_working_date);
     	

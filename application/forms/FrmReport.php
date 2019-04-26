@@ -29,6 +29,7 @@ class Application_Form_FrmReport extends Zend_Form
     	$pro_id->setValue($proValue);
     	$this->addElement($pro_id);
     	
+    	
     	/*$sql='SELECT DISTINCT name,id FROM tb_sublocation WHERE name!="" AND status=1 ';
     	$user = $this->GetuserInfo();
     	if($user["level"]!=1 AND $user["level"]!=2){
@@ -87,17 +88,19 @@ class Application_Form_FrmReport extends Zend_Form
     	$startDatevalue = $request->getParam("start_date");
     	$startDate->setAttribs(array(
     			'class'=>'form-control date-picker',
-    			'placeHolder'=>'Start Date'
+    			'placeHolder'=>'Start Date',
+				'data-date-format'=>"dd-mm-yyyy"
     			));
     	$startDate->setValue($startDatevalue);
     	 
     	$endDate = new Zend_Form_Element_Text("end_date");
     	$endDate->setAttribs(array(
-    			'class'=>'form-control date-picker'
+    			'class'=>'form-control date-picker',
+				'data-date-format'=>"dd-mm-yyyy"
     	));
     	
     	$endDatevalue = $request->getParam("end_date");
-    	if(empty($endDatevalue)){$endDatevalue = date("m/d/Y");}
+    	if(empty($endDatevalue)){$endDatevalue = date("d-m-Y");}
     	$endDate->setValue($endDatevalue);
 
     	$this->addElements(array($startDate,$endDate,$location_id));
@@ -115,7 +118,7 @@ class Application_Form_FrmReport extends Zend_Form
     	
      	$item = new report_Model_DbQuery();
     	$sql="SELECT p.id, p.item_name,p.item_code FROM tb_product AS p WHERE p.item_name!='' ";
-			$sql.=" ORDER BY p.item_name " ;
+		$sql.=" ORDER BY p.item_name " ;
 		$rs=$db->getGlobalDb($sql);
 		if($rs){
     	$options=array(''=>$tr->translate('CHOOSE_PRODUCT'));
@@ -144,15 +147,19 @@ class Application_Form_FrmReport extends Zend_Form
 		$saleagent_id->setValue($request->getParam("saleagent_id"));
 		$this->addElement($saleagent_id);
 		
+		$rs=$db->getGlobalDb('SELECT id,CONCAT(cust_name,contact_name) AS cust_name,`phone`,`contact_phone` FROM tb_customer WHERE (contact_name!="" AND cust_name!="") AND status=1 ');
+		$options=array($tr->translate('Choose Customer'));
+		$vendorValue = $request->getParam('customer_id');
+		if(!empty($rs)) foreach($rs as $read) $options[$read['id']]=$read['cust_name']."-".$read['contact_phone'];
+		$vendor_element=new Zend_Form_Element_Select('customer_id');
+		$vendor_element->setMultiOptions($options);
+		$vendor_element->setAttribs(array(
+				'id'=>'customer_id',
+				'class'=>'form-control select2me'
+		));
+		$vendor_element->setValue($vendorValue);
+		$this->addElement($vendor_element);
     	
-    	/*$sql='SELECT DISTINCT name,id FROM tb_sublocation WHERE name!="" AND status=1 ';
-    	$user = $this->GetuserInfo();
-    	if($user["level"]!=1 AND $user["level"]!=2){
-    		$sql .= " AND id= ".$user["branch_id"];
-    		 
-    	}*/
-    	//$rs=$db->getGlobalDb($sql);
-    	//$options=array(''=>$tr->translate('CHOOSE_BRANCH'));
     	$locationValue = $request->getParam('branch_id');
     	//foreach($rs as $read) $options[$read['id']]=$read['name'];
     	$location_id=new Zend_Form_Element_Select('branch_id');
@@ -200,17 +207,19 @@ class Application_Form_FrmReport extends Zend_Form
     	$startDatevalue = $request->getParam("start_date");
     	$startDate->setAttribs(array(
     			'class'=>'form-control date-picker',
-    			'placeHolder'=>'Start Date'
+    			'placeHolder'=>'Start Date',
+				'data-date-format'=>"dd-mm-yyyy"
     			));
     	$startDate->setValue($startDatevalue);
     	 
     	$endDate = new Zend_Form_Element_Text("end_date");
     	$endDate->setAttribs(array(
-    			'class'=>'form-control date-picker'
+    			'class'=>'form-control date-picker',
+				'data-date-format'=>"dd-mm-yyyy"
     	));
     	
     	$endDatevalue = $request->getParam("end_date");
-    	if(empty($endDatevalue)){$endDatevalue = date("m/d/Y");}
+    	if(empty($endDatevalue)){$endDatevalue = date("d-m-Y");}
     	$endDate->setValue($endDatevalue);
     	
     	$txt_search = new Zend_Form_Element_Text("txt_search");
@@ -219,6 +228,21 @@ class Application_Form_FrmReport extends Zend_Form
     	$txt_searchvalue = $request->getParam("txt_search");
     	$txt_search->setValue($txt_searchvalue);
     	$this->addElements(array($txt_search,$startDate,$endDate,$location_id));
+    	
+    	$rs=$db->getGlobalDb('SELECT vendor_id, v_name FROM tb_vendor WHERE v_name!="" AND status=1 ');
+    	 
+    	$options=array(-1=>$tr->translate('SELECT_VENDOR'));
+    	$vendorValue = $request->getParam('suppliyer_id');
+    	if(!empty($rs)) foreach($rs as $read) $options[$read['vendor_id']]=$read['v_name'];
+    	$vendor_element=new Zend_Form_Element_Select('suppliyer_id');
+    	$vendor_element->setMultiOptions($options);
+    	$vendor_element->setAttribs(array(
+    			'id'=>'suppliyer_id',
+    			'class'=>'form-control select2me'
+    	));
+    	$vendor_element->setValue($vendorValue);
+    	$this->addElement($vendor_element);
+    	
     	return $this;
     }
     function FrmReportPurchase(){
@@ -251,14 +275,15 @@ class Application_Form_FrmReport extends Zend_Form
     	$endDateValue = $request->getParam('end_date');
     	
     	if($endDateValue==""){
-    		$endDateValue=date("m/d/Y");
+    		$endDateValue=date("d-m-Y");
     	}
     	
     	$startDateElement = new Zend_Form_Element_Text('start_date');
     	$startDateElement->setValue($startDateValue);
     	$startDateElement->setAttribs(array(
     			'class'=>'form-control form-control-inline date-picker',
-    			'placeholder'=>'Start Date'
+    			'placeholder'=>'Start Date',
+				'data-date-format'=>"dd-mm-yyyy"
     	));
     	
     	$this->addElement($startDateElement);
@@ -267,7 +292,8 @@ class Application_Form_FrmReport extends Zend_Form
     	$endDateElement->setValue($endDateValue);
     	$this->addElement($endDateElement);
     	$endDateElement->setAttribs(array(
-    			'class'=>'form-control form-control-inline date-picker'
+    			'class'=>'form-control form-control-inline date-picker',
+				'data-date-format'=>"dd-mm-yyyy"
     	));
     	 
     	$statusCOValue=4;

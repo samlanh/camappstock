@@ -56,8 +56,51 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 		}
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbg->getAccessPermission();
-		$order=" ORDER BY id DESC ";
+		$order=" ORDER BY date_order ASC ";
 		//echo $sql.$where.$order;
+		return $db->fetchAll($sql.$where.$order);
+	}
+	public function getAllPurchasebySupplier($search){//1
+		$db= $this->getAdapter();
+		$sql=" SELECT id,
+		(SELECT name FROM `tb_sublocation` WHERE tb_sublocation.id = branch_id AND status=1 AND name!='' LIMIT 1) AS branch_name,
+		(SELECT v_name FROM `tb_vendor` WHERE tb_vendor.vendor_id=tb_purchase_order.vendor_id LIMIT 1 ) AS vendor_name,
+		(SELECT v_phone FROM `tb_vendor` WHERE tb_vendor.vendor_id=tb_purchase_order.vendor_id LIMIT 1 ) AS v_phone,
+		SUM(net_total) AS net_total,
+		SUM(paid) AS paid,
+		SUM(balance) AS balance,
+		SUM(balance_after) AS balance_after,
+		(SELECT name_en FROM `tb_view` WHERE key_code = purchase_status AND `type`=1 LIMIT 1 ) As purchase_status
+		FROM `tb_purchase_order`  ";
+		$from_date =(empty($search['start_date']))? '1': " date_order >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " date_order <= '".$search['end_date']." 23:59:59'";
+		$where = " WHERE status=1 and ".$from_date." AND ".$to_date;
+		if(!empty($search['text_search'])){
+			$s_where = array();
+			$s_search = trim(addslashes($search['text_search']));
+			$s_where[] = " order_number LIKE '%{$s_search}%'";
+			$s_where[] = " net_total LIKE '%{$s_search}%'";
+			$s_where[] = " paid LIKE '%{$s_search}%'";
+			$s_where[] = " balance LIKE '%{$s_search}%'";
+			$where .=' AND ('.implode(' OR ',$s_where).')';
+		}
+		if($search['suppliyer_id']>0){
+			$where .= " AND vendor_id = ".$search['suppliyer_id'];
+		}
+		if($search['branch_id']>0){
+			$where .= " AND branch_id =".$search['branch_id'];
+		}
+		if($search['status_paid']>0){
+			if($search['status_paid']==1){
+				$where .= " AND balance <=0 ";
+			}
+			elseif($search['status_paid']==2){
+				$where .= " AND balance >0 ";
+			}
+		}
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbg->getAccessPermission();
+		$order=" GROUP BY vendor_id ORDER BY date_order ASC ";
 		return $db->fetchAll($sql.$where.$order);
 	}
 	function getProductPruchaseById($id){//2
@@ -136,15 +179,15 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 		if($search['category_id']>0){
 			$where .= " AND it.cate_id =".$search['category_id'];
 		}
-		if($search['brand_id']>0){
-			$where .= " AND it.brand_id =".$search['brand_id'];
+		if($search['suppliyer_id']>0){
+			$where .= " AND p.vendor_id =".$search['suppliyer_id'];
 		}
 		if($search['branch_id']>0){
 			$where .= " AND p.branch_id =".$search['branch_id'];
 		}
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbg->getAccessPermission();
-		$order=" ORDER BY p.id DESC ";
+		$order=" ORDER BY p.vendor_id ,p.date_order ASC,order_number ASC ";
 		return $db->fetchAll($sql.$where.$order);
 	}
 	public function getAllSaleOrderReport($search){//4
@@ -177,7 +220,7 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 		}
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbg->getAccessPermission();
-		$order=" ORDER BY id DESC ";
+		$order=" ORDER BY s.date_sold ASC ";
 		return $db->fetchAll($sql.$where.$order);
 	}
 	public function getAllSalebyCustomerReport($search){//4
@@ -216,7 +259,7 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 		}
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbg->getAccessPermission();
-		$order=" GROUP BY s.customer_id ORDER BY id DESC ";
+		$order=" GROUP BY s.customer_id ORDER BY id DESC,s.date_sold ASC ";
 		return $db->fetchAll($sql.$where.$order);
 	}
 	function getProductSaleById($id){//5
@@ -291,15 +334,15 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 		if($search['category_id']>0){
 			$where .= " AND it.cate_id =".$search['category_id'];
 		}
-		if($search['brand_id']>0){
-			$where .= " AND it.brand_id =".$search['brand_id'];
+		if($search['customer_id']>0){
+			$where .= " AND s.customer_id =".$search['customer_id'];
 		}
 		if($search['branch_id']>0){
 			$where .= " AND s.branch_id =".$search['branch_id'];
 		}
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbg->getAccessPermission();
-		$order=" ORDER BY s.id DESC ";
+		$order=" ORDER BY s.customer_id ,s.date_sold ASC ";
 		return $db->fetchAll($sql.$where.$order);
 	}
 	function getAllCustomer($search){//7
@@ -689,9 +732,9 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 	public function getTopTenProductSO(){
 		$db = $this->getAdapter();
 		$sql = " SELECT  p.item_name, SUM( si.qty_order ) AS qty
-					FROM tb_product AS p,tb_sales_order_item AS si, tb_sales_order AS s
-					WHERE p.pro_id = si.pro_id
-					AND si.order_id = s.order_id AND s.status=4 AND s.date_order  >= DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY)
+					FROM tb_product AS p,tb_salesorder_item AS si, tb_sales_order AS s
+					WHERE p.id = si.pro_id
+					AND si.saleorder_id = s.id  AND s.date_sold  >= DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY)
 		 GROUP BY si.pro_id ORDER BY qty DESC LIMIT 10 ";
 		$rows = $db->fetchAll($sql);
 		return $rows;
@@ -1349,7 +1392,7 @@ SUM(vp.paid) AS total_paid
 		`tb_salesorder_item` AS so,
 		tb_product AS it
 		WHERE v.sale_id=so.saleorder_id AND it.id=so.pro_id
-		AND v.status =1 AND v.is_approved=1 ";
+		AND v.status =1 ";
 		$from_date =(empty($search['start_date']))? '1': " v.invoice_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " v.invoice_date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
@@ -1663,6 +1706,110 @@ SUM(vp.paid) AS total_paid
 			}
 		return $db->fetchAll($sql.$limit);
 	}
+	function getSaleCashflow($search){//6
+		$db = $this->getAdapter();
+		$sql=" SELECT
+					s.id,
+					(SELECT name FROM `tb_sublocation` WHERE id=s.branch_id) AS branch_name,
+					it.item_name,
+					it.item_code,
+					it.qty_perunit AS qty_perunit,
+					it.unit_label AS unit_label,
+					(SELECT tb_measure.name FROM `tb_measure` WHERE tb_measure.id=it.measure_id LIMIT 1) as measue_name,
+					(SELECT name FROM `tb_category` WHERE id=it.cate_id LIMIT 1) AS cate_name,
+					(SELECT name FROM `tb_brand` WHERE id=it.brand_id LIMIT 1) AS brand_name,
+					(SELECT cust_name FROM `tb_customer` WHERE tb_customer.id=s.customer_id LIMIT 1 ) AS customer_name,
+					(SELECT phone FROM `tb_customer` WHERE tb_customer.id=s.customer_id LIMIT 1 ) AS phone,
+					(SELECT contact_name FROM `tb_customer` WHERE tb_customer.id=s.customer_id LIMIT 1 ) AS contact_name,
+					(SELECT email FROM `tb_customer` WHERE tb_customer.id=s.customer_id LIMIT 1 ) AS email,
+					(SELECT u.username FROM tb_acl_user AS u WHERE u.user_id = s.user_mod LIMIT 1 ) AS user_name,
+					SUM(so.qty_order) AS qty_order,
+					so.price,
+					so.cost_price,
+					SUM(so.sub_total) AS sub_total,
+					SUM(s.net_total) AS net_total,
+					SUM(s.discount_value) AS discount_value,
+					
+					SUM(so.disc_value) AS disc_value,
+					s.id,s.sale_no,s.date_sold,s.remark,
+					s.paid,s.tax,
+					s.balance
+					FROM `tb_sales_order` AS s,
+					`tb_salesorder_item` AS so,
+					tb_product AS it
+					WHERE s.id=so.saleorder_id AND it.id=so.pro_id
+					AND s.status=1 ";
+		$from_date =(empty($search['start_date']))? '1': " s.date_sold >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " s.date_sold <= '".$search['end_date']." 23:59:59'";
+		$where = " AND ".$from_date." AND ".$to_date;
+		if(!empty($search['txt_search'])){
+			$s_where = array();
+			$s_search = trim(addslashes($search['txt_search']));
+			$s_where[] = " it.item_name LIKE '%{$s_search}%'";
+			$s_where[] = " it.item_code LIKE '%{$s_search}%'";
+			$s_where[] = " it.barcode LIKE '%{$s_search}%'";
+			$s_where[] = " s.sale_no LIKE '%{$s_search}%'";
+			$s_where[] = " s.net_total LIKE '%{$s_search}%'";
+			$s_where[] = " s.paid LIKE '%{$s_search}%'";
+			$s_where[] = " s.balance LIKE '%{$s_search}%'";
+			$where .=' AND ('.implode(' OR ',$s_where).')';
+		}
+		if($search['item']>0){
+			$where .= " AND it.id =".$search['item'];
+		}
+		if($search['category_id']>0){
+			$where .= " AND it.cate_id =".$search['category_id'];
+		}
+		if($search['customer_id']>0){
+			$where .= " AND s.customer_id =".$search['customer_id'];
+		}
+		if($search['branch_id']>0){
+			$where .= " AND s.branch_id =".$search['branch_id'];
+		}
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbg->getAccessPermission();
+		$order=" GROUP BY so.pro_id , s.date_sold ORDER BY s.customer_id ,s.date_sold ASC,s.id ASC ";
+		return $db->fetchAll($sql.$where.$order);
+	}
+	function getSaleDiscountCashflow($search){//6
+		$db = $this->getAdapter();
+		$sql=" SELECT
+		
+		SUM(s.discount_value) AS discount_value
+		FROM `tb_sales_order` AS s
+		WHERE 
+		 s.status=1 ";
+		$from_date =(empty($search['start_date']))? '1': " s.date_sold >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " s.date_sold <= '".$search['end_date']." 23:59:59'";
+		$where = " AND ".$from_date." AND ".$to_date;
+		if(!empty($search['txt_search'])){
+			$s_where = array();
+			$s_search = trim(addslashes($search['txt_search']));
+			$s_where[] = " it.item_name LIKE '%{$s_search}%'";
+			$s_where[] = " it.item_code LIKE '%{$s_search}%'";
+			$s_where[] = " it.barcode LIKE '%{$s_search}%'";
+			$s_where[] = " s.sale_no LIKE '%{$s_search}%'";
+			$s_where[] = " s.net_total LIKE '%{$s_search}%'";
+			$s_where[] = " s.paid LIKE '%{$s_search}%'";
+			$s_where[] = " s.balance LIKE '%{$s_search}%'";
+			$where .=' AND ('.implode(' OR ',$s_where).')';
+		}
+		if($search['item']>0){
+			$where .= " AND so.id =".$search['item'];
+		}
+		if($search['customer_id']>0){
+			$where .= " AND s.customer_id =".$search['customer_id'];
+		}
+		if($search['branch_id']>0){
+			$where .= " AND s.branch_id =".$search['branch_id'];
+		}
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbg->getAccessPermission();
+		$order=" GROUP BY s.date_sold ";
+		return $db->fetchOne($sql.$where.$order);
+	}
+	
+	
 }
 
 ?>

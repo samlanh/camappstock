@@ -13,23 +13,26 @@ public function init()
     }
     public function indexAction()
     {
-    	$db = new Product_Model_DbTable_DbTransfer();
-    	if($this->getRequest()->isPost()){
-    		$data = $this->getRequest()->getPost();
-    	}else{
-    		$data = array(
-    			'tran_num'	=>	'',
-    			'tran_date'	=>	1,
-    			'type'		=>	'',
-    			'status'	=>	1,
-    			'to_loc'	=>	'',
-    		);
+    	try{
+	    	$db = new Product_Model_DbTable_DbTransfer();
+	    	if($this->getRequest()->isPost()){
+	    		$data = $this->getRequest()->getPost();
+	    	}else{
+	    		$data = array(
+	    			'avd_search'	=>	'',
+	    			'start_date'	=>	date("Y-m-d"),
+	    			'end_date'		=>	date("Y-m-d"),
+	    			'status'	=>	1,
+	    		);
+	    	}
+	    	$this->view->product = $db->getTransfer($data);
+    	}catch (Exception $e){
+    		Application_Form_FrmMessage::messageError("INSERT_ERROR");
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
-    	$this->view->product = $db->getTransfer($data);
     	$formFilter = new Product_Form_FrmTransfer();
     	$this->view->formFilter = $formFilter->frmFilter();
     	Application_Model_Decorator::removeAllDecorator($formFilter);
-        
 	}
 	public function addAction()
 	{
@@ -38,13 +41,11 @@ public function init()
 				try{
 					$post = $this->getRequest()->getPost();
 					$db->add($post);
-					if(isset($post["save_close"]))
-					{
-						Application_Form_FrmMessage::message("INSERT_SUCCESS");
-						Application_Form_FrmMessage::redirectUrl('/product/transfer');
-					}
+					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::redirectUrl('/product/transfer');
 				  }catch (Exception $e){
-				  	Application_Form_FrmMessage::messageError("INSERT_ERROR",$err = $e->getMessage());
+				  	Application_Form_FrmMessage::messageError("INSERT_ERROR");
+				  	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				  }
 			}
 			$formProduct = new Product_Form_FrmTransfer();
@@ -59,7 +60,7 @@ public function init()
 			if($this->getRequest()->isPost()){ 
 				try{
 					$post = $this->getRequest()->getPost();
-					$db->add($post);
+					$db->edit($post);
 					if(isset($post["save_close"]))
 					{
 						Application_Form_FrmMessage::message("INSERT_SUCCESS");
@@ -87,8 +88,8 @@ public function init()
     	}else{
     		$data = array(
     			'avd_search'	=>	'',
-    			'start_date'	=>	date("m/d/Y"),
-    			'end_date'		=>	date("m/d/Y"),
+    			'start_date'	=>	date("d-m-Y"),
+    			'end_date'		=>	date("d-m-Y"),
     			'status'		=>	1,
     			'branch'		=>	-1,
     		);
@@ -104,11 +105,8 @@ public function init()
 				try{
 					$post = $this->getRequest()->getPost();
 					$db->addRequest($post);
-					if(isset($post["save_close"]))
-					{
-						Application_Form_FrmMessage::message("INSERT_SUCCESS");
-						Application_Form_FrmMessage::redirectUrl('/product/transfer/requestlist');
-					}
+					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::redirectUrl('/product/transfer/requestlist');
 				  }catch (Exception $e){
 				  	Application_Form_FrmMessage::messageError("INSERT_ERROR",$err = $e->getMessage());
 				  }
@@ -129,14 +127,9 @@ public function init()
 					$post["id"] = $id;
 					$db->editRequest($post);
 					
-					if(isset($post["save_close"]))
-					{
-						Application_Form_FrmMessage::message("INSERT_SUCCESS");
-						Application_Form_FrmMessage::redirectUrl('/product/transfer/requestlist');
-					}else{
-						Application_Form_FrmMessage::message("INSERT_SUCCESS");
-						Application_Form_FrmMessage::redirectUrl('/product/transfer/addrequest');
-					}
+					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::redirectUrl('/product/transfer/requestlist');
+					
 				  }catch (Exception $e){
 				  	Application_Form_FrmMessage::messageError("INSERT_ERROR",$err = $e->getMessage());
 				  }
@@ -156,8 +149,8 @@ public function init()
     	}else{
     		$data = array(
     			'avd_search'	=>	'',
-    			'start_date'	=>	date("m/d/Y"),
-    			'end_date'		=>	date("m/d/Y"),
+    			'start_date'	=>	date("d-m-Y"),
+    			'end_date'		=>	date("d-m-Y"),
     			'status'		=>	1,
     			'branch'		=>	-1,
     		);
@@ -176,21 +169,15 @@ public function init()
 					$post = $this->getRequest()->getPost();
 					$post["id"] = $id;
 					$db->ApproveRequest($post);
+					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::redirectUrl('/product/transfer/requestappr/');
 					
-					if(isset($post["save_close"]))
-					{
-						Application_Form_FrmMessage::message("INSERT_SUCCESS");
-						Application_Form_FrmMessage::redirectUrl('/product/transfer/requestappr/');
-					}else{
-						Application_Form_FrmMessage::redirectUrl('/product/transfer/requestappr/');
-					}
 				  }catch (Exception $e){
 				  	Application_Form_FrmMessage::messageError("INSERT_ERROR",$err = $e->getMessage());
 				  }
 			}
 			$this->view->rs= $db->getReqTransferById($id);
 			$this->view->rs_detail = $db->getReqTransferDetail($id);
-			
 	}
 	
 	function transferlistAction(){
@@ -200,8 +187,8 @@ public function init()
     	}else{
     		$data = array(
     			'avd_search'	=>	'',
-    			'start_date'	=>	date("m/d/Y"),
-    			'end_date'		=>	date("m/d/Y"),
+    			'start_date'	=>	date("d-m-Y"),
+    			'end_date'		=>	date("d-m-Y"),
     			'status'		=>	1,
     			'branch'		=>	-1,
     		);
@@ -220,18 +207,13 @@ public function init()
 					$post = $this->getRequest()->getPost();
 					$post["id"] = $id;
 					$db->makeTransfer($post);
-					
-					if(isset($post["save_close"]))
-					{
-						Application_Form_FrmMessage::message("INSERT_SUCCESS");
-						Application_Form_FrmMessage::redirectUrl('/product/transfer/transferlist');
-					}
+					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::redirectUrl('/product/transfer/transferlist');
 				}catch (Exception $e){
 				  	Application_Form_FrmMessage::messageError("INSERT_ERROR",$err = $e->getMessage());
 				}
 			}
 			$row = $db->getReqTransferById($id);
-			//print_r($row);
 			$this->view->rs_detail = $db->getReqTransferDetail($id);
 			$formProduct = new Product_Form_FrmTransfer();
 			$formStockAdd = $formProduct->makeTransfers($row);
@@ -275,8 +257,8 @@ public function init()
     	}else{
     		$data = array(
     			'avd_search'	=>	'',
-    			'start_date'	=>	date("m/d/Y"),
-    			'end_date'		=>	date("m/d/Y"),
+    			'start_date'	=>	date("d-m-Y"),
+    			'end_date'		=>	date("d-m-Y"),
     			'status'		=>	1,
     			'branch'		=>	-1,
     		);
@@ -377,7 +359,7 @@ public function init()
     	$query = new Product_Model_DbTable_DbTransfer();
 		$rs = $query->getReceiveById($id);
     	$this->view->product =  $query->getReceiveById($id);
-		
+// 		print_r($rs);exit();
 		$this->view->title_reprot = $query->getTitleReport($rs[0]["cu_loc"]);
 	}	
 	

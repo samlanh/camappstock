@@ -1,0 +1,78 @@
+<?php 
+	$user_info = new Application_Model_DbTable_DbGetUserInfo();
+	$result = $user_info->getUserInfo();
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage(); 
+	$session_user=new Zend_Session_Namespace('auth');
+	$arr_module = $session_user->arr_acl;
+	
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$level = $result["level"];
+	$controller=$request->getControllerName();
+	$module=$request->getModuleName();
+	$class_active='start active open';
+	$str_array = array(
+		'product'=>'<i class="fa fa-cubes white"></i>',
+		'purchase'=>'<i class="fa fa-truck white"></i>',
+		'sales'=>'<i class="fa fa-money white"></i>',
+		'report'=>'<i class="fa fa-calculator white"></i>',
+		'rsvacl'=>'<i class="fa fa-user white"></i>'
+	);
+	?>
+<!-- BEGIN SIDEBAR -->
+<style>
+.white{color: #02014a !important;}	
+</style>
+<div style="box-shadow: 3px -3px 5px #a09797 !important; background:red;">
+	<div class="page-sidebar-wrapper" style="box-shadow: 3px -3px 5px #a09797 !important; background:red;">
+		<!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+		<!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+		<div class="page-sidebar navbar-collapse collapse" >
+			<ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="margin-top:15px;box-shadow: 3px 1px 5px #a09797;">
+				<!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
+				<li class="sidebar-toggler-wrapper">
+					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+					<div class="sidebar-toggler">
+					</div>
+					<!-- END SIDEBAR TOGGLER BUTTON -->
+				</li>
+				
+				<?php 
+				$old_module='';
+				$settransfer=0;
+				if(!empty($arr_module))foreach($arr_module as $key=> $rs){
+				
+				if($rs['module']!=$old_module){
+					if($key>0){
+				?>
+				</ul>
+				</li>
+				<?php }?>
+				<li class="<?php if($rs['module']==$module){
+					echo $class_active;
+				}?>">
+					<a href="javascript:;">
+						<?php echo $str_array[$rs['module']];
+						
+						?>
+						<span class="title"><?php echo $tr->translate(strtoupper($rs['label']));?></span>
+						<span class="arrow "></span>
+					</a>
+					<ul class="sub-menu">
+				<?php }if($rs['controller']=='transfer' AND $settransfer==0){$settransfer=1;?>
+					<l><hr /></l>
+				<?php }?>
+						<li <?php if($rs['controller']==$controller)echo"class='active'"?>>
+							<a href="<?php echo $this->url(array('module'=>$rs['module'],'controller'=>$rs['controller'],'action'=>$rs['action']), null, true);?>">
+							<i class="icon-arrow-right"></i><?php echo $tr->translate(($rs['label']));?></a>
+						</li>
+				<?php 
+					$old_module=$rs['module'];
+				}?>	
+				<?php if(!empty($arr_module)){?>
+					</ul>
+					</li>
+				<?php }?>
+			</ul>			
+		</div>
+	</div>
+</div>

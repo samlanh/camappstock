@@ -13,31 +13,33 @@ class Purchase_ReceiveController extends Zend_Controller_Action
     	return $result;
     }
 	public function indexAction()
-		{
-			if($this->getRequest()->isPost()){
-					$search = $this->getRequest()->getPost();
-			}else{
-				$search= array(
-					'text_search' 		=> "",
-					'purchase_status'	=>	0,
-					'start_date'		=>	1,
-					'end_date'			=>	date("Y-m-d"),
+	{
+		try{
+				if($this->getRequest()->isPost()){
+						$search = $this->getRequest()->getPost();
+				}else{
+					$search= array(
+						'text_search' 		=> "",
+						'purchase_status'	=>	0,
+						'start_date'		=>	1,
+						'end_date'			=>	date("Y-m-d"),
+					);
+				}
+				$db = new Purchase_Model_DbTable_DbRecieveOrder();
+				$rows = $db->getAllReceivedOrder($search);
+				$this->view->rs = $rows;
+				$glClass = new Application_Model_GlobalClass();
+				$columns=array("PURCHASE_ORDER_CAP","ORDER_DATE_CAP", "VENDOR_NAME_CAP","TOTAL_CAP_DOLLAR","BY_USER_CAP");
+				$link=array(
+						'module'=>'purchase','controller'=>'receive','action'=>'detail-purchase-order',
 				);
+				$urlEdit = BASE_URL . "/purchase/index/update-purchase-order-test";
+				$list = new Application_Form_Frmlist();
+				$this->view->list=$list->getCheckList(1, $columns, $rows, array('order'=>$link),$urlEdit);
+			}catch (Exception $e){
+				Application_Form_FrmMessage::messageError("INSERT_ERROR");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
-			$db = new Purchase_Model_DbTable_DbRecieveOrder();
-			$rows = $db->getAllReceivedOrder($search);
-			$this->view->rs = $rows;
-			$glClass = new Application_Model_GlobalClass();
-			$columns=array("PURCHASE_ORDER_CAP","ORDER_DATE_CAP", "VENDOR_NAME_CAP","TOTAL_CAP_DOLLAR","BY_USER_CAP");
-			$link=array(
-					'module'=>'purchase','controller'=>'receive','action'=>'detail-purchase-order',
-			);
-			// url link to update purchase order
-			
-			$urlEdit = BASE_URL . "/purchase/index/update-purchase-order-test";
-			$list = new Application_Form_Frmlist();
-			$this->view->list=$list->getCheckList(1, $columns, $rows, array('order'=>$link),$urlEdit);
-			
 			$formFilter = new Application_Form_Frmsearch();
 			$this->view->formFilter = $formFilter;
 			Application_Model_Decorator::removeAllDecorator($formFilter);
@@ -55,7 +57,7 @@ class Purchase_ReceiveController extends Zend_Controller_Action
 				$ids = $db->add($data);
 				Application_Form_FrmMessage::message("Purchase has been Receive!"); 		
 				if(isset($data["save_print"])){
-					Application_Form_FrmMessage::redirectUrl("/purchase/receive/purproductdetail/id/".$ids);
+					Application_Form_FrmMessage::redirectUrl("/purchase/receive/receivenote/id/".$ids);
 				}else{
 					Application_Form_FrmMessage::redirectUrl("/purchase/receive");
 				}
@@ -81,8 +83,8 @@ class Purchase_ReceiveController extends Zend_Controller_Action
     	$this->view->product =  $query->getProductReceiveById($id);
 		
 		$session_user=new Zend_Session_Namespace('auth');
-		$db = new Application_Model_DbTable_DbGlobal();
-		$this->view->title_reprot = $db->getTitleReport($session_user->location_id);
+// 		$db = new Application_Model_DbTable_DbGlobal();
+// 		$this->view->title_reprot = $db->getTitleReport(1);
 	}
 	public function receivenoteAction(){
 		$id = ($this->getRequest()->getParam('id'))? $this->getRequest()->getParam('id'): '0';

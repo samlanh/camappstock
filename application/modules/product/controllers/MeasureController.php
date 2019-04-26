@@ -13,14 +13,19 @@ public function init()
     }
     public function indexAction()
     {
-		$db = new Product_Model_DbTable_DbMeasure();
-		$formFilter = new Measure_Form_FrmMeasure();
-		$frmsearch = $formFilter->MeasureFilter();
-		$this->view->formFilter = $frmsearch;
-		$list = new Application_Form_Frmlist();
-		$result = $db->getAllMeasure();
-		$this->view->resulr = $result;
-		Application_Model_Decorator::removeAllDecorator($formFilter);
+    	try{
+			$db = new Product_Model_DbTable_DbMeasure();
+			$list = new Application_Form_Frmlist();
+			$result = $db->getAllMeasure();
+			$this->view->resulr = $result;
+			}catch (Exception $e){
+				Application_Form_FrmMessage::messageError("INSERT_ERROR");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+			$formFilter = new Measure_Form_FrmMeasure();
+			$frmsearch = $formFilter->MeasureFilter();
+			$this->view->formFilter = $frmsearch;
+			Application_Model_Decorator::removeAllDecorator($formFilter);
 	}
 	public function addAction()
 	{

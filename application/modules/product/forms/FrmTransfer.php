@@ -3,14 +3,12 @@ class Product_Form_FrmTransfer extends Zend_Form
 {
 	public function init()
     {
-
 	}
 	protected function GetuserInfo(){
 		$user_info = new Application_Model_DbTable_DbGetUserInfo();
 		$result = $user_info->getUserInfo();
 		return $result;
 	}
-	
 	public function add($data=null) {
 		$db=new Product_Model_DbTable_DbTransfer();
 		$db_stock = new Product_Model_DbTable_DbAdjustStock();
@@ -19,23 +17,35 @@ class Product_Form_FrmTransfer extends Zend_Form
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	
 		$tran_num = new Zend_Form_Element_Text('tran_num');
-		$tran_num->setAttribs(array('class'=>'form-control', 'required'=>'required','readOnly'=>true));
-		$tran_num->setValue($db->getTransferNo());
+		$tran_num->setAttribs(array(
+				'dojoType'=>"dijit.form.ValidationTextBox",
+				'class'=>'fullside',
+				'required'=>"1",
+				'readOnly'=>true));
+		$tran_num->setValue($db->getTransferNo(1));
     	
-    	$date =new Zend_Date();
     	$tran_date = new Zend_Form_Element_Text('tran_date');
-    	$tran_date->setValue($date->get('MM/dd/YYYY'));
-    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',));
+    	$tran_date->setValue(date('Y-m-d'));
+    	$tran_date->setAttribs(array(
+    			'dojoType'=>"dijit.form.DateTextBox",
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+    			'required'=>'required',
+    		));
     	
     	$remark = new Zend_Form_Element_Textarea("remark");
-    	$remark->setAttribs(array('class'=>'form-control','style'=>'width: 100%;height:35px'));
-    	
+    	$remark->setAttribs(array(
+    			'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',	
+    		));
 		
 		$rs_from_loc = $db_global -> getAllLocation();
-		//print_r($rs_from_loc);
     	$from_loc = new Zend_Form_Element_Select("from_loc");
     	$from_loc->setAttribs(array(
-    			'class'=>'form-control select2me',
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
     	));
 		
 		$opt = array(''=>$tr->translate("SELECT BRANCH"));
@@ -50,7 +60,10 @@ class Product_Form_FrmTransfer extends Zend_Form
     	$opt = array(''=>$tr->translate("SELECT BRANCH"));
     	$to_loc = new Zend_Form_Element_Select("to_loc");
     	$to_loc->setAttribs(array(
-    			'class'=>'form-control select2me',
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
     	));
     	if(!empty($rs_loc)){
     		foreach ($rs_loc as $rs){
@@ -61,7 +74,10 @@ class Product_Form_FrmTransfer extends Zend_Form
     	
     	$pro_name =new Zend_Form_Element_Select("pro_name");
     	$pro_name->setAttribs(array(
-    			'class'=>'form-control select2me',
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
     			'onChange'=>'addNew();'
     	));
     	$opt= array(''=>$tr->translate("SELECT PRODUCT"));
@@ -75,7 +91,10 @@ class Product_Form_FrmTransfer extends Zend_Form
     	
     	$type =new Zend_Form_Element_Select("type");
     	$type->setAttribs(array(
-    			'class'=>'form-control select2me',
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
     			'onChange'=>'transferType()'
     	));
     	$opt= array(''=>$tr->translate("SELECT_TRANSFER_TYPE"),1=>$tr->translate("TRANSFER_IN"),2=>$tr->translate("TRANSFER_OUT"));
@@ -84,20 +103,27 @@ class Product_Form_FrmTransfer extends Zend_Form
     	
     	$status =new Zend_Form_Element_Select("status");
     	$status->setAttribs(array(
-    			'class'=>'form-control select2me',
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
     	));
     	$opt= array(''=>$tr->translate("SELECT_STATUS"),1=>$tr->translate("ACTIVE"),0=>$tr->translate("DEACTIVE"));
     	$status->setMultiOptions($opt);
-    	//set value when edit
+    	
+    	$id =new Zend_Form_Element_Hidden("id");
     	if($data != null) {
+    		$id->setValue($data["id"]);
     		$tran_num->setValue($data["tran_no"]);
     		$tran_date->setValue($data["date"]);
     		$remark->setValue($data["remark"]);
+    		
+    		$from_loc->setValue($data["cur_location"]);
     		$to_loc->setValue($data["tran_location"]);
     		$status->setValue($data["status"]);
     		$type->setValue($data["type"]);
     	}
-    	$this->addElements(array($status,$type,$pro_name,$tran_num,$tran_date,$remark,$from_loc,$to_loc));
+    	$this->addElements(array($id,$status,$type,$pro_name,$tran_num,$tran_date,$remark,$from_loc,$to_loc));
     	return $this;
 	}
 	
@@ -116,10 +142,11 @@ class Product_Form_FrmTransfer extends Zend_Form
 		$tran_num->setAttribs(array('class'=>'form-control', 'required'=>'required','readOnly'=>true));
 		$tran_num->setValue($db->getRequestTransferNo($result["branch_id"]));
     	
-    	$date =date("m/d/Y");
+    	$date =date("d-m-Y");
     	$tran_date = new Zend_Form_Element_Text('tran_date');
     	$tran_date->setValue($date);
-    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',));
+    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',
+		'data-date-format'=>"dd-mm-yyyy"));
     	
     	$remark = new Zend_Form_Element_Textarea("remark");
     	$remark->setAttribs(array('class'=>'form-control','style'=>'width: 100%;height:35px'));
@@ -162,7 +189,7 @@ class Product_Form_FrmTransfer extends Zend_Form
 		$row_product=$db_stock->getProductName();
     	if(!empty($row_product)){
     		foreach ($row_product as $rs){
-    			$opt[$rs["id"]] = $rs["item_name"];
+    			$opt[$rs["id"]] = $rs["item_name"].','.$rs["item_code"];
     		}
     	}
     	$pro_name->setMultiOptions($opt);
@@ -207,7 +234,7 @@ class Product_Form_FrmTransfer extends Zend_Form
 		$user_info = new Application_Model_DbTable_DbGetUserInfo();
 		$result = $user_info->getUserInfo();
 		
-		$date =date("m/d/Y");
+		$date =date("d-m-Y");
 	
 		$tran_num = new Zend_Form_Element_Text('tran_num');
 		$tran_num->setAttribs(array('class'=>'form-control', 'required'=>'required','readOnly'=>true));
@@ -215,16 +242,17 @@ class Product_Form_FrmTransfer extends Zend_Form
 		
 		$re_num = new Zend_Form_Element_Text('re_num');
 		$re_num->setAttribs(array('class'=>'form-control', 'required'=>'required','readOnly'=>true));
-		//$re_num->setValue($db->getRequestTransferNo());
     	
-    	$date =date("m/d/Y");
+    	$date =date("d-m-Y");
     	$tran_date = new Zend_Form_Element_Text('tran_date');
     	$tran_date->setValue($date);
-    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',));
+    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',
+		'data-date-format'=>"dd-mm-yyyy"));
 		
     	$re_date = new Zend_Form_Element_Text('re_date');
     	$re_date->setValue($date);
-    	$re_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',));
+    	$re_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',
+		'data-date-format'=>"dd-mm-yyyy"));
     	
     	$remark = new Zend_Form_Element_Textarea("remark");
     	$remark->setAttribs(array('class'=>'form-control','style'=>'width: 100%;height:35px'));
@@ -299,7 +327,7 @@ class Product_Form_FrmTransfer extends Zend_Form
     	if($data != null) {
     		$re_num->setValue($data["re_no"]);
 			$re_id = new Zend_Form_Element_Hidden("re_id");
-			if(!empty(@$data["re_id"])){
+			if(!empty($data["re_id"])){
 				$re_id->setValue($data["re_id"]);
 			}
 			
@@ -314,10 +342,11 @@ class Product_Form_FrmTransfer extends Zend_Form
 			}else{
     		$tran_num->setValue($db->getTransferNo($data["tran_location"]));
 			}
-			$re_date->setValue(date("m/d/Y",strtotime($data["re_date"])));
+// 			echo $data["re_date"];exit();
+			$re_date->setValue(date("d-m-Y",strtotime($data["re_date"])));
     		$remark->setValue($data["remark"]);
-    		$to_loc->setValue($data["cur_location"]);
-			$from_loc->setValue($data["tran_location"]);
+    		$to_loc->setValue($data["tran_location"]);
+			$from_loc->setValue($data["cur_location"]);
     		$status->setValue($data["status"]);
     		//$type->setValue($data["type"]);
     	}
@@ -336,7 +365,7 @@ class Product_Form_FrmTransfer extends Zend_Form
 		$user_info = new Application_Model_DbTable_DbGetUserInfo();
 		$result = $user_info->getUserInfo();
 		
-		$date =date("m/d/Y");
+		$date =date("d-m-Y");
 	
 		$tran_num = new Zend_Form_Element_Text('tran_num');
 		$tran_num->setAttribs(array('class'=>'form-control', 'required'=>'required','readOnly'=>true));
@@ -346,14 +375,16 @@ class Product_Form_FrmTransfer extends Zend_Form
 		$re_num->setAttribs(array('class'=>'form-control', 'required'=>'required','readOnly'=>true));
 		//$re_num->setValue($db->getRequestTransferNo());
     	
-    	$date =date("m/d/Y");
+    	$date =date("d-m-Y");
     	$tran_date = new Zend_Form_Element_Text('tran_date');
     	$tran_date->setValue($date);
-    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',));
+    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',
+		'data-date-format'=>"dd-mm-yyyy"));
 		
     	$re_date = new Zend_Form_Element_Text('re_date');
     	$re_date->setValue($date);
-    	$re_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',));
+    	$re_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',
+		'data-date-format'=>"dd-mm-yyyy"));
     	
     	$remark = new Zend_Form_Element_Textarea("remark");
     	$remark->setAttribs(array('class'=>'form-control','style'=>'width: 100%;height:35px'));
@@ -428,7 +459,7 @@ class Product_Form_FrmTransfer extends Zend_Form
     	if($data != null) {
     		$re_num->setValue($data["re_no"]);
 			$re_id = new Zend_Form_Element_Hidden("re_id");
-			if(!empty(@$data["re_id"])){
+			if(!empty($data["re_id"])){
 				$re_id->setValue($data["re_id"]);
 			}
 			
@@ -465,7 +496,7 @@ class Product_Form_FrmTransfer extends Zend_Form
 		$user_info = new Application_Model_DbTable_DbGetUserInfo();
 		$result = $user_info->getUserInfo();
 		
-		$date =date("m/d/Y");
+		$date =date("d-m-Y");
 	
 		$tran_num = new Zend_Form_Element_Text('tran_num');
 		$tran_num->setAttribs(array('class'=>'form-control', 'required'=>'required','readOnly'=>true));
@@ -475,10 +506,11 @@ class Product_Form_FrmTransfer extends Zend_Form
 		$re_num->setAttribs(array('class'=>'form-control', 'required'=>'required','readOnly'=>true));
 		//$re_num->setValue($db->getRequestTransferNo());
     	
-    	$date =date("m/d/Y");
+    	$date =date("d-m-Y");
     	$tran_date = new Zend_Form_Element_Text('tran_date');
     	$tran_date->setValue($date);
-    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',));
+    	$tran_date->setAttribs(array('class'=>'form-control date-picker', 'required'=>'required',
+		'data-date-format'=>"dd-mm-yyyy"));
 		
     	$re_date = new Zend_Form_Element_Text('re_date');
     	$re_date->setValue($date);
@@ -557,7 +589,7 @@ class Product_Form_FrmTransfer extends Zend_Form
     	if($data != null) {
     		$re_num->setValue($data["re_no"]);
 			$re_id = new Zend_Form_Element_Hidden("re_id");
-			if(!empty(@$data["re_id"])){
+			if(!empty($data["re_id"])){
 				$re_id->setValue($data["re_id"]);
 			}
 			
@@ -591,33 +623,47 @@ class Product_Form_FrmTransfer extends Zend_Form
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 		
 		$tran_num = new Zend_Form_Element_Text('avd_search');
-		$tran_num->setAttribs(array('class'=>'form-control'));
+		$tran_num->setAttribs(array(
+			'dojoType'=>"dijit.form.TextBox",
+			'class'=>'fullside',
+		));
 		$tran_num->setValue($request->getParam("avd_search"));
 		 
-		$date = date("m/d/Y");
+		$date = date("d-m-Y");
 		$start_date = new Zend_Form_Element_Text('start_date');
 		$start_date->setValue($date);
-		$start_date->setAttribs(array('class'=>'form-control date-picker'));
+		$start_date->setAttribs(array(
+				'dojoType'=>"dijit.form.DateTextBox",
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				));
 		if($request->getParam("start_date") !=""){
 			$date = $request->getParam("start_date");
 		}else{
-			$date = date("m/d/Y");
+			$date = date("Y-m-d");
 		}
 		$start_date->setValue($date);
 		
 		$end_date = new Zend_Form_Element_Text('end_date');
 		$end_date->setValue($date);
-		$end_date->setAttribs(array('class'=>'form-control date-picker'));
+		$end_date->setAttribs(array(
+				'dojoType'=>"dijit.form.DateTextBox",
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				));
 		if($request->getParam("end_date") !=""){
 			$date = $request->getParam("end_date");
 		}else{
-			$date = date("m/d/Y");
+			$date = date("Y-m-d");
 		}
 		$end_date->setValue($date);
 		
 		$type =new Zend_Form_Element_Select("type");
 		$type->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
 				'onChange'=>'transferType()'
 		));
 		$opt= array(''=>$tr->translate("SELECT_TRANSFER_TYPE"),1=>$tr->translate("TRANSFER_IN"),2=>$tr->translate("TRANSFER_OUT"));
@@ -626,7 +672,10 @@ class Product_Form_FrmTransfer extends Zend_Form
 		 
 		$status =new Zend_Form_Element_Select("status");
 		$status->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
 		));
 		$opt= array(1=>$tr->translate("ACTIVE"),0=>$tr->translate("DEACTIVE"));
 		$status->setMultiOptions($opt);
@@ -635,25 +684,25 @@ class Product_Form_FrmTransfer extends Zend_Form
 		$opt = array('-1'=>$tr->translate("SELECT BRANCH"));
 		$to_loc = new Zend_Form_Element_Select("branch");
 		$to_loc->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
 		));
-		if(!empty($rs_loc)){
-			foreach ($rs_loc as $rs){
-				$opt[$rs["id"]] = $rs["name"];
-			}
-		}
+		$opt = $db_global->getAllLocation(1);
 		$to_loc->setMultiOptions($opt);
 		$to_loc->setValue($request->getParam("branch"));
 		
 		$opt= array('-1'=>$tr->translate("SELECT_STATUS"),1=>$tr->translate("Wait check"),2=>$tr->translate("Reject"),3=>$tr->translate("Checked"));
 		$check_stat = new Zend_Form_Element_Select("check_stat");
 		$check_stat->setAttribs(array(
-				'class'=>'form-control select2me',
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
 		));
 		$check_stat->setValue($request->getParam("check_stat"));
 		$check_stat->setMultiOptions($opt);
-		
-		
 		
 		$this->addElements(array($status,$type,$tran_num,$start_date,$to_loc,$end_date,$check_stat));
 		return $this;

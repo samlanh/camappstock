@@ -7,22 +7,20 @@ $url_getProduct =  $this->url(array('module'=>'product','controller'=>'adjust','
 $formFilter = $this->formFilter;
 ?>
 <title><?php echo $tr->translate("TRANSFER_STOCK");?></title>
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>-->
-<br/>
 <div class="portlet box blue">
 		<div class="portlet-title">
 			<div class="caption">
 					<i class="fa fa-globe"></i><?php echo $tr->translate("ADD_NEW_TRANSFER");?>
 			</div>
 			<div class="caption" style="float:right">
-					<?php $formList = new Application_Form_Frmlist(); //echo $formList->showAddBuntton($url_new);?>
+					<?php $formList = new Application_Form_Frmlist(); ?>
 			</div>
 			<div class="tools">
 				<a href="<?php echo $url_cancel;?>"><button type="button" name="calcel" class="btn red"><?php echo $tr->translate("GO_BACK");?></button></a>
 			</div>
 		</div>
 		<div class="portlet-body form">
-			<form class="form-horizontal" method="post" action="" >
+			<form id="frm" class="form-horizontal" method="post" action="" >
 				<div class="form-body">	
 					<div class="form-group">
 						<label class="col-md-2 control-label"><?php echo $tr->translate("TRANSFER_NUM");?></label>
@@ -46,11 +44,9 @@ $formFilter = $this->formFilter;
 						</div>	
 					</div>
 					<div class="form-group">
-						<label class="col-md-2 control-label"><?php //echo $tr->translate("REMARK");?></label>
+						<label class="col-md-2 control-label"></label>
 						<div class="col-md-4">
-							<?php //echo $formFilter->getElement('remark');?>
 						</div>	
-						
 						<label class="col-md-2 control-label"><?php echo $tr->translate("STATUS");?></label>
 						<div class="col-md-4">
 							<?php echo $formFilter->getElement('status');?>
@@ -102,53 +98,22 @@ $formFilter = $this->formFilter;
 		</div>
 </div>
 <script type="text/javascript">
-
-jQuery(document).ready(function(){
-	//addRow();
+$('#frm').submit(function() {
+    identity = $("#identity").val();
+    if(identity==''){
+	 	alert("សូមបញ្ចូលបរិមាណទំនិញ");
+	    return false;
+     }
+	var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
+	if (r == true) {
+	    return true;
+	} else {
+	   return false;
+	}
 });
+/*jQuery(document).ready(function(){
+});*/
 var index=0;
-function addNew(){
-	id = $("#pro_name").val();
-	index++;
-	$.ajax({
-        url: "<?php echo $url_getProduct;?>",
-        type: "post",
-        data: {'id':id},
-        success: function(val){
-            //alert(data);
-			for(i=1; i<index; i++){
-				new_item=parseInt(id);
-				items = parseInt($("#pro_id_"+i).val());
-				if(new_item==items){		
-					newqty = parseInt($("#qty_tran_"+i).val());
-					newqty = newqty+1;
-					$("#qty_tran_"+i).val(newqty);
-					checkQTY(i);
-					return false;
-					
-				}
-			}
-			 data = $.parseJSON(val);
-			template='<tr id="row_location_'+index+'">';
-			template+='<td>'+index+'</td>';
-			template+='<td style="white-space: nowrap;">'+data.item_name+" "+data.brand+" "+data.size+" "+data.color+'<input type="hidden" id="pro_id_'+index+'" name="pro_id_'+index+'" value="'+data.id+'" </td>';
-			template+='<td><input type="text" id="qty_tran_'+index+'" onKeyup="checkQTY('+index+')" name="qty_tran_'+index+'" value="1" class="form-control"><input type="hidden" name="qty_'+index+'" id="qty_'+index+'" value="'+data.qty+'" /></td>'; 
-			template+='<td><input type="text" id="remark_'+index+'" name="remark_'+index+'" class="form-control"></td>';
-			template+='<td><button type="button" onClick="deleteRecord('+index+',1)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
-			template+='</tr>';
-			$('#tr_location').append(template);
-			if($('#identity').val()!="") {
-				var identity = $('#identity').val();
-				$('#identity').val(identity+','+index);
-			} else {$('#identity').val(index);}
-        },
-        error:function(){
-           // alert("Please Product Name And Location");
-            $("#result").html('There is error while submit');
-        }
-    });
-}
-	
 	function checkQTY(index){
 		qty = parseFloat($('#qty_'+index).val());
 		qty_tran = parseFloat($('#qty_tran_'+index).val());
@@ -166,31 +131,26 @@ function addNew(){
 			document.getElementById('lb_br').innerHTML = "To ";
 		}
 	}
-
-function deleteRecord(index,type) {
-		if(type==1){
+function deleteRecord(index,type){
+	if(type==1){
 			var identity = $('#identity').val();
 			var arrays = identity.split(',');
-		}else{
-			var identity = $('#identity_price').val();
-			var arrays = identity.split(',');
-		}
-		
-		for(var i=0;i<arrays.length;i++) {
-			if(arrays[i] == index) arrays.splice(i,1);
-		}
-		var strings = arrays.join(',');
-		
-		if(type==1){
-			$('#identity').val(strings);
-			$("#row_location_"+index).remove();
-		}else{
-			$('#identity_price').val(strings);
-			$("#row_price_"+index).remove();
-		}
+	}else{
+		var identity = $('#identity_price').val();
+		var arrays = identity.split(',');
 	}
-
-
+	for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	if(type==1){
+		$('#identity').val(strings);
+		$("#row_location_"+index).remove();
+	}else{
+		$('#identity_price').val(strings);
+		$("#row_price_"+index).remove();
+	}
+}
 function ShowPopupProduct(index){
 	item_id = $("#item_id_"+ index).val();
 	record_id = index;

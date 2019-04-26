@@ -71,8 +71,9 @@ class Sales_Form_FrmPayment extends Zend_Form
     	
     	$date_inElement = new Zend_Form_Element_Text('date_in');
     	$date =new Zend_Date();
-    	$date_inElement ->setAttribs(array('class'=>'validate[required] form-control form-control-inline date-picker'));
-    	$date_inElement ->setValue($date->get('MM/d/Y'));
+    	$date_inElement ->setAttribs(array('class'=>'validate[required] form-control form-control-inline date-picker',
+		'data-date-format'=>"dd-mm-yyyy"));
+    	$date_inElement ->setValue(date("d-m-Y"));
     	$this->addElement($date_inElement);
     	
     	$paidElement = new Zend_Form_Element_Text('paid');

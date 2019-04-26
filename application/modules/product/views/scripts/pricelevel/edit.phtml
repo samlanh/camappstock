@@ -1,12 +1,7 @@
 <?php
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$form=$this->form;
-//$baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();//new
-$url_submit =  $this->url(array('module'=>'product','controller'=>'AdjustStock','action'=>'update-item-price'));
-$url_cancel =  $this->url(array('module'=>'product','controller'=>'AdjustStock','action'=>'index'));
-$add_price = $this->frm_addprice;
-$row_price = $this->pricetype_option;
-
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$url_submit =  $this->url(array('module'=>'product','controller'=>'AdjustStock','action'=>'update-item-price'));
+	$add_price = $this->frm_addprice;
 ?>
 <title><?php echo $tr->translate("PRICE_LEVEL");?></title>
 <div class="wrapper">
@@ -17,7 +12,7 @@ $row_price = $this->pricetype_option;
 				<?php echo $tr->translate("PRICE_LEVEL");?>
 			</div>
 			<div class="contain_form">
-				<form id="orderFrm" action"<?php echo $url_submit;?>" method="post">.
+				<form id="orderFrm"  method="post">.
 					<table style="background:#eeeeee; border:1px solid #ccc;">
 						<tr>
 					 		<td colspan="4" height="40px;"></td>
@@ -79,8 +74,3 @@ $row_price = $this->pricetype_option;
 		</div>
 	</div>
 </div>
-
-<script>
-//action when click on add/delete of followup
-
-</script>

@@ -2,6 +2,7 @@
 	$url_new = $this->url(array('module'=>'sales','controller'=>'index','action'=>'add',));
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$base_url = $this->baseUrl();
+	$url_back = $this->url(array('module'=>'sales','controller'=>'index','action'=>'index',),null, true);
 ?>
 <style>
 table.calculate td,table.calculate th{padding:0px 3px !important; line-height: 20px; }
@@ -12,12 +13,14 @@ table.calculate td,table.calculate th{padding:0px 3px !important; line-height: 2
 	line-height:38px;
 }
 .fullside{ width:100%; height: 35px;}
-.fullblog{ width:100%; height: 28px;font-size: 15px !important;}
+.fullblog{ width:100%; height: 30px;font-size: 15px !important;}
 td{padding: 1px !important;}
 .aligncenter{text-align: center;background:#eaeaea;
-white-space: nowrap;font-size: 14px;line-height:33px;}
+white-space: nowrap;font-size: 12px;line-height:33px;}
 .hover:hover{background: #eee;}
 .full_width{width:100%;}
+.form-group .col-md-6,
+.form-group .col-md-12{margin-top: 5px;}
 </style>
 <title>POS STOCK</title>
 <script src="<?php echo $base_url;?>/js/dojo-1.6.1/dojo/dojo.js"  djConfig="isDebug: true,parseOnLoad: true"></script>
@@ -26,206 +29,206 @@ white-space: nowrap;font-size: 14px;line-height:33px;}
 <form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">   
    if(this.validate()) {
-    return true;
+		$("#btnsavenew").prop( "disabled",true);
+    	return true;
    }else {
-    return false;
+   	 	return false;
    }
 </script>
 	<div class="row" >
 		<div class="col-md-12">
 				<div class="portlet-body form">
 					<form method="post" action="<?php ?>">
-							<label class="control-label col-md-9">
-								<div class="portlet box blue">
-	                                    <div class="portlet-title">
-	                                        <div class="caption">
-	                                            <i class="fa fa-cogs"></i>ទំនិញដែលបានទិញ
-	                                          </div>
-	                                        <div class="tools">
-	                                            <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
-	                                        </div>
-	                                        <label class="control-label col-md-4" style="margin-top:10px;float:right">
-	                                          <label class="control-label col-md-7"><i class="fa fa-clock-o" aria-hidden="true"></i> កាលបរិច្ឆេទ : <?php echo date("d-M-Y");?></label>
-	                                          <label class="control-label col-md-5"><div id="time"></div></label>
-	                                          </label>
-	                                    </div>
-	                                    <div class="portlet-body">
-	                                        <div class="table-responsive">
-	                                        	<label class="control-label col-md-8" style="margin-left: -4px;">
-				                                    <div style="background: #cccccc;padding: 10px;">
-											    		<input id="product_id" />
-										    		</div>
-								    			</label>
-								    			<label class="control-label col-md-4" style="background: #cccccc;">
-								    				<div style="padding: 10px;">
-										    			<select class="fullside" onchange="addTermcondition();" name="term_condition" id="term_condition" dojoType="dijit.form.FilteringSelect" onchange="addProductRow();">
-															<option value="-1">ជ្រើសរើសលក្ខខ័ណ្ឌ</option>
-															<?php if(!empty($this->term_opt)){ foreach($this->term_opt as $rs){?>
-																<option <?php echo $rs['id']?>><?php echo $rs['con_khmer']?></option>
-															<?php }}?>
-										    			</select>
-									    				<input type="hidden" name="identity" id="identity" />
-									    				<input type="hidden" name="identity_term" id="identity_term" />
-									    				<input type="hidden" name="branch_id" id="branch_id" value="1" />
-									    				<input type="hidden" name="invoice" id="invoice" value="<?php echo $this->invoice;?>" /> 
-									    				<input type="hidden" name="sale_id" id="sale_id" value="<?php echo $this->rs['id'];?>" /> 
-								    				</div>
-								    			</label>
-		                                        <table id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
-													<thead>
-														<tr id="head-title" class="table table-bordered" align="right" style="">
-															<th class="aligncenter">#</th>
-															<th class="aligncenter">ឈ្មោះមុខទំនិញ</th>
-															<th class="aligncenter">ស្តុក</th>
-															<th class="aligncenter">បរិ.ដុំ</th>
-															<th class="aligncenter">បរិ.រាយ</th>
-															<th class="aligncenter">បរិមាណ</th>
-															<th class="aligncenter">តម្លៃលក់</th>
-															<th class="aligncenter">បញ្ចុះតម្លៃ</th>
-															<th class="aligncenter">សរុប</th>
-															<th class="aligncenter">លុប</th>
-														</tr>
-														<tr>
-															<td colspan="11" id="lbl_noproduct" align="center">មិនមាន ទំនិញ ក្នុងកន្រ្តក</td>
-														</tr>
-													</thead>
-												</table><br />
-												 <div style="clear:both;"></div>
-												  <label class="control-label col-md-12" >
-												 <table id="table_rowterm" border="1px" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
-														<thead>
-															<tr id="head-title" class="table table-bordered" align="right" style="">
-																<th class="aligncenter">#</th>
-																<th class="aligncenter">លក្ខខណ្ឌ</th>
-																<th class="aligncenter">លុប</th>
-															</tr>
-														</thead>
-														<tr>
-															<td colspan="11" id="lbl_termcondition" align="center">មិនមានសម្គាល់ទេ!</td>
-														</tr>
-													</table>
-												</label>
-	                                        </div>
-	                                    </div>
-	                                     <div style="clear:both;"></div>
-	                                </div>
-	                                <div style="clear:both;"></div>
-	                               
-							</label>
-							<label class="control-label col-md-3" style="background: #eee;">
+						<div class="control-label col-md-9">
 							<div class="portlet box blue">
-	                                    <div class="portlet-title">
-	                                        <div class="caption">
-	                                            <i class="fa fa-cogs"></i>អតិថិជន/ការទូទាត់</div>
-	                                        <div class="tools">
-	                                        
-	                                        </div>
-	                                    </div>
-	                                    <label class="control-label col-md-12" style="background: #eee;">
-	                                    	<label class="control-label col-md-12" style="margin-top:10px;" >
-				                            	<input type="text" id="customer_id" />       
-								    		</label>
-		                                    <label class="control-label col-md-6" style="background: #eee;">
-		                                    	<button type="button" name="btnsavenew" class="btn red btn-block btn-md"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;កែប្រែ</button>
-		                                    </label>
-		                                    <label class="control-label col-md-6" style="background: #eee;">
-		                                    	<button type="button" name="btnsavenew" onclick="getSuppliyer();" class="btn red btn-block btn-md"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;បន្ថែមអតិថិជន</button>
-	                                    	</label>
-	                                    </label>
-	                                    <div class="portlet-body">
-	                                        <div class="table-responsive">
-	                                            <table class="table table-bordered calculate" style="font-size:14px;">
-	                                                <tr>
-	                                                <thead>
-	                                                	<tr >
-	                                                	<th style="white-space: nowrap;background:#d84a38;color:#fff;">អាត្រាប្តូរប្រាក់ 1$= </th>
-	                                                    <th><input onkeyup="netTotal();" style="background:#d84a38;color:#fff" dojoType="dijit.form.NumberTextBox" class="full_width" value="4100" type="text" name="exchange_rate" id="exchange_rate" /></th>
-	                                                    </tr>
-	                                                </thead>
-	                                                <tbody>
-	                                                	<tr>
-	                                                        <th>សរុបរង $</th>
-	                                                        <th><input readonly dojoType="dijit.form.NumberTextBox" class="full_width" type="text" name="sub_total" id="sub_total" />
-	                                                        	<input dojoType="dijit.form.TextBox" onkeyup="netTotal();" class="full_width" type="hidden" name="tax" id="tax" />
-	                                                        </th>
-	                                                    </tr>
-	                                                    <tr>
-	                                                        <td>បញ្ចុះតម្លៃ </td>
-	                                                        <td><input dojoType="dijit.form.NumberTextBox" onkeyup="netTotal();" class="full_width" type="text" name="discount" id="discount" /></td>
-	                                                    </tr>
-	                                                   
-	                                                    <tr>
-	                                                        <td style="white-space: nowrap;">ថ្លៃសេវាដឹកជញ្ជូន</td>
-	                                                        <td><input type="text"  dojoType="dijit.form.NumberTextBox" onkeyup="netTotal();" class="full_width" name="transport_fee" id="transport_fee" /></td>
-	                                                    </tr>
-	                                                    <tr style="font-weight: bold;">
-	                                                        <td> សរុបរួមជាដុល្លារ </td>
-	                                                        <td><input readonly type="text" style="background:#b93524;color: #fff;" dojoType="dijit.form.NumberTextBox" class="full_width" name="total_dollar" id="total_dollar" /></td>
-	                                                    </tr>
-	                                                    <tr style="font-weight: bold;">
-	                                                        <td> សរុបរួមជារៀល </td>
-	                                                        <td> <input readonly type="text" style="background:#b93524;color: #fff;" dojoType="dijit.form.NumberTextBox" class="full_width" name="total_riel" id="total_riel" /> </td>
-	                                                    </tr>
-	                                                </tbody>
-	                                            </table>
-	                                            <hr />
-	                                            <table class="table table-bordered calculate" style="font-size:14px;">
-	                                                <tr>
-	                                                <tbody>
-	                                                	<tr>
-	                                                        <th style="white-space: nowrap;">ប្រាក់ទទួលជា ដុល្លារ </th>
-	                                                        <th><input type="text" required="1" onkeyup="calCualtepaid();" dojoType="dijit.form.NumberTextBox" class="full_width" name="receive_dollar" id="receive_dollar" /></th>
-	                                                    </tr>
-	                                                    <tr>
-	                                                        <th>ប្រាក់ទទួលជា រៀល </th>
-	                                                        <th> <input type="text" required="1" onkeyup="calCualtepaid();" value="0" dojoType="dijit.form.NumberTextBox" class="full_width" name="receive_riel" id="receive_riel" /></th>
-	                                                    </tr>
-	                                                     <tr>
-	                                                        <th>ប្រាក់ទទួលសរុប</th>
-	                                                        <th>
-	                                                         <label class="control-label col-md-6" style="background: #eee;">
-						                                    	<button type="button" name="btnsavenew" onclick="Fullpaid();" class="btn red btn-block btn-md"><i class="fa fa-usd" aria-hidden="true"></i>&nbsp;&nbsp;បង់គ្រប់</button>
-						                                    </label>
-						                                     <label class="control-label col-md-6" style="background: #eee;">
-	                                                        	<input type="text" required="1" readonly dojoType="dijit.form.NumberTextBox" class="full_width" name="total_paid" id="total_paid" />
-	                                                        </label>	
-	                                                        </th>
-	                                                    </tr>
-	                                                    <tr style="background: #c8c8ff">
-	                                                        <td> ប្រាក់អាប់ដុល្លា</td>
-	                                                        <td><input readonly type="text" value="0" dojoType="dijit.form.NumberTextBox" class="full_width" name="return_amount" id="return_amount" /> </td>
-	                                                    </tr>
-	                                                    <tr style="background: #4b8df8">
-	                                                        <td> ប្រាក់អាប់ជារៀល </td>
-	                                                        <td><input readonly type="text" value="0" dojoType="dijit.form.NumberTextBox" class="full_width" name="return_amountriel" id="return_amountriel" /> </td>
-	                                                    </tr>
-	                                                    <tr style="background: #c8c8ff">
-	                                                        <td> ជំពាក់ </td>
-	                                                        <td><input readonly type="text" value="0" dojoType="dijit.form.NumberTextBox" class="full_width" name="balance" id="balance" /> </td>
-	                                                    </tr>
-	                                                    <tr style="background: #c8c8ff">
-	                                                        <td colspan="2">
-	                                                        </td>
-	                                                    </tr>
-	                                                </tbody>
-	                                            </table>
-	                                             <lable class="col-md-13">
-	                                			<button type="button" onclick="showReceipt();" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-print"></i> រក្សាទុក/បោះ ពុម្ភ </button>
-											</lable>
-	                                        </div>
-	                                       
-	                                    </div>
-	                                     <div style="clear:both;"></div>
-	                                </div>
-										<!--  <lable class="col-md-13">
-											<lable class="col-md-6">
-		                                 		<button type="button" onclick="showReceipt();" name="btnsavenew" class="btn red btn-block btn-lg"><i class="fa fa-print"></i> បោះបង់</button>
-											</lable>
-											<lable class="col-md-6">
-		                                 		<button type="button" name="btnsavenew" class="btn red btn-block btn-lg"><i class="fa fa-print"></i> ផ្អាក</button>
-											</lable>
-										</lable>-->
-	                               </label>
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="fa fa-shopping-cart"></i>ទំនិញដែលបានទិញ
+                                          </div>
+                                           <label class="control-label col-md-4" style="margin-top:10px;float:right">
+	                                          <lable class="col-md-13">
+												    <a href="<?php echo $url_back;?>" class="btn btn-bg blue  pull-right">
+													<i class="fa fa-back"></i>&nbsp;<?php echo $tr->translate("GO_BACK");?>
+													</a>
+											 </lable>
+                                          </label>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="table-responsive">
+                                        	<label class="control-label col-md-12" style="margin-left: -4px;">
+			                                    <div style="background: #cccccc;padding: 10px;">
+										    		<input id="product_id" />
+									    		</div>
+							    				<div style="padding: 10px;">
+								    				<input type="hidden" name="identity" id="identity" />
+								    				<input type="hidden" name="identity_term" id="identity_term" />
+								    				<input type="hidden" name="branch_id" id="branch_id" value="1" />
+								    				<input type="hidden" name="invoice" id="invoice" value="<?php echo $this->invoice;?>" /> 
+								    				<input type="hidden" name="sale_id" id="sale_id" value="<?php echo $this->rs['id'];?>" /> 
+							    				</div>
+							    			</label>
+	                                        <table id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
+												<thead>
+													<tr id="head-title" class="table table-bordered" align="right" style="">
+														<th class="aligncenter">#</th>
+														<th class="aligncenter">ឈ្មោះមុខទំនិញ</th>
+														<th class="aligncenter">ពណ៍នា</th>
+														<th class="aligncenter">ជាង</th>
+														<th class="aligncenter">ស្តុក</th>
+														<th class="aligncenter">បរិ.ដុំ</th>
+														<th class="aligncenter">បរិ.រាយ</th>
+														<th class="aligncenter">បរិមាណ</th>
+														<th class="aligncenter">តម្លៃលក់</th>
+														<th class="aligncenter">បញ្ចុះតម្លៃ</th>
+														<th class="aligncenter">សរុប</th>
+														<th class="aligncenter">លុប</th>
+													</tr>
+													<tr>
+														<td colspan="12" id="lbl_noproduct" align="center">មិនមាន ទំនិញ ក្នុងកន្រ្តក</td>
+													</tr>
+												</thead>
+											</table>
+											<br />
+											 <div style="clear:both;"></div>
+											  <label class="control-label col-md-12" >
+											  	Term Condition
+											  	<div style="border:1px solid #ccc;">
+													<textarea style="height: 120px;width:100%;" name="term_condition" id="term_condition" data-dojo-type="dijit/Editor"><?php echo $this->rs['term_condition'];?></textarea>
+												</div>
+											</label>
+                                        </div>
+                                    </div>
+	                                <div style="clear:both;"></div>
+	                             </div>
+	                           <div style="clear:both;"></div>
+							</div>
+							<div class="control-label col-md-3" >
+								<div class="portlet box blue">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="fa fa-money white"></i>អតិថិជន/ការទូទាត់
+                                        </div>
+                                        <div class="tools">
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+	                                    <div class="form-group">
+											<div class="col-md-12">
+												<input dojoType="dijit.form.DateTextBox" required="1" constraints="{datePattern:'dd/MM/yyyy'}"
+		                                           class="full_width" type="text" name="sale_date" id="sale_date" />
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-12">
+												<select class="fullblog" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" >
+													<option value="-1">ជ្រើសរើសសាខា</option>
+													<?php if(!empty($this->rs_branch)){ foreach($this->rs_branch as $rs){?>
+														<option value="<?php echo $rs['id']?>" ><?php echo $rs['name'];?></option>
+													<?php }}?>
+								    			</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-12">
+												<input type="text" id="customer_id" />
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-12">
+												<button style="font-size: 14px;" type="button" name="btnsavenew" onclick="getSuppliyer();" class="btn red btn-block btn-md"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;បន្ថែមអតិថិជន</button>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-6">JC#</div>
+											<div class="col-md-6">
+												<input type="text" class="full_width" name="cjnumber"  id="cjnumber"  dojoType="dijit.form.TextBox"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-6">Mileage</div>
+											<div class="col-md-6">
+												<input type="text" name="mileage" id="mileage"  class="full_width" dojoType="dijit.form.TextBox"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-6">
+												អាត្រាប្តូរប្រាក់ 1$=
+											</div>
+											<div class="col-md-6">
+												<input onkeyup="netTotal();" style="background:#d84a38;color:#fff" dojoType="dijit.form.NumberTextBox" class="full_width" value="<?php echo $this->rsrate;?>" type="text" name="exchange_rate" id="exchange_rate" />
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-6">
+												សរុបរង $
+											</div>
+											<div class="col-md-6">
+												<input readonly dojoType="dijit.form.NumberTextBox" class="full_width" type="text" name="sub_total" id="sub_total" />
+                                                <input dojoType="dijit.form.TextBox" onkeyup="netTotal();" class="full_width" type="hidden" name="tax" id="tax" />
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-6">
+												បញ្ចុះតម្លៃ
+											</div>
+											<div class="col-md-6"><input dojoType="dijit.form.NumberTextBox" onkeyup="netTotal();" class="full_width" type="text" name="discount" id="discount" /></div>
+										 </div>
+										 <div class="form-group">
+											<div class="col-md-6">
+												សរុបរួមជាដុល្លារ
+											</div>
+											<div class="col-md-6">
+												<input readonly type="text" style="" dojoType="dijit.form.NumberTextBox" class="full_width" name="total_dollar" id="total_dollar" />
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-6">
+												សរុបរួមជារៀល
+											</div>
+											<div class="col-md-6">
+												<input readonly type="text" style="" dojoType="dijit.form.NumberTextBox" class="full_width" name="total_riel" id="total_riel" />
+											</div>
+										</div>
+										<div class="form-group">
+											<h4 class="underline" style="font-size: 14px;">
+												<i class="fa fa-hand-o-right" aria-hidden="true"></i>
+												ការទទួលប្រាក់
+											</h4>
+										</div>
+										<div class="form-group">
+											<div class="col-md-6">
+												ប្រាក់ទទួលសរុប
+											</div>
+											<div class="col-md-6">
+												<input type="hidden" value="0" onkeyup="calCualtepaid();" dojoType="dijit.form.TextBox" class="full_width" name="receive_dollar" id="receive_dollar" />
+												<button type="button" name="btnsavenew" onclick="Fullpaid();" class="btn red btn-block btn-md"><i class="fa fa-usd" aria-hidden="true"></i>&nbsp;&nbsp;បង់គ្រប់</button>
+												<input type="hidden" value="0"  onkeyup="calCualtepaid();" value="0" dojoType="dijit.form.TextBox" class="full_width" name="receive_riel" id="receive_riel" />
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-6">
+											</div>
+											<div class="col-md-6">
+												<input type="text" required="true" dojoType="dijit.form.NumberTextBox" class="full_width" name="total_paid" id="total_paid" />
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-6">ប្រាក់អាប់ដុល្លា</div>
+											<div class="col-md-6"><input readonly type="text" value="0" dojoType="dijit.form.NumberTextBox" class="full_width" name="return_amount" id="return_amount" /></div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-6">ជំពាក់ជាដុល្លា</div>
+											<div class="col-md-6"><input readonly type="text" value="0" dojoType="dijit.form.NumberTextBox" class="full_width" name="balance" id="balance" /></div>
+										</div>
+										<div class="form-group">
+	                                        <div class="col-md-12">
+	                                			<button type="submit" id="btnsavenew" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-print"></i> រក្សាទុក/បោះ ពុម្ភ</button>
+											</div>
+										</div>
+	                                    <div style="clear:both;"></div>
+	                               	 </div>
+	                            </div>
+	                      </div>
 					</form> 
 			   </div>
 		</div>
@@ -562,8 +565,8 @@ dojo.require("dijit.form.Form");
 dojo.require("dijit.Dialog");
 dojo.require("dojo.number");
 dojo.require("dojo.data.ItemFileWriteStore");  
-
-
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.Editor");
 
 var product_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->rsproduct));?> );
 var client_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->rscustomer));?> );
@@ -571,25 +574,28 @@ var client_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::en
 require(["dojo/ready"], function(ready){
 	 ready(function(){
 		 dijit.byId("product_id").attr("value",'');
-			dijit.byId("product_id").focus();
-			dijit.byId("customer_id").attr("value",1);
-			initailize();
-			dijit.byId('sub_total').attr('value',<?php echo $this->rs['net_total'];?>);
-			dijit.byId('transport_fee').attr('value',<?php echo $this->rs['transport_fee'];?>);
-			dijit.byId('discount').attr('value',<?php echo $this->rs['discount_value'];?>);
-			dijit.byId('total_dollar').attr('value',<?php echo $this->rs['all_total'];?>);
-			
-			dijit.byId('receive_dollar').attr('value',<?php echo $this->rs['paid_dollar'];?>);
-			dijit.byId('receive_riel').attr('value',<?php echo $this->rs['paid_riel'];?>);			
-			
-			dijit.byId('total_paid').attr('value',<?php echo $this->rs['paid'];?>);
-			dijit.byId('return_amount').attr('value',<?php echo $this->rs['return_dollar'];?>);
-			dijit.byId('return_amountriel').attr('value',<?php echo $this->rs['return_riel'];?>);
-			dijit.byId('balance').attr('value',<?php echo $this->rs['balance'];?>);
-			
+		 dijit.byId("product_id").focus();
+		 dijit.byId("customer_id").attr("value",<?php echo $this->rs['customer_id'];?>);
+		 dijit.byId("branch_id").attr("value",<?php echo $this->rs['branch_id'];?>);
+		 initailize();
+		 
+		 dijit.byId('sub_total').attr('value',<?php echo $this->rs['net_total'];?>);
+		 dijit.byId('discount').attr('value',<?php echo $this->rs['discount_value'];?>);
+		 dijit.byId('total_dollar').attr('value',<?php echo $this->rs['all_total'];?>);
+		 dijit.byId('receive_dollar').attr('value',<?php echo $this->rs['paid_dollar'];?>);
+		 dijit.byId('total_paid').attr('value',<?php echo $this->rs['paid'];?>);
+		 dijit.byId('return_amount').attr('value',<?php echo $this->rs['return_dollar'];?>);
+		 dijit.byId('balance').attr('value',<?php echo $this->rs['balance'];?>);
+		 dijit.byId('cjnumber').attr('value','<?php echo $this->rs['jcnumber'];?>');
+		 dijit.byId('mileage').attr('value','<?php echo $this->rs['mileage'];?>');
+		 dijit.byId('sale_date').attr('value','<?php echo $this->rs['date_sold'];?>');
+		 //dijit.byId('return_amountriel').attr('value',<?php //echo $this->rs['return_riel'];?>);
+		 //dijit.byId('agreement_no').attr('value',<?php //echo $this->rs['agreement_id'];?>);
+		 //dijit.byId('receive_riel').attr('value',<?php //echo $this->rs['paid_riel'];?>);		
+		 //dijit.byId('transport_fee').attr('value',<?php //echo $this->rs['transport_fee'];?>);
 	 });
 	 
-		new dijit.form.FilteringSelect({
+	new dijit.form.FilteringSelect({
 		store: product_store,
 		autoComplete: true,
 		required: false,		           
@@ -611,33 +617,12 @@ require(["dojo/ready"], function(ready){
 			id: "customer_id",
 			searchAttr: "name",
 			queryExpr: "*${0}*",
-			class: 'fullside',
+			class: 'fullblog',
 			onChange: function() {
 				getCustomerInfo();
 			}
-			}, "customer_id");
+		}, "customer_id");
 });
-function checkTime(i) {
-	  if (i < 10) {
-	    i = "0" + i;
-	  }
-	  return i;
-	}
-
-	function startTime() {
-	  var today = new Date();
-	  var h = today.getHours();
-	  var m = today.getMinutes();
-	  var s = today.getSeconds();
-	  // add a zero in front of numbers<10
-	  m = checkTime(m);
-	  s = checkTime(s);
-	  document.getElementById('time').innerHTML ="ម៉ោង : "+ h + ":" + m + ":" + s;
-	  t = setTimeout(function() {
-	    startTime()
-	  }, 500);
-	}
-	startTime();
 function showReceipt(){
 	if(dijit.byId('office_receipt').validate()){
 		balance = dijit.byId("balance").get("value");
@@ -660,27 +645,17 @@ function showReceipt(){
 			  var rowIDArray = rowId.split(',');
 			  i=0;		  	
 			for(var n = 0; n < rowIDArray.length; n++) {
+				qty_sold=dijit.byId('qty_sold'+rowIDArray[n]).get("value");
+				qty_sold=dijit.byId('qty_sold'+rowIDArray[n]).get("value");
 				i++;
 				temp+='<tr style=" font-size:12px !important; text-align:center;font-weight:bold;">';
 				temp+='<td style="border:1px solid #000;">'+i+'</td>';
 				temp+='<td style="border:1px solid #000;text-align:left;"><strong style="color:#000;">&nbsp;'+$('#product_name'+rowIDArray[n]).val();+'</strong></td>';
-				temp+='<td style="border:1px solid #000;"><strong style="color:#000;">'+$('#qty_sold'+rowIDArray[n]).val();+'</strong></td>';
-				temp+='<td style="border:1px solid #000;"><strong style="color:#000;">$ '+dojo.number.format($('#price_'+rowIDArray[n]).val(),{places:3});+'</strong></td>';
-				temp+='<td style="border:1px solid #000;"><strong style="color:#000;">$ '+dojo.number.format($('#sub_total'+rowIDArray[n]).val(),{places:3});+'</strong></td>';
+				temp+='<td style="border:1px solid #000;"><strong style="color:#000;">'+qty_sold+'</strong></td>';
+				temp+='<td style="border:1px solid #000;"><strong style="color:#000;">$ '+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get("value"),{places:3});+'</strong></td>';
+				temp+='<td style="border:1px solid #000;"><strong style="color:#000;">$ '+dojo.number.format(dijit.byId('sub_total'+rowIDArray[n]).get("value"),{places:3});+'</strong></td>';
 			  temp+='</tr>';
 			}
-			  transport_fee = dijit.byId("transport_fee").get("value");
-			  transport_fee = isNaN(transport_fee)?0:transport_fee;
-			 if(transport_fee>0){
-				 i++;
-				  temp+='<tr style=" font-size:12px; text-align:center;font-weight:bold;">';
-				  temp+='<td style="border:1px solid #000;">'+i+'</td>';
-				  temp+='<td style="border:1px solid #000;text-align:left"><strong style="color:#000;">ថ្លៃសេវាដឹកជញ្ជូន</strong></td>';
-				  temp+='<td style="border:1px solid #000;"><strong style="color:#000;">1</strong></td>';
-				  temp+='<td style="border:1px solid #000;"><strong style="color:#000;">$ '+dojo.number.format(transport_fee,{places:3})+'</strong></td>';
-				  temp+='<td style="border:1px solid #000;"><strong style="color:#000;">$ '+dojo.number.format(transport_fee,{places:3})+'</strong></td>';
-			  	  temp+='</tr>';
-				 }
 			 for(j=i;i<=13;i++){
 				 j++;
 		    	 temp+='<tr style="height:25px;;text-align:right;font-weight:bold;">';
@@ -691,16 +666,7 @@ function showReceipt(){
 				 temp+='<td style="border:1px solid #000;" ></td>';
 			     temp+='</tr>';
 			     }
-				 temp+='<tr style=" font-size:12px; text-align:right;font-weight:bold;">';
-				 temp+='<td style="border:1px solid #fff;border-right:1px solid #000" colspan="3"> '+dojo.number.format(dijit.byId('total_riel').get("value"),{places:0})+' រៀល&nbsp;</td>';
-				 temp+='<td style="border:1px solid #000;><strong style="color:#000;">សរុប</strong>&nbsp;</td>';
-				 temp+='<td style="border:1px solid #000;><strong style="color:#000;">$ '+dojo.number.format(dijit.byId('sub_total').get('value')+transport_fee,{places:3})+'</strong>&nbsp;</td>';
-			     temp+='</tr>';
-			     /*temp+='<tr style=" font-size:12px; text-align:center;font-weight:bold;">';
-				  temp+='<td style="border:1px solid #fff;border-right:1px solid #000" colspan="3"></td>';
-				  temp+='<td style="border:1px solid #000;><strong style="color:#000;">ពន្ធ</strong></td>';
-				  temp+='<td style="border:1px solid #000;><strong style="color:#000;">'+transport_fee+'</strong></td>';
-			     temp+='</tr>';*/
+				
 			     temp+='<tr style=" font-size:12px; text-align:right;font-weight:bold;">';
 				 temp+='<td style="border:1px solid #fff;border-right:1px solid #000;text-align:left;" colspan="3">- សូមពិនិត្យទំនិញអោយបានត្រឹមត្រូវ</td>';
 				 temp+='<td style="border:1px solid #000;><strong style="color:#000;">បញ្ចុះតម្លៃ&nbsp;</strong></td>';
@@ -721,7 +687,7 @@ function showReceipt(){
 			     temp+='<tr style=" font-size:12px; text-align:right;font-weight:bold;">';
 				 temp+='<td style="border:1px solid #fff;border-right:1px solid #000" colspan="3"></td>';
 				 temp+='<td style="border:1px solid #000;font-size:12px !important;"><strong style="color:#000;">នៅខ្វះ&nbsp;</strong></td>';
-				 temp+='<td style="border:1px solid #000;font-size:14px !important;"><strong style="color:#000;font-family:arial;font-weight:bold;">$ '+dojo.number.format($('#balance').val(),{places:3})+'</strong>&nbsp;</td>';
+				 temp+='<td style="border:1px solid #000;font-size:14px !important;"><strong style="color:#000;font-family:arial;font-weight:bold;">$ '+dojo.number.format(dijit.byId('balance').get("value"),{places:3})+'</strong>&nbsp;</td>';
 			     temp+='</tr>';
 			     
 		temp+='</table>';
@@ -854,15 +820,20 @@ function initailize(){
 			dojo.byId('lbl_noproduct').innerHTML = '';
 		}
 		template+='<td style="min-width:20px;text-align:center">'+col+'</td>';
-		template+='<td style="min-width:230px;font-size:13px;"><input type="hidden" value="'+product_name+'" id="product_name'+col+'">'+product_name+'<input type="hidden"  value="'+product_id+'" id="product_id'+col+'" name="product_id'+col+'" /></td>';
-		template+='<td style="min-width:170px"><lable style="font-size:12px;" id="lblcurrent_qty'+col+'"></lable><input type="hidden" name="qty_perunit'+col+'" id="qty_perunit'+col+'"/><input type="hidden" readonly dojoType="dijit.form.TextBox" id="current_qty'+col+'" name="current_qty'+col+'" /></td>';
-		template+='<td style="min-width:50px"><input type="text" onkeyup="calCualtePrice('+col+');" name="qty_'+col+'" class="fullblog" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/></td>';
-		template+='<td style="min-width:50px"><input type="text" onkeyup="calCualtePrice('+col+');" name="qtydetail_'+col+'" class="fullblog" id="qtydetail_'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/></td>';
-		template+='<td style="min-width:50px"><input required="1" readonly name="qty_sold'+col+'" class="fullblog" id="qty_sold'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/></td>';
-		template+='<td style="min-width:50px"><input required="1" type="text" tabindex="'+col+'"  onkeyup="calCualtePrice('+col+');" name="price_'+col+'" class="fullblog" id="price_'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/><input type="hidden" name="cost_price'+col+'" id="cost_price'+col+'" dojoType="dijit.form.TextBox" /></td>';
-		template+='<td style="min-width:50px"><input type="text"  onkeyup="calCualtePrice('+col+');"  name="discount_'+col+'" class="fullblog" id="discount_'+col+'" dojoType="dijit.form.TextBox" placeholder=""/></td>';
-		template+='<td style="min-width:60px"><input type="text" name="sub_total'+col+'" class="fullblog" id="sub_total'+col+'" dojoType="dijit.form.NumberTextBox" readonly/></td>';
-		template+='<td width="60px"><button style="height:30px" type="button" onclick="deleteRecord('+col+')" name="save_close" class="btn default red">លុប</button></td>';
+		template+='<td style="min-width:180px;font-size:13px;"><input type="hidden" value="'+product_name+'" id="product_name'+col+'">'+product_name+'<input type="hidden"  value="'+product_id+'" id="product_id'+col+'" name="product_id'+col+'" /></td>';
+		template+='<td style="min-width:130px;font-size:12px;" valign="top"><input class="fullblog" dojoType="dijit.form.TextBox" type="text" name="note'+col+'" id="note'+col+'"/></td>';
+		template+='<td style="min-width:80px;font-size:12px;" valign="top"><select required="false" dojoType="dijit.form.FilteringSelect" name="staff_'+col+'" id="staff_'+col+'">';<?php if(!empty($this->rs_staff))foreach($this->rs_staff as $rs){ ?>
+			template+='<option value="<?php echo $rs["id"];?>"><?php echo $rs["name"];?></option>';
+			<?php }?>
+			template+='</select></td>';
+		template+='<td style="min-width:60px"><lable style="font-size:12px;" id="lblcurrent_qty'+col+'"></lable><input type="hidden" name="qty_perunit'+col+'" id="qty_perunit'+col+'"/><input type="hidden" readonly dojoType="dijit.form.TextBox" id="current_qty'+col+'" name="current_qty'+col+'" /></td>';
+		template+='<td style="min-width:60px"><input type="text" onkeyup="calCualtePrice('+col+');" name="qty_'+col+'" class="fullblog" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/></td>';
+		template+='<td style="min-width:30px"><input type="text" onkeyup="calCualtePrice('+col+');" name="qtydetail_'+col+'" class="fullblog" id="qtydetail_'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/></td>';
+		template+='<td style="min-width:30px"><input required="1" readonly name="qty_sold'+col+'" class="fullblog" id="qty_sold'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/></td>';
+		template+='<td style="min-width:30px"><input required="1" type="text" tabindex="'+col+'"  onkeyup="calCualtePrice('+col+');" name="price_'+col+'" class="fullblog" id="price_'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/><input type="hidden" name="cost_price'+col+'" id="cost_price'+col+'" dojoType="dijit.form.TextBox" /></td>';
+		template+='<td style="min-width:30px"><input type="text"  onkeyup="calCualtePrice('+col+');"  name="discount_'+col+'" class="fullblog" id="discount_'+col+'" dojoType="dijit.form.TextBox" placeholder=""/></td>';
+		template+='<td style="min-width:50px"><input type="text" name="sub_total'+col+'" class="fullblog" id="sub_total'+col+'" dojoType="dijit.form.NumberTextBox" readonly/></td>';
+		template+='<td width="40px"><button style="height:30px" type="button" onclick="deleteRecord('+col+')" name="save_close" class="btn default red">x</button></td>';
 		tmp='<tr id="row'+col+'" class="hover">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -872,7 +843,6 @@ function initailize(){
 		});
 		dijit.byId("product_id").attr("value",'');
 		dijit.byId("product_id").focus();
-		//getProductinfo(col,product_id);
 			
 	if($("#identity").val()!="") {
 		var identity = $("#identity").val();
@@ -880,6 +850,8 @@ function initailize(){
 	} else {$("#identity").val(col);}
 	
 	dijit.byId('qty_'+col).attr('value',<?php echo $row['qty_unit']?>);
+	dijit.byId('note'+col).attr('value','<?php echo $row['note']?>');
+	dijit.byId('staff_'+col).attr('value',<?php echo $row['staff_id']?>);
 	dijit.byId('qtydetail_'+col).attr('value',<?php echo $row['qty_detail']?>);
 	dijit.byId('qty_sold'+col).attr('value',<?php echo $row['qty_order']?>);
 	dijit.byId('price_'+col).attr('value',<?php echo $row['price']?>);
@@ -900,15 +872,20 @@ function addProductRow(){
 			dojo.byId('lbl_noproduct').innerHTML = '';
 		}
 		template+='<td style="min-width:20px;text-align:center">'+col+'</td>';
-		template+='<td style="min-width:230px;font-size:13px;"><input type="hidden" value="'+product_name+'" id="product_name'+col+'">'+product_name+'<input type="hidden"  value="'+product_id+'" id="product_id'+col+'" name="product_id'+col+'" /></td>';
-		template+='<td style="min-width:170px"><lable style="font-size:12px;" id="lblcurrent_qty'+col+'"></lable><input type="hidden" name="qty_perunit'+col+'" id="qty_perunit'+col+'"/><input type="hidden" readonly dojoType="dijit.form.TextBox" id="current_qty'+col+'" name="current_qty'+col+'" /></td>';
-		template+='<td style="min-width:50px"><input type="text" onkeyup="calCualtePrice('+col+');" name="qty_'+col+'" class="fullblog" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/></td>';
-		template+='<td style="min-width:50px"><input type="text" onkeyup="calCualtePrice('+col+');" name="qtydetail_'+col+'" class="fullblog" id="qtydetail_'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/></td>';
-		template+='<td style="min-width:50px"><input required="1" readonly name="qty_sold'+col+'" class="fullblog" id="qty_sold'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/></td>';
-		template+='<td style="min-width:50px"><input required="1" type="text" tabindex="'+col+'"  onkeyup="calCualtePrice('+col+');" name="price_'+col+'" class="fullblog" id="price_'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/><input type="hidden" name="cost_price'+col+'" id="cost_price'+col+'" dojoType="dijit.form.TextBox" /></td>';
-		template+='<td style="min-width:50px"><input type="text"  onkeyup="calCualtePrice('+col+');"  name="discount_'+col+'" class="fullblog" id="discount_'+col+'" dojoType="dijit.form.TextBox" placeholder=""/></td>';
-		template+='<td style="min-width:60px"><input type="text" name="sub_total'+col+'" class="fullblog" id="sub_total'+col+'" dojoType="dijit.form.NumberTextBox" readonly/></td>';
-		template+='<td width="60px"><button style="height:30px" type="button" onclick="deleteRecord('+col+')" name="save_close" class="btn default red">លុប</button></td>';
+		template+='<td style="min-width:180px;font-size:13px;"><input type="hidden" value="'+product_name+'" id="product_name'+col+'">'+product_name+'<input type="hidden"  value="'+product_id+'" id="product_id'+col+'" name="product_id'+col+'" /></td>';
+		template+='<td style="min-width:130px;font-size:12px;" valign="top"><input class="fullblog" dojoType="dijit.form.TextBox" type="text" name="note'+col+'" id="note'+col+'"/></td>';
+		template+='<td style="min-width:80px;font-size:12px;" valign="top"><select required="false" dojoType="dijit.form.FilteringSelect" name="staff_'+col+'" id="staff_'+col+'">';<?php if(!empty($this->rs_staff))foreach($this->rs_staff as $rs){ ?>
+			template+='<option value="<?php echo $rs["id"];?>"><?php echo $rs["name"];?></option>';
+				<?php }?>
+			template+='</select></td>';
+		template+='<td style="min-width:60px"><lable style="font-size:12px;" id="lblcurrent_qty'+col+'"></lable><input type="hidden" name="qty_perunit'+col+'" id="qty_perunit'+col+'"/><input type="hidden" readonly dojoType="dijit.form.TextBox" id="current_qty'+col+'" name="current_qty'+col+'" /></td>';
+		template+='<td style="min-width:30px"><input type="text" onkeyup="calCualtePrice('+col+');" name="qty_'+col+'" class="fullblog" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/></td>';
+		template+='<td style="min-width:30px"><input type="text" onkeyup="calCualtePrice('+col+');" name="qtydetail_'+col+'" class="fullblog" id="qtydetail_'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/></td>';
+		template+='<td style="min-width:30px"><input required="1" readonly name="qty_sold'+col+'" class="fullblog" id="qty_sold'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/></td>';
+		template+='<td style="min-width:30px"><input required="1" type="text" tabindex="'+col+'"  onkeyup="calCualtePrice('+col+');" name="price_'+col+'" class="fullblog" id="price_'+col+'" dojoType="dijit.form.NumberTextBox" placeholder=""/><input type="hidden" name="cost_price'+col+'" id="cost_price'+col+'" dojoType="dijit.form.TextBox" /></td>';
+		template+='<td style="min-width:30px"><input type="text"  onkeyup="calCualtePrice('+col+');"  name="discount_'+col+'" class="fullblog" id="discount_'+col+'" dojoType="dijit.form.TextBox" placeholder=""/></td>';
+		template+='<td style="min-width:50px"><input type="text" name="sub_total'+col+'" class="fullblog" id="sub_total'+col+'" dojoType="dijit.form.NumberTextBox" readonly/></td>';
+		template+='<td width="40px"><button style="height:30px" type="button" onclick="deleteRecord('+col+')" name="save_close" class="btn default red">x</button></td>';
 		tmp='<tr id="row'+col+'" class="hover">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -928,8 +905,11 @@ function calCualtePrice(index){
 	main_qty= $("#qty_"+index).val();
 	if(main_qty==''){main_qty=0;}
 	detail_qty= $("#qtydetail_"+index).val();//ចំនួនរាយ
+	
 	if(detail_qty==''){detail_qty=0;}
 	qty_perunit= $("#qty_perunit"+index).val();//ចំនួនក្នុង១ឯកកតា
+	qty_perunit=1;
+	//alert("qty_perunit"+qty_perunit);
 	if(qty_perunit==''){qty_perunit=0;}
 	qty_sold = parseFloat(main_qty) + parseFloat(detail_qty/(qty_perunit));
 	$('#qty_sold'+index).val(qty_sold);
@@ -961,13 +941,10 @@ function netTotal() {//use
 	tax = dijit.byId("tax").get("value");
 	tax = isNaN(tax)?0:tax;
 	
-	transport_fee = dijit.byId("transport_fee").get("value");
-	transport_fee = isNaN(transport_fee)?0:transport_fee;
-	
 	exchange_rate = dijit.byId("exchange_rate").get("value");
 	exchange_rate = isNaN(exchange_rate)?0:exchange_rate;
 
-	total_dollar = netTotal+(netTotal*tax/100)+transport_fee-discount;
+	total_dollar = netTotal+(netTotal*tax/100)-discount;
 	dijit.byId('total_dollar').attr('value',total_dollar);
 	total_riel = total_dollar*exchange_rate;
 	dijit.byId('total_riel').attr('value',total_riel);
@@ -977,17 +954,13 @@ function calCualtepaid(){
 	receive_dollar = dijit.byId('receive_dollar').get('value');
 	receive_dollar = isNaN(receive_dollar)?0:receive_dollar;
 
-	receive_riel = dijit.byId('receive_riel').get('value');
-	receive_riel = isNaN(receive_riel)?0:receive_riel;
-	
 	exchange_rate = dijit.byId("exchange_rate").get("value");
 	exchange_rate = isNaN(exchange_rate)?0:exchange_rate;
 	
-	total_received = receive_dollar+parseFloat(receive_riel/exchange_rate)
+	total_received = receive_dollar;
 	
 	total_dollar = dijit.byId('total_dollar').get('value');
 	return_amount = total_received-total_dollar;
-	
 	dijit.byId('balance').attr('value',0);
 	if(return_amount<0){
 		return_amount = -return_amount;
@@ -998,10 +971,7 @@ function calCualtepaid(){
 		total_received=total_dollar;
 	}
 	dijit.byId('total_paid').attr('value',total_received);
-	
 	dijit.byId('return_amount').attr('value',return_amount);
-	return_amount = return_amount*exchange_rate;
-	dijit.byId('return_amountriel').attr('value',return_amount);
 }
 function Fullpaid(){
 	total_dollar = dijit.byId('total_dollar').get('value');

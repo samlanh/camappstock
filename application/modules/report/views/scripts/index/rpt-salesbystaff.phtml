@@ -16,7 +16,7 @@ $brach_name =  $this->branch;
 							 </button>
 								<ul class="dropdown-menu" role="menu">
 									<li>
-										<a href="#" onclick="doPrint();">
+										<a href="" onclick="doPrint();">
 											<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
 										</a>
 									</li>
@@ -27,7 +27,7 @@ $brach_name =  $this->branch;
 					</div>
 			</div>
             <div class="portlet-body form frmfilter">
-				<form method="post" action="<?php //echo $formFilter->getAction(); ?>">
+				<form method="post" autocomplete="off">
 					<div class="form-group" style="padding-top: 6px;">
 						<?php $formFilter = $this->form_purchase; ?>
 						<label class="control-label col-md-3"><?php echo $formFilter->getElement('text_search');?></label>

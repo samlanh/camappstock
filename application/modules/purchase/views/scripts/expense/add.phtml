@@ -1,156 +1,95 @@
-<?php
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$frm = $this->frm_expense;
-?>
 <?php 
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$form=$this->form_purchase;
 	$url_submit = $this->url(array('module'=>'purchase','controller'=>'expense','action'=>'add'));
-	$url_cancel = $this->url(array('module'=>'purchase','controller'=>'expense','action'=>'index'));
 	$frm = $this->frm_expense;
 ?>
 <title><?php echo $tr->translate("ADD_EXPENSE");?></title>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="icon-home"></i><?php echo $tr->translate("ADD_EXPENSE")?>
-				</div>
-				<div class="tools" >
-					<a href="<?php echo $url_cancel;?>" class="btn btn-sm pull-right" style="color:white;">
-					<i class="fa fa-undo"></i>	&nbsp;<?php echo $tr->translate("GO_BACK");?>
-					</a>
-				</div>
-			</div>
-			<div class="portlet-body form">
-				<!-- BEGIN FORM-->
-				<form id="frm" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post">
-					<div class="form-body">
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+            <div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_EXPENSE');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right"></div>
+    		</div>
+    	</div>
+		<div class="card-box">
+			<form dojoType="dijit.form.Form" id="frm" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post">
+					<script type="dojo/method" event="onSubmit">			
+					if(this.validate()) {
+						expense_type=dijit.byId("title").get('value');
+						if(expense_type=='' || expense_type==-1 || expense_type==0){
+							alert("Please select expense type");
+							dijit.byId('title').focus();
+							return false;	
+						}
+               			loadingBlock();
+						return true;
+					}else{
+						return false;
+					}
+				</script>
+					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("INVOICE_NO")?><span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $frm->getElement('invoice');?>
-								</div>
-							</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("EXPENSE_TITLE")?><span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $frm->getElement('title');?>
-								</div>
-							</div>
+							<label class=" col-md-4"><?php echo $tr->translate("BRANCH_NAME");?></label>
+							<div class="col-md-8"><?php echo $frm->getElement("branch_id");?></div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("CURRENCY_TYPE")?><span class="required">
-							* </span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-								<?php echo $frm->getElement('currency_type'); ?>
-								</div>
-							</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("EXCHANGE_RATE")?>($-B)</label>
-							<div class="col-md-2">
-								<div class="input-icon right">
-									<?php echo $frm->getElement('dollar');?>
-								</div>
-							</div>
-							<div class="col-md-2">
-								<div class="input-icon right">
-									<?php echo $frm->getElement('exchangetobath');?>
-								</div>
-							</div>
+							<label class=" col-md-4"><?php echo $tr->translate("DATE")?></label>
+							<div class="col-md-8"><?php echo $frm->getElement('Date');?></div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("EXPENSE_AMOUNT")?><span class="required">
-							* </span>
-							</label>
-								<div class="col-md-2">
-									<div class="input-icon right">
-									<?php echo $frm->getElement('received_dollar'); ?>
-									</div>
-								</div>
-								<div class="col-md-2">
-								<div class="input-icon right">
-								<?php echo $frm->getElement('received_bath'); ?>
-								</div>
-							</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("TOTAL_EXPENSE")?>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<?php echo $frm->getElement('total_amount');?>
-								</div>
-							</div>
+							<label class="col-md-4"><?php echo $tr->translate("INVOICE_NO")?></label>
+							<div class="col-md-8"><?php echo $frm->getElement('invoice');?></div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-4"><?php echo $tr->translate("TITLE")?></label>
+							<div class="col-md-8"><?php echo $frm->getElement('expense_title');?></div>
 						</div>
 						
 						<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("BRANCH_NAME");?><span class="required">
-								 </span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<?php echo $frm->getElement("branch_id");?>
-								</div>
-							</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("DATE")?><span class="required">
-							* </span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa fa-calendar"></i><?php echo $frm->getElement('Date');?></div>
-							</div>
+							<label class="col-md-4"><?php echo $tr->translate("EXPENSE_TITLE")?></label>
+							<div class="col-md-8"><?php echo $frm->getElement('title');?></div>
 						</div>
-						<div class="form-group" >
-						    <label class="control-label col-md-2"><?php echo $tr->translate("NOTE")?><span class="required">
-								 </span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<?php echo $frm->getElement('Description');?>
-								</div>
-							</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("STATUS")?><span class="required">
-								 </span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<?php echo $frm->getElement('Stutas');?>
-								</div>
-							</div>
-							
-						</div>
-						
-						
 						<div class="form-group">
-						    <div class="col-md-4">
-								<a href="<?php echo $this->baseUrl();?>/purchase/expense/"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
+							<label class="col-md-4"><?php echo $tr->translate("CURRENCY_TYPE")?></label>
+							<div class="col-md-8"><?php echo $frm->getElement('currency_type'); ?></div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-4"><?php echo $tr->translate("EXCHANGE_RATE")?>($-B)</label>
+							<div class="col-md-4"><?php echo $frm->getElement('dollar');?></div>
+							<div class="col-md-4"><?php echo $frm->getElement('exchangetobath');?></div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-4"><?php echo $tr->translate("EXPENSE_AMOUNT")?></label>
+							<div class="col-md-4"><?php echo $frm->getElement('received_dollar'); ?></div>
+							<div class="col-md-4"><?php echo $frm->getElement('received_bath'); ?></div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-4"><?php echo $tr->translate("TOTAL_EXPENSE")?></label>
+							<div class="col-md-8"><?php echo $frm->getElement('total_amount');?></div>
+						</div>
+						<div class="form-group">
+							<label class=" col-md-4"><?php echo $tr->translate("NOTE")?></label>
+							<div class="col-md-8"><?php echo $frm->getElement('Description');?></div>
+						</div>
+						<div class="form-group">
+							<div class="form-group">
+								<label  class="col-md-12 col-md-offset-4 col-md-8">
+									<button type="submit" name="btnsavenew" class="btn btn-primary"><i class="fa fa-save"></i> រក្សាទុក/បន្ថែមថ្មី </button>
+								</label>
 							</div>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<button type="submit" class="btn blue btn-block btn-lg" ><i class="fa fa-close"></i> <?php echo $tr->translate("SAVE_CLOSE")?></button>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<button type="submit" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_NEW")?> </button>
-							</div>
-							
 						</div>
 					</div>
-				</form>
-			</div>
+					<div class="col-md-6"></div>
+			</form>
 		</div>
 	</div>
 </div>
 <div id="productpopup" class="modal fade" tabindex="-1" data-width="1200">
-       <div class="modal-dialog">
+     <div class="modal-dialog">
       <div class="modal-content">
       <div class="modal-header">   
 		<div class="row">
@@ -161,9 +100,6 @@ $frm = $this->frm_expense;
 					<i class="icon-home"></i><?php echo $tr->translate("ADD_EXPENSE_TITLE");?>
 				</div>
 				<div class="caption pull-right">
-					<a href="<?php //echo $url_new;?>" >
-						 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					</a>
 				</div>
 			</div>
 			<div class="portlet-body form">
@@ -196,14 +132,7 @@ $frm = $this->frm_expense;
     </div>
  </div>
 <script>
-$('#frm').submit(function() {
-	expense_type=$("#title").val();
-	if(expense_type=='' || expense_type==-1 || expense_type==0){
-		alert("Please select expense type");
-		$('#title').select2('open');
-		return false;	
-	}
-});
+
 function CalculateReceived(){
 	received_dollar = $("#received_dollar").val();
 	if(isNaN(received_dollar) || received_dollar==''){received_dollar=0;}
@@ -223,9 +152,7 @@ function showexpense(){
 	if(title==-1){
 	$('#productpopup').modal('show');
 	}
-	
 }
-
 <?php $url_add_new =  $this->url(array('module'=>'purchase','controller'=>'expensetitle','action'=>'addexpensetitle')); ?>
 function addExpense(){
 		title_id = $("#expense_title").val();
@@ -238,11 +165,12 @@ function addExpense(){
 		      $('#title').append($("<option></option>").attr("value",data['id']).attr("selected",true).text($("#expense_title").val()));                       
 			  $("#title").select2();
 		      $('#productpopup').modal('hide');
-			 
 	        },
 	        error:function(){
 	           
 	        }
 	    });	
 }
+	dojo.require("dijit.form.DateTextBox");
+</script>
 </script>

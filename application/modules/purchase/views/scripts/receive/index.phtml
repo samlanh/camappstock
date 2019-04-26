@@ -2,22 +2,12 @@
 	$url_new = $this->url(array('module'=>'purchase','controller'=>'index','action'=>'add',));
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$formFilter = $this->formFilter;
-	//print_r($this->rs)."sfsgesd";
 ?>
 <title><?php echo $tr->translate("MENU_PURCHASE_ADVANCE_INDEX");?></title>
 <meta charset="utf-8" />
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("MENU_PURCHASE_ADVANCE_INDEX");?>
-				</div>
-				<!--<a href="<?php echo $url_new;?>" class="btn btn-sm green  pull-right">
-					<i class="fa fa-plus"></i>&nbsp;<?php echo $tr->translate("ADD_NEW");?>
-				</a>-->
-			</div>
-			<div class="portlet-body form frmfilter">
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
 				<form method="post" action="<?php echo $formFilter->getAction(); ?>">
 					<div class="form-group" style="padding-top: 6px;">
 						<label class="control-label col-md-2"><?php echo $formFilter->getElement('text_search');?></label>
@@ -25,11 +15,13 @@
 						<label class="control-label col-md-2"><?php echo $formFilter->getElement('start_date');?></label>
 						<label class="control-label col-md-2"><?php echo $formFilter->getElement('end_date');?></label>
 						<label class="control-label col-md-2">
-							<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
+							<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("REFRESH")?>" dojoType="dijit.form.Button" 
+								iconClass="dijitIconSearch" />
 						</label>
 					</div>			
 				</form> 
-				<div class="contain_form" style="clear: both;">
+			</div>
+			<div class="card-box">
 					<form name="list"><div style="overflow:scroll; max-height: 450px; overflow-x:hidden;" >
 					<table class="collape tablesorter" id="table" width="100%">
 						<thead>
@@ -110,10 +102,12 @@
 								$footer = '<div class="footer_list">'.$stringPagination.$counter.'</div>';
 							}}?>
 						</tbody>
-					</table></div></form><?php echo $footer?>
-						<?php //echo $this->list; ?>
-			    </div>
-		   </div>
-		</div>
-	</div>
+					</table></div>
+					</form>
+					<?php echo $footer?>
+			  </div>
+	 </div>
 </div>
+<script>
+dojo.require("dijit.form.DateTextBox");
+</script>

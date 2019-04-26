@@ -1,7 +1,6 @@
 <?php
 class Purchase_PaymentController extends Zend_Controller_Action
 {	
-	
     public function init()
     {
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
@@ -14,35 +13,35 @@ class Purchase_PaymentController extends Zend_Controller_Action
     }
    	public function indexAction()
 	{
-		if($this->getRequest()->isPost()){
-			$search = $this->getRequest()->getPost();
-			$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-			$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
+		try{
+			if($this->getRequest()->isPost()){
+				$search = $this->getRequest()->getPost();
+				$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
+				$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
+			}
+			else{
+				$search =array(
+						'text_search'=>'',
+						'start_date'=>date("Y-m-d"),
+						'end_date'=>date("Y-m-d"),
+						'branch_id'=>-1,
+						'customer_id'=>-1,
+						);
+			}
+			$db = new Purchase_Model_DbTable_Dbpayment();
+			$rows = $db->getAllReciept($search);
+			$columns=array("BRANCH_NAME","CUSTOMER_NAME","EXPENSE_DATE",
+					"TOTAL","PAID","BALANCE","PAYMENT_TYPE","CHEQUE_NUMBER","BANK_NAME","WITHDRAWER","CHEQ_ISSUE","CHEQ_WIDRAW","PAYMENT_METHOD","BY_USER");
+			$link=array(
+					'module'=>'purchase','controller'=>'payment','action'=>'edit',
+			);
+			$list = new Application_Form_Frmlist();
+			$this->view->list=$list->getCheckList(0, $columns, $rows, array('receipt_no'=>$link,'customer_name'=>$link,'branch_name'=>$link,
+					'date_input'=>$link));
+		}catch (Exception $e){
+			Application_Form_FrmMessage::messageError("INSERT_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		else{
-			$search =array(
-					'text_search'=>'',
-					'start_date'=>date("Y-m-d"),
-					'end_date'=>date("Y-m-d"),
-					'branch_id'=>-1,
-					'customer_id'=>-1,
-					);
-		}
-		$db = new Purchase_Model_DbTable_Dbpayment();
-		$rows = $db->getAllReciept($search);
-		$columns=array("BRANCH_NAME","CUSTOMER_NAME","EXPENSE_DATE",
-				"TOTAL","PAID","BALANCE","PAYMENT_TYPE","CHEQUE_NUMBER","BANK_NAME","WITHDRAWER","CHEQ_ISSUE","CHEQ_WIDRAW","PAYMENT_METHOD","BY_USER");
-		$link=array(
-				'module'=>'purchase','controller'=>'payment','action'=>'edit',
-		);
-// 		$link1=array(
-// 				'module'=>'sales','controller'=>'index','action'=>'viewapp',
-// 		);
-		
-		$list = new Application_Form_Frmlist();
-		$this->view->list=$list->getCheckList(0, $columns, $rows, array('receipt_no'=>$link,'customer_name'=>$link,'branch_name'=>$link,
-				'date_input'=>$link));
-		
 		$formFilter = new Sales_Form_FrmSearch();
 		$this->view->formFilter = $formFilter;
 	    Application_Model_Decorator::removeAllDecorator($formFilter);

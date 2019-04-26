@@ -3,13 +3,10 @@ class Product_AdjustController extends Zend_Controller_Action
 {
 	const REDIRECT_URL_ADD ='/product/damagredstock/add';
 	const REDIRECT_URL_ADD_CLOSE ='/product/damagredstock/';
-public function init()
+	public function init()
     {
-        /* Initialize action controller here */
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    	
     } 
-   	//view transfer index
     protected function GetuserInfoAction(){
     	$user_info = new Application_Model_DbTable_DbGetUserInfo();
     	$result = $user_info->getUserInfo();
@@ -30,19 +27,15 @@ public function init()
 				'end_date'		=>	date("Y-m-d"),
     		);
 		}
-   
    		$rows=$db->getAllDamagedStock($data);
-   		$columns=array("ITEM_CODE","PRO_NAME","QTY_BEFORE","QTY_ADJUST","DFFER_QTY","MEASURE","LOCATION","BY_USER","DATE");
+   		$columns=array("ITEM_CODE","PRODUCT_NAME","QTY_BEFORE","QTY_ADJUST","DFFER_QTY","MEASURE","BRANCH","BY_USER","DATE");
    		
    		$this->view->list=$list->getCheckList(0, $columns, $rows);
    		$frm = new Product_Form_FrmAdjust();
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->formFilter = $frm->filter();
    		
-   	}
-   	//26-8-13 add adjust stock //done 27-8-813
-   	
-   	//26-8-13 add adjust stock //done 27-8-813
+   	}   	
     public function addAction()
     {   
     	if($this->getRequest()->isPost()){   
@@ -56,13 +49,9 @@ public function init()
 			}
     		
     	}
-
-    	//for add location
-    	
     	$frm = new Product_Form_FrmAdjust();
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->formFilter = $frm->add();
-    	
 	}
 	public function priceAction(){
 		$formFilter = new Product_Form_FrmItemPrice();

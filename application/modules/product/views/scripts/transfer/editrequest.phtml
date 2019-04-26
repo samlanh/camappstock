@@ -22,12 +22,12 @@ $formFilter = $this->formFilter;
 			</div>
 		</div>
 		<div class="portlet-body form">
-			<form class="form-horizontal" method="post" action="" >
+			<form id="frm" class="form-horizontal" method="post" action="" >
 				<div class="form-body">	
 					<div class="form-group">
-						<label class="col-md-2 control-label"><span id="lb_br"></span><?php //echo $tr->translate("REQUET_TO_BRANCH");?></label>
+						<label class="col-md-2 control-label"><span id="lb_br"></span></label>
 						<div class="col-md-4">
-							<?php //echo $formFilter->getElement('to_loc');?>
+							
 						</div>	
 						
 						<label class="col-md-2 control-label"><?php echo $tr->translate("TRANSFER_NUM");?></label>
@@ -60,9 +60,7 @@ $formFilter = $this->formFilter;
 					<div class="form-group">
 						<label class="col-md-2 control-label"><?php //echo $tr->translate("REMARK");?></label>
 						<div class="col-md-4">
-							<?php //echo $formFilter->getElement('remark');?>
 						</div>	
-						
 						<label class="col-md-2 control-label"><?php echo $tr->translate("STATUS");?></label>
 						<div class="col-md-4">
 							<?php echo $formFilter->getElement('status');?>
@@ -89,8 +87,8 @@ $formFilter = $this->formFilter;
 											<tr>
 												<th>#</th>
 												<th><?php echo $tr->translate("PRODUCT_NAME");?></th>
-												<th><?php echo $tr->translate("QTY_TRANSFER_UNIT");?></th>
-												<th><?php echo $tr->translate("QTY_TRANSFER_PER_UNIT");?></th>
+												<th><?php echo $tr->translate("UNIT_QTY");?></th>
+												<th><?php echo $tr->translate("QTY_PER_UNIT");?></th>
 												<th><?php echo $tr->translate("QTY_TRANSFER");?></th>
 												<th><?php echo $tr->translate("REMARK");?></th>
 												<th><?php echo $tr->translate("ACTION");?></th>
@@ -116,9 +114,28 @@ $formFilter = $this->formFilter;
 		</div>
 </div>
 <script type="text/javascript">
+$('#frm').submit(function() {
+	from_loc = $("#from_loc").val();
+	to_loc = $("#to_loc").val();
+	if(from_loc=='' || to_loc=='' || from_loc ==to_loc){
+		alert("please check location");
+		return false;
+	}
+    identity = $("#identity").val();
+    if(identity==''){
+	 	alert("សូមបញ្ចូលបរិមាណទំនិញ");
+	 	$('#pro_name').select2('open');
+	    return false;
+     }
+	var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
+	if (r == true) {
+	    return true;
+	} else {
+	   return false;
+	}
+});
 
 jQuery(document).ready(function(){
-	//addRow();
 	oldRow();
 });
 function oldRow(){
@@ -130,8 +147,8 @@ function oldRow(){
 			template='<tr id="row_location_'+index+'">';
 			template+='<td>'+index+'</td>';
 			template+='<td style="white-space: nowrap;"><?php echo $rs["item_name"];?><input type="hidden" id="pro_id_'+index+'" name="pro_id_'+index+'" value="<?php echo $rs["pro_id"]?>" </td>';
-			template+='<td><input type="text" id="qty_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_unit_'+index+'" value="<?php echo $rs['qty_unit']?>" class="form-control" /></td>'; 
-			template+='<td><input type="text" id="qty_per_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_per_unit_'+index+'" value="<?php echo $rs['qty_per_unit']?>" class="form-control" /></td>'; 
+			template+='<td><input type="text" id="qty_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_unit_'+index+'" value="<?php echo $rs['qty_unit']?>" class="validate[required,custom[number]] input form-control" /></td>'; 
+			template+='<td><input type="text" id="qty_per_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_per_unit_'+index+'" value="<?php echo $rs['qty_per_unit']?>" class="validate[required,custom[number]] input form-control" /></td>'; 
 			template+='<td><input type="text" id="qty_tran_'+index+'" readOnly="readOnly" name="qty_tran_'+index+'" value="<?php echo $rs['qty']?>" class="form-control" /> <input type="hidden" id="old_qty_trans_'+index+'" readOnly="readOnly" name="old_qty_tran_'+index+'" value="<?php echo $rs['qty']?>" class="form-control" /> <input type="hidden" name="qty_measure_'+index+'" id="qty_measure_'+index+'" value="<?php echo $rs['qty_measure']?>"/></td>'; 
 			template+='<td><input type="text" id="remark_'+index+'" name="remark_'+index+'" class="form-control"></td>';
 			template+='<td><button type="button" onClick="deleteRecord('+index+',1)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
@@ -169,8 +186,8 @@ function addNew(){
 			template='<tr id="row_location_'+index+'">';
 			template+='<td>'+index+'</td>';
 			template+='<td style="white-space: nowrap;">'+data.item_name+" "+data.brand+" "+data.size+" "+data.color+'<input type="hidden" id="pro_id_'+index+'" name="pro_id_'+index+'" value="'+data.id+'" </td>';
-			template+='<td><input type="text" id="qty_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_unit_'+index+'" value="1" class="form-control" /></td>'; 
-			template+='<td><input type="text" id="qty_per_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_per_unit_'+index+'" value="0" class="form-control" /></td>'; 
+			template+='<td><input type="text" id="qty_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_unit_'+index+'" value="1" class="validate[required,custom[number]] input form-control" /></td>'; 
+			template+='<td><input type="text" id="qty_per_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_per_unit_'+index+'" value="0" class="validate[required,custom[number]] input form-control" /></td>'; 
 			template+='<td><input type="text" id="qty_tran_'+index+'" readOnly="readOnly" name="qty_tran_'+index+'" value="1" class="form-control" /><input type="hidden" id="old_qty_tran_'+index+'" readOnly="readOnly" name="old_qty_tran_'+index+'" value="1" class="form-control" /> <input type="hidden" name="qty_measure_'+index+'" id="qty_measure_'+index+'" value="'+data.qty_perunit+'"/></td>'; 
 			template+='<td><input type="text" id="remark_'+index+'" name="remark_'+index+'" class="form-control"></td>';
 			template+='<td><button type="button" onClick="deleteRecord('+index+',1)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';

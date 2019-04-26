@@ -19,7 +19,7 @@ class Product_Form_FrmDamagedProduct extends Zend_Form
 				'class'=>'form-control select2me',
 				'onChange'=>'addNew();'
 		));
-		$opt= array(''=>$tr->translate("SELECT PRODUCT"));
+		$opt= array(''=>$tr->translate("SELECT_PRODUCT"));
 		$row_product = $db->getProductName();
 		if(!empty($row_product)){
 			foreach ($row_product as $rs){
@@ -61,25 +61,27 @@ class Product_Form_FrmDamagedProduct extends Zend_Form
 		$start_date = New Zend_Form_Element_Text("start_date");
 		$start_date->setAttribs(array(
 				'class'=>'validate[required] form-control form-control-inline date-picker',
-				'placeholder' => 'Click to Choose Start Date'
+				'placeholder' => 'Click to Choose Start Date',
+				'data-date-format'=>"dd-mm-yyyy"
 		));
 		$re_start_date = $request->getParam("start_date");
 		if(!empty($re_start_date)){
 			$start_date ->setValue($re_start_date);
 		}else{
-			$start_date ->setValue($date->get('MM/d/Y'));
+			$start_date ->setValue(date("d-m-Y"));
 		}
 		
 		$end_date = New Zend_Form_Element_Text("end_date");
 		$end_date->setAttribs(array(
 				'class'=>'validate[required] form-control form-control-inline date-picker',
-				'placeholder' => 'Click to Choose End Date'
+				'placeholder' => 'Click to Choose End Date',
+				'data-date-format'=>"dd-mm-yyyy"
 		));
 		$re_end_date = $request->getParam("end_date");
 		if(!empty($re_end_date)){
 			$end_date ->setValue($re_end_date);
 		}else{
-			$end_date ->setValue($date->get('MM/d/Y'));
+			$end_date ->setValue(date("d-m-Y"));
 		}
 		
 		$this->addElements(array($pro_name,$end_date,$start_date));

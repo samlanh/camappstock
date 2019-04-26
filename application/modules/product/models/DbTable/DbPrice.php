@@ -10,16 +10,13 @@ class Product_Model_DbTable_DbPrice extends Zend_Db_Table_Abstract
 	
 	public function addPriceType($data){
 		$db  = $this->getAdapter();
-		
 		try {
 			$_arr = array(
 					"name" => $data["price_name"],
 					"desc" 			  => $data["price_decs"],
 					"status" 		  => $data["status"]
-					);
-		   
+				);
 			if(@$data["id"]!=""){
-				//print_r($data);exit();
 				$where = $db->quoteInto("id=?", $data["id"]);
 				$this->update($_arr, $where);
 			}else{

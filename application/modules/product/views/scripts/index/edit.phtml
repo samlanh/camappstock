@@ -1,227 +1,225 @@
 <?php 
-defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$form=$this->form;
+	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$form=$this->form;
 
-
-	$url_submit =  $this->url(array('module'=>'product','controller'=>'index','action'=>'edit'));
     $url_cencel =  $this->url(array('module'=>'product','controller'=>'index','action'=>'index'),null, true);
-    $url_check =  $this->url(array('module'=>'product','controller'=>'index','action'=>'check'));
     $url_new = $this->url(array('module'=>'product','controller'=>'index','action'=>'add'));
 	
 	$user_info = new Application_Model_DbTable_DbGetUserInfo();
 	$result = $user_info->getUserInfo();
 	$session_user=new Zend_Session_Namespace('auth');
 	$request=Zend_Controller_Front::getInstance()->getRequest();
-	 $level = $result["level"];
-	 if($level==1 OR  $level==2){
-		$disable = "";
-	}else{
-		$disable = "pointer-events: none;cursor: default;color: #ccc;";
+	$level = $result["level"];
+	 
+	$images=$this->baseUrl().'/images/no-image.png';
+	if(!empty($this->rs['photo'])){
+		$images=$this->baseUrl().'/images/product/'.$this->rs['photo'];
 	}
 ?>						 
 <title><?php echo $tr->translate("EDIT_PRODUCT");?></title>
-<body>
-
-		<form class="form-horizontal" id="product_id" method="post" action="<?php //echo $url_submit;?>" >				
-					<div class="portlet box blue">
-						<div class="portlet-title">
-							<div class="caption">
-								<i class="fa fa-gift"></i><?php echo $tr->translate("EDIT_PRODUCT");?>
-							</div>
-							<div class="tools">
-									<label><a href="<?php echo $url_cencel;?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i><?php echo $tr->translate("GO_BACK");?></button></a></label>
-							</div>
-						</div>
-						<div style="<?php echo $disable;?>">
-						<div class="portlet-body">
-							<div class="tabbable-custom ">
-								<ul class="nav nav-tabs ">
-									<li class="active">
-										<a href="#tab_5_1" data-toggle="tab">
-										<?php echo $tr->translate("PRODUCT_INFO");?> </a>
-									</li>
-								</ul>
-								<div class="tab-content">
-									<div class="tab-pane active" id="tab_5_1">
-									<!--<div class="portlet box blue">
-								<div class="portlet-title">
-									<div class="caption">
-											<i class="fa fa-globe"></i><?php echo $tr->translate("PRODUCT_INFO");?>
-									</div>
-									
-								</div>-->
-								<div class="portlet-body form">
-									 
-										<div class="form-group">
-														<label class="col-md-2 control-label"><?php echo $tr->translate("PRODUCT_NAME");?></label>
-														<div class="col-md-4">
-															<?php echo $form->getElement('name');?>
-														</div>
-														
-														<label class="col-md-2 control-label"><?php echo $tr->translate("PRODUCT_CODE");?></label>
-														<div class="col-md-4">
-															<?php echo $form->getElement('pro_code');?>
-														</div>	
-													</div>
-														
-													<div class="form-group">
-																		
-														<label class="col-md-2 control-label"><?php echo $tr->translate("BARCODE");?></label>
-														<div class="col-md-4">
-															<?php echo $form->getElement('barcode');?>
-														</div>
-														<label class="col-md-2 control-label"><?php echo $tr->translate("BRAND_NAME");?></label>
-														<div class="col-md-4">
-															<?php echo $form->getElement('brand');?>
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="col-md-2 control-label"><?php echo $tr->translate("PRODUCT_CATEGORY");?></label>
-														<div class="col-md-4">
-															<?php echo $form->getElement('category');?>
-														</div>
-														<label class="col-md-2 control-label"><?php echo $tr->translate("COLOR");?></label>
-														<div class="col-md-4">
-															<?php echo $form->getElement('color');?>
-														</div>
-													</div>
-													
-													
-													<div class="form-group">
-														<label class="col-md-2 control-label"><?php echo $tr->translate("MEASURE");?></label>
-														<div class="col-md-2">
-															<?php echo $form->getElement('measure');?>
-														</div>
-														
-														<div class="col-md-2">
-															<?php echo $form->getElement('unit');?>
-														</div>
-														<label class="col-md-1 control-label" id="lb_measure" style="text-align: center;"></label>
-														
-														<label class="col-md-1 control-label" style="text-align: center;">=</label>
-														<div class="col-md-2">
-															<?php echo $form->getElement('qty_unit');?>
-														</div>
-														
-														<div class="col-md-2">
-															<?php echo $form->getElement('label');?>
-														</div>
-														
-													</div>
-													<div class="form-group">
-														<label class="col-md-2 control-label"><?php echo $tr->translate("NOTE");?></label>
-														<div class="col-md-4">
-															<?php echo $form->getElement('description');?>
-														</div>
-														
-														<label class="col-md-2 control-label"><?php echo $tr->translate("STATUS");?></label>
-														<div class="col-md-4">
-															<?php echo $form->getElement('status');?>
-														</div>
-													</div>
-													<?php if($level==1 OR $level==2){?>
-													<div class="form-group">
-														<label class="col-md-2 control-label"><?php echo $tr->translate("COST_PRICE");?></label>
-														<div class="col-md-4">
-															<?php echo $form->getElement('price');?>
-														</div>
-														<label class="col-md-2 control-label"></label>
-														<div class="col-md-4"></div>
-													</div>
-													<?php }?>
-													<h3 class="form-section"></h3>
-													<div class="portlet box blue">
-														<div class="portlet-title">
-															<div class="caption" style="width:100%">
-															<?php echo $form->getElement('branch');?>
-															</div>
-														</div>
-													</div>
-													
-													<div class="portlet box blue">
-														<div class="portlet-title">
-															<div class="caption">
-																<i class="fa fa-cogs"></i><?php echo $tr->translate("PRODUCT_LOCATION");?>
-															</div>
-														</div>
-														<div class="portlet-body">
-															<div class="table-responsive">
-																<table class="table table-bordered" style="font-size:12px !important;">
-																<thead>
-																<tr>
-																	<th>#</th>
-																	<th><?php echo $tr->translate("LOCATION_NAME");?></th>
-																	<th><?php echo $tr->translate("UNIT_QTY");?></th>
-																	<th><?php echo $tr->translate("QTY_PER_UNIT");?></th>
-																	<th><?php echo $tr->translate("TOTAL_QTY");?></th>
-																	<th><?php echo $tr->translate("QTY_WARNING");?></th>
-																	<th><?php echo $tr->translate("ACTION");?></th>
-																</tr>
-																</thead>
-																<tbody id="tr_location">
-																
-																</tbody>
-																</table>
-															</div>
-															<input type="hidden" name="identity" id="identity" value="<?php //echo $identity;?>" >
-														</div>
-													</div>
-											</div>
-										</div>
-										<?php if($level==1 OR  $level==2){?>
-										<h3 class="form-section"><?php echo $tr->translate("PRODUCT_PRICE_INFO");?></h3>
-										<div class="portlet box blue">
-											<div class="portlet-title">
-												<div class="caption" style="width:100%">
-															<?php echo $form->getElement('price_type');?>
-												</div>
-											</div>
-										</div>
-										
-										<div class="portlet-body">
-											<div class="table-responsive">
-												<table class="table table-bordered">
-													<thead>
-														<tr>
-															<th>#</th>
-															<th><?php echo $tr->translate("TYPE_NAME");?></th>
-															<th><?php echo $tr->translate("PRICE");?></th>
-															<!--<th><?php //echo $tr->translate("COST_PRICE");?></th>-->
-															<th><?php echo $tr->translate("REMARK");?></th>
-															<th><?php echo $tr->translate("ACTION");?></th>
-														</tr>
-													</thead>
-													<tbody id="tr_price_type">
-													</tbody>
-												</table>
-											</div>
-												<input type="hidden" name="identity_price" id="identity_price" value="<?php //echo $identity;?>" >
-										</div>
-										<?php }?>
-										<div class="form-group">
-											<div class="col-md-3">
-											</div>
-											<div class="col-md-3">
-												<a href="<?php echo $this->baseUrl();?>/product/index"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
-											</div>
-											<div class="col-md-3">
-												<div class="input-icon right">
-													<button type="submit" name="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-close"></i> <?php echo $tr->translate("SAVE_CLOSE")?></button>
-												</div>
-											</div>
-											<div class="col-md-3">
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+            <div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_PRODUCT');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+    	<div class="card-box">
+			<form dojoType="dijit.form.Form" class="form-horizontal"  method="post"  enctype="multipart/form-data" autocomplete="off"  >				
+				 <script type="dojo/method" event="onSubmit">			
+					if(this.validate()) {
+						category = dijit.byId("category").get('value');
+   	 					if(category==''){
+       					 	alert("សូមជ្រើសរើស ប្រភេទផលិតផល! ");
+        					dijit.byId("category").focus();
+        					return false;
+    					}
+    					identity = $("#identity").val();
+    					if(identity==''){
+	 						alert("សូមបញ្ចូលបរិមាណទំនិញ");
+	 						addProLocation();
+	   						return false;
+     					}
+               			loadingBlock();
+						return true;
+					}else{
+						return false;
+					}
+				</script>
+				<div class="col-md-5">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("PRODUCT_INFO");?> 
+	                   </label>
+	                </div>
+					<div class="form-group">
+							<label class="col-md-4 control-label"><?php echo $tr->translate("TYPE");?>*</label>
+							<div class="col-md-8"><?php echo $form->getElement('type');?></div>
+					</div>
+					<div class="form-group">
+							<label class="col-md-4 control-label"><strong><?php echo $tr->translate("PRODUCT_NAME");?>*</strong></label>
+							<div class="col-md-8"><?php echo $form->getElement('name');?></div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("PRODUCT_CODE");?></label>
+						<div class="col-md-8"><?php echo $form->getElement('pro_code');?></div>	
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("BARCODE");?></label>
+						<div class="col-md-8"><?php echo $form->getElement('barcode');?></div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("BRAND_NAME");?></label>
+						<div class="col-md-8">
+							<?php echo $form->getElement('brand');?>
 						</div>
 					</div>
-							
-			</form>		
-<!--Popup Form Brand-->
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("PRODUCT_CATEGORY");?>*</label>
+						<div class="col-md-8"><?php echo $form->getElement('category');?></div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("COLOR");?></label>
+						<div class="col-md-8">
+							<?php echo $form->getElement('color');?>
+						</div>
+					</div>
+					<div class="form-group">
+					<label class="col-md-4 control-label"><?php echo $tr->translate("MEASURE");?></label>
+					<div class="col-md-2">
+						<?php echo $form->getElement('unit');?>
+					</div>
+					<div class="col-md-6">
+						<?php echo $form->getElement('measure');?>
+					</div>
+					</div>
+					<div class="form-group">
+							<label class="col-md-3 control-label" id="lb_measure" style="text-align: center;"></label>
+							<label class="col-md-1 control-label" style="text-align: center;">=</label>
+							<div class="col-md-4">
+								<?php echo $form->getElement('qty_unit');?>
+							</div>
+							<div class="col-md-4">
+								<?php echo $form->getElement('label');?>
+							</div>
+						</div>
+				</div>
+				<div class="col-md-5">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-money" aria-hidden="true"></i> <?php echo $tr->translate("PRICE_SETTING");?></label>
+	                </div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><strong><?php echo $tr->translate("COST_PRICE");?>*</strong></label>
+						<div class="col-md-8">
+							<?php echo $form->getElement('price');?>
+						</div>
+					</div>		
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("PRODUCT_PRICE_INFO");?></label>
+						<label class="col-md-8 control-label"><?php echo $form->getElement('price_type');?>
+							<input type="hidden" name="identity_price" id="identity_price" value="" >
+						</label>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"></div>
+						<div class="col-md-8">
+							<table class="table table-bordered" style="font-size: 11px;">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th><?php echo $tr->translate("TYPE_NAME");?></th>
+										<th><?php echo $tr->translate("PRICE");?></th>
+										<th><?php echo $tr->translate("REMARK");?></th>
+										<th><?php echo $tr->translate("ACTION");?></th>
+									</tr>
+								</thead>
+								<tbody id="tr_price_type">
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("NOTE");?></label>
+						<div class="col-md-8">
+							<?php echo $form->getElement('description');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("STATUS");?></label>
+						<div class="col-md-8">
+							<?php echo $form->getElement('status');?>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<h4 class="underline" >
+						<i class="fa fa-hand-o-right" aria-hidden="true"></i>
+						<?php echo $tr->translate("PHOTO");?></h4>
+					<div class="imgBlog">
+						<img class="image_view bd" id="image_viewbg" src="<?php echo $images;?>" alt=""  />
+						<div class="button_browse">
+							<span>Upload Imags &nbsp;&nbsp;<span><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+							<input class="btn_borwse_image"  type="file" id="photo" name="photo">
+						</div>
+					</div>	
+				</div>
+				<div class="card-box">
+		            <div class="col-sm-12 border-botom">
+				    	<div class="col-sm-8 pd-0">
+				    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('PRODUCT_LOCATION');?></h4>
+		    			</div>
+		    			<div class="col-sm-4 text-right">
+		    			</div>
+		    		</div>
+		    	</div>
+				<div class="card-box">
+					<div class="col-md-6">
+						<div class="portlet box blue">
+							<div class="portlet-title">
+								<div class="caption" style="width:100%">
+									<?php echo $form->getElement('branch');?>
+								</div>
+							</div>
+						</div>
+						<div class="table-responsive">
+							<table class="table table-bordered" style="font-size:12px !important;">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th><?php echo $tr->translate("LOCATION_NAME");?></th>
+										<th><?php echo $tr->translate("UNIT_QTY");?></th>
+										<th><?php echo $tr->translate("QTY_PER_UNIT");?></th>
+										<th><?php echo $tr->translate("TOTAL_QTY");?></th>
+										<th><?php echo $tr->translate("QTY_WARNING");?></th>
+										<th><?php echo $tr->translate("ACTION");?></th>
+									</tr>
+								</thead>
+								<tbody id="tr_location"></tbody>
+							</table>
+						</div>
+						<input type="hidden" name="identity" id="identity" value="" >
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="form-group">
+	<div class="col-md-3"></div>
+	<div class="col-md-3">
+		<a href="<?php echo $this->baseUrl();?>/product/index"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
+	</div>
+	<div class="col-md-3">
+		<div class="input-icon right">
+			<button type="submit" name="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-close"></i> <?php echo $tr->translate("SAVE_CLOSE")?></button>
+		</div>
+	</div>
+	<div class="col-md-3"></div>
+</div>
 <?php $formBrand = $this->frmBrand; ?>
 <div id="brandpopup" class="modal fade" tabindex="-1" data-width="1200">
        <div class="modal-dialog">
@@ -684,8 +682,8 @@ $( document ).ready(function() {
 	
 	<?php $url_add_brand =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-brand')); ?>
 	function addNewBrand(){
-		//alert(1);
 		var brand_name  = $("#brand_name").val();
+		if(brand_name==''){$("#brand_name").focus();return false;}
 		$.ajax({
 			url: "<?php echo $url_add_brand;?>",
 			type: "post",
@@ -705,8 +703,8 @@ $( document ).ready(function() {
 	
 	<?php $url_add_category =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-category')); ?>
 	function addNewCategory(){
-		//alert(1);
 		var cat_name  = $("#cat_name").val();
+		if(cat_name==''){$("#cat_name").focus();return false;}
 		$.ajax({
 			url: "<?php echo $url_add_category;?>",
 			type: "post",
@@ -726,8 +724,8 @@ $( document ).ready(function() {
 	
 	<?php $url_add_measure =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-measure')); ?>
 	function addNewMeasure(){
-		//alert(1);
 		var measure_name  = $("#measure_name").val();
+		if(measure_name==''){$("#measure_name").focus();return false;}
 		$.ajax({
 			url: "<?php echo $url_add_measure;?>",
 			type: "post",
@@ -747,8 +745,8 @@ $( document ).ready(function() {
 	
 	<?php $url_add_color =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-other')); ?>
 	function addNewColor(){
-		//alert(1);
 		var title  = $("#title_en").val();
+		if(title==''){$("#title_en").focus();return false;}
 		$.ajax({
 			url: "<?php echo $url_add_color;?>",
 			type: "post",
@@ -767,8 +765,8 @@ $( document ).ready(function() {
 	}
 	
 	function addNewModel(){
-		//alert(1);
 		var title  = $("#title_en").val();
+		if(title==''){$("#title_en").focus();return false;}
 		$.ajax({
 			url: "<?php echo $url_add_color;?>",
 			type: "post",
@@ -785,26 +783,40 @@ $( document ).ready(function() {
 			}
 		});
 	}
-	
-	function addNewSize(){
-		//alert(1);
-		var title  = $("#title_en").val();
-		$.ajax({
-			url: "<?php echo $url_add_color;?>",
-			type: "post",
-			data: $('#frmOther').serialize(),
-			success: function(data){
-				rs = $.parseJSON(data);
-				 $('#size').append($("<option></option>").attr("value",rs['other_id']).attr("selected",true).text(title));                       
-				 $("#size").select2();
-				$('#otherpopup').modal('hide');
-			},
-			error:function(err){
-				alert("faile insert");
-			   
-			}
-		});
-	}
+var maxSize = 0;
+function readURL(input) {
+  if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+          $('#image_viewbg').attr('src', e.target.result);
+      }
+      reader.readAsDataURL(input.files[0]);
+  }
+}
+$("#photo").change(function(){
+	var iSize = ($("#photo")[0].files[0].size / 1024); 
+  if (iSize / 1024 > 1) 
+  { 
+     if (((iSize / 1024) / 1024) > 1) 
+     { 
+         iSize = (Math.round(((iSize / 1024) / 1024) * 100) / 100);
+         maxSize = 0;
+     }else{ 
+         iSize = (Math.round((iSize / 1024) * 100) / 100);
+         if(iSize>5){
+             alert('<?php echo $tr->translate("Image size more than 5Mb can not upload");?>');
+             maxSize = 1;
+             $('#image_viewbg').attr('src', "<?php echo $this->baseUrl().'/images/no-image.png';?>");
+             return false;
+         }
+     } 
+  } 
+  else 
+  {
+     iSize = (Math.round(iSize * 100) / 100);
+     maxSize = 0;
+  }
+  readURL(this);
+});
+dojo.require("dijit.form.NumberTextBox");
 </script>		
-</body>
-</html>

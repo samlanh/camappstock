@@ -11,77 +11,83 @@ class Product_Form_FrmBranch extends Zend_Form
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$branch_name = new Zend_Form_Element_Text('branch_name');
 		$branch_name->setAttribs(array(
-				'class'=>'form-control',
-				'required'=>'required'
+				'dojoType'=>"dijit.form.ValidationTextBox",
+				'class'=>'fullside',
+				'required'=>"1"
 		));
 		
 		$code = new Zend_Form_Element_Text("code");
 		$code->setAttribs(array(
-				'class'=>'form-control',
-				//'required'=>'required'
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',	
 		));
 		
 		$prefix = new Zend_Form_Element_Text("prefix");
 		$prefix->setAttribs(array(
-				'class'=>'form-control',
-				//'required'=>'required'
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',	
 		));
 		
 		$addres = new Zend_Form_Element_Textarea("address");
 		$addres->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',	
 				'style'=>'height:59px',
-				//'required'=>'required'
 		));
 		 
 		$contact_name = new Zend_Form_Element_Text("contact");
 		$contact_name->setAttribs(array(
-				'class'=>'form-control',
-				//'required'=>'required'
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',	
 		));
 		 
 		$contact_num = new Zend_Form_Element_Text("contact_num");
 		$contact_num->setAttribs(array(
-				'class'=>'form-control',
-				//'required'=>'required'
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',	
 		));
 		
 		$email = new Zend_Form_Element_Text("email");
 		$email->setAttribs(array(
-				'class'=>'form-control',
-				//'required'=>'required'
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',	
 		));
 		
 		$fax = new Zend_Form_Element_Text("fax");
 		$fax->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',	
 				
 		));
 		
 		$office_num = new Zend_Form_Element_Text("office_num");
 		$office_num->setAttribs(array(
-				'class'=>'form-control',
-				//'required'=>'required'
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',	
 		));
 		
 		$status = new Zend_Form_Element_Select("status");
 		$status->setAttribs(array(
-				'class'=>'form-control',
-				//'required'=>'required'
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
 		));
 		$opt = array('1'=>$tr->translate("ACTIVE"),'0'=>$tr->translate("DEACTIVE"));
 		$status->setMultiOptions($opt);
 		
 		$remark = new Zend_Form_Element_Text("remark");
 		$remark->setAttribs(array(
-				'class'=>'form-control',
-		
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',	
 		));
 		
 		$show_by = new Zend_Form_Element_Select("show_by");
 		$show_by->setAttribs(array(
-				'class'=>'form-control',
-				//'required'=>'required'
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
 		));
 		$opt_show = array('1'=>$tr->translate("SHOW_BY_TEXT"),'2'=>$tr->translate("SHOW_BY_LOGO"),'3'=>$tr->translate("SHOW_BY_ALL"));
 		$show_by->setMultiOptions($opt_show);
@@ -106,7 +112,6 @@ class Product_Form_FrmBranch extends Zend_Form
 			$show_by->setValue($data["show_by"]);
 			$old_logo->setValue($data["logo"]);
 		}
-			
 		$this->addElements(array($show_by,$code,$prefix,$branch_name,$addres,$contact_name,$contact_num,$email,$fax,$office_num,$status,$remark));
 		return $this;
 	}

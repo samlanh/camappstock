@@ -10,8 +10,8 @@ public function init()
 		$nameValue = $request->getParam('text_search');
 		$nameElement = new Zend_Form_Element_Text('text_search');
 		$nameElement->setAttribs(array(
-				'class'=>'form-control',
-				'placeholder'=>'Enter Keyword...'
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
 				));
 		$nameElement->setValue($nameValue);
 		$this->addElement($nameElement);
@@ -20,14 +20,15 @@ public function init()
 		$endDateValue = $request->getParam('end_date');
 		
 		if($endDateValue==""){
-			$endDateValue=date("m/d/Y");
+			$endDateValue=date("Y-m-d");
 		}
 		
 		$startDateElement = new Zend_Form_Element_Text('start_date');
 		$startDateElement->setValue($startDateValue);
 		$startDateElement->setAttribs(array(
-				'class'=>'form-control form-control-inline date-picker',
-				'placeholder'=>'Start Date'
+				'dojoType'=>"dijit.form.DateTextBox",
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 		));
 		$this->addElement($startDateElement);
 		
@@ -38,7 +39,12 @@ public function init()
 		$options=array(0=>"Choose Branch");
 		if(!empty($rs)) foreach($rs as $read) $options[$read['id']]=$read['name'];
 		$locationID = new Zend_Form_Element_Select('branch_id');
-		$locationID ->setAttribs(array('class'=>'validate[required] form-control select2me'));
+		$locationID ->setAttribs(array(
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
+				));
 		$locationID->setMultiOptions($options);
 		$locationID->setattribs(array(
 				'Onchange'=>'AddLocation()',));
@@ -48,13 +54,19 @@ public function init()
 		$endDateElement->setValue($endDateValue);
 		$this->addElement($endDateElement);
 		$endDateElement->setAttribs(array(
-				'class'=>'form-control form-control-inline date-picker'
+				'dojoType'=>"dijit.form.DateTextBox",
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 		));
 		
 		$opt_s = array("-1"=>"All",1=>"Active",0=>"Deactive");
 		$status = new Zend_Form_Element_Select('status');
 		$status->setattribs(array(
-				'class'=>'form-control',));
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
+		));
 		$status->setMultiOptions($opt_s);
 		$status->setValue($request->getParam("status"));
 		$this->addElement($status);

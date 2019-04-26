@@ -32,7 +32,6 @@ class Purchase_ExpenseController extends Zend_Controller_Action
     		
 			$rs_rows= $db->getAllExpense($formdata);//call frome model
     		$glClass = new Application_Model_GlobalClass();
-    		//$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmlist();
     		$collumns = array("BRANCH_NAME","INVOICE_NO","EXPENSE_TITLE","CURRENCY_TYPE","TOTAL_EXPENSE","NOTE","DATE","BY_USER","STATUS");
     		$link=array(

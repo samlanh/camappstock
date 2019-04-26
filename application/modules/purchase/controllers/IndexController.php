@@ -3,19 +3,19 @@ class Purchase_indexController extends Zend_Controller_Action
 {	
     public function init()
     {
-        /* Initialize action controller here */
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     }
 	public function indexAction()
 	{
-		if($this->getRequest()->isPost()){
+		try{
+			if($this->getRequest()->isPost()){
 				$search = $this->getRequest()->getPost();
 				$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
 				$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
-		}
-		else{
-			$search =array(
+			}
+			else{
+				$search =array(
 					'text_search'=>'',
 					'start_date'=>date("Y-m-d"),
 					'end_date'=>date("Y-m-d"),
@@ -23,18 +23,21 @@ class Purchase_indexController extends Zend_Controller_Action
 					'purchase_status'=>0,
 					'branch_id'=>-1,
 					'status_paid'=>-1,
-					);
-		}
-		$db = new Purchase_Model_DbTable_DbPurchaseOrder();
-		$rows = $db->getAllPurchaseOrder($search);
-		$list = new Application_Form_Frmlist();
-		$columns=array("BRANCH_NAME","VENDOR_NAME","PURCHASE_ORDER","ORDER_DATE","DATE_IN",
+				);
+			}
+			$db = new Purchase_Model_DbTable_DbPurchaseOrder();
+			$rows = $db->getAllPurchaseOrder($search);
+			$list = new Application_Form_Frmlist();
+			$columns=array("BRANCH_NAME","VENDOR_NAME","PURCHASE_ORDER","ORDER_DATE","DATE_IN",
 				 "INVOICE_NO","TOTAL_AMOUNT","PAID","BALANCE","ORDER_STATUS","STATUS","BY_USER");
-		$link=array(
+			$link=array(
 				'module'=>'purchase','controller'=>'index','action'=>'edit',
-		);
-		
-		$this->view->list=$list->getCheckList(0, $columns, $rows, array('branch_name'=>$link,'vendor_name'=>$link,'order_number'=>$link,'date_order'=>$link));
+			);
+			$this->view->list=$list->getCheckList(0, $columns, $rows, array('branch_name'=>$link,'vendor_name'=>$link,'order_number'=>$link,'date_order'=>$link));
+		}catch (Exception $e){
+			Application_Form_FrmMessage::messageError("INSERT_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
 		$formFilter = new Application_Form_Frmsearch();
 		$this->view->formFilter = $formFilter;
 		Application_Model_Decorator::removeAllDecorator($formFilter);
@@ -58,7 +61,6 @@ class Purchase_indexController extends Zend_Controller_Action
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}
 		}
-		///link left not yet get from DbpurchaseOrder 	
 		$frm_purchase = new Application_Form_purchase(null);
 		$form_add_purchase = $frm_purchase->productOrder();
 		Application_Model_Decorator::removeAllDecorator($form_add_purchase);
@@ -74,15 +76,9 @@ class Purchase_indexController extends Zend_Controller_Action
 		$this->view->form = $formStockAdd;
 		
 		$formpopup = new Application_Form_FrmPopup(null);
-		//for add vendor
 		$formStockAdd = $formpopup->popupVendor(null);
 		Application_Model_Decorator::removeAllDecorator($formStockAdd);
 		$this->view->form_vendor = $formStockAdd;
-		
-		//for add location
-// 		$formAdd = $formpopup->popuLocation(null);
-// 		Application_Model_Decorator::removeAllDecorator($formAdd);
-// 		$this->view->form_branch = $formAdd;	
 	}
 	public function editAction(){
 		$db = new Application_Model_DbTable_DbGlobal();
@@ -106,7 +102,6 @@ class Purchase_indexController extends Zend_Controller_Action
 		$db = new Purchase_Model_DbTable_DbPurchaseOrder();
 		$row = $db->getPurchaseById($id);
 		$this->view->rs = $db->getPurchaseDetailById($id);
-		//print_r($db->getPurchaseDetailById($id));
 		
 		$frm_purchase = new Application_Form_purchase();
 		$form_add_purchase = $frm_purchase->productOrder($row);

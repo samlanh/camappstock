@@ -10,7 +10,8 @@ public function init()
 		$nameValue = $request->getParam('text_search');
 		$nameElement = new Zend_Form_Element_Text('text_search');
 		$nameElement->setAttribs(array(
-				'class'=>'form-control'
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
 				));
 		$nameElement->setValue($nameValue);
 		$this->addElement($nameElement);
@@ -23,7 +24,10 @@ public function init()
 		$vendor_element->setMultiOptions($options);
 		$vendor_element->setAttribs(array(
 				'id'=>'customer_id',
-				'class'=>'form-control select2me'
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
 		));
 		$vendor_element->setValue($vendorValue);
 		$this->addElement($vendor_element);
@@ -32,28 +36,27 @@ public function init()
 		$endDateValue = $request->getParam('end_date');
 		
 		if($endDateValue==""){
-			$endDateValue=date("m/d/Y");
-			//$startDateValue=date("m/d/Y");
+			$endDateValue=date("Y-m-d");
 		}
 		
 		$startDateElement = new Zend_Form_Element_Text('start_date');
 		$startDateElement->setValue($startDateValue);
 		$startDateElement->setAttribs(array(
-				'class'=>'form-control form-control-inline date-picker',
-				'placeholder'=>'Start Date'
+				'dojoType'=>"dijit.form.DateTextBox",
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 		));
 		$this->addElement($startDateElement);
 		
-// 		Application_Form_DateTimePicker::addDateField(array('start_date','end_date'));
-		
 		$options="";
-		$sql = "SELECT id, name FROM tb_sublocation WHERE name!='' ";
-		$sql.=" ORDER BY id DESC ";
-		$rs=$db->getGlobalDb($sql);
-		$options=array(0=>"Choose Branch");
-		if(!empty($rs)) foreach($rs as $read) $options[$read['id']]=$read['name'];
+		$options = $db->getAllLocation(1);
 		$locationID = new Zend_Form_Element_Select('branch_id');
-		$locationID ->setAttribs(array('class'=>'validate[required] form-control select2me'));
+		$locationID ->setAttribs(array(
+			'dojoType'=>"dijit.form.FilteringSelect",
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'class'=>'fullside',
+				));
 		$locationID->setMultiOptions($options);
 		$locationID->setattribs(array(
 				'Onchange'=>'AddLocation()',));
@@ -64,7 +67,9 @@ public function init()
 		$endDateElement->setValue($endDateValue);
 		$this->addElement($endDateElement);
 		$endDateElement->setAttribs(array(
-				'class'=>'form-control form-control-inline date-picker'
+			'dojoType'=>"dijit.form.DateTextBox",
+			'class'=>'fullside',
+			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 		));
 		
 		$opt=array(-1=>"Choose Sale Person");
@@ -73,7 +78,12 @@ public function init()
 			foreach($rows as $rs) $opt[$rs['id']]=$rs['name'];
 		}
 		$saleagent_id = new Zend_Form_Element_Select('saleagent_id');
-		$saleagent_id->setAttribs(array('class'=>'demo-code-language form-control select2me'));
+		$saleagent_id->setAttribs(array(
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
+				));
 		$saleagent_id->setMultiOptions($opt);
 		$saleagent_id->setValue($request->getParam("saleagent_id"));
 		$this->addElement($saleagent_id);
@@ -84,20 +94,13 @@ public function init()
 			foreach($rows as $readStock) $opt[$readStock['key_code']]=$readStock['name_en'];
 		}
 		$customer_type = new Zend_Form_Element_Select('customer_type');
-		$customer_type->setAttribs(array('class'=>'form-control select2me'));
+		$customer_type->setAttribs(array(
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
+			));
 		$customer_type->setMultiOptions($opt);
 		$this->addElement($customer_type);
-		/*$options="";
-		$sql = "SELECT id,name FROM `tb_price_type` WHERE name!='' ";
-		$sql.=" ORDER BY id DESC ";
-		$rs=$db->getGlobalDb($sql);
-		$options=array(0=>"Choose Level");
-		if(!empty($rs)) foreach($rs as $read) $options[$read['id']]=$read['name'];
-		$locationID = new Zend_Form_Element_Select('level');
-		$locationID ->setAttribs(array('class'=>'validate[required] form-control select2me'));
-		$locationID->setMultiOptions($options);
-		$locationID->setattribs(array(
-				'Onchange'=>'AddLocation()',));
-		$this->addElement($locationID);*/
 	}
 }

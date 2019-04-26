@@ -28,17 +28,20 @@ public function add($data=null) {
     	$this->addElement($recieve_no);
 		
 		$date_order = new Zend_Form_Element_Text('date_order');
-		$date_order->setAttribs(array('class'=>'validate[required] form-control date-picker','placeholder'=>'Select Purchase No'));
+		$date_order->setAttribs(array('class'=>'validate[required] form-control date-picker','placeholder'=>'Select Purchase No',
+		'data-date-format'=>"dd-mm-yyyy"));
 		$date_order->setValue($date->get('MM/dd/YYYY'));
     	$this->addElement($date_order);
 		
 		$date_in = new Zend_Form_Element_Text('date_in');
-		$date_in->setAttribs(array('class'=>'validate[required] form-control date-picker','placeholder'=>'Select Purchase No'));
+		$date_in->setAttribs(array('class'=>'validate[required] form-control date-picker','placeholder'=>'Select Purchase No',
+		'data-date-format'=>"dd-mm-yyyy"));
 		$date_in->setValue($date->get('MM/dd/YYYY'));
     	$this->addElement($date_in);
 		
 		$date_recieve = new Zend_Form_Element_Text('date_recieve');
-		$date_recieve->setAttribs(array('class'=>'validate[required] form-control date-picker','placeholder'=>'Select Purchase No'));
+		$date_recieve->setAttribs(array('class'=>'validate[required] form-control date-picker','placeholder'=>'Select Purchase No',
+		'data-date-format'=>"dd-mm-yyyy"));
 		$date_recieve->setValue($date->get('MM/dd/YYYY'));
     	$this->addElement($date_recieve);
 		

@@ -12,13 +12,17 @@ class Product_Form_FrmBrand extends Zend_Form
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$name = new Zend_Form_Element_Text('brand_name');
 		$name->setAttribs(array(
-				'class'=>'form-control',
-				'required'=>'required'
+			'dojoType'=>"dijit.form.ValidationTextBox",
+			'class'=>'fullside',
+			'required'=>"1"
 		));
 		 
 		$parent = new Zend_Form_Element_Select("parent");
 		$parent->setAttribs(array(
-				'class'=>'form-control',
+			'dojoType'=>"dijit.form.FilteringSelect",
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'class'=>'fullside',
 		));
 		$opt = array(''=>$tr->translate("SELECT_BRAND"));
 		$row_brand = $db->getAllBrand();
@@ -31,7 +35,10 @@ class Product_Form_FrmBrand extends Zend_Form
 		
 		$status = new Zend_Form_Element_Select("status");
 		$status->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
 				'required'=>'required'
 		));
 		$opt = array('1'=>$tr->translate("ACTIVE"),'0'=>$tr->translate("DEACTIVE"));
@@ -39,7 +46,8 @@ class Product_Form_FrmBrand extends Zend_Form
 		
 		$remark = new Zend_Form_Element_Text('remark');
 		$remark->setAttribs(array(
-				'class'=>'form-control',
+			'dojoType'=>"dijit.form.TextBox",
+			'class'=>'fullside',
 		));
 		
 		if($data != null){
@@ -59,24 +67,15 @@ class Product_Form_FrmBrand extends Zend_Form
 		$db = new Brand_Model_DbTable_DbBrand();
 		$name = new Zend_Form_Element_Text('name');
 		$name->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',	
 		));
 		$name->setValue($request->getParam("name"));
 		
-// 		$parent = new Zend_Form_Element_Select("parent");
-// 		$parent->setAttribs(array(
-// 				'class'=>'form-control',
-// 		));
-// // 		$opt = array(''=>$tr->translate("SEELECT_Brand"));
-// // 		if(!empty($db->getAllBrand(null))){
-// // 			foreach ($db->getAllBrand() as $rs){
-// // 				$opt[$rs["id"]] = $rs["name"];
-// // 			}
-// // 		}
-// 		$parent->setMultiOptions($opt);
 		$status = new Zend_Form_Element_Select("status");
 		$status->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.FilteringSelect",
+			'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 				'required'=>'required'
 		));
 		$opt = array('1'=>$tr->translate("ACTIVE"),'0'=>$tr->translate("DEACTIVE"));

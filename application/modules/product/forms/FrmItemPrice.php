@@ -5,14 +5,26 @@ class Product_Form_FrmItemPrice extends Zend_Form
 		$db=new Application_Model_DbTable_DbGlobal();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$name= new Zend_Form_Element_Text("price_name");
-		$name->setAttribs(array('class'=>'form-control'));
+		$name->setAttribs(array(
+				'dojoType'=>"dijit.form.ValidationTextBox",
+				'class'=>'fullside',
+				'required'=>"1"
+				));
 		
 		$remark = new Zend_Form_Element_Text('price_decs');
-		$remark->setAttribs(array('class'=>'form-control'));
+		$remark->setAttribs(array(
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
+		));
 		
 		$optionsStatus=array(1=>$tr->translate("ACTIVE"),0=>$tr->translate('DEACTIVE'));
 		$statusElement = new Zend_Form_Element_Select('status');
-		$statusElement->setAttribs(array('class'=>'form-control'));
+		$statusElement->setAttribs(array(
+			'dojoType'=>"dijit.form.FilteringSelect",
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'class'=>'fullside',
+		));
 		$statusElement->setMultiOptions($optionsStatus);
 		
 		if($data!=""){
@@ -20,7 +32,6 @@ class Product_Form_FrmItemPrice extends Zend_Form
 			$remark->setValue($data["desc"]);
 			$statusElement->setValue($data["status"]);
 		}
-		
 		return $this->addElements(array($name,$remark,$statusElement));
 		
 	}
@@ -152,7 +163,10 @@ class Product_Form_FrmItemPrice extends Zend_Form
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 		$priceElement = new Zend_Form_Element_Text('price_type');
-		$priceElement->setAttribs(array('class'=>"form-control"));
+		$priceElement->setAttribs(array(
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
+				));
 		$pricevalue = $request->getParam("price_type");
 		$priceElement->setValue($pricevalue);
 		$this->addElement($priceElement);
@@ -160,11 +174,13 @@ class Product_Form_FrmItemPrice extends Zend_Form
 		$optionsStatus=array(1=>$tr->translate("ACTIVE"),0=>$tr->translate("DEACTIVE"));
 		$statusElement = new Zend_Form_Element_Select('status');
 		$statusvalue = $request->getParam("status");
-		$statusElement->setAttribs(array('class'=>"form-control"));
+		$statusElement->setAttribs(array(
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
+				));
 		$statusElement->setValue($statusvalue);
 		$statusElement->setMultiOptions($optionsStatus);
 		$this->addElement($statusElement);
 		return $this;
-		
 	}
 }

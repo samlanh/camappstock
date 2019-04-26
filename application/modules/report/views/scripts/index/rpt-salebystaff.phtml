@@ -16,7 +16,7 @@ $frm_sales_report = $this->form_search;
 							 </button>
 								<ul class="dropdown-menu" role="menu">
 									<li>
-										<a href="#" onclick="doPrint();">
+										<a href="" onclick="doPrint();">
 											<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
 										</a>
 									</li>
@@ -27,7 +27,7 @@ $frm_sales_report = $this->form_search;
 					</div>
 			</div>
             <div class="portlet-body form frmfilter">
-				<form method="post" action="<?php //echo $formFilter->getAction(); ?>">
+				<form method="post" autocomplete="off">
 					<div class="form-group" style="padding-top: 6px;">
 						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement("txt_search");?></label>
 						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement("branch_id");?></label>

@@ -10,7 +10,7 @@ class Purchase_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 		$originalDate = $data['Date'];
 		$newDate = date("Y-m-d", strtotime($originalDate));
 		$data = array(
-				
+				'expense_title'=>$data['expense_title'],
 				'title'=>$data['title'],
 				'invoice'=>$data['invoice'],
 				'branch_id'=>$data['branch_id'],
@@ -18,22 +18,20 @@ class Purchase_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 				'total_amount'=>$data['total_amount'],
 				'desc'=>$data['Description'],
 				'for_date'=>$newDate,
-				'status'=>$data['Stutas'],
+				'status'=>1,
 				'user_id'=>$this->getUserId(),
 				'create_date'=>date('Y-m-d'),
 				'exchangetobath'=>$data['exchangetobath'],
-				'received_dollar'=>$data['received_dollar'],
+				'received_dollar'=>empty($data['received_dollar'])?0:$data['received_dollar'],
 				'received_bath'=>$data['received_bath'],
-				
 		);
-		$this->insert($data);
-
+	$this->insert($data);
  }
  function updateExpense($data){
 	$originalDate = $data['Date'];
 	$newDate = date("Y-m-d", strtotime($originalDate));
 	$arr = array(
-				
+				'expense_title'=>$data['expense_title'],
 				'title'=>$data['title'],
 				'invoice'=>$data['invoice'],
 				'curr_type'=>$data['currency_type'],

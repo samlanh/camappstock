@@ -1,31 +1,30 @@
 <?php 
 $tr=Application_Form_FrmLanguages::getCurrentlanguage();
-//print_r($this->product);
 ?>
-<title>Purchase Report</title>
+<title><?php echo $tr->translate("RECEIVED_ITEM");?></title>
 <div class="row">
 	<div class="col-md-12">
 		<div class="portlet box blue">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("PURCHASE_REPORT");?>
+					<i class="fa fa-globe"></i>
 				</div>
-						<div class="btn-group pull-right">
-							 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
-							   Actions <i class="fa fa-angle-down"></i>
-							 </button>
-								<ul class="dropdown-menu" role="menu">
-									<li>
-										<a href="#" onclick="doPrint();">
-											<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
-									</li>
-									
-								</ul>
-					</div>
+				<div class="btn-group pull-right">
+					 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
+					   Actions <i class="fa fa-angle-down"></i>
+					 </button>
+						<ul class="dropdown-menu" role="menu">
+							<li>
+								<a href="" onclick="doPrint();">
+									<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+								</a>
+							</li>
+							<li>
+								<a href="javascript:;"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
+							</li>
+							
+						</ul>
+				</div>
 			</div>
             <div class="portlet-body form frmfilter">
 					<div style="clear:both;"></div>	
@@ -52,7 +51,7 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		        	<table width="100%" style="font-family: 'Khmer OS Battambang';" cellpadding="0" cellpadding="0">
 		            	<tbody>
 							<tr>
-								<td width="20%" valign="top"><img src="<?php echo $this->baseUrl();?>/images/logo/<?php echo $this->title_reprot["logo"]?>" height="55px"></td>
+								<td width="20%" valign="top"></td>
 								<td width="60%" valign="top">
 									<ul>
 										<li style="text-align:center; font-size:20px; font-family:'Khmer MEF2'"><?php echo $this->title_reprot["title_report_kh"]?></li>
@@ -69,10 +68,10 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		                			<tbody>
 		                			<tr>
 		                				<td style="font-size: 12px;" valign="top" width="30%;">
-											<div style="padding-left: 10px;width:100%; background: #244456;display: block;color:#fff;font-size:15px !important;">&nbsp;&nbsp;<?php echo $tr->translate("SUPPLIER_INFO");?></div>
+											<div style="padding-left: 10px;width:100%; background: #244456;display: block;color:#fff;font-size:15px !important;">&nbsp;&nbsp;<?php echo $tr->translate("VENDOR_INFO");?></div>
 											<table width="100%" style="font-size: 12px; font-weight:600;">
 												<tr style="line-height:20px;">
-													<td style="text-align: left;white-space: nowrap;"><?php echo $tr->translate("SUPPLIER_NAME");?> :</td>
+													<td style="text-align: left;white-space: nowrap;"><?php echo $tr->translate("VENDOR_NAME");?> :</td>
 													<td style="text-align: right;white-space: nowrap;"><?php echo $this->product[0]['vendor_name'];?></td>
 												</tr>
 												<tr style="line-height:20px;">
@@ -102,11 +101,11 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		                					
 											<table width="100%" style="font-size: 12px; font-weight:600;">
 												<tr style="line-height:20px;">
-													<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("PURCHASE_NO");?> :</td>
+													<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("PO_NUM");?> :</td>
 													<td style="text-align: right;white-space: nowrap;"><?php echo $this->product[0]['po_no'];?></td>
 												</tr>
 												<tr style="line-height:20px;">
-													<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("PU_DATE");?> :</td>
+													<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("ORDER_DATE");?> :</td>
 													<td style="text-align: right;white-space: nowrap;"><?php echo date("d/m/Y",strtotime($this->product[0]['date_order']));?></td>
 												</tr>
 												<tr style="line-height:20px;">
@@ -138,13 +137,13 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		    	<td>
 		            <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px; margin-top:10px;" width="100%" cellspacing="0">
 		                 <tbody>
-						 <tr style="background:#ccc">
-							<th width="3%">&nbsp;<?php echo $tr->translate("NUM");?></th>
-							<th><?php echo $tr->translate("ITEM_CODE");?></th>
-							<th><?php echo $tr->translate("ITEM_NAME");?></th>
-							<th>&nbsp;<?php echo $tr->translate("QTY_ORDER");?></th>
-							<th>&nbsp;<?php echo $tr->translate("QTY_RECEIVE");?></th>
-							<th>&nbsp;<?php echo $tr->translate("MEASURE");?></th>
+						 <tr style="background:#a8aeff;text-align: center !important;">
+							<th width="3%" style="text-align: center !important;">&nbsp;<?php echo $tr->translate("NUM");?></th>
+							<th style="text-align: center !important;"><?php echo $tr->translate("ITEM_CODE");?></th>
+							<th style="text-align: center !important;"><?php echo $tr->translate("ITEM_NAME");?></th>
+							<th style="text-align: center !important;">&nbsp;<?php echo $tr->translate("QTY_ORDER");?></th>
+							<th style="text-align: center !important;">&nbsp;<?php echo $tr->translate("QTY_RECEIVE");?></th>
+							<th style="text-align: center !important;">&nbsp;<?php echo $tr->translate("MEASURE");?></th>
 							<!--<td>&nbsp;<?php echo $tr->translate("SUPPLIER");?></td>-->
 						</tr>
 						

@@ -3,50 +3,55 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 ?>
 <title><?php echo $tr->translate("ADD_EXPENSETITLE");?></title>
-<div class="col-md-12">
-	<div class="portlet box blue">
-		<div class="portlet-title">
-			<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("ADD_EXPENSETITLE");?>
-			</div>
-			<div class="caption pull-right">
-				<a href="<?php echo $url_new;?>" class="btn btn-sm green  pull-right">
-						<i class="fa fa-undo"></i>&nbsp;<?php echo $tr->translate("GO_BACK");?>
-				</a>
-			</div>
-			
-		</div>
-		<div class="portlet-body form">
-			<form class="form-horizontal" method="post" >
-			
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+            <div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_EXPENSETITLE');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<div class="card-box">
+			<form  dojoType="dijit.form.Form" class="form-horizontal" method="post" >
+				<script type="dojo/method" event="onSubmit">			
+					if(this.validate()) {
+						loadingBlock();
+						return true;
+					}else{
+						return false;
+					}
+				</script>
 				<div class="form-body ">
-					<div style="margin: 0 auto;" >
+					<div class='col-md-6'>
 							<div class="form-group">
-								<label class="col-md-2 control-label"><?php echo $tr->translate("NAME_KHMER");?></label>
+								<label class="col-md-4 control-label"><?php echo $tr->translate("NAME_KHMER");?></label>
 								<div class="col-md-8">
-									<textarea name="title" id="title" class="validate[required] form-control" placeholder="Enter Name Khmer" style="height:40px;" rows="24" cols="80"><?php echo $this->rs["title"];?></textarea>
+									<input name="title" id="title" required="1" dojoType="dijit.form.ValidationTextBox" class='fullside' value="<?php echo $this->rs['title'];?>" >
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-2 control-label"><?php echo $tr->translate("NAME_ENTITLE");?></label>
+								<label class="col-md-4 control-label"><?php echo $tr->translate("NAME_ENTITLE");?></label>
 								<div class="col-md-8">
-									<textarea name="name_en" id="name_en" class="form-control" placeholder="Enter Name EN" style="height:40px;" rows="24" cols="80"><?php echo $this->rs["title_en"];?></textarea>
+									<input name="name_en" id="name_en" dojoType="dijit.form.TextBox" class='fullside' value='<?php echo $this->rs["title_en"];?>' >
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-2 control-label"><?php echo $tr->translate("STATUS");?></label>
+								<label class="col-md-4 control-label"><?php echo $tr->translate("STATUS");?></label>
 								<div class="col-md-8">
-									<select name="status" id="status" class="form-control select2me">
-    <option value="1" label="Active">Active</option>
-    <option value="0" label="Deactive">Deactive</option>
-</select>	
+									<select dojoType="dijit.form.FilteringSelect" name="status" id="status" class="fullside">
+									    <option value="1" label="Active">Active</option>
+									    <option value="0" label="Deactive">Deactive</option>
+									</select>	
 								</div>
 							</div>
-					<div class="form-group">
-						<label  class="col-md-12 col-md-offset-4 col-md-8">
-						<a href="<?php echo $this->baseUrl();?>/purchase/expensetitle"><button type="button" class="btn red"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
-							<button type="submit" name="save_close" value="saveclose" class="btn btn-primary" ><i class="glyphicon glyphicon-log-in"></i> <?php echo $tr->translate("SAVE_CLOSE")?></button>
-					</div>
+						<div class="form-group">
+							<label  class="col-md-12 col-md-offset-4 col-md-8">
+								<button type="submit" name="save_close" value="saveclose" class="btn btn-primary" ><i class="glyphicon glyphicon-log-in"></i> <?php echo $tr->translate("SAVE_CLOSE")?></button>
+							</label>
+						</div>
 					</div>
 				</div>
 			</form>

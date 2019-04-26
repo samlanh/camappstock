@@ -45,7 +45,6 @@ public function init()
     		try {
     			$db->add($data);
     			if(isset($data['save_new'])){
-    				
     				Application_Form_FrmMessage::message('ការ​បញ្ចូល​​ជោគ​ជ័យ');
     			}
     			if(isset($data['save_close'])){

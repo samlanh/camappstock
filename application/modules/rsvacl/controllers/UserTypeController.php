@@ -1,15 +1,10 @@
 <?php
-
 class Rsvacl_UsertypeController extends Zend_Controller_Action
 {
-
-	
     public function init()
     {
-        /* Initialize action controller here */
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
-
     public function indexAction()
     {
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -20,49 +15,32 @@ class Rsvacl_UsertypeController extends Zend_Controller_Action
         	$link = array("rsvacl","usertype","edit");
         	$links = array('user_type'=>$link);
         	$list=new Application_Form_Frmlist();
-        	$columns=array($tr->translate('USER_TYPE_CAP'), $tr->translate('TYPE_OF_CAP'));
+        	$columns=array($tr->translate('USER_TYPE'), $tr->translate('PARENT'));
         	$this->view->form=$list->getCheckList('radio', $columns, $rows, $links);
         }else $this->view->form = $tr->translate('NO_RECORD_FOUND');
     }
-    
-    public function viewUserTypeAction()
-    {   
-    	/* Initialize action controller here */
-    	if($this->getRequest()->getParam('id')){
-    		$db = new Rsvacl_Model_DbTable_DbUserType();
-    		$user_type_id = $this->getRequest()->getParam('id');
-    		$rs=$db->getUserType($user_type_id);
-    		$this->view->rs=$rs;
-    	}
-    }
 	public function addAction()
+	{
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		if($this->getRequest()->isPost())
 		{
-			$form=new Rsvacl_Form_FrmUserType();
-			$this->view->form=$form;
-			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-			if($this->getRequest()->isPost())
-			{
-				$db=new Rsvacl_Model_DbTable_DbUserType();	
-				$post=$this->getRequest()->getPost();
-				if(!$db->isUserTypeExist($post['user_type'])){
-					$id=$db->insertUserType($post);
-// 					$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-// 					Application_Form_FrmMessage::message($tr->translate('ROW_AFFECTED'));
-// 					Application_Form_FrmMessage::redirector('/rsvAcl/user-type/index');
-					$this->_redirect('/rsva
-							cl/usertype/index');
-				}else {
-					Application_Form_FrmMessage::message('User type had existed already');
-				}
+			$db=new Rsvacl_Model_DbTable_DbUserType();	
+			$post=$this->getRequest()->getPost();
+			if(!$db->isUserTypeExist($post['user_type'])){
+				$id=$db->insertUserType($post);
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", '/rsvacl/usertype/index');
+			}else {
+				Application_Form_FrmMessage::message('User type had existed already');
 			}
 		}
+		$form=new Rsvacl_Form_FrmUserType();
+		$this->view->form=$form;
+	}
     public function editAction()
     {	
     	$user_type_id=$this->getRequest()->getParam('id');
     	if(!$user_type_id)$user_type_id=0;
-
    		$form = new Rsvacl_Form_FrmUserType();
-
     	$db = new Rsvacl_Model_DbTable_DbUserType();
         $rs = $db->getUserTypeInfo('SELECT * FROM tb_acl_user_type where user_type_id='.$user_type_id);
 		Application_Model_Decorator::setForm($form, $rs);
@@ -74,14 +52,12 @@ class Rsvacl_UsertypeController extends Zend_Controller_Action
 		{
 			$post=$this->getRequest()->getPost();
 			if($rs[0]['user_type']==$post['user_type']){
-				Application_Form_FrmMessage::message($tr->translate('ROW_AFFECTED'));
 				$db->updateUserType($post,$rs[0]['user_type_id']);
-				Application_Form_FrmMessage::redirector('/rsvacl/usertype/index');
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", '/rsvacl/usertype/index');
 			}else{
 				if(!$db->isUserTypeExist($post['user_type'])){
 					$db->updateUserType($post,$rs[0]['user_type_id']);
-					Application_Form_FrmMessage::message($tr->translate('ROW_AFFECTED'));
-					Application_Form_FrmMessage::redirector('/rsvacl/usertype/index');
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", '/rsvacl/usertype/index');
 				}else {
 					Application_Form_FrmMessage::message('User had existed already');
 				}

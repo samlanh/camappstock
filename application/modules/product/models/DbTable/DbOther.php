@@ -42,12 +42,11 @@ class Product_Model_DbTable_DbOther extends Zend_Db_Table_Abstract
     function add($data){
     	$db = $this->getAdapter();
     	$key_code = $this->getLastKeycodeByType($data['type']);
-		//echo $key_code;exit();
     	$arr = array(
     		'name_en'	=>	$data["title_en"],
     		'key_code'	=>	$key_code,
     		'type'		=>	$data["type"],
-    		'status'	=>	$data["status"],
+    		'status'	=>	1,
     	);
     	$this->_name = "tb_view";
     	$this->insert($arr);

@@ -77,17 +77,12 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 				$order_add=$data['txt_order'];
 			}
 			$info_purchase_order=array(
-					"vendor_id"      => 	$data['v_name'],
-					"branch_id"      => 	$data["LocationId"],
-					"order_number"   => 	$order_add,
-					"date_order"     => 	date("Y-m-d",strtotime($data['order_date'])),
-					"date_in"     	 => 	date("Y-m-d",strtotime($data['date_in'])),
-					"purchase_status"=> 	$data['status'],
-					//"payment_method" => $data['payment_name'],
-					//"currency_id"    => $data['currency'],
-					//"discount_type"	 => $data['discount_type'],
-					//"payment_number"        => 	$data['payment_number'],
-					//'date_issuecheque'=>date("Y-m-d",strtotime($data['date_issuecheque'])),
+					"vendor_id"      => $data['v_name'],
+					"branch_id"      => $data["LocationId"],
+					"order_number"   => $order_add,
+					"date_order"     => date("Y-m-d",strtotime($data['order_date'])),
+					"date_in"     	 => date("Y-m-d",strtotime($data['date_in'])),
+					"purchase_status"=> $data['status'],
 					"remark"         => $data['remark'],
 					"all_total"      => $data['totalAmoun'],
 					"discount_value" => $data['dis_value'],
@@ -102,10 +97,15 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 					'invoice_no' 	 => $data['invoice_no'],
 					"user_mod"       => $GetUserId,
 					"date"      	 => new Zend_Date(),
-					'commission'	 => $data['commission'],
-					'commission_ensur'=>$data['commission_ensur'],
-					'bank_name'		 => $data['bank_name'],
 					'is_completed'	 => ($data['remain']==0)?1:0,
+// 					'commission'	 => $data['commission'],
+// 					'commission_ensur'=>$data['commission_ensur'],
+// 					'bank_name'		 => $data['bank_name'],
+					//"payment_method" => $data['payment_name'],
+					//"currency_id"    => $data['currency'],
+					//"discount_type"	 => $data['discount_type'],
+					//"payment_number"        => 	$data['payment_number'],
+					//'date_issuecheque'=>date("Y-m-d",strtotime($data['date_issuecheque'])),
 			);
 			$this->_name="tb_purchase_order";
 			$purchase_id = $this->insert($info_purchase_order);
@@ -160,8 +160,6 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 						"date_order"     => $data['order_date'],
 						"date_in"     	 => $data['date_in'],
 						"purchase_status"=> $data['status'],
-						//"payment_method" => $data['payment_name'],
-						//"currency_id"    => $data['currency'],
 						"remark"         => $data['remark'],
 						"all_total"      => $data['totalAmoun'],
 						"discount_value" => $data['dis_value'],
@@ -171,6 +169,8 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 						"balance"        => $data['remain'],
 						"user_mod"       => $GetUserId,
 						"date"      	 => new Zend_Date(),
+						//"payment_method" => $data['payment_name'],
+						//"currency_id"    => $data['currency'],
 				);
 				$this->_name='tb_recieve_order';
 				$recieved_order = $this->insert($orderdata);
@@ -383,7 +383,9 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 	}
 	public function getPurchaseDetailById($id){//just new
 		$db=$this->getAdapter();
-		$sql = "SELECT * FROM `tb_purchase_order_item` WHERE purchase_id=$id ";
+		$sql = "SELECT *,
+			(SELECT item_name FROM `tb_product` WHERE id=pro_id LIMIT 1) AS item_name
+		FROM `tb_purchase_order_item` WHERE purchase_id=$id ";
 		$rows=$db->fetchAll($sql);
 		return $rows;
 	}

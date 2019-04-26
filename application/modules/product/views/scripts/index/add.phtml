@@ -10,175 +10,213 @@
 	$result = $user_info->getUserInfo();
 	$session_user=new Zend_Session_Namespace('auth');
 	$request=Zend_Controller_Front::getInstance()->getRequest();
-	 $level = $result["level"];
+	$level = $result["level"];
 ?>						 
 <title><?php echo $tr->translate("ADD_NEW_PRODUCT");?></title>
-<body>
-	<form class="form-horizontal" id="product_id" method="post" action="<?php echo $url_submit;?>" >				
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="fa fa-gift"></i><?php echo $tr->translate("ADD_NEW_PRODUCT");?>
+<style>
+.table>tbody>tr>td, .table>tfoot>tr>td, .table>thead>tr>td {
+    padding: 2px 2px;
+}
+</style>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+            <div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_NEW_PRODUCT');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<div class="card-box">
+			<form dojoType="dijit.form.Form" id="frm" method="post" action="<?php echo $url_submit;?>" enctype="multipart/form-data" autocomplete="off" >				
+				 <script type="dojo/method" event="onSubmit">			
+					if(this.validate()) {
+						category = dijit.byId("category").get('value');
+   	 					if(category==''){
+       					 	alert("សូមជ្រើសរើស ប្រភេទផលិតផល! ");
+        					dijit.byId("category").focus();
+        					return false;
+    					}
+    					identity = $("#identity").val();
+    					if(identity==''){
+	 						alert("សូមបញ្ចូលបរិមាណទំនិញ");
+	 						addProLocation();
+	   						return false;
+     					}
+               			loadingBlock();
+						return true;
+					}else{
+						return false;
+					}
+				</script>
+				<div class="col-md-5">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("PRODUCT_INFO");?> 
+	                   </label>
+	                </div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("TYPE");?>*</label>
+						<div class="col-md-8"><?php echo $form->getElement('type');?></div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><strong><?php echo $tr->translate("PRODUCT_NAME");?>*</strong></label>
+						<div class="col-md-8"><?php echo $form->getElement('name');?></div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("PRODUCT_CODE");?></label>
+						<div class="col-md-8"><?php echo $form->getElement('pro_code');?></div>	
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("BARCODE");?></label>
+						<div class="col-md-8"><?php echo $form->getElement('barcode');?></div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("BRAND_NAME");?></label>
+						<div class="col-md-8">
+							<?php echo $form->getElement('brand');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("PRODUCT_CATEGORY");?>*</label>
+						<div class="col-md-8"><?php echo $form->getElement('category');?></div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("COLOR");?></label>
+						<div class="col-md-8">
+							<?php echo $form->getElement('color');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("MEASURE");?></label>
+						<div class="col-md-2">
+							<?php echo $form->getElement('unit');?>
+						</div>
+						<div class="col-md-6">
+							<?php echo $form->getElement('measure');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label" id="lb_measure" style="text-align: center;"></label>
+						<label class="col-md-1 control-label" style="text-align: center;">=</label>
+						<div class="col-md-4">
+							<?php echo $form->getElement('qty_unit');?>
+						</div>
+						<div class="col-md-4">
+							<?php echo $form->getElement('label');?>
+						</div>
+					</div>
 				</div>
-				<div class="tools">
-					<label><a href="<?php echo $url_cencel;?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i><?php echo $tr->translate("GO_BACK");?></button></a></label>
+				<div class="col-md-5">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-money" aria-hidden="true"></i> <?php echo $tr->translate("PRICE_SETTING");?></label>
+	                </div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><strong><?php echo $tr->translate("COST_PRICE");?>*</strong></label>
+						<div class="col-md-8">
+							<?php echo $form->getElement('price');?>
+						</div>
+					</div>		
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("PRODUCT_PRICE_INFO");?></label>
+						<label class="col-md-8 control-label"><?php echo $form->getElement('price_type');?></label>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"></div>
+						<div class="col-md-8">
+							<table class="table table-bordered" style="font-size: 11px;">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th><?php echo $tr->translate("TYPE_NAME");?></th>
+										<th><?php echo $tr->translate("SOLD_PRICE");?></th>
+										<th><?php echo $tr->translate("ACTION");?></th>
+									</tr>
+								</thead>
+								<tbody id="tr_price_type"></tbody>
+							</table>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("NOTE");?></label>
+						<div class="col-md-8">
+							<?php echo $form->getElement('description');?>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-picture-o" aria-hidden="true"></i> <?php echo $tr->translate("PHOTO");?></label>
+	                </div>
+					<div class="form-group">
+						<div class="col-md-12">
+							<div class="imgBlog">
+							<img class="image_view bd" id="image_viewbg" src="<?php echo $this->baseUrl().'/images/no-image.png';?>" alt=""  />
+							<div class="button_browse">
+								<span>Upload Imags &nbsp;&nbsp;<span><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+								<input class="btn_borwse_image"  type="file" id="photo" name="photo">
+							</div>
+						</div>
+						</div>
+					</div>
+			</div>
+			<div class="card-box">
+	            <div class="col-sm-12 border-botom">
+			    	<div class="col-sm-8 pd-0">
+			    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('PRODUCT_LOCATION');?></h4>
+	    			</div>
+	    			<div class="col-sm-4 text-right">
+	    			</div>
+	    		</div>
+	    	</div>
+			<div class="col-md-6">
+                <div class="portlet box blue">
+					<div class="portlet-title">
+						<div class="caption" style="width:100%">
+							<?php echo $form->getElement('branch');?>
+						</div>
+					</div>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-bordered" style="font-size:12px !important;">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th><?php echo $tr->translate("LOCATION_NAME");?></th>
+								<th><?php echo $tr->translate("UNIT_QTY");?></th>
+								<th><?php echo $tr->translate("QTY_PER_UNIT");?></th>
+								<th><?php echo $tr->translate("TOTAL_QTY");?></th>
+								<th><?php echo $tr->translate("QTY_WARNING");?></th>
+								<th><?php echo $tr->translate("ACTION");?>
+									<input type="hidden" name="identity" id="identity" value="<?php //echo $identity;?>" >
+								</th>
+							</tr>
+						</thead>
+						<tbody id="tr_location"></tbody>
+					</table>
 				</div>
 			</div>
 			<div class="portlet-body">
-				<div class="tabbable-custom ">
-					<div class="portlet-body form">
-							<div class="form-body">
-										<div class="form-group">
-											<label class="col-md-2 control-label"><?php echo $tr->translate("PRODUCT_NAME");?></label>
-											<div class="col-md-4">
-												<?php echo $form->getElement('name');?>
-											</div>
-											<label class="col-md-2 control-label"><?php echo $tr->translate("PRODUCT_CODE");?></label>
-											<div class="col-md-4">
-												<?php echo $form->getElement('pro_code');?>
-											</div>	
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label"><?php echo $tr->translate("BARCODE");?></label>
-											<div class="col-md-4">
-												<?php echo $form->getElement('barcode');?>
-											</div>
-											<label class="col-md-2 control-label"><?php echo $tr->translate("BRAND_NAME");?></label>
-											<div class="col-md-4">
-												<?php echo $form->getElement('brand');?>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label"><?php echo $tr->translate("PRODUCT_CATEGORY");?></label>
-											<div class="col-md-4">
-												<?php echo $form->getElement('category');?>
-											</div>
-											<label class="col-md-2 control-label"><?php echo $tr->translate("COLOR");?></label>
-											<div class="col-md-4">
-												<?php echo $form->getElement('color');?>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label"><?php echo $tr->translate("MEASURE");?></label>
-											<div class="col-md-2">
-												<?php echo $form->getElement('measure');?>
-											</div>
-											<div class="col-md-2">
-												<?php echo $form->getElement('unit');?>
-											</div>
-											<label class="col-md-1 control-label" id="lb_measure" style="text-align: center;"></label>
-											<label class="col-md-1 control-label" style="text-align: center;">=</label>
-											<div class="col-md-2">
-												<?php echo $form->getElement('qty_unit');?>
-											</div>
-											<div class="col-md-2">
-												<?php echo $form->getElement('label');?>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-md-2 control-label"><?php echo $tr->translate("NOTE");?></label>
-											<div class="col-md-4">
-												<?php echo $form->getElement('description');?>
-											</div>
-											
-											<label class="col-md-2 control-label"><?php echo $tr->translate("STATUS");?></label>
-											<div class="col-md-4">
-												<?php echo $form->getElement('status');?>
-											</div>
-										</div>
-										<?php if($level==1 OR $level==2){?>
-										<div class="form-group">
-											<label class="col-md-2 control-label"><?php echo $tr->translate("COST_PRICE");?></label>
-											<div class="col-md-4">
-												<?php echo $form->getElement('price');?>
-											</div>
-											<label class="col-md-2 control-label"><?php echo $tr->translate("PRODUCT_PRICE_INFO");?></label>
-											<div class="col-md-4">
-														<?php echo $form->getElement('price_type');?>
-												<table class="table table-bordered" style="font-size: 11px;">
-													<thead>
-														<tr>
-															<th>#</th>
-															<th><?php echo $tr->translate("TYPE_NAME");?></th>
-															<th><?php echo $tr->translate("PRICE");?></th>
-															<!--<th><?php //echo $tr->translate("COST_PRICE");?></th>-->
-															<th><?php echo $tr->translate("REMARK");?></th>
-															<th><?php echo $tr->translate("ACTION");?></th>
-														</tr>
-													</thead>
-													<tbody id="tr_price_type">
-													</tbody>
-												</table>
-											</div>
-										</div>
-										
-										<?php }?>
-										<h3 class="form-section"><?php echo $tr->translate("");?></h3>
-										<div class="portlet box blue">
-											<div class="portlet-title">
-												<div class="caption" style="width:100%">
-												<?php echo $form->getElement('branch');?>
-												
-												</div>
-											</div>
-										</div>
-										<div class="portlet box blue">
-											<div class="portlet-title">
-												<div class="caption">
-													<i class="fa fa-cogs"></i><?php echo $tr->translate("PRODUCT_LOCATION");?>
-												</div>
-											</div>
-											<div class="portlet-body">
-												<div class="table-responsive">
-													<table class="table table-bordered" style="font-size:12px !important;">
-													<thead>
-													<tr>
-														<th>#</th>
-														<th><?php echo $tr->translate("LOCATION_NAME");?></th>
-														<th><?php echo $tr->translate("UNIT_QTY");?></th>
-														<th><?php echo $tr->translate("QTY_PER_UNIT");?></th>
-														<th><?php echo $tr->translate("TOTAL_QTY");?></th>
-														<th><?php echo $tr->translate("QTY_WARNING");?></th>
-														<th><?php echo $tr->translate("ACTION");?></th>
-													</tr>
-													</thead>
-													<tbody id="tr_location">
-													
-													</tbody>
-													</table>
-												</div>
-												<input type="hidden" name="identity" id="identity" value="<?php //echo $identity;?>" >
-											</div>
-										</div>
-								</div>
-							</div>
-							<div class="portlet-body">
-								<div class="table-responsive">
-									
-								</div>
-									<input type="hidden" name="identity_price" id="identity_price" value="<?php //echo $identity;?>" >
-							</div>
-							<div class="form-group">
-								<div class="col-md-3">
-								</div>
-								<div class="col-md-2">
-									<a href="<?php echo $this->baseUrl();?>/product/index"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
-								</div>
-								<div class="col-md-2">
-									<div class="input-icon right">
-										<button type="submit" name="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-close"></i> <?php echo $tr->translate("SAVE_CLOSE")?></button>
-									</div>
-								</div>
-								<div class="col-md-2">
-									<button type="submit" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_NEW")?> </button>
-								</div>
-								<div class="col-md-3">
-								</div>
-							</div>
+				<div class="table-responsive"></div>
+				<input type="hidden" name="identity_price" id="identity_price" value="<?php //echo $identity;?>" >
+			</div>
+			<div class="card-box">
+				<div class="border-top">
+					<div class="col-md-4"></div>
+					<div class="col-md-5" class='center'>
+						<input type="submit" value="save_new" id="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE")?>" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
+						<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("SAVE_NEW")?>" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
 					</div>
+					<div class="col-md-3"></div>
 				</div>
 			</div>
-	</form>	
+			</form>	
+		</div>
+	</div>
+</div>
 <!--Popup Form Brand-->
 <?php $formBrand = $this->frmBrand; ?>
 <div id="brandpopup" class="modal fade" tabindex="-1" data-width="1200">
@@ -223,10 +261,10 @@
 								</div>
 						</div>
 						<div class="form-group">
-						<label  class="col-md-12 col-md-offset-4 col-md-8">
-							<button type="button" name="btnsavenew" onclick="addNewBrand();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CLOSE")?> </button>
-						</label>
-					</div>
+							<label  class="col-md-12 col-md-offset-4 col-md-8">
+								<button type="button" name="btnsavenew" onclick="addNewBrand();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CLOSE")?> </button>
+							</label>
+						</div>
 					</div>
 				</form>
 			</div>
@@ -419,21 +457,6 @@
     </div>
  </div>
 <script>
-$('#product_id').submit(function() {
-	category = $("#category").val();
-    if(category==''){
-        alert("សូមជ្រើសរើស ប្រភេទផលិតផល! ");
-        $('#category').select2('open');
-        return false;
-    }
-	var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
-	if (r == true) {
-	    return true;
-	} else {
-	   return false;
-	    
-	}
-});
 $( document ).ready(function() {
 	$('#price_type').val(1);
 	addProLocation();
@@ -446,25 +469,24 @@ $( document ).ready(function() {
 	  }
 	});
 });
-
-	function getMeasureLabel(){
-		var sel = $("#measure");
-		var text = $("option:selected",sel).text();
-		document.getElementById('lb_measure').innerHTML = text; 
-	}
+function getMeasureLabel(){
+	var sel = $("#measure");
+	var text = $("option:selected",sel).text();
+	document.getElementById('lb_measure').innerHTML = text; 
+}
 	index = 0;
-	function addProLocation(){
+function addProLocation(){
 		<?php if(!empty($this->branch)){foreach ($this->branch as $key=> $rs){?>
 		index++;
 		id = '<?php echo $rs["id"];?>';
 		inx = '<?php echo $key+1;?>';
 			template='<tr id="row_location_<?php echo $key+1;?>">';
 			template+='<td><?php echo $key+1;?></td>';
-			template+='<td><?php echo $rs["name"];?><input type="hidden" id="branch_id_<?php echo $key+1;?>" name="branch_id_<?php echo $key+1;?>" value="'+id+'"</td>';
-			template+='<td><input type="text" id="current_qty_<?php echo $key+1;?>" onKeyup="totalQty(<?php echo $key+1;?>)" name="current_qty_<?php echo $key+1;?>" value="0" class="form-control"></td>'; 
-			template+='<td><input type="text" id="other_qty_<?php echo $key+1;?>" onKeyup="totalQty(<?php echo $key+1;?>)" name="other_qty_<?php echo $key+1;?>" value="0" class="form-control"></td>'; 
-			template+='<td><input type="text" id="total_qty_<?php echo $key+1;?>" name="total_qty_<?php echo $key+1;?>" value="0" class="form-control"></td>'; 
-			template+='<td><input type="text" id="qty_warning_<?php echo $key+1;?>" name="qty_warnning_<?php echo $key+1;?>" value="0" class="form-control"></td>';
+			template+='<td style="min-width:100px;"><?php echo $rs["name"];?><input type="hidden" id="branch_id_<?php echo $key+1;?>" name="branch_id_<?php echo $key+1;?>" value="'+id+'"</td>';
+			template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="current_qty_<?php echo $key+1;?>" onKeyup="totalQty(<?php echo $key+1;?>)" name="current_qty_<?php echo $key+1;?>" value="0" class="form-control"></td>'; 
+			template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="other_qty_<?php echo $key+1;?>" onKeyup="totalQty(<?php echo $key+1;?>)" name="other_qty_<?php echo $key+1;?>" value="0" class="form-control"></td>'; 
+			template+='<td><input readonly dojoType="dijit.form.NumberTextBox" required="true" type="text" id="total_qty_<?php echo $key+1;?>" name="total_qty_<?php echo $key+1;?>" value="0" class="form-control"></td>'; 
+			template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="qty_warning_<?php echo $key+1;?>" name="qty_warnning_<?php echo $key+1;?>" value="0" class="form-control"></td>';
 			template+='<td><button type="button" onClick="deleteRecord(<?php echo $key+1;?>,1)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
 			template+='</tr>';
 			$('#tr_location').append(template);
@@ -473,277 +495,257 @@ $( document ).ready(function() {
 				$('#identity').val(identity+','+inx);
 			} else {$('#identity').val(inx);}
 		<?php }}?>
-	}
+}
 	
-	function totalQty(index){
-		o_measure = $('#qty_unit').val();
-		unit_qty = $('#current_qty_'+index).val();
-		other_qty = $('#other_qty_'+index).val();
-		total_other_qty = parseFloat(other_qty)/parseFloat(o_measure);
-		total_qty = parseFloat(unit_qty)+ total_other_qty;
-		$('#total_qty_'+index).val(total_qty);
-	}
+function totalQty(index){
+	o_measure = $('#qty_unit').val();
+	unit_qty = $('#current_qty_'+index).val();
+	other_qty = $('#other_qty_'+index).val();
+	total_other_qty = parseFloat(other_qty)/parseFloat(o_measure);
+	total_qty = parseFloat(unit_qty)+ total_other_qty;
+	$('#total_qty_'+index).val(total_qty);
+}
 	
-	function doTotalQty(){
-		o_measure = $('#qty_unit').val();
-		if(o_measure=="" || o_measure==0){
-			$('#qty_unit').val(1);
+function doTotalQty(){
+	o_measure = $('#qty_unit').val();
+	if(o_measure=="" || o_measure==0){
+		$('#qty_unit').val(1);
+	}
+	var identity = $('#identity').val();
+	if(identity!=""){
+		var arrays = identity.split(',');
+		for(var index=0;index<arrays.length;index++) {
+			o_measure = $('#qty_unit').val();
+			unit_qty = $('#current_qty_'+index).val();
+			other_qty = $('#other_qty_'+index).val();
+			total_other_qty = parseFloat(other_qty)/parseFloat(o_measure);
+			total_qty = parseFloat(unit_qty)+ total_other_qty;
+			$('#total_qty_'+index).val(total_qty);
 		}
-		var identity = $('#identity').val();
-		if(identity!=""){
-			var arrays = identity.split(',');
-			for(var index=0;index<arrays.length;index++) {
-				o_measure = $('#qty_unit').val();
-				unit_qty = $('#current_qty_'+index).val();
-				other_qty = $('#other_qty_'+index).val();
-				total_other_qty = parseFloat(other_qty)/parseFloat(o_measure);
-				total_qty = parseFloat(unit_qty)+ total_other_qty;
-				$('#total_qty_'+index).val(total_qty);
-			}
-		}
-		var strings = arrays.join(',');
 	}
-	function addNewProLocation(){
-			index++;
-			var branch_text = $("#branch");
-			var txt_br = $("option:selected",branch_text).text();
-			var branch_id = $("#branch").val();
-			template='<tr id="row_location_'+index+'">';
-			template+='<td>'+index+'</td>';
-			template+='<td>'+txt_br+'<input type="hidden" id="branch_id_'+index+'" name="branch_id_'+index+'" value="'+branch_id+'" </td>';
-			template+='<td><input type="text" id="current_qty_'+index+'" onKeyup="totalQty('+index+')" name="current_qty_'+index+'" value="0" class="form-control"></td>'; 
-			template+='<td><input type="text" id="other_qty_'+index+'" onKeyup="totalQty('+index+')" name="other_qty_'+index+'" value="0" class="form-control"></td>'; 
-			template+='<td><input type="text" id="total_qty_'+index+'" name="total_qty_'+index+'" value="0" class="form-control"></td>'; 
-			template+='<td><input type="text" id="qty_warning_'+index+'" name="qty_warnning_'+index+'" value="0" class="form-control"></td>';
-			template+='<td><button type="button" onClick="deleteRecord('+index+',1)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
-			template+='</tr>';
-			$('#tr_location').append(template);
-			if($('#identity').val()!="") {
-				var identity = $('#identity').val();
-				$('#identity').val(identity+','+index);
-			} else {$('#identity').val(index);}
-			
-	}	
-	function addPriceType(){
-		<?php if(!empty($this->price_type)){foreach ($this->price_type as $key=> $rs){?>
-		indexs++;
-		id_price = '<?php echo $rs["id"];?>';
-		inx_price = '<?php echo $key+1;?>';
-			template='<tr id="row_price_<?php echo $key+1;?>">';
-			template+='<td><?php echo $key+1;?></td>';
-			template+='<td><?php echo $rs["name"];?><input type="hidden" id="price_type_<?php echo $key+1;?>" name="price_type_<?php echo $key+1;?>" value="'+id_price+'"</td>';
-			template+='<td><input type="text" id="price_<?php echo $key+1;?>" name="price_<?php echo $key+1;?>" value="0" class="form-control"></td>'; 
-			template+='<td><input type="text" id="price_remark_<?php echo $key+1;?>" name="price_remark_<?php echo $key+1;?>" class="form-control"></td>'; 
-			template+='<td><button type="button" onClick="deleteRecord(<?php echo $key+1;?>,2)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
-			template+='</tr>';
-			$('#tr_price_type').append(template);
-			if($('#identity_price').val()!="") {
-				var identity_price = $('#identity_price').val();
-				$('#identity_price').val(identity_price+','+inx_price);
-			} else {$('#identity_price').val(inx_price);}
-		<?php }}?>
-	}
-	
-	indexs=0;
-	function addNewPriceType(){
-			indexs++;
-			var price_text = $("#price_type");
-			var txt_pr = $("option:selected",price_text).text();
-			var price_id = $("#price_type").val();
-			template='<tr id="row_price_'+indexs+'">';
-			template+='<td >'+indexs+'</td>';
-			template+='<td style="white-space:nowrap">'+txt_pr+'<input type="hidden" id="price_type_'+indexs+'" name="price_type_'+indexs+'" value="'+price_id+'" </td>';
-			template+='<td><input type="text" id="price_'+indexs+'" name="price_'+indexs+'" value="0" class="form-control"></td>'; 
-			template+='<td><input type="text" id="price_remark_'+indexs+'" name="price_remark_'+indexs+'" class="form-control"></td>'; 
-			template+='<td><button type="button" onClick="deleteRecord('+indexs+',2)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
-			template+='</tr>';
-			$('#tr_price_type').append(template);
-			if($('#identity_price').val()!="") {
-				var identity_price = $('#identity_price').val();
-				$('#identity_price').val(identity_price+','+indexs);
-			} else {$('#identity_price').val(indexs);}
-			
-	}
-	function deleteRecord(index,type) {
-		if(type==1){
+	var strings = arrays.join(',');
+}
+function addNewProLocation(){
+		index++;
+		var branch_text = $("#branch");
+		var txt_br = $("option:selected",branch_text).text();
+		var branch_id = $("#branch").val();
+		template='<tr id="row_location_'+index+'">';
+		template+='<td>'+index+'</td>';
+		template+='<td>'+txt_br+'<input type="hidden" id="branch_id_'+index+'" name="branch_id_'+index+'" value="'+branch_id+'" </td>';
+		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="current_qty_'+index+'" onKeyup="totalQty('+index+')" name="current_qty_'+index+'" value="0" class="form-control"></td>'; 
+		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="other_qty_'+index+'" onKeyup="totalQty('+index+')" name="other_qty_'+index+'" value="0" class="form-control"></td>'; 
+		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="total_qty_'+index+'" name="total_qty_'+index+'" value="0" class="form-control"></td>'; 
+		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="qty_warning_'+index+'" name="qty_warnning_'+index+'" value="0" class="form-control"></td>';
+		template+='<td><button type="button" onClick="deleteRecord('+index+',1)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
+		template+='</tr>';
+		$('#tr_location').append(template);
+		if($('#identity').val()!="") {
 			var identity = $('#identity').val();
-			var arrays = identity.split(',');
-		}else{
-			var identity = $('#identity_price').val();
-			var arrays = identity.split(',');
-		}
+			$('#identity').val(identity+','+index);
+		} else {$('#identity').val(index);}
 		
-		for(var i=0;i<arrays.length;i++) {
-			if(arrays[i] == index) arrays.splice(i,1);
-		}
-		var strings = arrays.join(',');
+}	
+indexs=0;
+function addNewPriceType(){
+		indexs++;
+		var price_text = $("#price_type");
+		var txt_pr = $("option:selected",price_text).text();
+		var price_id = $("#price_type").val();
+		template='<tr id="row_price_'+indexs+'">';
+		template+='<td >'+indexs+'</td>';
+		template+='<td style="white-space:nowrap">'+txt_pr+'<input type="hidden" id="price_type_'+indexs+'" name="price_type_'+indexs+'" value="'+price_id+'" </td>';
+		template+='<td><input type="text" required="true" dojoType="dijit.form.NumberTextBox" id="price_'+indexs+'" name="price_'+indexs+'" value="0" class="form-control"></td>'; 
+		template+='<td><button type="button" onClick="deleteRecord('+indexs+',2)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
+		template+='</tr>';
+		$('#tr_price_type').append(template);
+		if($('#identity_price').val()!="") {
+			var identity_price = $('#identity_price').val();
+			$('#identity_price').val(identity_price+','+indexs);
+		} else {$('#identity_price').val(indexs);}
 		
-		if(type==1){
-			$('#identity').val(strings);
-			$("#row_location_"+index).remove();
-		}else{
-			$('#identity_price').val(strings);
-			$("#row_price_"+index).remove();
+}
+function deleteRecord(index,type) {
+	if(type==1){
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+	}else{
+		var identity = $('#identity_price').val();
+		var arrays = identity.split(',');
+	}
+	
+	for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	
+	if(type==1){
+		$('#identity').val(strings);
+		$("#row_location_"+index).remove();
+	}else{
+		$('#identity_price').val(strings);
+		$("#row_price_"+index).remove();
+	}
+}
+function getPopupBrand(){
+	val = $('#brand').val();
+	if(val==-1){
+		$('#brandpopup').modal('show');
+	}
+}
+
+function getPopupCategory(){
+	val = $('#category').val();
+	if(val==-1){
+		$('#categorypopup').modal('show');
+	}
+}
+
+function getPopupMeasure(){
+	val = $('#measure').val();
+	if(val==-1){
+		$('#measurepopup').modal('show');
+	}
+}
+
+function getPopupColor(){
+	val = $('#color').val();
+	if(val==-1){
+		$('#otherpopup').modal('show');
+		$('#type').val(4);
+		$('#type').attr('readOnly',true);
+		$('#savemodel').hide();
+		$('#savesize').hide();
+		$('#savecolor').show();
+	}
+}
+
+function getPopupModel(){
+	val = $('#model').val();
+	if(val==-1){
+		$('#otherpopup').modal('show');
+		$('#type').val(2);
+		$('#type').attr('readOnly',true);
+		$('#savecolor').hide();
+		$('#savesize').hide();
+		$('#savemodel').show();
+	}
+}
+
+function getPopupSize(){
+	val = $('#size').val();
+	if(val==-1){
+		$('#otherpopup').modal('show');
+		$('#type').val(3);
+		$('#type').attr('readOnly',true);
+		$('#savemodel').hide();
+		$('#savecolor').hide();
+		$('#savesize').show();
+	}
+}
+
+<?php $url_add_brand =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-brand')); ?>
+function addNewBrand(){
+	var brand_name  = $("#brand_name").val();
+	if(brand_name==''){$("#brand_name").focus();return false;}
+	$.ajax({
+		url: "<?php echo $url_add_brand;?>",
+		type: "post",
+		data: $('#frmbrand').serialize(),
+		success: function(data){
+			rs = $.parseJSON(data);
+			 $('#brand').append($("<option></option>").attr("value",rs['brand_id']).attr("selected",true).text(brand_name));                       
+			 $("#brand").select2();
+			$('#brandpopup').modal('hide');
+		},
+		error:function(err){
+			alert("faile insert");
+		   
 		}
-	}
-	function getPopupBrand(){
-		val = $('#brand').val();
-		if(val==-1){
-			$('#brandpopup').modal('show');
+	});
+}
+<?php $url_add_category =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-category')); ?>
+function addNewCategory(){
+	var cat_name  = $("#cat_name").val();
+	if(cat_name==''){$("#cat_name").focus();return false;}
+	$.ajax({
+		url: "<?php echo $url_add_category;?>",
+		type: "post",
+		data: $('#frmCat').serialize(),
+		success: function(data){
+			rs = $.parseJSON(data);
+			 $('#category').append($("<option></option>").attr("value",rs['cat_id']).attr("selected",true).text(cat_name));                       
+			 $("#category").select2();
+			$('#categorypopup').modal('hide');
+		},
+		error:function(err){
+			alert("faile insert");
+		   
 		}
-	}
-	
-	function getPopupCategory(){
-		val = $('#category').val();
-		if(val==-1){
-			$('#categorypopup').modal('show');
+	});
+}
+<?php $url_add_measure =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-measure')); ?>
+function addNewMeasure(){
+	var measure_name  = $("#measure_name").val();
+	if(measure_name==''){$("#measure_name").focus();return false;}
+	$.ajax({
+		url: "<?php echo $url_add_measure;?>",
+		type: "post",
+		data: $('#frmMesure').serialize(),
+		success: function(data){
+			rs = $.parseJSON(data);
+			 $('#measure').append($("<option></option>").attr("value",rs['measure_id']).attr("selected",true).text(measure_name));                       
+			 $("#measure").select2();
+			$('#measurepopup').modal('hide');
+			document.getElementById('lb_measure').innerHTML = measure_name; 
+		},
+		error:function(err){
+			alert("faile insert");
 		}
-	}
-	
-	function getPopupMeasure(){
-		val = $('#measure').val();
-		if(val==-1){
-			$('#measurepopup').modal('show');
+	});
+}
+
+<?php $url_add_color =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-other')); ?>
+function addNewColor(){
+	var title  = $("#title_en").val();
+	if(title==''){$("#title_en").focus();return false;}
+	$.ajax({
+		url: "<?php echo $url_add_color;?>",
+		type: "post",
+		data: $('#frmOther').serialize(),
+		success: function(data){
+			rs = $.parseJSON(data);
+			 $('#color').append($("<option></option>").attr("value",rs['other_id']).attr("selected",true).text(title));                       
+			 $("#color").select2();
+			$('#otherpopup').modal('hide');
+		},
+		error:function(err){
+			alert("faile insert");
+		   
 		}
-	}
-	
-	function getPopupColor(){
-		val = $('#color').val();
-		if(val==-1){
-			$('#otherpopup').modal('show');
-			$('#type').val(4);
-			$('#type').attr('readOnly',true);
-			$('#savemodel').hide();
-			$('#savesize').hide();
-			$('#savecolor').show();
+	});
+}
+
+function addNewModel(){
+	var title  = $("#title_en").val();
+	if(title==''){$("#title_en").focus();return false;}
+	$.ajax({
+		url: "<?php echo $url_add_color;?>",
+		type: "post",
+		data: $('#frmOther').serialize(),
+		success: function(data){
+			rs = $.parseJSON(data);
+			 $('#model').append($("<option></option>").attr("value",rs['other_id']).attr("selected",true).text(title));                       
+			 $("#model").select2();
+			$('#otherpopup').modal('hide');
+		},
+		error:function(err){
+			alert("faile insert");
+		   
 		}
-	}
-	
-	function getPopupModel(){
-		val = $('#model').val();
-		if(val==-1){
-			$('#otherpopup').modal('show');
-			$('#type').val(2);
-			$('#type').attr('readOnly',true);
-			$('#savecolor').hide();
-			$('#savesize').hide();
-			$('#savemodel').show();
-		}
-	}
-	
-	function getPopupSize(){
-		val = $('#size').val();
-		if(val==-1){
-			$('#otherpopup').modal('show');
-			$('#type').val(3);
-			$('#type').attr('readOnly',true);
-			$('#savemodel').hide();
-			$('#savecolor').hide();
-			$('#savesize').show();
-		}
-	}
-	
-	<?php $url_add_brand =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-brand')); ?>
-	function addNewBrand(){
-		//alert(1);
-		var brand_name  = $("#brand_name").val();
-		$.ajax({
-			url: "<?php echo $url_add_brand;?>",
-			type: "post",
-			data: $('#frmbrand').serialize(),
-			success: function(data){
-				rs = $.parseJSON(data);
-				 $('#brand').append($("<option></option>").attr("value",rs['brand_id']).attr("selected",true).text(brand_name));                       
-				 $("#brand").select2();
-				$('#brandpopup').modal('hide');
-			},
-			error:function(err){
-				alert("faile insert");
-			   
-			}
-		});
-	}
-	<?php $url_add_category =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-category')); ?>
-	function addNewCategory(){
-		var cat_name  = $("#cat_name").val();
-		$.ajax({
-			url: "<?php echo $url_add_category;?>",
-			type: "post",
-			data: $('#frmCat').serialize(),
-			success: function(data){
-				rs = $.parseJSON(data);
-				 $('#category').append($("<option></option>").attr("value",rs['cat_id']).attr("selected",true).text(cat_name));                       
-				 $("#category").select2();
-				$('#categorypopup').modal('hide');
-			},
-			error:function(err){
-				alert("faile insert");
-			   
-			}
-		});
-	}
-	<?php $url_add_measure =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-measure')); ?>
-	function addNewMeasure(){
-		var measure_name  = $("#measure_name").val();
-		$.ajax({
-			url: "<?php echo $url_add_measure;?>",
-			type: "post",
-			data: $('#frmMesure').serialize(),
-			success: function(data){
-				rs = $.parseJSON(data);
-				 $('#measure').append($("<option></option>").attr("value",rs['measure_id']).attr("selected",true).text(measure_name));                       
-				 $("#measure").select2();
-				$('#measurepopup').modal('hide');
-				document.getElementById('lb_measure').innerHTML = measure_name; 
-			},
-			error:function(err){
-				alert("faile insert");
-			}
-		});
-	}
-	
-	<?php $url_add_color =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-other')); ?>
-	function addNewColor(){
-		var title  = $("#title_en").val();
-		$.ajax({
-			url: "<?php echo $url_add_color;?>",
-			type: "post",
-			data: $('#frmOther').serialize(),
-			success: function(data){
-				rs = $.parseJSON(data);
-				 $('#color').append($("<option></option>").attr("value",rs['other_id']).attr("selected",true).text(title));                       
-				 $("#color").select2();
-				$('#otherpopup').modal('hide');
-			},
-			error:function(err){
-				alert("faile insert");
-			   
-			}
-		});
-	}
-	
-	function addNewModel(){
-		//alert(1);
-		var title  = $("#title_en").val();
-		$.ajax({
-			url: "<?php echo $url_add_color;?>",
-			type: "post",
-			data: $('#frmOther').serialize(),
-			success: function(data){
-				rs = $.parseJSON(data);
-				 $('#model').append($("<option></option>").attr("value",rs['other_id']).attr("selected",true).text(title));                       
-				 $("#model").select2();
-				$('#otherpopup').modal('hide');
-			},
-			error:function(err){
-				alert("faile insert");
-			   
-			}
-		});
-	}
-	
-	function addNewSize(){
-		//alert(1);
+	});
+}
+function addNewSize(){
 		var title  = $("#title_en").val();
 		$.ajax({
 			url: "<?php echo $url_add_color;?>",
@@ -761,6 +763,42 @@ $( document ).ready(function() {
 			}
 		});
 	}
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#image_viewbg').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+var maxSize = 0;
+$("#photo").change(function(){
+	var iSize = ($("#photo")[0].files[0].size / 1024); 
+    if (iSize / 1024 > 1) 
+    { 
+       if (((iSize / 1024) / 1024) > 1) 
+       { 
+           iSize = (Math.round(((iSize / 1024) / 1024) * 100) / 100);
+           maxSize = 0;
+       }else{ 
+           iSize = (Math.round((iSize / 1024) * 100) / 100);
+           if(iSize>5){
+               alert('<?php echo $tr->translate("Image size more than 5Mb can not upload");?>');
+               maxSize = 1;
+               $('#image_viewbg').attr('src', "<?php echo $this->baseUrl().'/images/no-image.png';?>");
+               return false;
+           }
+       } 
+    } 
+    else 
+    {
+       iSize = (Math.round(iSize * 100) / 100);
+       maxSize = 0;
+    }    
+    
+    readURL(this);
+});
+dojo.require("dijit.form.NumberTextBox");
 </script>		
-</body>
-</html>

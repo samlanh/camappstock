@@ -16,35 +16,39 @@ class Rsvacl_Form_FrmUser extends Zend_Form
 		$user_type_filter=new Zend_Form_Element_Select('user_type_filter');
     	$user_type_filter->setMultiOptions($options);
     	$user_type_filter->setAttribs(array(
-    		'id'=>'user_type_filter',
-    		'class'=>'validate[required] form-control',
+    			'dojoType'=>"dijit.form.FilteringSelect",
+    			'autoComplete'=>"false",
+    			'queryExpr'=>'*${0}*',
+    			'class'=>'fullside',
     		'onchange'=>'this.form.submit()',
     	));
     	$user_type_filter->setValue($usertype);
     	$this->addElement($user_type_filter);
 		
-		$sql = 'SELECT p.`id`,p.`name` FROM `tb_sublocation` AS p';
-		$rs=$db->getGlobalDb($sql);
 		$options=array('All Location');
 		$location_r = $request->getParam('location');
-		foreach($rs as $read) $options[$read['id']]=$read['name'];
 		$location=new Zend_Form_Element_Select('location');
+		$options = $db->getAllLocation(1);
     	$location->setMultiOptions($options);
     	$location->setAttribs(array(
-    		'id'=>'user_type_filter',
-    		'class'=>'validate[required] form-control',
+    		'dojoType'=>"dijit.form.FilteringSelect",
+    		'autoComplete'=>"false",
+    		'queryExpr'=>'*${0}*',
+    		'class'=>'fullside',
     		'onchange'=>'this.form.submit()',
     	));
     	$location->setValue($location_r);
     	$this->addElement($location);
 		
-		$options=array(''=>'All Status',1=>"ACTIVE",'0'=>"DEACTIVE");
+		$options=array(''=>$tr->translate('SELECT_STATUS'),1=>$tr->translate('ACTIVE'),'0'=>$tr->translate('DEACTIVE'));
 		$status_r = $request->getParam('status_se');
 		$status_se=new Zend_Form_Element_Select('status_se');
     	$status_se->setMultiOptions($options);
     	$status_se->setAttribs(array(
-    		'id'=>'user_type_filter',
-    		'class'=>'validate[required] form-control',
+    		'dojoType'=>"dijit.form.FilteringSelect",
+    		'autoComplete'=>"false",
+    		'queryExpr'=>'*${0}*',
+    		'class'=>'fullside',
     		'onchange'=>'this.form.submit()',
     	));
     	$status_se->setValue($status_r);
@@ -53,21 +57,28 @@ class Rsvacl_Form_FrmUser extends Zend_Form
 		$ad_search=new Zend_Form_Element_Text('ad_search');
     	$ad_search->setAttribs(array(
     		'id'=>'username',
-    		'class'=>'validate[required] form-control',
+    		'dojoType'=>"dijit.form.TextBox",
+    		'class'=>'fullside',
     	));
+    	$ad_search->setValue($request->getParam('ad_search'));
     	$this->addElement($ad_search);
 
     	//uer title
     	$user_title = new Zend_Form_Element_Select("title");
-    	$user_title->setAttribs(array('class'=>'form-control'));
+    	$user_title->setAttribs(array(
+    			'dojoType'=>"dijit.form.FilteringSelect",
+    			'autoComplete'=>"false",
+    			'queryExpr'=>'*${0}*',
+    			'class'=>'fullside',
+    			));
     	$user_title->setMultiOptions(array("Mr"=>"Mr","Ms"=>"Ms"));
     	$this->addElement($user_title);
 
-    	//user full name
     	$user_fullname = new Zend_Form_Element_Text("fullname");
     	$user_fullname->setAttribs(array(
     		'id'=>'fullname',
-    		'class'=>'validate[required] form-control',
+    		'dojoType'=>"dijit.form.TextBox",
+    		'class'=>'fullside',
     	));
     	$this->addElement($user_fullname);
     	
@@ -75,7 +86,8 @@ class Rsvacl_Form_FrmUser extends Zend_Form
     	$user_name=new Zend_Form_Element_Text('username');
     	$user_name->setAttribs(array(
     		'id'=>'username',
-    		'class'=>'validate[required] form-control',
+    		'dojoType'=>"dijit.form.TextBox",
+			'class'=>'fullside',
     	));
     	$this->addElement($user_name);
     	
@@ -83,52 +95,63 @@ class Rsvacl_Form_FrmUser extends Zend_Form
     	$email=new Zend_Form_Element_Text('email');
     	$email->setAttribs(array(
     		'id'=>'email',
-    		'class'=>'validate[required] form-control centerRight',
+    		'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
     	));
     	$this->addElement($email);
-    	 
-    	
 //password    	
     	$password=new Zend_Form_Element_Password('password');
     	$password->setAttribs(array(
     		'id'=>'password',
-    		'class'=>'validate[required] form-control',
+    		'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
     	));
     	$this->addElement($password);
 //confirm password    	
     	$confirm_password=new Zend_Form_Element_Password('confirm_password');
     	$confirm_password->setAttribs(array(
     		'id'=>'confirm_password',
-    		'class'=>'validate[required] form-control',
+    		'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
     	));
     	$this->addElement($confirm_password);
     	
     	//user type
 		$sql = 'SELECT user_type_id,user_type FROM tb_acl_user_type';
 		$rs=$db->getGlobalDb($sql);
-		$options=array(''=>$tr->translate('Please_Select'));
+		$options=array(''=>$tr->translate('USER_TYPE'));
 		foreach($rs as $read) $options[$read['user_type_id']]=$read['user_type'];
 		$user_type_id=new Zend_Form_Element_Select('user_type_id');		
     	$user_type_id->setMultiOptions($options);
     	$user_type_id->setAttribs(array(
     		'id'=>'user_type_id',
-    		'class'=>'validate[required] form-control',
+    			'dojoType'=>"dijit.form.FilteringSelect",
+    			'autoComplete'=>"false",
+    			'queryExpr'=>'*${0}*',
+    			'class'=>'fullside',
     	));
     	$this->addElement($user_type_id);
 		
 		$status = new Zend_Form_Element_Select("status");
-    	$status->setAttribs(array('class'=>'form-control'));
+    	$status->setAttribs(array(
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
+    			));
     	$status->setMultiOptions(array("1"=>"Active","0"=>"Deactive"));
     	$this->addElement($status);
-
-    	
     	//location 
-    	$rs=$db->getGlobalDb('SELECT id, name FROM tb_sublocation WHERE name!="" AND status=1 ORDER BY id DESC');
-    	$option =array("1"=>$tr->translate("Please_Select"),"-1"=>$tr->translate("Add_New_Location"));
-    	if(!empty($rs)) foreach($rs as $read) $option[$read['id']]=$read['name'];
+    	$option = $db->getAllLocation(1);
+    	
     	$locationID= new Zend_Form_Element_Select('LocationId');
     	$locationID->setMultiOptions($option);
-    	$locationID->setattribs(array('id'=>'LocationId','Onchange'=>'AddLocation()','class'=>'form-control'));
+    	$locationID->setattribs(array('id'=>'LocationId','Onchange'=>'AddLocation()',
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
+    			));
     	$this->addElement($locationID);
     	
     	if($data!=null){
@@ -140,7 +163,6 @@ class Rsvacl_Form_FrmUser extends Zend_Form
 			$status->setValue($data["status"]);
 			$locationID->setValue($data["LocationId"]);
 		}
-    	
     	return $this;
     }
 }

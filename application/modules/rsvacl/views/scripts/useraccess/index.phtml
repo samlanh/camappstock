@@ -1,12 +1,10 @@
-<title>List User Right</title>
-<?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();?>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="icon-home"></i>User Access</div>
-			</div>
+<?php 
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+?>
+<title><?php echo $tr->translate("USERACCESS");?></title>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
 			<?php echo  $this->form;?>
 		</div>
 	</div>

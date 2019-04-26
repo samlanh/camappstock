@@ -27,8 +27,8 @@ $row_rs = $this->row_rs;
 						<label class="control-label col-md-2">
 							<?php echo $formFilter->getElement("projectname");?>
 						</label>
-						<label class="control-label col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i><input class="form-control form-control-inline date-picker" id="start_date" name="start_date" value="<?php echo date("m/d/Y",strtotime($this->row['start_date']));?>" type="text" ></div></label>
-						<label class="control-label col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i><input class="form-control form-control-inline date-picker" id="end_date" name="end_date" value="<?php echo date("m/d/Y",strtotime($this->row['end_date']));?>" type="text" ></div></label>
+						<label class="control-label col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i><input class="form-control form-control-inline date-picker" id="start_date" name="start_date"  data-date-format="dd-mm-yyyy" value="<?php echo date("m/d/Y",strtotime($this->row['start_date']));?>" type="text" ></div></label>
+						<label class="control-label col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i><input class="form-control form-control-inline date-picker" id="end_date" name="end_date" data-date-format="dd-mm-yyyy" value="<?php echo date("m/d/Y",strtotime($this->row['end_date']));?>" type="text" ></div></label>
 						<label class="control-label col-md-2">
 							<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
 						</label>

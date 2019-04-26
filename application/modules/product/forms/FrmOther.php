@@ -12,11 +12,15 @@ class Product_Form_FrmOther extends Zend_Form
 		$db = new Product_Model_DbTable_DbOther();		
 		$_title = new Zend_Form_Element_Text('adv_search');
 		$_title->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
 		));
 		$status_search=  new Zend_Form_Element_Select('status_search');
 		$status_search->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
 				'required'=>'required'));
 		$_status_opt = array(
 				-1=>$tr->translate("ALL"),
@@ -24,12 +28,11 @@ class Product_Form_FrmOther extends Zend_Form
 				0=>$tr->translate("DACTIVE"));
 		$status_search->setMultiOptions($_status_opt);
 		
-		
-		
 		$name_en = new Zend_Form_Element_Text('title_en');
 		$name_en->setAttribs(array(
-				'class'=>'form-control',
-				'required'=>'required'
+				'dojoType'=>"dijit.form.ValidationTextBox",
+				'class'=>'fullside',
+				'required'=>"1"
 		));
 		
 		$name_kh = new Zend_Form_Element_Text('title_kh');
@@ -39,27 +42,37 @@ class Product_Form_FrmOther extends Zend_Form
 		));
 		$key_code = new Zend_Form_Element_Text('key_code');
 		$key_code->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',	
 				'required'=>'required'
 				));
 		$_arr = array(1=>$tr->translate("ACTIVE"),0=>$tr->translate("DACTIVE"));
 		$_status = new Zend_Form_Element_Select("status");
 		$_status->setMultiOptions($_arr);
 		$_status->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
 				'required'=>'required'));
 		
 		$opt = array(''=>$tr->translate("SELECT_TYPE"),2=>$tr->translate("MODEL"),3=>$tr->translate("SIZE"),4=>$tr->translate("COLOR"),6=>$tr->translate("Customer Type"));
 		$type = new Zend_Form_Element_Select("type");
 		$type->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
 				'required'=>'required'));
 		$type->setMultiOptions($opt);
 		
 		
 		$_display=  new Zend_Form_Element_Select('display_by');
 		$_display->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
 				'required'=>'required'));
 		$_display_opt = array(
 				1=>$tr->translate("NAME_KHMER"),
@@ -83,13 +96,16 @@ class Product_Form_FrmOther extends Zend_Form
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 		$_title = new Zend_Form_Element_Text('adv_search');
 		$_title->setAttribs(array(
-				'class'=>'form-control',
+				'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
 		));
 		$_title->setValue($request->getParam("adv_search"));
 		
 		$status_search=  new Zend_Form_Element_Select('status_search');
 		$status_search->setAttribs(array(
-				'class'=>'form-control',));
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*','class'=>'fullside',));
 		$_status_opt = array(
 				''=>$tr->translate("ALL"),
 				1=>$tr->translate("ACTIVE"),
@@ -100,7 +116,9 @@ class Product_Form_FrmOther extends Zend_Form
 		$opt = array(''=>$tr->translate("SELECT_TYPE"),2=>$tr->translate("MODEL"),3=>$tr->translate("SIZE"),4=>$tr->translate("COLOR"));
 		$type = new Zend_Form_Element_Select("type");
 		$type->setAttribs(array(
-				'class'=>'form-control',));
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*','class'=>'fullside',));
 		$type->setMultiOptions($opt);
 		$type->setValue($request->getParam("type"));
 		

@@ -12,10 +12,7 @@ class Sales_Model_DbTable_Dbquoteapprov extends Zend_Db_Table_Abstract
 			(SELECT contact_name FROM `tb_customer` WHERE tb_customer.id=tb_quoatation.customer_id LIMIT 1 ) AS contact_name,	
 			(SELECT name FROM `tb_sale_agent` WHERE tb_sale_agent.id =tb_quoatation.saleagent_id  LIMIT 1 ) AS staff_name,
 			quoat_number,date_order,
-			(SELECT symbal FROM `tb_currency` WHERE id= currency_id limit 1) As curr_name,
 			all_total,discount_value,net_total,
-			(SELECT name_en FROM `tb_view` WHERE type=7 AND key_code=is_approved LIMIT 1),
-			(SELECT name_en FROM `tb_view` WHERE type=8 AND key_code=pending_status LIMIT 1),
 			'Make SO',
 			(SELECT name_en FROM `tb_view` WHERE type=9 AND key_code=is_tosale LIMIT 1),
 			
@@ -79,7 +76,6 @@ class Sales_Model_DbTable_Dbquoteapprov extends Zend_Db_Table_Abstract
 							"sale_no"       => 	$so,//$data['txt_order'],
 							"date_sold"     => date("Y-m-d"),
 							"saleagent_id"  => 	$row['saleagent_id'],
-							"currency_id"    => $row['currency_id'],
 							"remark"         => $row['remark'],
 							"all_total"      => $row['all_total'],
 							"discount_value" => $row['discount_value'],
@@ -126,7 +122,7 @@ class Sales_Model_DbTable_Dbquoteapprov extends Zend_Db_Table_Abstract
 						$this->insert($data_item);
 						
 					}
-					}
+			}
 			 $ids=explode(',',$data['identity_term']);
 			 if(!empty($data['identity_term'])){
 				 foreach ($ids as $i)
@@ -167,7 +163,6 @@ class Sales_Model_DbTable_Dbquoteapprov extends Zend_Db_Table_Abstract
 			$pending=2;
 			if($data['approved_name']==2){$pending=1;}
 			$arr=array(		
-// 					'is_toinvocie'=>1,		
 					'is_approved'	=> $data['approved_name'],
 					'approved_userid'=> $GetUserId,
 					'approval_note'	=> $data['app_remark'],
@@ -191,7 +186,6 @@ class Sales_Model_DbTable_Dbquoteapprov extends Zend_Db_Table_Abstract
 								"user_id"   	=> 	$GetUserId,
 								"date"      	=> 	date("Y-m-d"),
 								'term_type'		=>	1
-								
 						);
 						$this->_name='tb_quoatation_termcondition';
 						$this->insert($data_item);
@@ -200,13 +194,11 @@ class Sales_Model_DbTable_Dbquoteapprov extends Zend_Db_Table_Abstract
 			
 			}
 			
-			
 			$db->commit();
 		}catch(Exception $e){
 			$db->rollBack();
 			Application_Form_FrmMessage::message('INSERT_FAIL');
 			$err =$e->getMessage();
-			echo $err ;exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($err);
 		}
 	}
@@ -269,14 +261,12 @@ class Sales_Model_DbTable_Dbquoteapprov extends Zend_Db_Table_Abstract
 							"sale_no"       => 	$so,//$data['txt_order'],
 							"date_sold"     => date("Y-m-d",strtotime($data['order_date'])),
 							"saleagent_id"  => 	$data['saleagent_id'],
-							"currency_id"    => $data['currency'],
 							"remark"         => $data['remark'],
 							"all_total"      => $data['totalAmoun'],
 							"discount_value" => $data['dis_value'],
 							"net_total"      => $data['all_total'],
 							"user_mod"       => $GetUserId,
 							"date"      	 => date("Y-m-d"),
-// 							'is_approved'=>0,
 							'pending_status' =>2,
 							"date"      => 	date("Y-m-d"),
 					);
@@ -324,6 +314,7 @@ class Sales_Model_DbTable_Dbquoteapprov extends Zend_Db_Table_Abstract
 			$db->rollBack();
 			Application_Form_FrmMessage::message('INSERT_FAIL');
 			$err =$e->getMessage();
+			echo $err;exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($err);
 		}
 	}
