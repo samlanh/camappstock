@@ -140,8 +140,8 @@ class Product_Form_FrmProduct extends Zend_Form
 		$opt = array(''=>$tr->translate("SELECT_MEASURE"),-1=>$tr->translate("ADD_NEW_MEASURE"));
 		$measure = new Zend_Form_Element_Select("measure");
 		$measure->setAttribs(array(
-				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
-				//'required'=>'required',
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false",
+				 'queryExpr'=>'*${0}*','class'=>'fullside',
 				'Onchange'	=>	'getMeasureLabel();getPopupMeasure();'
 		));
 		$row_measure= $db->getMeasure();
@@ -155,7 +155,6 @@ class Product_Form_FrmProduct extends Zend_Form
 		$label = new Zend_Form_Element_Text("label");
 		$label->setAttribs(array(
 				'dojoType'=>"dijit.form.TextBox",'class'=>'fullside'
-				//'required'=>'required'
 		));
 		 
 		$description = new Zend_Form_Element_Text("description");
@@ -176,7 +175,6 @@ class Product_Form_FrmProduct extends Zend_Form
 		$status->setAttribs(array(
 				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
 				'required'=>'required',
-				//'Onchange'	=>	'getMeasureLabel()'
 		));
 		$status->setMultiOptions($opt);
 		

@@ -140,14 +140,14 @@ public function init()
 		$this->view->frmOther = $frmOther;
 	}
 	
-	public function addBrandAction(){
+	public function getBrandAction(){
 		if($this->getRequest()->isPost()){
 			try {
 				$post=$this->getRequest()->getPost();
 				$db = new Product_Model_DbTable_DbBrand();
-				$brand_id =$db->addNew($post);
-				$result = array('brand_id'=>$brand_id);
-				echo Zend_Json::encode($result);
+				$result =$db->getAllBrand($post);
+				array_unshift($result, array ( 'id' =>-1,'name' =>"ADD_NEW"));
+				print_r(Zend_Json::encode($result));
 				exit();
 			}catch (Exception $e){
 				$result = array('err'=>$e->getMessage());
@@ -156,13 +156,12 @@ public function init()
 			}
 		}
 	}
-	public function addCategoryAction(){
+	public function getCategoryAction(){
 		if($this->getRequest()->isPost()){
 			try {
 				$post=$this->getRequest()->getPost();
 				$db = new Product_Model_DbTable_DbCategory();
-				$cat_id =$db->addNew($post);
-				$result = array('cat_id'=>$cat_id);
+				$result =$db->getAllCategory($post);
 				echo Zend_Json::encode($result);
 				exit();
 			}catch (Exception $e){
@@ -173,16 +172,12 @@ public function init()
 		}
 	}
 
-	public function addMeasureAction(){
+	public function getMeasureAction(){
 		if($this->getRequest()->isPost()){
 			try {
 				$post=$this->getRequest()->getPost();
 				$db = new Product_Model_DbTable_DbMeasure();
-				if(empty($post['measure_name'])){
-					$post['measure_name']=$post['name'];
-				}
-				$measure_id =$db->addNew($post);
-				$result = array('measure_id'=>$measure_id);
+				$result =$db->getAllMeasure($post);
 				echo Zend_Json::encode($result);
 				exit();
 			}catch (Exception $e){

@@ -38,9 +38,8 @@ class Product_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 		
   }
   public function getBrand(){
-  	$db = $this->getAdapter();
-  	$sql = "SELECT b.`id`,b.`name` FROM `tb_brand` AS b WHERE b.`status`=1";
-  	return $db->fetchAll($sql);
+  	$db = new Application_Model_DbTable_DbGlobal();
+  	return $db->getAllBrand();
   }
   
   public function getModel(){
@@ -50,14 +49,12 @@ class Product_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
   }
   
   public function getCategory(){
-  	$db = $this->getAdapter();
-  	$sql = "SELECT b.`id`,b.`name` FROM `tb_category` AS b WHERE b.`status`=1 AND b.`name`!='' ";
-  	return $db->fetchAll($sql);
+  	$db = new Application_Model_DbTable_DbGlobal();
+  	return $db->getallCategory();
   }
   public function getMeasure(){
-  	$db = $this->getAdapter();
-  	$sql = "SELECT b.`id`,b.`name` FROM `tb_measure` AS b WHERE b.`status`=1";
-  	return $db->fetchAll($sql);
+  	$db = new Application_Model_DbTable_DbGlobal();
+  	return $db->getMeasure();
   }
   public function getSize(){
   	$db = $this->getAdapter();

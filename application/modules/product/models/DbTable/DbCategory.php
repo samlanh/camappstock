@@ -48,9 +48,8 @@ class Product_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 	}
 	
 	public function getAllCategory(){
-		$db = $this->getAdapter();
-		$sql = "SELECT c.id,c.`name`,c.`parent_id`,c.`remark`,c.`status` FROM `tb_category` AS c WHERE c.`status` =1";
-		return $db->fetchAll($sql);
+		$db = new Application_Model_DbTable_DbGlobal();
+		return $db->getallCategory();
 	}
 	
 	public function getCategory($id){

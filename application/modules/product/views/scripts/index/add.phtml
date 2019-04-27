@@ -74,8 +74,11 @@
 					</div>
 					<div class="form-group">
 						<label class="col-md-4 control-label"><?php echo $tr->translate("BRAND_NAME");?></label>
-						<div class="col-md-8">
+						<div class="col-md-5">
 							<?php echo $form->getElement('brand');?>
+						</div>
+						<div class="col-md-3">
+							<input class='fullside' iconClass="dijitIconUndo" type="button" label="Refresh" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
 						</div>
 					</div>
 					<div class="form-group">
@@ -217,246 +220,9 @@
 		</div>
 	</div>
 </div>
-<!--Popup Form Brand-->
-<?php $formBrand = $this->frmBrand; ?>
-<div id="brandpopup" class="modal fade" tabindex="-1" data-width="1200">
-       <div class="modal-dialog">
-      <div class="modal-content">
-      <div class="modal-header">   
-		<div class="row">
-		<div class="col-md-12">
-			<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="icon-home"></i><?php echo $tr->translate("ADD_NEW_BRAND");?>
-				</div>
-				<div class="caption pull-right">
-					<a href="<?php echo $url_new;?>" >
-						 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					</a>
-				</div>
-			</div>
-			<div class="portlet-body form">
-				<form id="frmbrand" name="frmcustomer" class="form-horizontal" enctype="multipart/form-data" method="post">
-						<div class="form-body">
-							<div class="form-group">
-								<label class="col-md-2 control-label"><?php echo $tr->translate("PARENT");?></label>
-								<div class="col-md-4">
-									<?php echo $formBrand->getElement('parent');?>
-								</div>
-								<label class="col-md-2 control-label"><?php echo $tr->translate("BRAND_NAME");?></label>
-								<div class="col-md-4">
-									<?php echo $formBrand->getElement('brand_name');?>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-md-2 control-label"><?php echo $tr->translate("STATUS");?></label>
-								<div class="col-md-4">
-									<?php echo $formBrand->getElement('status');?>
-								</div>
-												
-								<label class="col-md-2 control-label"><?php echo $tr->translate("REMARK");?></label>
-								<div class="col-md-4">
-									<?php echo $formBrand->getElement('remark');?>
-								</div>
-						</div>
-						<div class="form-group">
-							<label  class="col-md-12 col-md-offset-4 col-md-8">
-								<button type="button" name="btnsavenew" onclick="addNewBrand();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CLOSE")?> </button>
-							</label>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-          </div>
-        </div>
-    </div>
- </div>	
-
-<!-- CATEGORY Popup -->
-<?php $formcat = $this->frmCat; ?>
-<div id="categorypopup" class="modal fade" tabindex="-1" data-width="1200">
-       <div class="modal-dialog">
-      <div class="modal-content">
-      <div class="modal-header">   
-		<div class="row">
-		<div class="col-md-12">
-			<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="icon-home"></i><?php echo $tr->translate("ADD_PRODUCT_CATEGORY");?>
-				</div>
-				<div class="caption pull-right">
-					<a href="<?php echo $url_new;?>" >
-						 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					</a>
-				</div>
-			</div>
-			<div class="portlet-body form">
-				<form id="frmCat" name="frmcustomer" class="form-horizontal" enctype="multipart/form-data" method="post">
-				<div class="form-body">
-					<div class="form-group">
-								<label class="col-md-2 control-label"><?php echo $tr->translate("PARENT");?></label>
-								<div class="col-md-4">
-									<?php echo $formcat->getElement('parent');?>
-								</div>
-								<label class="col-md-2 control-label"><?php echo $tr->translate("CATEGORY_NAME");?></label>
-								<div class="col-md-4">
-									<?php echo $formcat->getElement('cat_name');?>
-								</div>
-												
-							</div>
-							<div class="form-group">
-												
-								<label class="col-md-2 control-label"><?php echo $tr->translate("STATUS");?></label>
-								<div class="col-md-4">
-									<?php echo $formcat->getElement('status');?>
-								</div>
-								<label class="col-md-2 control-label"><?php echo $tr->translate("REMARK");?></label>
-								<div class="col-md-4">
-									<?php echo $formcat->getElement('remark');?>
-								</div>
-							</div>
-							<div class="form-group">
-								<label  class="col-md-12 col-md-offset-4 col-md-8">
-									<button type="button" name="btnsavenew" onclick="addNewCategory();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CLOSE")?> </button>
-								</label>
-							</div>
-				</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-          </div>
-        </div>
-    </div>
- </div>	
-
-<!-- MEASURE Popup-->
-<?php $frmMesure = $this->frmMesure; ?>
-<div id="measurepopup" class="modal fade" tabindex="-1" data-width="1200">
-       <div class="modal-dialog">
-      <div class="modal-content">
-      <div class="modal-header">   
-		<div class="row">
-		<div class="col-md-12">
-			<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="icon-home"></i><?php echo $tr->translate("ADD_MEASURE_NAME");?>
-				</div>
-				<div class="caption pull-right">
-					<a href="<?php echo $url_new;?>" >
-						 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					</a>
-				</div>
-			</div>
-			<div class="portlet-body form">
-				<form id="frmMesure" name="frmcustomer" class="form-horizontal" enctype="multipart/form-data" method="post">
-				<div class="form-body">
-					<div class="form-group">
-								<label class="col-md-4 control-label"><?php echo $tr->translate("MESUER_NAME");?></label>
-								<div class="col-md-6">
-									<?php echo $frmMesure->getElement('measure_name');?>
-								</div>
-												
-							</div>
-							<div class="form-group">
-												
-								<label class="col-md-4 control-label"><?php echo $tr->translate("STATUS");?></label>
-								<div class="col-md-6">
-									<?php echo $frmMesure->getElement('status');?>
-								</div>
-							</div>
-							<div class="form-group">
-												
-								<label class="col-md-4 control-label"><?php echo $tr->translate("REMARK");?></label>
-								<div class="col-md-6">
-									<?php echo $frmMesure->getElement('remark');?>
-								</div>
-							</div>
-					
-					<div class="form-group">
-						<label  class="col-md-12 col-md-offset-4 col-md-8">
-							<button type="button" name="btnsavenew" onclick="addNewMeasure();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CLOSE")?> </button>
-						</label>
-					</div>
-				</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-          </div>
-        </div>
-    </div>
- </div>	
-<!-- Color Model Size Popup -->
-<?php $frmOther = $this->frmOther; ?>
-<div id="otherpopup" class="modal fade" tabindex="-1" data-width="1200">
-       <div class="modal-dialog">
-      <div class="modal-content">
-      <div class="modal-header">   
-		<div class="row">
-		<div class="col-md-12">
-			<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="icon-home"></i><?php echo $tr->translate("ADD_NEW_COLOR");?>
-				</div>
-				<div class="caption pull-right">
-					<a href="<?php echo $url_new;?>" >
-						 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					</a>
-				</div>
-			</div>
-			<div class="portlet-body form">
-				<form id="frmOther" name="frmOther" class="form-horizontal" enctype="multipart/form-data" method="post">
-				<div class="form-body">
-					<div class="form-group">
-									<label class="col-md-4 control-label"><?php echo $tr->translate("TITLE");?></label>
-									<div class="col-md-6">
-										<?php echo $frmOther->getElement('title_en');?>
-									</div>
-													
-								</div>
-								<div class="form-group">
-									<label class="col-md-4 control-label"><?php echo $tr->translate("TYPE");?></label>
-									<div class="col-md-6">
-										<?php echo $frmOther->getElement('type');?>
-									</div>
-													
-								</div>
-								<div class="form-group">
-													
-									<label class="col-md-4 control-label"><?php echo $tr->translate("STATUS");?></label>
-									<div class="col-md-6">
-										<?php echo $frmOther->getElement('status');?>
-									</div>
-								</div>
-					
-					<div class="form-group">
-						<label  class="col-md-12 col-md-offset-4 col-md-8">
-							<button type="button" id="savecolor"name="btnsavenew" onclick="addNewColor();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CLOSE")?> </button>
-							<button type="button" id="savemodel" name="btnsavenew" onclick="addNewModel();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CLOSE")?> </button>
-							<button type="button"id="savesize" name="btnsavenew" onclick="addNewSize();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CLOSE")?> </button>
-						</label>
-					</div>
-				</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-          </div>
-        </div>
-    </div>
- </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script>
+dojo.require("dojo.data.ItemFileWriteStore");
 $( document ).ready(function() {
 	$('#price_type').val(1);
 	addProLocation();
@@ -588,125 +354,104 @@ function deleteRecord(index,type) {
 	}
 }
 function getPopupBrand(){
-	val = $('#brand').val();
+	val = dijit.byId("brand").get('value');
 	if(val==-1){
-		$('#brandpopup').modal('show');
+		window.open('<?php echo $this->baseUrl();?>/product/brand/add?rightclick=true','_blank');
 	}
 }
-
 function getPopupCategory(){
-	val = $('#category').val();
+	val = dijit.byId("category").get('value');
 	if(val==-1){
-		$('#categorypopup').modal('show');
+		window.open('<?php echo $this->baseUrl();?>/product/category/add?rightclick=true','_blank');
 	}
 }
-
 function getPopupMeasure(){
-	val = $('#measure').val();
+	val = dijit.byId("measure").get('value');
 	if(val==-1){
-		$('#measurepopup').modal('show');
+		window.open('<?php echo $this->baseUrl();?>/product/measure/add?rightclick=true','_blank');
 	}
 }
-
 function getPopupColor(){
-	val = $('#color').val();
+	val = dijit.byId("color").get('value');
 	if(val==-1){
-		$('#otherpopup').modal('show');
-		$('#type').val(4);
-		$('#type').attr('readOnly',true);
-		$('#savemodel').hide();
-		$('#savesize').hide();
-		$('#savecolor').show();
+		window.open('<?php echo $this->baseUrl();?>/product/other/add?rightclick=true','_blank');
 	}
 }
-
-function getPopupModel(){
-	val = $('#model').val();
-	if(val==-1){
-		$('#otherpopup').modal('show');
-		$('#type').val(2);
-		$('#type').attr('readOnly',true);
-		$('#savecolor').hide();
-		$('#savesize').hide();
-		$('#savemodel').show();
+function AllRefresh(){
+	//fillterBrand();
+	//filtterCategory();
+	fillterMeasure();
+	//fillterColor();
+}
+get_urlbrand = '<?php echo $this->url(array('module'=>'product','controller'=>'index','action'=>'get-brand'));?>';
+function fillterBrand(){
+	brand = dijit.byId('brand').get('value');
+	if(brand==-1){
+		return false;
 	}
+	dojo.xhrPost({
+		url:get_urlbrand,	
+		content:{ 
+			'get_data':1
+		},
+		handleAs:"json",
+		load: function(data) {	
+			brand_store  = getDataStorefromJSON('id','name', data);		
+		    dijit.byId('brand').set('store', brand_store);
+		    //document.getElementsByClassName("overlay")[0].style.display="none";	
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});	
+	
 }
-
-function getPopupSize(){
-	val = $('#size').val();
-	if(val==-1){
-		$('#otherpopup').modal('show');
-		$('#type').val(3);
-		$('#type').attr('readOnly',true);
-		$('#savemodel').hide();
-		$('#savecolor').hide();
-		$('#savesize').show();
+url_getcategory = '<?php echo $this->url(array('module'=>'product','controller'=>'index','action'=>'get-category')); ?>';
+function filtterCategory(){
+	category = dijit.byId('category').get('value');
+	if(category==-1){
+		return false;
 	}
+	dojo.xhrPost({
+		url:url_getcategory,	
+		content:{ 
+			'get_data':1
+		},
+		handleAs:"json",
+		load: function(data) {	
+			cate_store  = getDataStorefromJSON('id','name', data);		
+		    dijit.byId('category').set('store', cate_store);
+		    document.getElementsByClassName("overlay")[0].style.display="none";	
+		},
+		error: function(err) {
+		}
+	});	
 }
 
-<?php $url_add_brand =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-brand')); ?>
-function addNewBrand(){
-	var brand_name  = $("#brand_name").val();
-	if(brand_name==''){$("#brand_name").focus();return false;}
-	$.ajax({
-		url: "<?php echo $url_add_brand;?>",
-		type: "post",
-		data: $('#frmbrand').serialize(),
-		success: function(data){
-			rs = $.parseJSON(data);
-			 $('#brand').append($("<option></option>").attr("value",rs['brand_id']).attr("selected",true).text(brand_name));                       
-			 $("#brand").select2();
-			$('#brandpopup').modal('hide');
+get_mesure = '<?php echo $this->url(array('module'=>'product','controller'=>'index','action'=>'get-measure')); ?>'
+function fillterMeasure(){
+	measure_id = dijit.byId('measure').get('value');
+	if(measure_id==-1){
+		return false;
+	}
+	dojo.xhrPost({
+		url:get_mesure,	
+		content:{ 
+			'get_data':1
 		},
-		error:function(err){
-			alert("faile insert");
-		   
-		}
-	});
-}
-<?php $url_add_category =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-category')); ?>
-function addNewCategory(){
-	var cat_name  = $("#cat_name").val();
-	if(cat_name==''){$("#cat_name").focus();return false;}
-	$.ajax({
-		url: "<?php echo $url_add_category;?>",
-		type: "post",
-		data: $('#frmCat').serialize(),
-		success: function(data){
-			rs = $.parseJSON(data);
-			 $('#category').append($("<option></option>").attr("value",rs['cat_id']).attr("selected",true).text(cat_name));                       
-			 $("#category").select2();
-			$('#categorypopup').modal('hide');
+		handleAs:"json",
+		load: function(data) {	
+			measure_store  = getDataStorefromJSON('id','name', data);		
+		    dijit.byId('measure').set('store', measure_store);
+		    document.getElementsByClassName("overlay")[0].style.display="none";	
 		},
-		error:function(err){
-			alert("faile insert");
-		   
+		error: function(err) {
 		}
-	});
-}
-<?php $url_add_measure =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-measure')); ?>
-function addNewMeasure(){
-	var measure_name  = $("#measure_name").val();
-	if(measure_name==''){$("#measure_name").focus();return false;}
-	$.ajax({
-		url: "<?php echo $url_add_measure;?>",
-		type: "post",
-		data: $('#frmMesure').serialize(),
-		success: function(data){
-			rs = $.parseJSON(data);
-			 $('#measure').append($("<option></option>").attr("value",rs['measure_id']).attr("selected",true).text(measure_name));                       
-			 $("#measure").select2();
-			$('#measurepopup').modal('hide');
-			document.getElementById('lb_measure').innerHTML = measure_name; 
-		},
-		error:function(err){
-			alert("faile insert");
-		}
-	});
+	});	
 }
 
 <?php $url_add_color =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-other')); ?>
-function addNewColor(){
+function fillterColor(){
 	var title  = $("#title_en").val();
 	if(title==''){$("#title_en").focus();return false;}
 	$.ajax({
@@ -726,43 +471,6 @@ function addNewColor(){
 	});
 }
 
-function addNewModel(){
-	var title  = $("#title_en").val();
-	if(title==''){$("#title_en").focus();return false;}
-	$.ajax({
-		url: "<?php echo $url_add_color;?>",
-		type: "post",
-		data: $('#frmOther').serialize(),
-		success: function(data){
-			rs = $.parseJSON(data);
-			 $('#model').append($("<option></option>").attr("value",rs['other_id']).attr("selected",true).text(title));                       
-			 $("#model").select2();
-			$('#otherpopup').modal('hide');
-		},
-		error:function(err){
-			alert("faile insert");
-		   
-		}
-	});
-}
-function addNewSize(){
-		var title  = $("#title_en").val();
-		$.ajax({
-			url: "<?php echo $url_add_color;?>",
-			type: "post",
-			data: $('#frmOther').serialize(),
-			success: function(data){
-				rs = $.parseJSON(data);
-				 $('#size').append($("<option></option>").attr("value",rs['other_id']).attr("selected",true).text(title));                       
-				 $("#size").select2();
-				$('#otherpopup').modal('hide');
-			},
-			error:function(err){
-				alert("faile insert");
-			   
-			}
-		});
-	}
 function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -797,7 +505,6 @@ $("#photo").change(function(){
        iSize = (Math.round(iSize * 100) / 100);
        maxSize = 0;
     }    
-    
     readURL(this);
 });
 dojo.require("dijit.form.NumberTextBox");

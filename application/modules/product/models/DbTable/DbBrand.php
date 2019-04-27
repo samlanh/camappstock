@@ -62,9 +62,8 @@ class Product_Model_DbTable_DbBrand extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where);
 	}
 	public function getAllBrand(){
-		$db = $this->getAdapter();
-		$sql = "SELECT c.id,c.`name`,c.`parent_id`,c.`remark`,c.`status` FROM `tb_brand` AS c WHERE c.`status` =1";
-		return $db->fetchAll($sql);
+		$db = new Application_Model_DbTable_DbGlobal();
+		return $db->getAllBrand();
 	}
 	
 	public function getBrand($id){

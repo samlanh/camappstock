@@ -825,7 +825,21 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    		imagejpeg($im, $uploadimage, 80);
    	}
    	return $new_name;
-   		
+   }
+   public function getallCategory(){
+   	$db = $this->getAdapter();
+   	$sql = "SELECT b.`id`,b.`name` FROM `tb_category` AS b WHERE b.`status`=1 AND b.`name`!='' ";
+   	return $db->fetchAll($sql);
+   }
+   public function getAllBrand(){
+   	$db = $this->getAdapter();
+   	$sql = "SELECT c.id,c.`name`,c.`parent_id`,c.`remark`,c.`status` FROM `tb_brand` AS c WHERE c.`status` =1";
+   	return $db->fetchAll($sql);
+   }
+   public function getMeasure(){
+   	$db = $this->getAdapter();
+   	$sql = "SELECT b.`id`,b.`name` FROM `tb_measure` AS b WHERE b.`status`=1 AND name!='' ";
+   	return $db->fetchAll($sql);
    }
    	
 }
