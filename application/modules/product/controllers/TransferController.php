@@ -79,69 +79,6 @@ public function init()
 			Application_Model_Decorator::removeAllDecorator($formStockAdd);
 			$this->view->formFilter = $formStockAdd;
 	}
-	//view category 27-8-2013
-	
-	function requestlistAction(){
-		$db = new Product_Model_DbTable_DbTransfer();
-    	if($this->getRequest()->isPost()){
-    		$data = $this->getRequest()->getPost();
-    	}else{
-    		$data = array(
-    			'avd_search'	=>	'',
-    			'start_date'	=>	date("d-m-Y"),
-    			'end_date'		=>	date("d-m-Y"),
-    			'status'		=>	1,
-    			'branch'		=>	-1,
-    		);
-    	}
-    	$this->view->product = $db->getRequestTransfer($data);
-    	$formFilter = new Product_Form_FrmTransfer();
-    	$this->view->formFilter = $formFilter->frmFilter();
-    	Application_Model_Decorator::removeAllDecorator($formFilter);
-	}
-	function addrequestAction(){
-		$db = new Product_Model_DbTable_DbTransfer();
-			if($this->getRequest()->isPost()){ 
-				try{
-					$post = $this->getRequest()->getPost();
-					$db->addRequest($post);
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
-					Application_Form_FrmMessage::redirectUrl('/product/transfer/requestlist');
-				  }catch (Exception $e){
-				  	Application_Form_FrmMessage::messageError("INSERT_ERROR",$err = $e->getMessage());
-				  }
-			}
-			$formProduct = new Product_Form_FrmTransfer();
-			$formStockAdd = $formProduct->addRequest(null);
-			Application_Model_Decorator::removeAllDecorator($formStockAdd);
-			$this->view->formFilter = $formStockAdd;
-	}
-	
-	function editrequestAction(){
-		
-		$id = $this->getRequest()->getParam("id");
-		$db = new Product_Model_DbTable_DbTransfer();
-			if($this->getRequest()->isPost()){ 
-				try{
-					$post = $this->getRequest()->getPost();
-					$post["id"] = $id;
-					$db->editRequest($post);
-					
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
-					Application_Form_FrmMessage::redirectUrl('/product/transfer/requestlist');
-					
-				  }catch (Exception $e){
-				  	Application_Form_FrmMessage::messageError("INSERT_ERROR",$err = $e->getMessage());
-				  }
-			}
-			$row = $db->getReqTransferById($id);
-			$this->view->rs_detail = $db->getReqTransferDetail($id);
-			$formProduct = new Product_Form_FrmTransfer();
-			$formStockAdd = $formProduct->addRequest($row);
-			Application_Model_Decorator::removeAllDecorator($formStockAdd);
-			$this->view->formFilter = $formStockAdd;
-	}
-	
 	function requestapprAction(){
 		$db = new Product_Model_DbTable_DbTransfer();
     	if($this->getRequest()->isPost()){
@@ -159,8 +96,7 @@ public function init()
     	$formFilter = new Product_Form_FrmTransfer();
     	$this->view->formFilter = $formFilter->frmFilter();
     	Application_Model_Decorator::removeAllDecorator($formFilter);
-	}
-	
+}
 	function addrequestapprAction(){
 		$id = $this->getRequest()->getParam("id");
 		$db = new Product_Model_DbTable_DbTransfer();
@@ -180,76 +116,6 @@ public function init()
 			$this->view->rs_detail = $db->getReqTransferDetail($id);
 	}
 	
-	function transferlistAction(){
-		$db = new Product_Model_DbTable_DbTransfer();
-    	if($this->getRequest()->isPost()){
-    		$data = $this->getRequest()->getPost();
-    	}else{
-    		$data = array(
-    			'avd_search'	=>	'',
-    			'start_date'	=>	date("d-m-Y"),
-    			'end_date'		=>	date("d-m-Y"),
-    			'status'		=>	1,
-    			'branch'		=>	-1,
-    		);
-    	}
-    	$this->view->product = $db->getRequestTransfer($data);
-    	$formFilter = new Product_Form_FrmTransfer();
-    	$this->view->formFilter = $formFilter->frmFilter();
-    	Application_Model_Decorator::removeAllDecorator($formFilter);
-	}
-	function maketransferAction(){
-		
-		$id = $this->getRequest()->getParam("id");
-		$db = new Product_Model_DbTable_DbTransfer();
-			if($this->getRequest()->isPost()){ 
-				try{
-					$post = $this->getRequest()->getPost();
-					$post["id"] = $id;
-					$db->makeTransfer($post);
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
-					Application_Form_FrmMessage::redirectUrl('/product/transfer/transferlist');
-				}catch (Exception $e){
-				  	Application_Form_FrmMessage::messageError("INSERT_ERROR",$err = $e->getMessage());
-				}
-			}
-			$row = $db->getReqTransferById($id);
-			$this->view->rs_detail = $db->getReqTransferDetail($id);
-			$formProduct = new Product_Form_FrmTransfer();
-			$formStockAdd = $formProduct->makeTransfers($row);
-			Application_Model_Decorator::removeAllDecorator($formStockAdd);
-			$this->view->formFilter = $formStockAdd;
-	}
-	function edittransferAction(){
-		
-		$id = $this->getRequest()->getParam("id");
-		$db = new Product_Model_DbTable_DbTransfer();
-			if($this->getRequest()->isPost()){ 
-				try{
-					$post = $this->getRequest()->getPost();
-					$post["id"] = $id;
-					$db->editTransfer($post);
-					if(isset($post["save_close"]))
-					{
-						Application_Form_FrmMessage::message("INSERT_SUCCESS");
-						Application_Form_FrmMessage::redirectUrl('/product/transfer/transferlist');
-					}else{
-						Application_Form_FrmMessage::message("INSERT_SUCCESS");
-						Application_Form_FrmMessage::redirectUrl('/product/transfer/transferlist');
-					}
-				  }catch (Exception $e){
-				  	Application_Form_FrmMessage::messageError("INSERT_ERROR",$err = $e->getMessage());
-				  }
-			}
-			
-		$rs = $db->getTransferById($id);
-		$rs_detail = $db->getTransferDettail($id,$rs["cur_location"]);
-		$this->view->rs_detail = $rs_detail;
-		$formProduct = new Product_Form_FrmTransfer();
-		$formStockAdd = $formProduct->editTransfers($rs);
-		Application_Model_Decorator::removeAllDecorator($formStockAdd);
-		$this->view->formFilter = $formStockAdd;
-	}
 	function receiverequestAction(){
 		$db = new Product_Model_DbTable_DbTransfer();
     	if($this->getRequest()->isPost()){
@@ -326,19 +192,6 @@ public function init()
 		$this->view->formFilter = $formStockAdd;
 	}
 	
-	public function requestnoteAction(){
-		$id = ($this->getRequest()->getParam('id'))? $this->getRequest()->getParam('id'): '0';
-    	if(empty($id)){
-    		$this->_redirect("/report/index/rpt-purchase");
-    	}
-    	$query = new Product_Model_DbTable_DbTransfer();
-		$rs = $query->getRequestPrint($id);
-    	$this->view->product =  $query->getRequestPrint($id);
-		
-		/*$session_user=new Zend_Session_Namespace('auth');
-		$db = new Application_Model_DbTable_DbGlobal();*/
-		$this->view->title_reprot = $query->getTitleReport($rs[0]["cur_location"]);
-	}
 
 	public function viewtransferAction(){
 		$id = ($this->getRequest()->getParam('id'))? $this->getRequest()->getParam('id'): '0';

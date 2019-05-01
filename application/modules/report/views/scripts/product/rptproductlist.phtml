@@ -3,16 +3,9 @@
 	$formFilter = $this->formFilter;
 ?>
 <title><?php echo $tr->translate("REPORT_PRODUCT");?></title>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("REPORT_PRODUCT");?>
-				</div>
-				<?php echo $this->getHeader;?>
-			</div>
-            <div class="portlet-body form frmfilter">
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
 				<form method="post" >
 					<div class="form-body">
 						<div class="form-group">
@@ -44,13 +37,13 @@
 								<?php echo $formFilter->getElement('status_qty');?>
 							</label>
 							<label class="control-label col-md-2">
-								<button type="submit" class="btn btn-primary col-md-12"><?php echo $tr->translate("SEARCH");?></button>
+								<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("REFRESH")?>" dojoType="dijit.form.Button" 
+									iconClass="dijitIconSearch" />
 							</label>
 						</div>	
 					</div>
 					<div style="clear:both;"></div>	
 				</form> 
-	<div style=" min-height:28cm; margin:0 auto; padding:0px 0.2cm">
 		<div id="divPrint" style="width: 100%;">
 			<style>
 				.style{
@@ -149,16 +142,8 @@
 				</tbody>
 			</table>
 		</div>
-		<!-- 
-			<center>
-				<button dojoType="dijit.form.Button" id="printselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
-					type="button" onclick="printSelected();">Print Selected</button>
-			</center>
-		 -->
 	  </div>		
 	</div>
-	 </div>
-   </div>
 </div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
 <script>

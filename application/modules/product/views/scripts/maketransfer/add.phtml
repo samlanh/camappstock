@@ -1,0 +1,174 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$url_submit =  $this->url(array('module'=>'product','controller'=>'transfer','action'=>'transferlist'),null,true);
+	$formFilter = $this->formFilter;
+?>
+<title><?php echo $tr->translate("Make Transfer");?></title>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+            <div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('MAKE_TRANSFER');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right"></div>
+    		</div>
+    	</div>
+		<div class="card-box">
+			<form dojoType="dijit.form.Form" id="frm" class="form-horizontal" method="post" action="" >
+				<script type="dojo/method" event="onSubmit">			
+					if(this.validate()){
+						identity = $("#identity").val();
+   						if(identity==''){
+	 						alert("សូមបញ្ចូលបរិមាណទំនិញ");
+	    					return false;
+     					}
+						loadingBlock();
+						return true;
+					}else{
+						return false;
+					}
+			</script>
+				<div class="form-body">	
+					<div class="form-group">
+						<label class="col-md-2 control-label"><?php echo $tr->translate("REQUET_TO_FROM");?></label>
+						<div class="col-md-4">
+							<?php echo $formFilter->getElement('from_loc');?>
+						</div>
+						
+						<label class="col-md-2 control-label"><?php echo $tr->translate("REQUET_TO_BRANCH");?></label>
+						<div class="col-md-4">
+							<?php echo $formFilter->getElement('to_loc');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label"><?php echo $tr->translate("TRANSFER_NUM");?></label>
+						<div class="col-md-4">
+							<?php echo $formFilter->getElement('tran_num');?>
+						</div>
+						<label class="col-md-2 control-label"><?php echo $tr->translate("REQUEST_NUM");?></label>
+						<div class="col-md-4">
+							<?php echo $formFilter->getElement('re_num');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label"><?php echo $tr->translate("REQUEST_DATE");?></label>
+						<div class="col-md-4">
+							<?php echo $formFilter->getElement('re_date');?>
+						</div>
+						
+						<label class="col-md-2 control-label"><span id="lb_br"></span><?php echo $tr->translate("TRANSFER_DATE");?></label>
+						<div class="col-md-4">
+							<?php echo $formFilter->getElement('tran_date');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label"><?php echo $tr->translate("REMARK");?></label>
+						<div class="col-md-4">
+							<?php echo $formFilter->getElement('remark');?>
+						</div>	
+						<label class="col-md-2 control-label"><?php echo $tr->translate("STATUS");?></label>
+						<div class="col-md-4">
+							<?php echo $formFilter->getElement('status');?>
+						</div>
+					</div>
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th><?php echo $tr->translate("PRODUCT_NAME");?></th>
+									<th><?php echo $tr->translate("QTY_REQUEST");?></th>
+									<th><?php echo $tr->translate("UNIT_QTY");?></th>
+									<th><?php echo $tr->translate("QTY_PER_UNIT");?></th>
+									<th><?php echo $tr->translate("QTY_TRANSFER");?></th>
+									<th><?php echo $tr->translate("REMARK");?></th>
+								</tr>
+							</thead>
+							<tbody id="tr_location" style="font-size:12px;">
+							</tbody>
+						</table>
+					</div>
+					<input type="hidden" name="identity" id="identity" value="" >
+				</div>
+				<div class="card-box">
+					<div class="border-top">
+						<div class="col-md-4"></div>
+						<div class="col-md-5" class='center'>
+							<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("SAVE_NEW")?>" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	oldRow();
+});
+var index=0;
+function oldRow(){
+	qty_request=0;
+	<?php if(!empty($this->rs_detail)){
+			foreach( $this->rs_detail as $rs){
+	?>
+		qty_unit = '<?php echo number_format($rs["qty_unit"],0);?>';
+		qty_per_unit = '<?php echo number_format($rs["qty_per_unit"],0);?>';
+		if(parseFloat(qty_unit)>0 && parseFloat(qty_per_unit)>0){
+			qty_request = qty_unit+" <?php echo $rs["measure"]?> & "+qty_per_unit+" <?php echo $rs["unit_label"]?>";
+		}else if(parseFloat(qty_unit)<=0 && parseFloat(qty_per_unit)>0){
+			qty_request = qty_per_unit+" <?php echo $rs["unit_label"]?>";
+		}else if(parseFloat(qty_unit)>0 && parseFloat(qty_per_unit)<=0){
+			qty_request=qty_unit+" <?php echo $rs["measure"]?>";
+		}
+			index++;
+			template='<tr id="row_location_'+index+'">';
+			template+='<td>'+index+'</td>';
+			template+='<td style="white-space: nowrap;"><?php echo $rs["item_name"];?><input type="hidden" id="pro_id_'+index+'" name="pro_id_'+index+'" value="<?php echo $rs["pro_id"]?>" </td>';
+			template+='<td>'+qty_request+'<input type="hidden" id="qty_request_'+index+'" readOnly="readOnly" name="qty_request_'+index+'" value="<?php echo $rs['qty']?>" class="form-control"></td>'; 
+			template+='<td width="80px;"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="qty_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_unit_'+index+'" value="<?php echo $rs['qty_unit']?>" /></td>'; 
+			template+='<td width="80px;"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="qty_per_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_per_unit_'+index+'" value="<?php echo $rs['qty_per_unit']?>" class="form-control" /></td>'; 
+			template+='<td width="80px;"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="qty_tran_'+index+'" readOnly="readOnly" name="qty_tran_'+index+'" value="<?php echo $rs['qty']?>" class="form-control"> <input type="hidden" name="qty_measure_'+index+'" id="qty_measure_'+index+'" value="<?php echo $rs['qty_measure']?>"/></td>'; 
+			template+='<td><input dojoType="dijit.form.TextBox" type="text" id="remark_'+index+'" name="remark_'+index+'" class="form-control"></td>';
+			template+='</tr>';
+			$('#tr_location').append(template);
+			if($('#identity').val()!="") {
+				var identity = $('#identity').val();
+				$('#identity').val(identity+','+index);
+			} else {$('#identity').val(index);}
+	<?php }}?>
+}
+function TotalQty(index){
+		main_qty =$("#qty_unit_"+index).val();
+		detail_qty =  $("#qty_per_unit_"+index).val();
+		qty_measure = $("#qty_measure_"+index).val();
+		if(qty_measure==0){
+			qty_measure=1;
+		}else{
+			qty_measure = qty_measure;
+		}
+		total_qty = parseFloat(main_qty) + (parseFloat(detail_qty)/parseFloat(qty_measure));
+		$("#qty_tran_"+index).val(total_qty.toFixed(3));
+}
+
+<?php $url_no =  $this->url(array('module'=>'product','controller'=>'transfer','action'=>'get-transfer-no')); ?>
+function gettransferNo(){
+	var id = $("#from_loc").val();
+	$.ajax({
+        url: "<?php echo $url_no;?>",
+        type: "post",
+        data: {'id':id},
+        success: function(data){
+           val = $.parseJSON(data);
+		   $("#tran_num").val(val);
+        },
+        error:function(){
+        }
+    });
+}
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.NumberTextBox");
+</script>

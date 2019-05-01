@@ -22,7 +22,7 @@ public function init()
 				Application_Form_FrmMessage::messageError("INSERT_ERROR");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
-			$formFilter = new Measure_Form_FrmMeasure();
+			$formFilter = new Product_Form_FrmMeasure();
 			$frmsearch = $formFilter->MeasureFilter();
 			$this->view->formFilter = $frmsearch;
 			Application_Model_Decorator::removeAllDecorator($formFilter);
@@ -38,7 +38,7 @@ public function init()
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", '/product/measure/index');
 			}
 		}
-		$formFilter = new Measure_Form_FrmMeasure();
+		$formFilter = new Product_Form_FrmMeasure();
 		$formAdd = $formFilter->measure();
 		$this->view->frmAdd = $formAdd;
 		Application_Model_Decorator::removeAllDecorator($formAdd);
@@ -61,7 +61,7 @@ public function init()
 			}
 		}
 		$rs = $db->getMeasure($id);
-		$formFilter = new Measure_Form_FrmMeasure();
+		$formFilter = new Product_Form_FrmMeasure();
 		$formAdd = $formFilter->measure($rs);
 		$this->view->frmAdd = $formAdd;
 		Application_Model_Decorator::removeAllDecorator($formAdd);

@@ -42,12 +42,7 @@ public function init()
 			$data = $this->getRequest()->getPost();
 			$db = new Product_Model_DbTable_DbBranch();
 			$db->add($data);
-			if($data['save_close']){
-				Application_Form_FrmMessage::Sucessfull("INSER_SUCCESS", '/product/branch/index');
-			}
-			else{
-				Application_Form_FrmMessage::Sucessfull("INSER_SUCCESS", '/product/branch/index/add');
-			}
+			Application_Form_FrmMessage::Sucessfull("INSER_SUCCESS");
 		}
 		$formFilter = new Product_Form_FrmBranch();
 		$formAdd = $formFilter->branch();
@@ -66,11 +61,13 @@ public function init()
 			$data = $this->getRequest()->getPost();
 			$data["id"] = $id;
 			$db->edit($data);
-			if($data['save_close']){
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", '/product/branch/index');
-			}
+			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", '/product/branch/index');
 		}
 		$rs = $db->getBranchById($id);
+		if(empty($rs)){
+			Application_Form_FrmMessage::Sucessfull("NO_DATA", '/product/branch/index');
+		}
+		
 		$formFilter = new Product_Form_FrmBranch();
 		$formAdd = $formFilter->branch($rs);
 		$this->view->frmAdd = $formAdd;

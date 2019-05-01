@@ -188,7 +188,7 @@ class Product_Form_FrmProduct extends Zend_Form
 		}
 		$branch->setAttribs(array(
 				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
-				//'required'=>'required',
+				'required'=>'false',
 				'Onchange'	=>	'addNewProLocation()'
 		));
 		$branch->setMultiOptions($opt);
@@ -202,9 +202,10 @@ class Product_Form_FrmProduct extends Zend_Form
 			}
 		}
 		$price_type->setAttribs(array(
-				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false", 'queryExpr'=>'*${0}*','class'=>'fullside',
-				//'required'=>'required',
-				'Onchange'	=>	'addNewPriceType()'
+				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*','class'=>'fullside',
+				'Onchange'	=>	'addNewPriceType()',
+				'required'=>'false',
 		));
 		$price_type->setMultiOptions($opt);
 		

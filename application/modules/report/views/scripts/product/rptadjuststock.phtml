@@ -3,50 +3,43 @@
 	$formFilter = $this->formFilter;
 ?>
 <title><?php echo $tr->translate("RPT_ADJUSTSTOCK");?></title>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("RPT_ADJUSTSTOCK");?>
-				</div>
-				<?php echo $this->getHeader;?>
-			</div>
-            <div class="portlet-body form frmfilter">
-				<form method="post" >
-					<div class="form-body">
-						<div class="form-group">
-							<div class="control-label col-md-3">
-								<?php echo $formFilter->getElement('ad_search');?>
-							</div>
-							<div class="control-label col-md-3">
-								<?php echo $formFilter->getElement('brand');?>
-							</div>
-							<div class="control-label col-md-3">
-								<?php echo $formFilter->getElement('category');?>
-							</div>
-							<div class="control-label col-md-3">
-								<?php echo $formFilter->getElement('model');?>
-							</div>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+			<form method="post" >
+				<div class="form-body">
+					<div class="form-group">
+						<div class="control-label col-md-3">
+							<?php echo $formFilter->getElement('ad_search');?>
 						</div>
-						<div class="form-group">
-							<div class="control-label col-md-3">
-								<?php echo $formFilter->getElement('size');?>
-							</div>
-							<div class="control-label col-md-3">
-								<?php echo $formFilter->getElement('color');?>
-							</div>
-							<div class="control-label col-md-3">
-								<?php echo $formFilter->getElement('status');?>
-							</div>
-							<div class="control-label col-md-3">
-								<button type="submit" class="btn btn-primary col-md-12"><?php echo $tr->translate("SEARCH");?></button>
-							</div>
-						</div>		
+						<div class="control-label col-md-3">
+							<?php echo $formFilter->getElement('brand');?>
+						</div>
+						<div class="control-label col-md-3">
+							<?php echo $formFilter->getElement('category');?>
+						</div>
+						<div class="control-label col-md-3">
+							<?php echo $formFilter->getElement('model');?>
+						</div>
 					</div>
-					<div style="clear:both;"></div>	
-				</form> 
-	<div style=" min-height:28cm; margin:0 auto;padding:0px 0.2cm">
+					<div class="form-group">
+						<div class="control-label col-md-3">
+							<?php echo $formFilter->getElement('size');?>
+						</div>
+						<div class="control-label col-md-3">
+							<?php echo $formFilter->getElement('color');?>
+						</div>
+						<div class="control-label col-md-3">
+							<?php echo $formFilter->getElement('status');?>
+						</div>
+						<div class="control-label col-md-3">
+							<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("REFRESH")?>" dojoType="dijit.form.Button" 
+							iconClass="dijitIconSearch" />
+						</div>
+					</div>		
+				</div>
+				<div style="clear:both;"></div>	
+			</form> 
 	<div id="divPrint" style="width: 100%;">
 	<style>
 		.style{
@@ -105,13 +98,11 @@
 			          </td>
 			         </tr>
 		              <?php echo $this->getFooter;?>		
-				</tbody>
-			</table>
-		</div>
-	  </div>		
+					</tbody>
+				</table>
+			</div>
+  		</div>		
 	</div>
-	 </div>
-   </div>
 </div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
 <script>

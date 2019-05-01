@@ -1,0 +1,214 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$url_submit =  $this->url(array('module'=>'product','controller'=>'adjust','action'=>'add'));
+	$url_getProduct =  $this->url(array('module'=>'product','controller'=>'transfer','action'=>'getproduct'));
+	$formFilter = $this->formFilter;
+?>
+<title><?php echo $tr->translate("TRANSFER_STOCK");?></title>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+            <div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_REQUEST');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<div class="card-box">	
+			<form dojoType="dijit.form.Form" id="frm" method="post" action="" >
+			<script  type="dojo/method" event="onSubmit">	
+				if(this.validate()) {
+				from_loc = dijit.byId("from_loc").get('value');
+				to_loc = dijit.byId("to_loc").get('value');
+				if(from_loc=='' || to_loc=='' || from_loc ==to_loc){
+					alert("please check location");
+					dijit.byId("to_loc").focus();
+					return false;
+				}
+			    identity = $("#identity").val();
+			    if(identity==''){
+				 	alert("សូមបញ្ចូលបរិមាណទំនិញ");
+				 	dijit.byId('pro_name').focus();
+				    return false;
+			     }
+						loadingBlock();
+						return true;
+				}else{
+					return false;
+				}
+			     </script>		
+				<div class="col-md-4">	
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("TRANSFER_NUM");?></label>
+						<div class="col-md-8">
+							<?php echo $formFilter->getElement('tran_num');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("TRANSFER_DATE");?></label>
+						<div class="col-md-8"><?php echo $formFilter->getElement('tran_date');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("REQUET_TO_FROM");?></label>
+						<div class="col-md-8">
+							<?php echo $formFilter->getElement('from_loc');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><span id="lb_br"></span><?php echo $tr->translate("REQUET_TO_BRANCH");?></label>
+						<div class="col-md-8">
+							<?php echo $formFilter->getElement('to_loc');?>
+						</div>							
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("REMARK");?></label>
+						<div class="col-md-8">
+							<?php echo $formFilter->getElement('remark');?>
+						</div>	
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label"><?php echo $tr->translate("STATUS");?></label>
+						<div class="col-md-8">
+							<?php echo $formFilter->getElement('status');?>
+						</div>
+					</div>
+					<div class="form-group" style="padding-top: 6px;">
+						<label class="col-md-4 control-label"></label>
+						<div class="col-md-8">
+							<button type="submit" name="btnsavenew" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_NEW")?> </button>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-8">	
+					<div class="portlet box blue">
+						<div class="portlet-title">
+							<div class="caption" style="width:100%">
+								<?php echo $formFilter->getElement('pro_name');?>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th><?php echo $tr->translate("PRODUCT_NAME");?></th>
+									<th><?php echo $tr->translate("UNIT_QTY");?></th>
+									<th><?php echo $tr->translate("QTY_PER_UNIT");?></th>
+									<th style="white-space:nowrap;"><?php echo $tr->translate("QTY_REQUEST");?></th>
+									<th><?php echo $tr->translate("REMARK");?></th>
+									<th><?php echo $tr->translate("ACTION");?></th>
+								</tr>
+							</thead>
+							<tbody id="table_row" style="font-size:12px;">
+							</tbody>
+						</table>
+						<input type="hidden" name="identity" id="identity" value="" >
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.NumberTextBox");
+	var index=0;
+	col = 0;
+function addNew(){
+	id = dijit.byId("pro_name").get('value');
+	branch_id = dijit.byId("to_loc").get('value');	
+	if(branch_id==''){return false;}
+	index++;
+	$.ajax({
+        url: "<?php echo $url_getProduct;?>",
+        type: "post",
+        data: {'id':id,'location_ids':branch_id},
+        success: function(val){
+			for(i=1; i<index; i++){
+				new_item=parseInt(id);
+				items = parseInt($("#pro_id_"+i).val());
+				if(new_item==items){		
+					newqty = parseInt($("#qty_tran_"+i).val());
+					newqty = newqty+1;
+					$("#qty_tran_"+i).val(newqty);
+					$("#qty_unit_"+i).val(newqty);
+					checkQTY(i);
+					return false;
+				}
+			}
+			col++;
+			data = $.parseJSON(val);
+			template='<td>'+index+'</td>';
+			template+='<td style="white-space: nowrap;">'+data.item_name+'<input type="hidden" id="pro_id_'+index+'" name="pro_id_'+index+'" value="'+data.id+'" </td>';
+			template+='<td width="80px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="qty_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_unit_'+index+'" value="1"  /></td>'; 
+			template+='<td width="80px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="qty_per_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_per_unit_'+index+'" value="0" /></td>'; 
+			template+='<td width="80px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="qty_tran_'+index+'" readOnly="readOnly" name="qty_tran_'+index+'" value="1"> <input type="hidden" name="qty_measure_'+index+'" id="qty_measure_'+index+'" value="'+data.qty_perunit+'"/></td>'; 
+			template+='<td><input class="fullside" dojoType="dijit.form.TextBox" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
+			template+='<td><button type="button" onClick="deleteRecord('+index+',1)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
+			
+			tmp='<tr id="row'+col+'">';
+			tmp+="</tr>";
+			$('#table_row').append(tmp);
+			dojo.html.set(dojo.byId('row'+col),template , {
+			     parseContent: true,
+			});
+			if($('#identity').val()!="") {
+				var identity = $('#identity').val();
+				$('#identity').val(identity+','+index);
+			} else {$('#identity').val(index);}
+        },
+        error:function(){
+        }
+    });
+}
+function TotalQty(index){
+	main_qty =$("#qty_unit_"+index).val();
+	detail_qty =  $("#qty_per_unit_"+index).val();
+	qty_measure = $("#qty_measure_"+index).val();
+	if(qty_measure==0){
+		qty_measure=1;
+	}else{
+		qty_measure = qty_measure;
+	}
+	total_qty = parseFloat(main_qty) + (parseFloat(detail_qty)/parseFloat(qty_measure));
+	$("#qty_tran_"+index).val(total_qty.toFixed(3));
+}
+	function checkQTY(index){
+		qty = parseFloat($('#qty_'+index).val());
+		qty_tran = parseFloat($('#qty_tran_'+index).val());
+		translate = "This Product is remain "+qty+" Only";
+		if(qty_tran>qty){
+			alert("This Product is remain "+qty+" Only");
+			$('#qty_tran_'+index).val(qty)
+		}
+	}
+function deleteRecord(index,type) {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		$("#row"+index).remove();
+	}
+<?php $url_no =  $this->url(array('module'=>'product','controller'=>'transfer','action'=>'get-request-transfer-no')); ?>
+function getRequestNo(){
+	var id = $("#from_loc").val();
+	$.ajax({
+        url: "<?php echo $url_no;?>",
+        type: "post",
+        data: {'id':id},
+        success: function(data){
+           val = $.parseJSON(data);
+		   $("#tran_num").val(val);
+        },
+        error:function(){
+        }
+    });
+}
+</script>

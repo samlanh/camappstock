@@ -5,37 +5,28 @@
 	$originalDate = "2012-10-31";
 	$newDate = date("m/d/Y", strtotime($originalDate));
 ?>
-<form  id='foundation_class' action=""  method="post" enctype="application/x-www-form-urlencoded">
-</form>
+
 <style>
 .hover:hover{ background: #ddd;}
 </style>
 <title><?php echo $tr->translate("RPT_EXPENSE");?></title>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("RPT_EXPENSE");?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+			<form method="post" autocomplete="off">
+				<div class="form-group" style="padding-top: 6px;">
+					<?php $formFilter = $this->formFilter; ?>
+					<div class="col-md-2"><?php echo $formFilter->getElement('text_search');?></div>
+					<div class="col-md-2"><?php echo $formFilter->getElement('branch_id');?></div>
+					<div class="col-md-2"><?php echo $formFilter->getElement('title');?></div>
+					<div class="col-md-2"><?php echo $formFilter->getElement('start_date');?></div>
+					<div class="col-md-2"><?php echo $formFilter->getElement('end_date');?></div>
+					<div class="col-md-2">
+						<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("REFRESH")?>" dojoType="dijit.form.Button" 
+							iconClass="dijitIconSearch" />
+					</div>
 				</div>
-				<?php echo $this->getHeader;?>
-			</div>
- <div class="portlet-body form frmfilter">
-	<form method="post" autocomplete="off">
-		<div class="form-group" style="padding-top: 6px;">
-			<?php $formFilter = $this->formFilter; ?>
-			<label class="control-label col-md-2"><?php echo $formFilter->getElement('text_search');?></label>
-			<label class="control-label col-md-2"><?php echo $formFilter->getElement('branch_id');?></label>
-			<label class="control-label col-md-2"><?php echo $formFilter->getElement('title');?></label>
-			<label class="control-label col-md-2"><div class="input-icon right"><i class="icon-calendar"></i><?php echo $formFilter->getElement('start_date');?></div></label>
-			<label class="control-label col-md-2"><div class="input-icon right"><i class="icon-calendar"></i><?php echo $formFilter->getElement('end_date');?></div></label>
-			<label class="control-label col-md-2">
-				<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
-			</label>
-		</div><div style="clear:both;"></div>	
-	</form> 
-</div>
-<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
+			</form> 
 	<div id="divPrint"  >
 		<table class="table2excel" style="background:#fff; margin: 0 auto; width: 100%; padding: 0px 2px 1cm 2px;font-family: 'Hanuman';">
 		<tr style="font-size: 13px;">
@@ -117,14 +108,13 @@
 				</td>
 			</tr>
 		</table>
-		<?php echo $this->getFooter;?>
-	</div>	
-</div>
-</div>
-</div>
+			<?php echo $this->getFooter;?>
+			</div>	
+		</div>
+	</div>
 </div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
 <script type="text/javascript">
 function doPrint() {var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();}
-
+dojo.require("dijit.form.DateTextBox");
 </script>

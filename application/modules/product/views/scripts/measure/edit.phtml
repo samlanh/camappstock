@@ -35,19 +35,18 @@
 								<?php echo $formFilter->getElement('measure_name');?>
 							</div>
 						</div>
-							<div class="form-group">
-								<label class="col-md-4 control-label"><?php echo $tr->translate("STATUS");?></label>
-								<div class="col-md-8">
-									<?php echo $formFilter->getElement('status');?>
-								</div>
+						<div class="form-group">
+							<label class="col-md-4 control-label"><?php echo $tr->translate("REMARK");?></label>
+							<div class="col-md-8">
+								<?php echo $formFilter->getElement('remark');?>
 							</div>
-							<div class="form-group">
-												
-								<label class="col-md-4 control-label"><?php echo $tr->translate("REMARK");?></label>
-								<div class="col-md-8">
-									<?php echo $formFilter->getElement('remark');?>
-								</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-4 control-label"><?php echo $tr->translate("STATUS");?></label>
+							<div class="col-md-8">
+								<?php echo $formFilter->getElement('status');?>
 							</div>
+						</div>
 						<div class="form-group">
 								<label  class="col-md-12 col-md-offset-4 col-md-8">
 									<a href="<?php echo $this->baseUrl();?>/product/measure/index"><button type="button" class="btn red"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>

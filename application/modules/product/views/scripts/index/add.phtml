@@ -1,23 +1,9 @@
 <?php 
-	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$form=$this->form;
 	$url_submit =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add'));
-    $url_cencel =  $this->url(array('module'=>'product','controller'=>'index','action'=>'index'));
-    $url_check =  $this->url(array('module'=>'product','controller'=>'index','action'=>'check'));
-    $url_new = $this->url(array('module'=>'product','controller'=>'index','action'=>'add'));
-	$user_info = new Application_Model_DbTable_DbGetUserInfo();
-	$result = $user_info->getUserInfo();
-	$session_user=new Zend_Session_Namespace('auth');
-	$request=Zend_Controller_Front::getInstance()->getRequest();
-	$level = $result["level"];
 ?>						 
 <title><?php echo $tr->translate("ADD_NEW_PRODUCT");?></title>
-<style>
-.table>tbody>tr>td, .table>tfoot>tr>td, .table>thead>tr>td {
-    padding: 2px 2px;
-}
-</style>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content">
 		<div class="card-box">
@@ -25,8 +11,7 @@
 		    	<div class="col-sm-8 pd-0">
 		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_NEW_PRODUCT');?></h4>
     			</div>
-    			<div class="col-sm-4 text-right">
-    			</div>
+    			<div class="col-sm-4 text-right"></div>
     		</div>
     	</div>
 		<div class="card-box">
@@ -51,118 +36,118 @@
 						return false;
 					}
 				</script>
-				<div class="col-md-5">
-					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("PRODUCT_INFO");?> 
-	                   </label>
-	                </div>
-					<div class="form-group">
-						<label class="col-md-4 control-label"><?php echo $tr->translate("TYPE");?>*</label>
-						<div class="col-md-8"><?php echo $form->getElement('type');?></div>
+			<div class="col-md-5">
+				<div class="form-group">
+                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("PRODUCT_INFO");?> 
+                   </label>
+                </div>
+				<div class="form-group">
+					<label class="col-md-4 control-label"><?php echo $tr->translate("TYPE");?>*</label>
+					<div class="col-md-8"><?php echo $form->getElement('type');?></div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label"><strong><?php echo $tr->translate("PRODUCT_NAME");?>*</strong></label>
+					<div class="col-md-8"><?php echo $form->getElement('name');?></div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label"><?php echo $tr->translate("PRODUCT_CODE");?></label>
+					<div class="col-md-8"><?php echo $form->getElement('pro_code');?></div>	
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label"><?php echo $tr->translate("BARCODE");?></label>
+					<div class="col-md-8"><?php echo $form->getElement('barcode');?></div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label"><?php echo $tr->translate("BRAND_NAME");?></label>
+					<div class="col-md-5">
+						<?php echo $form->getElement('brand');?>
 					</div>
-					<div class="form-group">
-						<label class="col-md-4 control-label"><strong><?php echo $tr->translate("PRODUCT_NAME");?>*</strong></label>
-						<div class="col-md-8"><?php echo $form->getElement('name');?></div>
-					</div>
-					<div class="form-group">
-						<label class="col-md-4 control-label"><?php echo $tr->translate("PRODUCT_CODE");?></label>
-						<div class="col-md-8"><?php echo $form->getElement('pro_code');?></div>	
-					</div>
-					<div class="form-group">
-						<label class="col-md-4 control-label"><?php echo $tr->translate("BARCODE");?></label>
-						<div class="col-md-8"><?php echo $form->getElement('barcode');?></div>
-					</div>
-					<div class="form-group">
-						<label class="col-md-4 control-label"><?php echo $tr->translate("BRAND_NAME");?></label>
-						<div class="col-md-5">
-							<?php echo $form->getElement('brand');?>
-						</div>
-						<div class="col-md-3">
-							<input class='fullside' iconClass="dijitIconUndo" type="button" label="Refresh" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-md-4 control-label"><?php echo $tr->translate("PRODUCT_CATEGORY");?>*</label>
-						<div class="col-md-8"><?php echo $form->getElement('category');?></div>
-					</div>
-					<div class="form-group">
-						<label class="col-md-4 control-label"><?php echo $tr->translate("COLOR");?></label>
-						<div class="col-md-8">
-							<?php echo $form->getElement('color');?>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-md-4 control-label"><?php echo $tr->translate("MEASURE");?></label>
-						<div class="col-md-2">
-							<?php echo $form->getElement('unit');?>
-						</div>
-						<div class="col-md-6">
-							<?php echo $form->getElement('measure');?>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-md-3 control-label" id="lb_measure" style="text-align: center;"></label>
-						<label class="col-md-1 control-label" style="text-align: center;">=</label>
-						<div class="col-md-4">
-							<?php echo $form->getElement('qty_unit');?>
-						</div>
-						<div class="col-md-4">
-							<?php echo $form->getElement('label');?>
-						</div>
+					<div class="col-md-3">
+						<input class='fullside' iconClass="dijitIconUndo" type="button" label="Refresh" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
 					</div>
 				</div>
-				<div class="col-md-5">
-					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-money" aria-hidden="true"></i> <?php echo $tr->translate("PRICE_SETTING");?></label>
-	                </div>
-					<div class="form-group">
-						<label class="col-md-4 control-label"><strong><?php echo $tr->translate("COST_PRICE");?>*</strong></label>
-						<div class="col-md-8">
-							<?php echo $form->getElement('price');?>
-						</div>
-					</div>		
-					<div class="form-group">
-						<label class="col-md-4 control-label"><?php echo $tr->translate("PRODUCT_PRICE_INFO");?></label>
-						<label class="col-md-8 control-label"><?php echo $form->getElement('price_type');?></label>
-					</div>
-					<div class="form-group">
-						<div class="col-md-4"></div>
-						<div class="col-md-8">
-							<table class="table table-bordered" style="font-size: 11px;">
-								<thead>
-									<tr>
-										<th>#</th>
-										<th><?php echo $tr->translate("TYPE_NAME");?></th>
-										<th><?php echo $tr->translate("SOLD_PRICE");?></th>
-										<th><?php echo $tr->translate("ACTION");?></th>
-									</tr>
-								</thead>
-								<tbody id="tr_price_type"></tbody>
-							</table>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-md-4 control-label"><?php echo $tr->translate("NOTE");?></label>
-						<div class="col-md-8">
-							<?php echo $form->getElement('description');?>
-						</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label"><?php echo $tr->translate("PRODUCT_CATEGORY");?>*</label>
+					<div class="col-md-8"><?php echo $form->getElement('category');?></div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label"><?php echo $tr->translate("COLOR");?></label>
+					<div class="col-md-8">
+						<?php echo $form->getElement('color');?>
 					</div>
 				</div>
-				<div class="col-md-2">
-					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-picture-o" aria-hidden="true"></i> <?php echo $tr->translate("PHOTO");?></label>
-	                </div>
-					<div class="form-group">
-						<div class="col-md-12">
-							<div class="imgBlog">
-							<img class="image_view bd" id="image_viewbg" src="<?php echo $this->baseUrl().'/images/no-image.png';?>" alt=""  />
-							<div class="button_browse">
-								<span>Upload Imags &nbsp;&nbsp;<span><i class="fa fa-camera" aria-hidden="true"></i></span></span>
-								<input class="btn_borwse_image"  type="file" id="photo" name="photo">
-							</div>
-						</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label"><?php echo $tr->translate("MEASURE");?></label>
+					<div class="col-md-2">
+						<?php echo $form->getElement('unit');?>
+					</div>
+					<div class="col-md-6">
+						<?php echo $form->getElement('measure');?>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label" id="lb_measure" style="text-align: center;color:red;"></label>
+					<label class="col-md-1 control-label" style="text-align: center;">=</label>
+					<div class="col-md-4">
+						<?php echo $form->getElement('qty_unit');?>
+					</div>
+					<div class="col-md-4">
+						<?php echo $form->getElement('label');?>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-5">
+				<div class="form-group">
+                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-money" aria-hidden="true"></i> <?php echo $tr->translate("PRICE_SETTING");?></label>
+                </div>
+				<div class="form-group">
+					<label class="col-md-4 control-label"><strong><?php echo $tr->translate("COST_PRICE");?>*</strong></label>
+					<div class="col-md-8">
+						<?php echo $form->getElement('price');?>
+					</div>
+				</div>		
+				<div class="form-group">
+					<label class="col-md-4 control-label"><?php echo $tr->translate("PRODUCT_PRICE_INFO");?></label>
+					<label class="col-md-8 control-label"><?php echo $form->getElement('price_type');?></label>
+				</div>
+				<div class="form-group">
+					<div class="col-md-4"></div>
+					<div class="col-md-8">
+						<table class="table table-bordered" style="font-size: 11px;">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th><?php echo $tr->translate("TYPE_NAME");?></th>
+									<th><?php echo $tr->translate("SOLD_PRICE");?></th>
+									<th><?php echo $tr->translate("ACTION");?></th>
+								</tr>
+							</thead>
+							<tbody id="tr_price_type"></tbody>
+						</table>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label"><?php echo $tr->translate("NOTE");?></label>
+					<div class="col-md-8">
+						<?php echo $form->getElement('description');?>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group">
+                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-picture-o" aria-hidden="true"></i> <?php echo $tr->translate("PHOTO");?></label>
+                </div>
+				<div class="form-group">
+					<div class="col-md-12">
+						<div class="imgBlog">
+						<img style="border:1px solid #ccc;" class="image_view bd" id="image_viewbg" src="<?php echo $this->baseUrl().'/images/no-image.png';?>" alt=""  />
+						<div class="button_browse">
+							<span>Upload Imags &nbsp;&nbsp;<span><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+							<input class="btn_borwse_image"  type="file" id="photo" name="photo">
 						</div>
 					</div>
+					</div>
+				</div>
 			</div>
 			<div class="card-box">
 	            <div class="col-sm-12 border-botom">
@@ -183,16 +168,16 @@
 				</div>
 				<div class="table-responsive">
 					<table class="table table-bordered" style="font-size:12px !important;">
-						<thead>
+						<thead style="background:#cecece">
 							<tr>
 								<th>#</th>
 								<th><?php echo $tr->translate("LOCATION_NAME");?></th>
 								<th><?php echo $tr->translate("UNIT_QTY");?></th>
 								<th><?php echo $tr->translate("QTY_PER_UNIT");?></th>
 								<th><?php echo $tr->translate("TOTAL_QTY");?></th>
-								<th><?php echo $tr->translate("QTY_WARNING");?></th>
-								<th><?php echo $tr->translate("ACTION");?>
-									<input type="hidden" name="identity" id="identity" value="<?php //echo $identity;?>" >
+								<th style="white-space: nowrap;"><?php echo $tr->translate("QTY_WARNING");?></th>
+								<th>
+									<input type="hidden" name="identity" id="identity" value="" >
 								</th>
 							</tr>
 						</thead>
@@ -202,16 +187,14 @@
 			</div>
 			<div class="portlet-body">
 				<div class="table-responsive"></div>
-				<input type="hidden" name="identity_price" id="identity_price" value="<?php //echo $identity;?>" >
+				<input type="hidden" name="identity_price" id="identity_price" value="" >
 			</div>
 			<div class="card-box">
 				<div class="border-top">
 					<div class="col-md-4"></div>
 					<div class="col-md-5" class='center'>
-						<input type="submit" value="save_new" id="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE")?>" dojoType="dijit.form.Button" 
-							iconClass="dijitEditorIcon dijitEditorIconSave" />
 						<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("SAVE_NEW")?>" dojoType="dijit.form.Button" 
-							iconClass="dijitEditorIcon dijitEditorIconSave" />
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
 					</div>
 					<div class="col-md-3"></div>
 				</div>
@@ -223,10 +206,7 @@
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script>
 dojo.require("dojo.data.ItemFileWriteStore");
-$( document ).ready(function() {
-	$('#price_type').val(1);
-	addProLocation();
-	addNewPriceType();
+require(["dojo/ready"], function(ready){
 	$('#product_id').on('keyup keypress', function(e) {
 		var keyCode = e.keyCode || e.which;
 	  if (keyCode === 13) { 
@@ -234,35 +214,16 @@ $( document ).ready(function() {
 		return false;
 	  }
 	});
+	 ready(function(){
+		dijit.byId('price_type').attr('value',1);
+		addProLocation();
+		//addNewPriceType();
+	});
 });
 function getMeasureLabel(){
-	var sel = $("#measure");
-	var text = $("option:selected",sel).text();
-	document.getElementById('lb_measure').innerHTML = text; 
+	var measur_label = dijit.byId("measure").attr("displayedValue");
+	document.getElementById('lb_measure').innerHTML = measur_label; 
 }
-	index = 0;
-function addProLocation(){
-		<?php if(!empty($this->branch)){foreach ($this->branch as $key=> $rs){?>
-		index++;
-		id = '<?php echo $rs["id"];?>';
-		inx = '<?php echo $key+1;?>';
-			template='<tr id="row_location_<?php echo $key+1;?>">';
-			template+='<td><?php echo $key+1;?></td>';
-			template+='<td style="min-width:100px;"><?php echo $rs["name"];?><input type="hidden" id="branch_id_<?php echo $key+1;?>" name="branch_id_<?php echo $key+1;?>" value="'+id+'"</td>';
-			template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="current_qty_<?php echo $key+1;?>" onKeyup="totalQty(<?php echo $key+1;?>)" name="current_qty_<?php echo $key+1;?>" value="0" class="form-control"></td>'; 
-			template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="other_qty_<?php echo $key+1;?>" onKeyup="totalQty(<?php echo $key+1;?>)" name="other_qty_<?php echo $key+1;?>" value="0" class="form-control"></td>'; 
-			template+='<td><input readonly dojoType="dijit.form.NumberTextBox" required="true" type="text" id="total_qty_<?php echo $key+1;?>" name="total_qty_<?php echo $key+1;?>" value="0" class="form-control"></td>'; 
-			template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="qty_warning_<?php echo $key+1;?>" name="qty_warnning_<?php echo $key+1;?>" value="0" class="form-control"></td>';
-			template+='<td><button type="button" onClick="deleteRecord(<?php echo $key+1;?>,1)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
-			template+='</tr>';
-			$('#tr_location').append(template);
-			if($('#identity').val()!="") {
-				var identity = $('#identity').val();
-				$('#identity').val(identity+','+inx);
-			} else {$('#identity').val(inx);}
-		<?php }}?>
-}
-	
 function totalQty(index){
 	o_measure = $('#qty_unit').val();
 	unit_qty = $('#current_qty_'+index).val();
@@ -271,7 +232,6 @@ function totalQty(index){
 	total_qty = parseFloat(unit_qty)+ total_other_qty;
 	$('#total_qty_'+index).val(total_qty);
 }
-	
 function doTotalQty(){
 	o_measure = $('#qty_unit').val();
 	if(o_measure=="" || o_measure==0){
@@ -289,47 +249,94 @@ function doTotalQty(){
 			$('#total_qty_'+index).val(total_qty);
 		}
 	}
-	var strings = arrays.join(',');
+}
+index = 0;
+function addProLocation(){//initialize
+	template='';
+	<?php if(!empty($this->branch)){foreach ($this->branch as $key=> $rs){?>
+	index++;
+	id = '<?php echo $rs["id"];?>';
+	inx = '<?php echo $key+1;?>';
+		template+='<tr id="row_location_<?php echo $key+1;?>">';
+		template+='<td><?php echo $key+1;?></td>';
+		template+='<td style="min-width:100px;"><?php echo $rs["name"];?><input type="hidden" id="branch_id_<?php echo $key+1;?>" name="branch_id_<?php echo $key+1;?>" value="'+id+'"</td>';
+		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="current_qty_<?php echo $key+1;?>" onKeyup="totalQty(<?php echo $key+1;?>)" name="current_qty_<?php echo $key+1;?>" value="0" ></td>'; 
+		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="other_qty_<?php echo $key+1;?>" onKeyup="totalQty(<?php echo $key+1;?>)" name="other_qty_<?php echo $key+1;?>" value="0" ></td>'; 
+		template+='<td><input readonly dojoType="dijit.form.NumberTextBox" required="true" type="text" id="total_qty_<?php echo $key+1;?>" name="total_qty_<?php echo $key+1;?>" value="0" ></td>'; 
+		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="qty_warning_<?php echo $key+1;?>" name="qty_warnning_<?php echo $key+1;?>" value="0"></td>';
+		template+='<td style="min-width:20px;cursor: pointer;"><img onclick="deleteRecord(<?php echo $key+1;?>,1)" src="<?php echo $this->baseUrl();?>/images/Delete_16.png" /></td>';
+		template+='</tr>';
+		if($('#identity').val()!="") {
+			var identity = $('#identity').val();
+			$('#identity').val(identity+','+inx);
+		} else {$('#identity').val(inx);}
+	<?php }}?>
+	dojo.html.set(dojo.byId("tr_location"),template , {
+	     parseContent: true,
+	});
 }
 function addNewProLocation(){
+		var branch_id = dijit.byId("branch").get('value');
+		if(branch_id==''){return false;}
+		var iden = $("#identity").val();
+		var arrays = iden.split(',');
+		if(arrays!=""){
+			 for(var i=0;i< arrays.length;i++) {
+				 readychoose = $('#branch_id_'+arrays[i]).val();
+				 if(readychoose==branch_id){
+					alert("បានជ្រើសរើសរួចហើយ");
+				 	return false;
+				 }
+			}
+		}
 		index++;
-		var branch_text = $("#branch");
-		var txt_br = $("option:selected",branch_text).text();
-		var branch_id = $("#branch").val();
+		var branch_text = dijit.byId("branch").attr('displayedValue');
 		template='<tr id="row_location_'+index+'">';
 		template+='<td>'+index+'</td>';
-		template+='<td>'+txt_br+'<input type="hidden" id="branch_id_'+index+'" name="branch_id_'+index+'" value="'+branch_id+'" </td>';
-		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="current_qty_'+index+'" onKeyup="totalQty('+index+')" name="current_qty_'+index+'" value="0" class="form-control"></td>'; 
-		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="other_qty_'+index+'" onKeyup="totalQty('+index+')" name="other_qty_'+index+'" value="0" class="form-control"></td>'; 
-		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="total_qty_'+index+'" name="total_qty_'+index+'" value="0" class="form-control"></td>'; 
-		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="qty_warning_'+index+'" name="qty_warnning_'+index+'" value="0" class="form-control"></td>';
-		template+='<td><button type="button" onClick="deleteRecord('+index+',1)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
+		template+='<td>'+branch_text+'<input dojoType="dijit.form.TextBox" type="hidden" id="branch_id_'+index+'" name="branch_id_'+index+'" value="'+branch_id+'" </td>';
+		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="current_qty_'+index+'" onKeyup="totalQty('+index+')" name="current_qty_'+index+'" value="0" ></td>'; 
+		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="other_qty_'+index+'" onKeyup="totalQty('+index+')" name="other_qty_'+index+'" value="0" ></td>'; 
+		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="total_qty_'+index+'" name="total_qty_'+index+'" value="0" ></td>'; 
+		template+='<td><input type="text" dojoType="dijit.form.NumberTextBox" required="true" id="qty_warning_'+index+'" name="qty_warnning_'+index+'" value="0" ></td>';
+		template+='<td><img onclick="deleteRecord('+index+',1)" src="<?php echo $this->baseUrl();?>/images/Delete_16.png" /></td>';
 		template+='</tr>';
 		$('#tr_location').append(template);
 		if($('#identity').val()!="") {
 			var identity = $('#identity').val();
 			$('#identity').val(identity+','+index);
 		} else {$('#identity').val(index);}
-		
 }	
 indexs=0;
 function addNewPriceType(){
+		var price_id = dijit.byId("price_type").get('value');
+		if(price_id=='' || price_id==-1){
+			return false;
+		}
+		var iden = $("#identity_price").val();
+		var arrays = iden.split(',');
+		if(arrays!=""){
+			 for(var i=0;i< arrays.length;i++){
+				 readychoose = $('#price_type_'+arrays[i]).val();
+				 if(readychoose==price_id){
+					alert("បានជ្រើសរើសរួចហើយ");
+				 	return false;
+				 }
+			}
+		}
+			
+		var price_text = dijit.byId("price_type").attr("displayedValue");
 		indexs++;
-		var price_text = $("#price_type");
-		var txt_pr = $("option:selected",price_text).text();
-		var price_id = $("#price_type").val();
 		template='<tr id="row_price_'+indexs+'">';
 		template+='<td >'+indexs+'</td>';
-		template+='<td style="white-space:nowrap">'+txt_pr+'<input type="hidden" id="price_type_'+indexs+'" name="price_type_'+indexs+'" value="'+price_id+'" </td>';
+		template+='<td style="white-space:nowrap">'+price_text+'<input type="hidden" id="price_type_'+indexs+'" name="price_type_'+indexs+'" value="'+price_id+'" </td>';
 		template+='<td><input type="text" required="true" dojoType="dijit.form.NumberTextBox" id="price_'+indexs+'" name="price_'+indexs+'" value="0" class="form-control"></td>'; 
-		template+='<td><button type="button" onClick="deleteRecord('+indexs+',2)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
+		template+='<td><img onClick="deleteRecord('+indexs+',2)" src="<?php echo $this->baseUrl();?>/images/Delete_16.png" /></td>';
 		template+='</tr>';
 		$('#tr_price_type').append(template);
 		if($('#identity_price').val()!="") {
 			var identity_price = $('#identity_price').val();
 			$('#identity_price').val(identity_price+','+indexs);
 		} else {$('#identity_price').val(indexs);}
-		
 }
 function deleteRecord(index,type) {
 	if(type==1){
@@ -378,10 +385,11 @@ function getPopupColor(){
 	}
 }
 function AllRefresh(){
-	//fillterBrand();
-	//filtterCategory();
+	loadingBlock();
+	filtterCategory();
+	fillterBrand();
 	fillterMeasure();
-	//fillterColor();
+	fillterColor();
 }
 get_urlbrand = '<?php echo $this->url(array('module'=>'product','controller'=>'index','action'=>'get-brand'));?>';
 function fillterBrand(){
@@ -398,13 +406,10 @@ function fillterBrand(){
 		load: function(data) {	
 			brand_store  = getDataStorefromJSON('id','name', data);		
 		    dijit.byId('brand').set('store', brand_store);
-		    //document.getElementsByClassName("overlay")[0].style.display="none";	
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});	
-	
 }
 url_getcategory = '<?php echo $this->url(array('module'=>'product','controller'=>'index','action'=>'get-category')); ?>';
 function filtterCategory(){
@@ -449,32 +454,31 @@ function fillterMeasure(){
 		}
 	});	
 }
-
-<?php $url_add_color =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-other')); ?>
+url_getcolur = '<?php echo  $this->url(array('module'=>'product','controller'=>'index','action'=>'get-other')); ?>'
 function fillterColor(){
-	var title  = $("#title_en").val();
-	if(title==''){$("#title_en").focus();return false;}
-	$.ajax({
-		url: "<?php echo $url_add_color;?>",
-		type: "post",
-		data: $('#frmOther').serialize(),
-		success: function(data){
-			rs = $.parseJSON(data);
-			 $('#color').append($("<option></option>").attr("value",rs['other_id']).attr("selected",true).text(title));                       
-			 $("#color").select2();
-			$('#otherpopup').modal('hide');
+	color = dijit.byId('color').get('value');
+	if(color==-1){
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_getcolur,	
+		content:{ 
+			'get_data':1
 		},
-		error:function(err){
-			alert("faile insert");
-		   
+		handleAs:"json",
+		load: function(data) {	
+			color_store  = getDataStorefromJSON('id','name', data);		
+		    dijit.byId('color').set('store', color_store);
+		    document.getElementsByClassName("overlay")[0].style.display="none";	
+		},
+		error: function(err) {
 		}
-	});
+	});	
 }
 
 function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
-        
         reader.onload = function (e) {
             $('#image_viewbg').attr('src', e.target.result);
         }

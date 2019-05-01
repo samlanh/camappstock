@@ -83,7 +83,6 @@ class Product_Model_DbTable_DbOther extends Zend_Db_Table_Abstract
     	$sql = "SELECT COUNT(key_code) FROM `tb_view` WHERE type=$type ORDER BY key_code DESC LIMIT 1 ";
     	$db =$this->getAdapter();
     	$number = $db->fetchOne($sql);
-		//echo (int)$number+1;exit;
     	return (int)$number+1;
     }
 }

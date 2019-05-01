@@ -63,9 +63,8 @@ class Product_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
   }
   
   public function getColor(){
-  	$db = $this->getAdapter();
-  	$sql = "SELECT v.`id`,v.`name_en` as name,v.`status`,v.`key_code`,`type` FROM `tb_view` AS v WHERE v.`type` = 4";
-  	return $db->fetchAll($sql);
+  	$db = new Application_Model_DbTable_DbGlobal();
+  	return $db->getColor();
   }
   
   function getBranch(){
@@ -100,74 +99,71 @@ class Product_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
   	return $pre.$new_acc_no;
   }
   
-  function getAllProduct($data){
-  	$db = $this->getAdapter();
-  	$db_globle = new Application_Model_DbTable_DbGlobal();
-	$user_id = $this->getUserId();
-	//(SELECT v.`name_en` FROM tb_view AS v WHERE v.`type`=4  AND p.`color_id`=v.`key_code` LIMIT 1) AS color,
-	//(SELECT b.`name` FROM `tb_brand` AS b WHERE b.`id`=p.`brand_id` LIMIT 1) AS brand,
-  	$sql ="SELECT 
-			  p.`id`,
-			  (SELECT b.name FROM `tb_sublocation` AS b WHERE b.id=pl.`location_id` LIMIT 1) AS branch,
-			  p.`item_code`,
-			  p.`item_name` ,
+//   function getAllProduct($data){
+//   	$db = $this->getAdapter();
+//   	$db_globle = new Application_Model_DbTable_DbGlobal();
+// 	$user_id = $this->getUserId();
+//   	$sql ="SELECT 
+// 			  p.`id`,
+// 			  (SELECT b.name FROM `tb_sublocation` AS b WHERE b.id=pl.`location_id` LIMIT 1) AS branch,
+// 			  p.`item_code`,
+// 			  p.`item_name` ,
 			  
-			  (SELECT c.name FROM `tb_category` AS  c WHERE c.id=p.`cate_id` LIMIT 1) AS cat,
-			  (SELECT m.name FROM `tb_measure` AS m WHERE m.id = p.`measure_id` LIMIT 1) AS measure,
-			  SUM(pl.`qty`) AS qty,
-			  (SELECT pp.`price` FROM `tb_product_price` AS pp WHERE pp.`pro_id`=p.`id` AND `type_id`=1 LIMIT 1) AS master_price,
-			  (SELECT `fullname` FROM `tb_acl_user` WHERE `user_id`=p.`user_id` LIMIT 1) AS user_name,
-  			  (SELECT v.`name_en` FROM tb_view AS v WHERE v.`type`=5  AND p.`status`=v.`key_code` LIMIT 1) AS status
-			FROM
-			  `tb_product` AS p ,
-			  `tb_prolocation` AS pl
-			WHERE p.`id`=pl.`pro_id` ";
-  	$where = '';
-  	if($data["ad_search"]!=""){
-		$string = str_replace(' ','',$data['ad_search']);
-  		$s_where=array();
-  		$s_search = addslashes(trim($string));
-  		$s_where[]= " REPLACE(p.item_name,' ','') LIKE '%{$s_search}%'";
-  		$s_where[]=" REPLACE(p.barcode,' ','') LIKE '%{$s_search}%'";
-  		$s_where[]= " REPLACE(p.item_code,' ','') LIKE '%{$s_search}%'";
-  		$s_where[]= " REPLACE(p.serial_number,' ','') LIKE '%{$s_search}%'";
-  		$where.=' AND ('.implode(' OR ', $s_where).')';
-  	}
-  	if($data["branch"]!=""){
-  		$where.=' AND pl.`location_id`='.$data["branch"];
-  	}
-  	if($data["brand"]!=""){
-  		$where.=' AND p.brand_id='.$data["brand"];
-  	}
-  	if($data["category"]!=""){
-  		$where.=' AND p.cate_id='.$data["category"];
-  	}
-  	if($data["model"]!=""){
-  		$where.=' AND p.model_id='.$data["model"];
-  	}
-  	if($data["size"]!=""){
-  		$where.=' AND p.size_id='.$data["size"];
-  	}
-  	if($data["color"]!=""){
-  		$where.=' AND p.color_id='.$data["color"];
-  	}
-  	if($data["status"]!=-1){
-  		$where.=' AND p.status='.$data["status"];
-  	}
-  	$location = $db_globle->getAccessPermission('pl.`location_id`');
-  	$group_by = " GROUP BY p.id";
-  	return $db->fetchAll($sql.$where.$location.$group_by);
-  	
-  }
+// 			  (SELECT c.name FROM `tb_category` AS  c WHERE c.id=p.`cate_id` LIMIT 1) AS cat,
+// 			  (SELECT m.name FROM `tb_measure` AS m WHERE m.id = p.`measure_id` LIMIT 1) AS measure,
+// 			  SUM(pl.`qty`) AS qty,
+// 			  (SELECT pp.`price` FROM `tb_product_price` AS pp WHERE pp.`pro_id`=p.`id` AND `type_id`=1 LIMIT 1) AS master_price,
+// 			  (SELECT `fullname` FROM `tb_acl_user` WHERE `user_id`=p.`user_id` LIMIT 1) AS user_name,
+//   			  (SELECT v.`name_en` FROM tb_view AS v WHERE v.`type`=5  AND p.`status`=v.`key_code` LIMIT 1) AS status
+// 			FROM
+// 			  `tb_product` AS p ,
+// 			  `tb_prolocation` AS pl
+// 			WHERE p.`id`=pl.`pro_id` ";
+//   	$where = '';
+//   	if($data["ad_search"]!=""){
+// 		$string = str_replace(' ','',$data['ad_search']);
+//   		$s_where=array();
+//   		$s_search = addslashes(trim($string));
+//   		$s_where[]= " REPLACE(p.item_name,' ','') LIKE '%{$s_search}%'";
+//   		$s_where[]=" REPLACE(p.barcode,' ','') LIKE '%{$s_search}%'";
+//   		$s_where[]= " REPLACE(p.item_code,' ','') LIKE '%{$s_search}%'";
+//   		$s_where[]= " REPLACE(p.serial_number,' ','') LIKE '%{$s_search}%'";
+//   		$where.=' AND ('.implode(' OR ', $s_where).')';
+//   	}
+//   	if($data["branch"]!=""){
+//   		$where.=' AND pl.`location_id`='.$data["branch"];
+//   	}
+//   	if($data["brand"]!=""){
+//   		$where.=' AND p.brand_id='.$data["brand"];
+//   	}
+//   	if($data["category"]!=""){
+//   		$where.=' AND p.cate_id='.$data["category"];
+//   	}
+//   	if($data["model"]!=""){
+//   		$where.=' AND p.model_id='.$data["model"];
+//   	}
+//   	if($data["size"]!=""){
+//   		$where.=' AND p.size_id='.$data["size"];
+//   	}
+//   	if($data["color"]!=""){
+//   		$where.=' AND p.color_id='.$data["color"];
+//   	}
+//   	if($data["status"]!=-1){
+//   		$where.=' AND p.status='.$data["status"];
+//   	}
+//   	$location = $db_globle->getAccessPermission('pl.`location_id`');
+//   	$group_by = " GROUP BY p.id";
+//   	return $db->fetchAll($sql.$where.$location.$group_by);
+//   }
   function getAllProductForAdmin($data){
   	$db = $this->getAdapter();
   		$db_globle = new Application_Model_DbTable_DbGlobal();
 		$user_id = $this->getUserId();
   	$sql ="SELECT 
 			  p.`id`,
+			  (SELECT v.`name_en` FROM tb_view AS v WHERE v.`type`=16  AND p.`is_service`=v.`key_code` LIMIT 1) AS is_service,
 			  p.`item_code`,
 			  p.`item_name` ,
-			  (SELECT v.`name_en` FROM tb_view AS v WHERE v.`type`=16  AND p.`is_service`=v.`key_code` LIMIT 1) AS is_service,
 			  (SELECT c.name FROM `tb_category` AS  c WHERE c.id=p.`cate_id` LIMIT 1) AS cat,
 			  (SELECT m.name FROM `tb_measure` AS m WHERE m.id = p.`measure_id` LIMIT 1) AS measure,
 			  SUM(pl.`qty`) AS qty,
@@ -199,8 +195,8 @@ class Product_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 	  	if($data["category"]!=""){
 	  		$where.=' AND p.cate_id='.$data["category"];
 	  	}
-	  	if($data["model"]!=""){
-	  		$where.=' AND p.model_id='.$data["model"];
+	  	if($data["type"]>-1){
+	  		$where.=' AND p.is_service='.$data["type"];
 	  	}
 	  	if($data["color"]!=""){
 	  		$where.=' AND p.color_id='.$data["color"];
@@ -401,12 +397,6 @@ class Product_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$db->beginTransaction();
 		
-		$user_info = new Application_Model_DbTable_DbGetUserInfo();
-		$result = $user_info->getUserInfo();
-		$session_user=new Zend_Session_Namespace('auth');
-		$request=Zend_Controller_Front::getInstance()->getRequest();
-		$level = $result["level"];
-		
 		$part= PUBLIC_PATH.'/images/product/';
 		$name = $_FILES['photo']['name'];
 		$size = $_FILES['photo']['size'];
@@ -420,7 +410,6 @@ class Product_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 			$new_image_name = "product".date("Y").date("m").date("d").time().".".end($tem);
 			$photo = $dbg->resizeImase($_FILES['photo'], $part,$new_image_name);
 		}
-		
     	try {
     		$arr = array(
     			'item_name'		=>	$data["name"],
@@ -437,19 +426,16 @@ class Product_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     			'user_id'		=>	$this->getUserId(),
     			'note'			=>	$data["description"],
     			'status'		=>	1,
+    			"price" 		=>  $data["price"]
     		);
     		$this->_name="tb_product";
     		$id = $this->insert($arr);
 			
-			$arrs =array("price" =>$data["price"]);
-			$where = $db->quoteInto("id=?", $id);
-			$this->update($arrs, $where);
-    		
     		if(!empty($data['identity'])){
     			$identitys = explode(',',$data['identity']);
     			foreach($identitys as $i)
     			{
-    				$arr1 = array(
+    				$arr = array(
     					'pro_id'			=>	$id,
     					'location_id'		=>	$data["branch_id_".$i],
     					'qty'				=>	$data["total_qty_".$i],
@@ -458,21 +444,21 @@ class Product_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     					'last_mod_date'		=>	new Zend_Date(),
     				);
     				$this->_name = "tb_prolocation";
-    				$this->insert($arr1);
+    				$this->insert($arr);
     			}
     		}
 				if(!empty($data['identity_price'])){
 					$identitys = explode(',',$data['identity_price']);
 					foreach($identitys as $i)
 					{
-						$arr2 = array(
+						$arr = array(
 								'pro_id'			=>	$id,
 								'location_id'		=>	$data["branch_id_".$i],
 								'type_id'			=>	$data["price_type_".$i],
 								'price'				=>	$data["price_".$i],
 						);
 						$this->_name = "tb_product_price";
-						$this->insert($arr2);
+						$this->insert($arr);
 					}
 				}
     		$db->commit();
@@ -558,8 +544,6 @@ class Product_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 								'type_id'			=>	$data["price_type_".$i],
 								'location_id'		=>	$location_id,
 								'price'				=>	$data["price_".$i],
-								//'cost_price'		=>	$data["cost_price_".$i],
-								'remark'			=>	$data["price_remark_".$i],
 						);
 						$this->_name = "tb_product_price";
 						$this->insert($arr2);

@@ -32,9 +32,8 @@ class Product_AdjustController extends Zend_Controller_Action
    		
    		$this->view->list=$list->getCheckList(0, $columns, $rows);
    		$frm = new Product_Form_FrmAdjust();
-    	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->formFilter = $frm->filter();
-   		
+    	Application_Model_Decorator::removeAllDecorator($frm->filter());
    	}   	
     public function addAction()
     {   

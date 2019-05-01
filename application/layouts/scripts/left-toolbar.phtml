@@ -46,7 +46,10 @@
 	<!-- sidebar menu -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
-              &nbsp;
+	               &nbsp;
+	              <div class="button-make-loan mb-10">
+						<a href="<?php echo $this->baseUrl()."/sales/possale/add"?>"  class="closebtn-makesale"  ><i class="fa fa-plus" aria-hidden="true"></i> <?php echo $tr->translate("ADD_SALE");?> </a>
+					</div>
                 <ul class="nav side-menu">
                 	<?php if(!empty($arr_module)){ foreach ($arr_module as $rs){
                 		$url =$this->url(array('module'=>$rs,'controller'=>'index','action'=>'index'), null, true);

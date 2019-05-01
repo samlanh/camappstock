@@ -27,19 +27,18 @@ public function init()
 	    			'branch'	=>	'',
 	    			'brand'		=>	'',
 	    			'category'	=>	'',
-	    			'model'		=>	'',
+	    			'type'		=>	-1,
 	    			'color'		=>	'',
 	    			'size'		=>	'',
 	    			'status'	=>	1
 	    		);
 	    	}
 			$rows = $db->getAllProductForAdmin($data);
-			$columns=array("ITEM_CODE","ITEM_NAME","TYPE",
-					"PRODUCT_CATEGORY","MEASURE","QTY","SOLD_PRICE","COST_PRICE","BY_USER","STATUS");
+			$columns=array("TYPE","ITEM_CODE","ITEM_NAME",
+				"PRODUCT_CATEGORY","MEASURE","QTY","SOLD_PRICE","COST_PRICE","BY_USER","STATUS");
 			$link=array(
 				'module'=>'product','controller'=>'index','action'=>'edit',
 			);
-		
 			$list = new Application_Form_Frmlist();
 			$this->view->list=$list->getCheckList(0, $columns, $rows,array('item_name'=>$link,'item_code'=>$link,'barcode'=>$link,'branch'=>$link));
     	}catch (Exception $e){
@@ -57,12 +56,7 @@ public function init()
 				try{
 					$post = $this->getRequest()->getPost();
 					$db->add($post);
-					if(isset($post["save_close"]))
-					{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", '/product/index');
-					}else{
-						Application_Form_FrmMessage::message("INSERT_SUCCESS");
-					}
+					Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				  }catch (Exception $e){
 				  	Application_Form_FrmMessage::messageError("INSERT_ERROR");
 				  	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -70,76 +64,42 @@ public function init()
 			}
 			$rs_branch = $db->getBranch();
 			$this->view->branch = $rs_branch;
-			$this->view->price_type = $db->getPriceType();
+			//$this->view->price_type = $db->getPriceType();
 			$formProduct = new Product_Form_FrmProduct();
 			$formStockAdd = $formProduct->add(null);
 			Application_Model_Decorator::removeAllDecorator($formStockAdd);
 			$this->view->form = $formStockAdd;
-			
-			$formBrand = new Product_Form_FrmBrand();
-			$frmBrand = $formBrand->Brand();
-			$this->view->frmBrand = $frmBrand;
-			Application_Model_Decorator::removeAllDecorator($frmBrand);
-			
-			$formCat = new Product_Form_FrmCategory();
-			$frmCat = $formCat->cat();
-			$this->view->frmCat = $frmCat;
-			Application_Model_Decorator::removeAllDecorator($frmCat);
-			
-			$formMeasure = new Product_Form_FrmMeasure();
-			$frmMesure = $formMeasure->measure();
-			$this->view->frmMesure = $frmMesure;
-			Application_Model_Decorator::removeAllDecorator($frmMesure);
-			
-			$fmOther = new Product_Form_FrmOther();
-			$frmOther = $fmOther->add();
-			Application_Model_Decorator::removeAllDecorator($frmOther);
-			$this->view->frmOther = $frmOther;
 	}
 	public function editAction()
 	{
 		$id = $this->getRequest()->getParam("id"); 
 		$db = new Product_Model_DbTable_DbProduct();
 		if($this->getRequest()->isPost()){ 
-				try{
-					$post = $this->getRequest()->getPost();
-					$post["id"] = $id;
-					$db->edit($post);
-					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", '/product/index');
-				  }catch (Exception $e){
-				  	Application_Form_FrmMessage::messageError("INSERT_ERROR",$err = $e->getMessage());
-				  }
+			try{
+				$post = $this->getRequest()->getPost();
+				$post["id"] = $id;
+				$db->edit($post);
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", '/product/index');
+			  }catch (Exception $e){
+			  	Application_Form_FrmMessage::messageError("INSERT_ERROR");
+			  	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			  }
 		}
 		$this->view->rs_location = $db->getProductLocation($id);
 		$this->view->rs_price = $db->getProductPrcie($id);
+		
 		$rs = $db->getProductById($id);
+		if(empty($rs)){
+			Application_Form_FrmMessage::Sucessfull("NO_DATA", '/product/index');
+		}
 		$this->view->rs = $rs;
+		
+		
 		$formProduct = new Product_Form_FrmProduct();
 		$formStockAdd = $formProduct->add($rs);
 		Application_Model_Decorator::removeAllDecorator($formStockAdd);
 		$this->view->form = $formStockAdd;
-		
-		$formBrand = new Product_Form_FrmBrand();
-		$frmBrand = $formBrand->Brand();
-		$this->view->frmBrand = $frmBrand;
-		Application_Model_Decorator::removeAllDecorator($frmBrand);
-		
-		$formCat = new Product_Form_FrmCategory();
-		$frmCat = $formCat->cat();
-		$this->view->frmCat = $frmCat;
-		Application_Model_Decorator::removeAllDecorator($frmCat);
-		
-		$formMeasure = new Product_Form_FrmMeasure();
-		$frmMesure = $formMeasure->measure();
-		$this->view->frmMesure = $frmMesure;
-		Application_Model_Decorator::removeAllDecorator($frmMesure);
-		
-		$fmOther = new Product_Form_FrmOther();
-		$frmOther = $fmOther->add();
-		Application_Model_Decorator::removeAllDecorator($frmOther);
-		$this->view->frmOther = $frmOther;
 	}
-	
 	public function getBrandAction(){
 		if($this->getRequest()->isPost()){
 			try {
@@ -171,7 +131,6 @@ public function init()
 			}
 		}
 	}
-
 	public function getMeasureAction(){
 		if($this->getRequest()->isPost()){
 			try {
@@ -187,14 +146,13 @@ public function init()
 			}
 		}
 	}
-	
-	public function addOtherAction(){
+	public function getOtherAction(){
 		if($this->getRequest()->isPost()){
 			try {
 				$post=$this->getRequest()->getPost();
-				$db = new Product_Model_DbTable_DbOther();
-				$other_id =$db->addNew($post);
-				$result = array('other_id'=>$other_id);
+				$db = new Application_Model_DbTable_DbGlobal();
+				$result =$db->getColor($post);
+				array_unshift($result, array ( 'id' =>-1,'name' =>"ADD_NEW"));
 				echo Zend_Json::encode($result);
 				exit();
 			}catch (Exception $e){
@@ -220,7 +178,6 @@ public function init()
 			}
 		}
 	}
-	
 	function outstockAction(){
 		$db = new Product_Model_DbTable_DbProduct();
     	if($this->getRequest()->isPost()){
@@ -242,7 +199,6 @@ public function init()
     	$this->view->formFilter = $formFilter->productFilter();
     	Application_Model_Decorator::removeAllDecorator($formFilter);
 	}
-	
 	function lowstockAction(){
 		$db = new Product_Model_DbTable_DbProduct();
     	if($this->getRequest()->isPost()){
@@ -264,6 +220,4 @@ public function init()
     	$this->view->formFilter = $formFilter->productFilter();
     	Application_Model_Decorator::removeAllDecorator($formFilter);
 	}
-	
 }
-

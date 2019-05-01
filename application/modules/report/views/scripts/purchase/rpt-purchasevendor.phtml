@@ -2,35 +2,28 @@
 	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
 ?>
 <title><?php echo $tr->translate("RPT_PURCHASE");?></title>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("RPT_PURCHASE");?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+			<form method="post" autocomplete="off">
+				<?php $formFilter = $this->form_purchase; ?>
+					<div class="form-group" style="padding-top: 6px;">
+					<div class="col-md-3"><?php echo $formFilter->getElement('text_search');?></div>
+					<div class="col-md-3"><?php echo $formFilter->getElement('suppliyer_id');?></div>
+					<div class="col-md-3"><?php echo $formFilter->getElement('branch_id');?></div>
+					<div class="col-md-3"><?php echo $formFilter->getElement('status_paid');?></div>
 				</div>
-				<?php echo $this->getHeader;?>
-			</div>
-            <div class="portlet-body form frmfilter">
-				<form method="post" autocomplete="off">
-					<?php $formFilter = $this->form_purchase; ?>
-						<div class="form-group" style="padding-top: 6px;">
-						<label class="control-label col-md-3"><?php echo $formFilter->getElement('text_search');?></label>
-						<label class="coontrol-label col-md-3"><?php echo $formFilter->getElement('suppliyer_id');?></label>
-						<label class="conntrol-label col-md-3"><?php echo $formFilter->getElement('branch_id');?></label>
-						<label class="ctrol-label col-md-3"><?php echo $formFilter->getElement('status_paid');?></label>
+				<div class="form-group">
+					<div class="col-md-3"><?php echo $formFilter->getElement('purchase_status');?></div>
+					<div class="col-md-3"><?php echo $formFilter->getElement('start_date');?></div>
+					<div class="col-md-3"><?php echo $formFilter->getElement('end_date');?></div>
+					<div class="col-md-3">
+						<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("REFRESH")?>" dojoType="dijit.form.Button" 
+							iconClass="dijitIconSearch" />
 					</div>
-					<div class="form-group">
-						<label class="control-label col-md-3"><?php echo $formFilter->getElement('purchase_status');?></label>
-						<label class="control-label col-md-3"><div class="input-icon right"><i class="fa fa-calendar"></i><?php echo $formFilter->getElement('start_date');?></div></label>
-						<label class="control-label col-md-3"><div class="input-icon right"><i class="fa fa-calendar"></i><?php echo $formFilter->getElement('end_date');?></div></label>
-						<label class="control-label col-md-3">
-							<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
-						</label>
-					</div>
-					<div style="clear:both;"></div>	
-				</form> 
-	<div style=" min-height:28cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.2cm">
+				</div>
+				<div style="clear:both;"></div>	
+			</form> 
 	<div id="divPrint" style="width: 100%;">
 	<style>
 		.style{
@@ -47,7 +40,6 @@
 		  display: table-header-group;
 		  page-break-inside:avoid; page-break-after:auto;
 		}
-		
 	</style>
 		<table style="font-family: 'Khmer OS Content'; width:100%;">
 			<tbody>
@@ -116,10 +108,9 @@
 		</div>
 	  </div>		
 	</div>
-	 </div>
-   </div>
 </div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
 <script>
 function doPrint() {var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();}
+dojo.require("dijit.form.DateTextBox");
 </script>

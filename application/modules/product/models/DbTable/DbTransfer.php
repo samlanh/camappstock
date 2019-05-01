@@ -471,7 +471,6 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 						'remark'		=>	$data["remark"],
 						'user_id'		=>	$result["user_id"],
 						'action'		=>	1,
-						//'appr_pedding'	=>	1
 				);
 				$this->_name="tb_transfer_history";				
 				$his_id = $this->insert($arr_history);
@@ -521,10 +520,8 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 			$user_info = new Application_Model_DbTable_DbGetUserInfo();
 			$result = $user_info->getUserInfo();
 			$arr = array(
-					//'tran_no'		=>	$data["tran_num"],
 					'cur_location'	=>	$data["from_loc"],
 					'tran_location'	=>	$data["to_loc"],
-					//'type'			=>	$data["type"],
 					'date'			=>	date('Y-m-d'),
 					'date_tran'		=>	$data["tran_date"],
 					'remark'		=>	$data["remark"],
@@ -715,7 +712,6 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 							$this->_name="tb_prolocation";
 							$this->insert($arr_to);
 						}
-					
 						$arr = array(
 							'appr_status'	=>	0,
 							'appr_pedding'	=>	3,
@@ -733,7 +729,6 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 			Application_Model_DbTable_DbUserLog::writeMessageError($e);
 		}
 	}
-	
 	public function editTransfer($data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
@@ -769,7 +764,6 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 						'remark'		=>	$data["remark"],
 						'user_id'		=>	$result["user_id"],
 						'action'		=>	2,
-							//'appr_pedding'	=>	1
 					);
 					$this->_name="tb_transfer_history";
 					$his_id = $this->insert($arr_history);
@@ -780,9 +774,6 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 				if(!empty($old_qty)){
 					foreach($old_qty AS $rs){
 						$rs_old = $this->getProductExist($rs["pro_id"],$rs["branch_id"]);
-						//print_r($rs_old);
-						//echo $rs_old["qty"]+$rs["qty"];
-						//exit();
 						$arr_old = array(
 							'qty'	=>	$rs_old["qty"]+$rs["qty"],
 						);
@@ -831,29 +822,6 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 					$rs_from = $this->getProductExist($data["pro_id_".$i],$data["from_loc"]);
 					$rs_to = $this->getProductExist($data["pro_id_".$i],$data["to_loc"]);
 	
-					//update stock recieve branch
-					//echo $rs_to["qty"]+$data["qty_tran_".$i];
-					/*if(!empty($rs_to)){
-						$arr_to = array(
-								'qty'	=>	$rs_to["qty"]-$data["qty_tran_".$i],
-						);
-						$this->_name="tb_prolocation";
-						$where = array('pro_id=?'=>$data["pro_id_".$i],"location_id=?"=>$data["to_loc"]);
-						$this->update($arr_to, $where);
-					}else{
-						$arr_to = array(
-								'pro_id'			=>	$data["pro_id_".$i],
-								'location_id'		=>	$data["to_loc"],
-								'qty'				=>	$data["qty_tran_".$i],
-								'qty_warning'		=>	0,
-								'last_mod_userid'	=>	$result["user_id"],
-								'last_mod_date'		=>	new Zend_Date(),
-						);
-						$this->_name="tb_prolocation";
-						$this->insert($arr_to);
-					}*/
-					
-					/// Update transfer branch
 					if(!empty($rs_from)){
 						$arr_fo = array(
 							'qty'	=>	$rs_from["qty"]-$data["qty_tran_".$i],
@@ -884,12 +852,10 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 				$this->update($arr,$where);
 			}
 			}
-			//exit();
 			$db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e);
-			echo $e->getMessage();exit();
 		}
 	}
 	

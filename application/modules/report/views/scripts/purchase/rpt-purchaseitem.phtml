@@ -3,60 +3,56 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 $frm_sales_report = $this->form_search;
 ?>
 <title><?php echo $tr->translate("RPT_PURCHASE_DETAIL");?></title>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("RPT_PURCHASE_DETAIL");?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+			<form method="post" autocomplete="off">
+				<div class="form-group" >
+					<label class=" col-md-3"><?php echo $frm_sales_report->getElement("txt_search");?></label>
+					<label class=" col-md-3"><?php echo $frm_sales_report->getElement("branch_id");?></label>
+					<label class=" col-md-3"><?php echo $frm_sales_report->getElement('suppliyer_id');?></label>
+					<label class=" col-md-3"><?php echo $frm_sales_report->getElement("category_id");?></label>
 				</div>
-				<?php echo $this->getHeader;?>
-			</div>
-            <div class="portlet-body form frmfilter">
-				<form method="post" autocomplete="off">
-					<div class="form-group" style="padding-top: 6px;">
-						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement("txt_search");?></label>
-						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement("branch_id");?></label>
-						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement('suppliyer_id');?></label>
-						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement("category_id");?></label>
-					</div>
-					<div class="form-group" style="padding-top: 6px;">
-						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement('item');?></label>
-						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement('start_date');?></label>
-						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement("end_date");?></label>
-						<label class="control-label col-md-3">
-						<input type="submit" value="<?php echo $tr->translate("SEARCH")?>"  class="ui-button ui-widget ui-state-default ui-corner-all ui-state-hover" name="btn_search" name="btn_search" /></label>
-					</div><div style="clear:both;"></div>	
-				</form> 
-	<div style=" min-height:12cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.2cm;overflow: scroll;">
+				<div class="form-group">
+					<label class=" col-md-3"><?php echo $frm_sales_report->getElement('item');?></label>
+					<label class=" col-md-3"><?php echo $frm_sales_report->getElement('start_date');?></label>
+					<label class=" col-md-3"><?php echo $frm_sales_report->getElement("end_date");?></label>
+					<label class=" col-md-3">
+						<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("REFRESH")?>" dojoType="dijit.form.Button" 
+							iconClass="dijitIconSearch" />
+					</label>
+				</div>
+			</form> 
 	<div id="divPrint" style="width: 100%;">
-	<style>
-		.style{
-			line-height: 25px;font-size: 12px !important;
-			font-family: 'Khmer OS Battambang';
-		}
-		ul{margin: 0;padding:0;}
-		table tr td ul li{text-align: center;list-style: none;line-height: 25px; font-weight: bold;}
-		th{padding: 5px;}
-		.hover:hover{background: #ccc;}
-	</style>
+			<style>
+				.style{
+					line-height: 25px;font-size: 12px !important;
+					font-family: 'Khmer OS Battambang';
+				}
+				ul{margin: 0;padding:0;}
+				table tr td ul li{text-align: center;list-style: none;line-height: 25px; font-weight: bold;}
+				th{padding: 5px;}
+				.hover:hover{background: #ccc;}
+			</style>
 		<table style="font-family: 'Khmer OS Content'; width:100%;">
 			<tbody>
 			<tr>
 		    	<td align="center">
 		        	<table width="100%" style="font-family: 'Khmer OS Battambang';" cellpadding="0" cellpadding="0">
-		            	<tbody><tr>
-		                	<td width="20%" valign="top"><img src="<?php echo $this->baseUrl();?>/images/logo.jpg" height="55px"></td>
-		                	<td width="60%" valign="top">
-		                		<ul>
-		                			<li style="text-align:center; font-size:16px; font-family:'Khmer MEF2'"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
-		                			<li style="text-align:center; font-size:14px; font-family:'Khmer MEF2'"><?php echo $tr->translate("RPT_PURCHASE_DETAIL");?></li>
-		                			<li style="text-align:center; font-size:14px;"><?php echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
-		                		</ul>
-		                	</td>
-		                    <td width="20%"></td>
-		                </tr> 
-		            </tbody></table>
+		            	<tbody>
+		            		<tr>
+			                	<td width="20%" valign="top"><img src="<?php echo $this->baseUrl();?>/images/logo.jpg" height="55px"></td>
+			                	<td width="60%" valign="top">
+			                		<ul>
+			                			<li style="text-align:center; font-size:16px; font-family:'Khmer MEF2'"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
+			                			<li style="text-align:center; font-size:14px; font-family:'Khmer MEF2'"><?php echo $tr->translate("RPT_PURCHASE_DETAIL");?></li>
+			                			<li style="text-align:center; font-size:14px;"><?php echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
+			                		</ul>
+			                	</td>
+			                    <td width="20%"></td>
+			                </tr> 
+		            	</tbody>
+		            </table>
 		        </td>
 		    </tr>
 		    <tr>
@@ -117,7 +113,7 @@ $frm_sales_report = $this->form_search;
 				            </tr>
 			            <?php }?>
 		                </tbody>
-		           </table>
+		           		</table>
 		            	<div style="text-align: right; min-width: 100px;float: right; ">សរុបរួម $ <span style="border-bottom: 2px dotted #000;font-weight: bold;"><?php echo number_format($all_total,2);?></span></div>
 		              <br>
 		              <?php echo $this->getFooter;?>
@@ -126,12 +122,13 @@ $frm_sales_report = $this->form_search;
 			</tbody>
 		</table>
 		</div>
-	  </div>		
+	 </div>		
 	</div>
-	 </div>
-   </div>
 </div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
 <script>
 function doPrint() {var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();}
+</script>
+<script>
+	dojo.require("dijit.form.DateTextBox");
 </script>

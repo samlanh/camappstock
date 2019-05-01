@@ -828,7 +828,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    public function getallCategory(){
    	$db = $this->getAdapter();
-   	$sql = "SELECT b.`id`,b.`name` FROM `tb_category` AS b WHERE b.`status`=1 AND b.`name`!='' ";
+   	$sql = "SELECT c.id,c.`name`,c.`parent_id`,c.`remark`,c.`status` FROM `tb_category` AS c WHERE c.`status` =1 AND c.`name`!='' ";
    	return $db->fetchAll($sql);
    }
    public function getAllBrand(){
@@ -839,6 +839,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    public function getMeasure(){
    	$db = $this->getAdapter();
    	$sql = "SELECT b.`id`,b.`name` FROM `tb_measure` AS b WHERE b.`status`=1 AND name!='' ";
+   	return $db->fetchAll($sql);
+   }
+   public function getColor(){
+   	$db = $this->getAdapter();
+   	$sql = "SELECT v.`id`,v.`name_en` as name,v.`status`,v.`key_code`,`type` FROM `tb_view` AS v WHERE v.`type` = 4";
    	return $db->fetchAll($sql);
    }
    	

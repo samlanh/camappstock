@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$url_cancel =  $this->url(array('module'=>'product','controller'=>'transfer','action'=>'index'),null,true);
-	$url_getProduct =  $this->url(array('module'=>'product','controller'=>'adjust','action'=>'get-product'));
+	$url_getProduct =  $this->url(array('module'=>'product','controller'=>'adjust','action'=>'getproduct'));
 	$formFilter = $this->formFilter;
 ?>
 <title><?php echo $tr->translate("TRANSFER_STOCK");?></title>
@@ -85,80 +84,75 @@
 								<tr>
 									<th>#</th>
 									<th><?php echo $tr->translate("PRODUCT_NAME");?></th>
+									<th><?php echo $tr->translate("CURRENT_QTY");?></th>
 									<th><?php echo $tr->translate("QTY_TRANSFER");?></th>
 									<th><?php echo $tr->translate("REMARK");?></th>
 									<th><?php echo $tr->translate("ACTION");?></th>
 								</tr>
 							</thead>
-							<tbody id="tr_location" style="font-size:12px;">
+							<tbody id="table_row" style="font-size:12px;">
 							</tbody>
 						</table>
 					</div>
-					<div class="form-group" style="">
-						<label  class="col-md-12 col-md-offset-4 col-md-8">
-							<input type="hidden" name="identity" id="identity" value="" />
-							<button type="submit" name="save_close" class="btn btn-primary"><?php echo $tr->translate("SAVE_CLOSE");?></button>
-						</label>
-					</div>
+					<div class="card-box">
+						<div class="border-top">
+							<div class="col-md-4"></div>
+							<div class="col-md-5" class='center'>
+								<input type="hidden" name="identity" id="identity" value="" />
+								<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" 
+								iconClass="dijitEditorIcon dijitEditorIconSave" />
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+				</div>
 		</form>
 	</div>
 </div>
 <script type="text/javascript">
-$('#frm').submit(function() {
-	from_loc = $("#from_loc").val();
-	to_loc = $("#to_loc").val();
-	 if(from_loc=='' || to_loc==''){
-		 alert("Please Select From and To Location");
-		 return false;
-	}
-    if(from_loc==to_loc){
-        $('#to_loc').select2('open');
-        return false;
-    }
-    identity = $("#identity").val();
-    if(identity==''){
-	 	alert("សូមបញ្ចូលបរិមាណទំនិញ");
-	 	 $('#pro_name').select2('open');
-	   return false;
-     }
-	var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
-	if (r == true) {
-	    return true;
-	} else {
-	   return false;
-	    
-	}
-});
 jQuery(document).ready(function(){
 	oldRow();
 });
 var index=0;
+col = 0;
 function oldRow(){
 	<?php if(!empty($this->rs_detail)){
 			foreach( $this->rs_detail as $rs){
 	?>
-			index++;
-			template='<tr id="row_location_'+index+'">';
-			template+='<td>'+index+'</td>';
-			template+='<td style="white-space: nowrap;"><?php echo $rs["item_name"];?><input type="hidden" id="pro_id_'+index+'" name="pro_id_'+index+'" value="<?php echo $rs["pro_id"]?>" </td>';
-			template+='<td><input type="text" required="1" id="qty_tran_'+index+'" onKeyup="checkQTY('+index+')" name="qty_tran_'+index+'" value="<?php echo $rs['qty']?>" class="form-control"><input type="hidden" name="qty_'+index+'" id="qty_'+index+'" value="<?php echo $rs['qty_loc']?>" /></td>'; 
-			template+='<td><input type="text" id="remark_'+index+'" name="remark_'+index+'" class="form-control"></td>';
-			template+='<td><button type="button" onClick="deleteRecord('+index+',1)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
-			template+='</tr>';
-			$('#tr_location').append(template);
-			if($('#identity').val()!="") {
-				var identity = $('#identity').val();
-				$('#identity').val(identity+','+index);
-			} else {$('#identity').val(index);}
+		template='';
+		index++;
+		col++;
+		template+='<td>'+index+'</td>';
+		template+='<td style="white-space: nowrap;"><?php echo $rs["item_name"];?><input type="hidden" id="pro_id_'+index+'" name="pro_id_'+index+'" value="<?php echo $rs["pro_id"]?>" </td>';
+		template+='<td style="width:90px;"><input type="hidden" name="qty_'+index+'" id="qty_'+index+'" value="<?php echo $rs['qty_loc']?>" /></td>'; 
+		template+='<td style="width:90px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" id="qty_tran_'+index+'" onKeyup="checkQTY('+index+')" name="qty_tran_'+index+'" value="<?php echo $rs['qty']?>" class="form-control"></td>'; 
+		template+='<td><input type="text" class="fullside" dojoType="dijit.form.TextBox" id="remark_'+index+'" name="remark_'+index+'" ></td>';
+		template+='<td><button type="button" onClick="deleteRecord('+index+')" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
+		tmp='<tr id="row'+col+'">';
+		tmp+="</tr>";
+		$('#table_row').append(tmp);
+		
+		if($('#identity').val()!="") {
+			var identity = $('#identity').val();
+			$('#identity').val(identity+','+index);
+		} else {$('#identity').val(index);}
+		
+		dojo.html.set(dojo.byId("row"+col),template , {
+		     parseContent: true,
+		});
 	<?php }}?>
+	
 }
 function addNew(){
-	id = $("#pro_name").val();
+	id = dijit.byId("pro_name").get('value');
+	branch_id = dijit.byId("from_loc").get('value');	
+	if(branch_id==''){
+		return false;
+	}
 	index++;
 	$.ajax({
         url: "<?php echo $url_getProduct;?>",
         type: "post",
-        data: {'id':id},
+        data: {'id':id,'location_ids':branch_id},
         success: function(val){
 			for(i=1; i<index; i++){
 				new_item=parseInt(id);
@@ -169,25 +163,29 @@ function addNew(){
 					$("#qty_tran_"+i).val(newqty);
 					checkQTY(i);
 					return false;
-					
 				}
 			}
-			 data = $.parseJSON(val);
-			template='<tr id="row_location_'+index+'">';
-			template+='<td>'+index+'</td>';
-			template+='<td style="white-space: nowrap;">'+data.item_name+" "+data.brand+" "+data.size+" "+data.color+'<input type="hidden" id="pro_id_'+index+'" name="pro_id_'+index+'" value="'+id+'" </td>';
-			template+='<td><input type="text" id="qty_tran_'+index+'" onKeyup="checkQTY('+index+')" name="qty_tran_'+index+'" value="1" class="form-control"><input type="hidden" name="qty_'+index+'" id="qty_'+index+'" value="'+data.qty+'" /></td>'; 
-			template+='<td><input type="text" id="remark_'+index+'" name="remark_'+index+'" class="form-control"></td>';
-			template+='<td><button type="button" onClick="deleteRecord('+index+',1)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
-			template+='</tr>';
-			$('#tr_location').append(template);
+			col++;
+			data = $.parseJSON(val);
+			template='<td>'+index+'</td>';
+			template+='<td style="white-space: nowrap;">'+data.item_name+'<input type="hidden" id="pro_id_'+index+'" name="pro_id_'+index+'" value="'+id+'" </td>';
+			template+='<td style="width:90px;"><input class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" type="text" name="qty_'+index+'" id="qty_'+index+'" value="'+data.qty+'" /></td>'; 
+			template+='<td style="width:90px;"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="qty_tran_'+index+'" onKeyup="checkQTY('+index+')" name="qty_tran_'+index+'" value="1" ></td>'; 
+			template+='<td><input class="fullside" dojoType="dijit.form.TextBox" type="text" id="remark_'+index+'" name="remark_'+index+'"></td>';
+			template+='<td><button type="button" onClick="deleteRecord('+index+')" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
+			tmp='<tr id="row'+col+'">';
+			tmp+="</tr>";
+			$('#table_row').append(tmp);
+			
+			dojo.html.set(dojo.byId("row"+col),template , {
+			     parseContent: true,
+			});
 			if($('#identity').val()!="") {
 				var identity = $('#identity').val();
 				$('#identity').val(identity+','+index);
 			} else {$('#identity').val(index);}
         },
-        error:function(){
-            $("#result").html('There is error while submit');
+        error:function(e){
         }
     });
 }	
@@ -208,29 +206,17 @@ function transferType(){
 		document.getElementById('lb_br').innerHTML = "To ";
 	}
 }
-function deleteRecord(index,type) {
-	if(type==1){
-		var identity = $('#identity').val();
-		var arrays = identity.split(',');
-	}else{
-		var identity = $('#identity_price').val();
-		var arrays = identity.split(',');
-	}
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
 	
 	for(var i=0;i<arrays.length;i++) {
 		if(arrays[i] == index) arrays.splice(i,1);
 	}
 	var strings = arrays.join(',');
-	
-	if(type==1){
-		$('#identity').val(strings);
-		$("#row_location_"+index).remove();
-	}else{
-		$('#identity_price').val(strings);
-		$("#row_price_"+index).remove();
-	}
+	$('#identity').val(strings);
+	$("#row"+index).remove();
 }
-</script>
-	<script>
 dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.NumberTextBox");
 </script>

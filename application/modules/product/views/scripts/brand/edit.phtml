@@ -1,8 +1,5 @@
 <?php 
-	$url_new = $this->url(array('module'=>'product','controller'=>'brand','action'=>'add',));
 	$url_edit = $this->url(array('module'=>'product','controller'=>'brand','action'=>'edit'));
-	$url_delete = $this->url(array('module'=>'product','controller'=>'brand','action'=>'delete',));
-	$url_cencel = $this->url(array('module'=>'product','controller'=>'brand','action'=>'index'),null,true);
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$formFilter = $this->frmAdd;
 ?>
@@ -19,7 +16,7 @@
     		</div>
     	</div>
 		<div class="card-box">	
-			<form dojoType="dijit.form.Form"  class="form-horizontal" method="post" action="<?php echo $url_edit;?>" >
+			<form dojoType="dijit.form.Form"  class="form-horizontal" method="post"  >
 				<script type="dojo/method" event="onSubmit">			
 					if(this.validate()) {
                			loadingBlock();
