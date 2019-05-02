@@ -51,10 +51,7 @@ class Purchase_indexController extends Zend_Controller_Action
 			 if(!empty($data['identity'])){
 				$db->addPurchaseOrder($data);
 			 }
-			Application_Form_FrmMessage::message("Purchase has been Saved!");
-				if(!empty($data['btnsavenew'])){
-					Application_Form_FrmMessage::redirectUrl("/purchase/index");
-				}
+			Application_Form_FrmMessage::message("INSERT_SUCESS");
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message('INSERT_FAIL');
 				$err =$e->getMessage();

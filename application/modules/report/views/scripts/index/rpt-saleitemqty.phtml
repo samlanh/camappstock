@@ -3,32 +3,26 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 $frm_sales_report = $this->form_search;
 ?>
 <title><?php echo $tr->translate("RPT_PRODUCT_SOLD");?></title>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("RPT_PRODUCT_SOLD");?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+			<form method="post" autocomplete="off">
+				<div class="form-group" style="padding-top: 6px;">
+					<div class="col-md-3"><?php echo $frm_sales_report->getElement("txt_search");?></div>
+					<div class="col-md-3"><?php echo $frm_sales_report->getElement("branch_id");?></div>
+					<div class="col-md-3"><?php echo $frm_sales_report->getElement('brand_id');?></div>
+					<div class="col-md-3"><?php echo $frm_sales_report->getElement("category_id");?></div>
 				</div>
-				<?php echo $this->getHeader;?>
-			</div>
-            <div class="portlet-body form frmfilter">
-				<form method="post" autocomplete="off">
-					<div class="form-group" style="padding-top: 6px;">
-						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement("txt_search");?></label>
-						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement("branch_id");?></label>
-						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement('brand_id');?></label>
-						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement("category_id");?></label>
+				<div class="form-group" style="padding-top: 6px;">
+					<div class="col-md-3"><?php echo $frm_sales_report->getElement('item');?></div>
+					<div class="col-md-3"><?php echo $frm_sales_report->getElement('start_date');?></div>
+					<div class="col-md-3"><?php echo $frm_sales_report->getElement("end_date");?></div>
+					<div class="col-md-3">
+						<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("REFRESH")?>" dojoType="dijit.form.Button" 
+							iconClass="dijitIconSearch" />
 					</div>
-					<div class="form-group" style="padding-top: 6px;">
-						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement('item');?></label>
-						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement('start_date');?></label>
-						<label class="control-label col-md-3"><?php echo $frm_sales_report->getElement("end_date");?></label>
-						<label class="control-label col-md-3">
-						<input type="submit" value="<?php echo $tr->translate("SEARCH")?>"  class="ui-button ui-widget ui-state-default ui-corner-all ui-state-hover" name="btn_search" name="btn_search" /></label>
-					</div><div style="clear:both;"></div>	
-				</form> 
-	<div style=" min-height:12cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.2cm;overflow: scroll;">
+				</div>
+			</form> 
 	<div id="divPrint" style="width: 100%;">
 	<style>
 		.style{
@@ -63,8 +57,7 @@ $frm_sales_report = $this->form_search;
 		                    <td width="20%"></td>
 		                </tr> 
 		                <tr>
-		                	<td colspan="3" valign="top">
-				              </td>
+		                	<td colspan="3" valign="top"></td>
 				           </tr>   
 		            </tbody></table>
 		        </td>
@@ -126,10 +119,9 @@ $frm_sales_report = $this->form_search;
 		</div>
 	  </div>		
 	</div>
-	 </div>
-   </div>
 </div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
 <script>
 function doPrint() {var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();}
+dojo.require("dijit.form.DateTextBox");
 </script>

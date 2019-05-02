@@ -2,7 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$form=$this->form_purchase;
 	$url_submit = $this->url(array('module'=>'purchase','controller'=>'index','action'=>'add'));
-	$url_cancel = $this->url(array('module'=>'purchase','controller'=>'index','action'=>'index'));
 ?>
 <title><?php echo $tr->translate("ADD_PURCAHSE_ORDER");?></title>
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -16,191 +15,166 @@
     		</div>
     	</div>
 		<div class="card-box">
-			<form id='frm' autocomplete="off" class="form-horizontal" novalidate="novalidate" action="<?php echo $url_submit; ?>" enctype="multipart/form-data" method="post">
-				<div class="form-body">
+			<form dojoType="dijit.form.Form" autocomplete="off" class="form-horizontal" novalidate="novalidate" action="<?php echo $url_submit; ?>" enctype="multipart/form-data" method="post">
+				<script type="dojo/method" event="onSubmit">			
+					if(this.validate()) {
+					customer_id=dijit.byId("v_name").get('value');
+					if(customer_id=='' || customer_id==-1){
+						alert("Please select vendor name");
+						dijit.byId('v_name').focus();
+						return false;	
+					}
+					identity =$("#identity").val();
+					if(identity=='' || identity==-1){
+						alert("Please add product row");
+						dijit.byId('add_item').focus();
+						return false;
+					}
+						loadingBlock();
+						return true;
+
+					}else{
+						return false;
+					}
+				</script>
+				<div class="col-md-4">
 					<div class="form-group">
-						<label class="control-label col-md-2"><?php echo $tr->translate("VENDOR_NAME");?> <span class="required">
-						</span>
-						</label>
-						<div class="col-md-4">
-							<?php echo $form->getElement("v_name");?>
-						</div>
-						<label class="control-label col-md-2"><?php echo $tr->translate("LOCATION_NAME");?><span class="required">
-							</span>
-						</label>
-						<div class="col-md-4">
+						<div class="col-md-4"><?php echo $tr->translate("LOCATION_NAME");?></div>
+						<div class="col-md-8">
 							<?php echo $form->getElement('LocationId');?>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-md-2"><?php echo $tr->translate("ORDER_DATE");?>
-						</label>
-						<div class="col-md-4">
+						<div class="col-md-4"><?php echo $tr->translate("VENDOR_NAME");?></div>
+						<div class="col-md-8">
+							<?php echo $form->getElement("v_name");?>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"><?php echo $tr->translate("ORDER_DATE");?></div>
+						<div class="col-md-8">
 							<?php echo $form->getElement("order_date");?>
 						</div>
-						<label class="control-label col-md-2"><?php  echo $tr->translate("DATE_IN");?>	</label>
+					</div>
+					<div class="form-group">
 						<div class="col-md-4">
+							<?php echo $tr->translate("DATE_IN");?>
+						</div>
+						<div class="col-md-8">
 							<?php echo $form->getElement("date_in");?>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-md-2"><?php echo $tr->translate("PO_NUM");?><span class="required">
-						* </span>
-						</label>
 						<div class="col-md-4">
-							<div class="input-icon right">
-								<?php echo $form->getElement("txt_order"); ?>
-							</div>
+							<?php echo $tr->translate("PO_NUM");?>
 						</div>
-						<label class="control-label col-md-2"><?php echo $tr->translate("INVOICE_NUM");?><span class="required">
-						</span>
-						</label>
+						<div class="col-md-8">
+							<?php echo $form->getElement("txt_order"); ?>
+						</div>
+					</div>
+					<div class="form-group">
 						<div class="col-md-4">
-							<div class="input-icon right">
-								<?php echo $form->getElement("invoice_no"); ?></div>
+							<?php echo $tr->translate("INVOICE_NUM");?>
+						</div>
+						<div class="col-md-8">
+							<?php echo $form->getElement("invoice_no"); ?>
 						</div>
 					</div>
 					<div class="form-group" >
-						<div >
-						<label class="control-label col-md-2"><?php echo $tr->translate("STATUS");?>
-							<span class="required"></span>
-						</label>
-						<div class="col-md-4">
-							<div class="input-icon right">
-								<?php echo $form->getElement("status");?>
-							</div>
-						</div>
-						</div>
-						<label class="control-label col-md-2"><?php echo $tr->translate("REMARK");?><span class="required">
-							 </span>
-						</label>
-						<div class="col-md-4">
-							<div class="input-icon right">
-								<?php echo $form->getElement("remark");?>
-							</div>
+						<div class="col-md-4"><?php echo $tr->translate("STATUS");?></div>
+						<div class="col-md-8">
+							<?php echo $form->getElement("status");?>
 						</div>
 					</div>
 					<div class="form-group">
-					<div class="col-md-12">
-						<label class="control-label col-md-1 col-lg-1">
-						</label>
-						<label class="control-label col-md-8">
-							<select dojoType="dijit.form.FilteringSelect" class='fullside' style="text-align: left;" id="add_item" name="add_item" Onchange="getItemOrder();" >
-							<?php echo $this->items; ?>
-							</select>
-						</label>
-						<label class="control-label col-md-2 col-lg-2 col-sm-12">
-							<input type="button" onclick="popupProduct();" value="btnsavenew"  label="<?php echo $tr->translate("ADD_PRODUCT")?>" dojoType="dijit.form.Button" 
-							iconClass="dijitIconSearch" />
-						</label>
-						<label class="control-label col-md-1 col-lg-1 col-sm-12">
-							<button type="button" class="btn red delete col-md-12">
-								<input type="checkbox" Onclick="Confirmmessage()" id="free" name="free" />
-								<span>&nbsp;&nbsp;Free</span>
-							</button>
-						</label>
+						<div class="col-md-4">
+							<?php echo $tr->translate("REMARK");?>
+						</div>
+						<div class="col-md-8">
+							<?php echo $form->getElement("remark");?>
+						</div>
 					</div>
-					</div>
-					<div class="portlet-body">
-						<table class="table table-striped table-bordered table-hover" id="table_order" style="font-size:12px;">
-							<tr height="33px">
-								<th><?php echo $tr->translate("DEL");?></th>
-								<th><?php echo $tr->translate("NUM");?></th>
-								<th style="white-space:nowrap;"><?php echo $tr->translate("ITEM_NAME");?></th>
-								<th><?php echo $tr->translate("FREE");?></th>
-								<th><?php echo $tr->translate("QTY_UNIT");?></th>
-								<th><?php echo $tr->translate("QTY_PER_UNIT");?></th>
-								<th><?php echo $tr->translate("QTY_ORDER");?></th>
-								<th><?php echo $tr->translate("UNIT_PRICE_CAP");?></th>
-								<th style="white-space:nowrap;"><?php echo $tr->translate("DISCOUNT");?></th>
-								<th><?php echo $tr->translate("SUB_TOTAL_CAP");?></th>
-						</tr>
-					 </table>
-					 <input type="hidden" id="identity" name="identity" />
 				</div>
-					<div class="col-md-4"></div>
-					<div class="col-md-4">
-						<div class="form-group">
-							<label class="control-label col-md-4">កម្រៃ/កម្រៃរ៉ាប់រង</label>
+				<div class="col-md-8">
+					<div class="form-group">
+						<div class="col-md-12">
 							<div class="col-md-8">
-								<div class="input-icon right">
-								<?php echo $form->getElement("commission");?>
-								</div>
+								<select dojoType="dijit.form.FilteringSelect" class='fullside' style="text-align: left;" id="add_item" name="add_item" Onchange="getItemOrder();" >
+								<?php echo $this->items; ?>
+								</select>
 							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-md-4" style="text-align: center;white-space: nowrap;">ឈ្មោះធនាគារ </label>
-							<div class="col-md-8">
-								<div class="input-icon right">
-								<?php echo $form->getElement("bank_name");?>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-md-4"​ >ថ្លៃដឹកជញ្ជួន/ផ្សេងៗ​ </label>
-							<div class="col-md-8">
-								<div class="input-icon right">
-								<?php echo $form->getElement("commission_ensur");?>
-								</div>
-							</div>
+							<label class="col-md-2">
+								<input type="button" onclick="window.open('<?php echo $this->baseUrl();?>/product/index/add?rightclick=true','_blank');;" value="btnsavenew"  label="<?php echo $tr->translate("ADD_NEW")?>" dojoType="dijit.form.Button" 
+									iconClass="dijitIconSearch" />
+							</label>
+							<label class="col-md-2">
+							</label>
 						</div>
 					</div>
+					<div class="form-group">
+						<div class="portlet-body">
+							<table class="table table-striped table-bordered table-hover" id="table_order" style="font-size:12px;">
+								<tr height="33px">
+									<th><?php echo $tr->translate("DEL");?></th>
+									<th><?php echo $tr->translate("NUM");?></th>
+									<th style="white-space:nowrap;"><?php echo $tr->translate("ITEM_NAME");?></th>
+									<th><?php echo $tr->translate("QTY_ORDER");?></th>
+									<th><?php echo $tr->translate("UNIT_PRICE_CAP");?></th>
+									<th style="white-space:nowrap;"><?php echo $tr->translate("DISCOUNT");?></th>
+									<th><?php echo $tr->translate("SUB_TOTAL_CAP");?>
+										<input type="hidden" id="identity" name="identity" />
+									</th>
+								</tr>
+								<tbody id="table_row" style="font-size:12px;">
+								</tbody>
+							 </table>
+						</div>
+					</div>
+				</div>
+				<div class="card-box">
 					<div class="col-md-4">
 						<div class="form-group">
-							<label class="control-label col-md-4"><?php echo $tr->translate("TOTAL");?></label>
+		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-dollar" aria-hidden="true"></i> ព៌ត័មានការទូទាត់ប្រាក់ 
+		                   </label>
+		                </div>
+						<div class="form-group">
+							<div class="col-md-4"><?php echo $tr->translate("TOTAL");?></div>
 							<div class="col-md-8">
-								<div class="input-icon right">
 								<?php echo $form->getElement("totalAmoun");?>
-								</div>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-md-4"><?php echo $tr->translate("DISCOUNT");?></label>
+							<div class="col-md-4"><?php echo $tr->translate("DISCOUNT");?></div>
 							<div class="col-md-8">
-								<div class="input-icon right">
-									<?php echo $form->getElement("dis_value");?>
-								    <input type="hidden" name="global_disc" id="global_disc"/>
-								</div>
+								<?php echo $form->getElement("dis_value");?>
+								<input type="hidden" name="global_disc" id="global_disc"/>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-md-4"><?php echo $tr->translate("TOTAL_AMOUNT");?>​
-							</label>
+							<label class="col-md-4"><?php echo $tr->translate("TOTAL_AMOUNT");?></label>
 							<div class="col-md-8">
-								<div class="input-icon right">
 								<?php echo $form->getElement("all_total");?>
 								<?php echo $form->getElement("all_totalpayment");?>
-								</div>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-md-4"><?php echo $tr->translate("PAID");?></label>
+							<label class="col-md-4"><?php echo $tr->translate("PAID");?></label>
 							<div class="col-md-8">
-								<div class="input-icon right">
-									<?php echo $form->getElement("paid");?>
-								</div>
+								<?php echo $form->getElement("paid");?>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-md-4"><?php echo $tr->translate("BALANCE");?></label>
+							<div class="col-md-4"><?php echo $tr->translate("BALANCE");?></div>
 							<div class="col-md-8">
-								<div class="input-icon right">
 								<?php echo $form->getElement("remain");?>
-								</div>
 							</div>
 						</div>
 					</div>
+					<div class="col-md-8"></div>
 					<div class="form-group">
-					   <label class="control-label col-md-2">
-						</label>
-						<div class="col-md-2">
-							<div class="input-icon right">
-							</div>
-						</div>
-						<div class="col-md-1">
-							<div class="input-icon right">
-							</div>
-						</div>
+					   	<div class="col-md-2"></div>
+						<div class="col-md-2"></div>
+						<div class="col-md-1"></div>
 					</div>
 					<div class="form-group">
 					    <div class="col-md-3"></div>
@@ -217,28 +191,6 @@
 	</div>
 </div>
 <script>
-$('#frm').submit(function() {
-	customer_id=$("#v_name").val();
-	if(customer_id=='' || customer_id==-1){
-		alert("Please select vendor name");
-		$('#v_name').select2('open');
-		return false;	
-	}
-	identity =$("#identity").val();
-	if(identity=='' || identity==-1){
-		alert("Please add product row");
-		$('#add_item').select2('open');
-		return false;
-	}
-	var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
-	if (r == true) {
-	    return true;
-	} else {
-	   return false;	    
-	}
-});
-</script>
-<script>
 var index5 = 0;num=0;
 var option5 = '<?php echo $this->items; ?>';
 var baseUrl = '<?php echo BASE_URL; ?>';
@@ -248,94 +200,66 @@ pqty = 1;
 var index=1;
 function addRow(item_id) {
 	item_title=dijit.byId("add_item").attr('displayedValue');
-	
-	index5++; //var first = index5;
-	index=index+1;
+	index5++;
 	for(i=1; i<index5; i++){
 		new_item=parseInt(item_id);
 		items = parseInt($("#item_id_"+i).val());
 	}
-	template='<tr id="row_order_'+index5+'" style="height:33px;">';
-	var inp = '';
-	if(index5 == 1) {
-		template+='<td >&nbsp;</td>';
-	} else {
-		template+='<td ><img onClick="deleteRecord('+index5+')" src="<?php echo BASE_URL; ?>/images/icon/delete.gif" /></td>';
-	}
-	template+='<td  width="2%">'+index5+'</td>';
-	template+='<td width="30%"><input type="hidden" id="item_id_'+index5+'" name="item_id_'+index5+'" value="'+item_id+'" />'+item_title+'</td>';
-	template+='<td ><input type="checkbox" onkeyup="getPriceFree('+index5+')" id="pricefree_'+index5+'" name="pricefree_'+index5+'"/> </td>';
-	template+='<td ><input type="text" dojoType="dijit.form.NumberTextBox" onkeyup="totalQty('+index5+')" class="validate[required,custom[number]] input form-control" required="1" value="1" id="qty_unit_'+index5+'" name="qty_unit_'+index5+'" /><input type="hidden"  class="input form-control" id="qty_detail_'+index5+'" name="qty_detail_'+index5+'" /></td>';
-	template+='<td ><input type="text" dojoType="dijit.form.NumberTextBox" onkeyup="totalQty('+index5+')" class="validate[required,custom[number]] input form-control" value="0" id="qty_per_unit_'+index5+'" name="qty_per_unit_'+index5+'" /></td>';
-	template+='<td ><input type="text" readonly onkeyup="calculatePrice('+index5+')" class="form-control" required="1" id="qty'+index5+'" name="qty'+index5+'"/></td>';
-	template+='<td ><input type="text" dojoType="dijit.form.NumberTextBox" onkeyup="calculatePrice('+index5+')" required="1" class="validate[required,custom[number]] input form-control" id="price'+index5+'" name="price'+index5+'" /><input type="hidden" id="oldprice_'+index5+'" name="oldprice_'+index5+'"/></td>';
-	template+='<td  width="5%"><input type="text" onkeyup="calculatePrice('+index5+')" value="0" id="dis_value'+index5+'" name="dis_value'+index5+'" class="form-control" /><input type="hidden" id="olddis_value_'+index5+'" name="olddis_value_'+index5+'"/><input type="hidden" readonly="readonly" class="input70px" id="real-value'+index5+'" name="real-value'+index5+'" /></td>';
-	template+='<td ><input type="text" class="form-control" readonly="readonly" id="total'+index5+'" name="total'+index5+'" /></span></td>';
-	template+="</tr>";
-	$('#table_order').append(template);
+	template='<td><img onClick="deleteRecord('+index5+')" src="<?php echo BASE_URL; ?>/images/icon/delete.gif" /></td>';
+	template+='<td width="10px">'+index5+'</td>';
+	template+='<td style="min-width:200px;"><input type="hidden" id="item_id_'+index5+'" name="item_id_'+index5+'" value="'+item_id+'" />'+item_title+'</td>';
+	template+='<td width="80px"><input class="fullsite" type="text" dojoType="dijit.form.NumberTextBox" onkeyup="calculatePrice('+index5+')" required="1" id="qty'+index5+'" name="qty'+index5+'"/></td>';
+	template+='<td width="80px"><input class="fullsite" type="text" dojoType="dijit.form.NumberTextBox" onkeyup="calculatePrice('+index5+')" required="1"  id="price'+index5+'" name="price'+index5+'" /><input type="hidden" id="oldprice_'+index5+'" name="oldprice_'+index5+'"/></td>';
+	template+='<td width="80px"><input class="fullsite" type="text" dojoType="dijit.form.TextBox" onkeyup="calculatePrice('+index5+')" value="0" id="dis_value'+index5+'" name="dis_value'+index5+'"  /><input type="hidden" id="olddis_value_'+index5+'" name="olddis_value_'+index5+'"/><input type="hidden" readonly="readonly" class="input70px" id="real-value'+index5+'" name="real-value'+index5+'" /></td>';
+	template+='<td width="80px"><input type="text" class="fullsite" dojoType="dijit.form.NumberTextBox" class="form-control" readonly="readonly" id="total'+index5+'" name="total'+index5+'" /></span></td>';
+	tmp='<tr id="row'+index5+'">';
+	tmp+="</tr>";
+	$('#table_row').append(tmp);
+	dojo.html.set(dojo.byId('row'+index5),template , {
+	     parseContent: true,
+	});
 	if($('#identity').val()!="") {
 		var identity = $('#identity').val();
 		$('#identity').val(identity+','+index5);
 	} else {$('#identity').val(index5);}
 	$("#item_id_"+index5).val(item_id);
-	getQtyById(index5);
-	if(free.checked){
-		$("#pricefree_"+index5).attr({checked:'checked'});  
-		$("#price"+index5).val(0);
-		$("#price"+index5).attr('readonly','readonly');
-		$("#dis-value"+index5).attr('readonly','readonly');
-		$("#dis-value"+index5).val(0);
-	}
-	else{
-		$('#global_disc').val(0);
-		$("#paid").val(0);
-	}
+	
+	$('#global_disc').val(0);
+	$("#paid").val(0);
 	$("#row_order_0").remove();
 	$("#add_item").val("");
+	getProductById(item_id,index5);
 }
 <?php $url_qty =  $this->url(array('module'=>'purchase','controller'=>'index','action'=>'getqtybyid')); ?>
-function getQtyById(index){//use
-				item_id=$("#item_id_"+index).val();
-				alert(item_id);
-				qty_unit=$("#qty_unit_"+index).val();
-				qty_per_unit=$("#qty_per_unit_"+index).val();
-				branch_id = dijit.byId("LocationId").get('value');
-				if(branch_id=='' || branch_id==-1){alert("Please Select Branch First ");}
-				if(qty_unit==null || qty_unit==""){
-					if(qty_per_unit!==null && qty_per_unit!==""){
-						$("#qty"+index).val(qty_per_unit);
-					}
-				}else{
-					$.ajax({
-						url:"<?php echo $url_qty;?>",
-						type:"post",
-						data:{'item_id':item_id,'branch_id':branch_id},
-						success: function(data){
-							item_qty = $.parseJSON(data);										
-							//$("#qty_detail_"+index).val(item_qty.qty_perunit);
-							//$("#price"+index).val(item_qty.price);
-							
-							//main_qty =$("#qty_unit_"+index).val();
-							//detail_qty =  $("#qty_per_unit_"+index).val();
-							//$("#current_qty"+index).val(item_qty.qty);
-							total_qty = parseFloat(main_qty) + parseFloat(detail_qty/(item_qty.qty_perunit));
-							//$("#qty"+index).val(total_qty.toFixed(3));
-						},
-						error:function(e){
-							alert("err product"+e);
-						}
-				});
-			}
+function getProductById(item_id,index){//use
+	branch_id = dijit.byId("LocationId").get('value');
+	if(branch_id=='' || branch_id==-1){alert("Please Select Branch First ");return false;}
+	$.ajax({
+		url:"<?php echo $url_qty;?>",
+		type:"post",
+		data:{'item_id':item_id,'branch_id':branch_id},
+		success: function(data){
+			data = $.parseJSON(data);			
+			dijit.byId('price'+index).attr('value',data.price);
+			$('#oldprice_'+index).attr('value',data.price);
+		},
+		error:function(e){
+		}
+	});
 }
 function getItemOrder(){
 	item_ids=dijit.byId("add_item").get('value');
 	if(item_ids==-1){
-		$('#productpopup').modal('show');
 	}else{
+		branch_id = dijit.byId("LocationId").get('value');
+		if(branch_id=='' || branch_id==-1){
+				alert("Please Select Branch First ");
+				dijit.byId("LocationId").focus();
+				return false;
+		}
 		addRow(item_ids);
 	}
 }
-var record_index= 1;
 function deleteRecord(index) {
 	var identity = $('#identity').val();
 	var arrays = identity.split(',');
@@ -344,11 +268,11 @@ function deleteRecord(index) {
 	}
 	var strings = arrays.join(',');
 	$('#identity').val(strings);
-	$("#row_order_"+index).remove();
+	$("#row"+index).remove();
 	netTotal();
 }
-function netTotal() {//use
-	var cur_type = 1;//$('#currency').val();
+function netTotal() {
+	var cur_type = 1;
 	var netTotal=0;
 	var rowId = $('#identity').val();
 	var rowIDArray = rowId.split(',');
@@ -368,10 +292,12 @@ function calculateDiscount(){//use
 				var discount=(alltotal*parseFloat(pds[0]))/100;
 				totalpayment = alltotal - discount;
 				$('#all_total').val(totalpayment);
+				dijit.byId('all_totalpayment').attr('value',totalpayment);
 		}else{
 				alltotal = $("#totalAmoun").val();
 				totalpayment = alltotal - discountValue;
 				$('#all_total').val(totalpayment);
+				dijit.byId('all_totalpayment').attr('value',totalpayment);
 		}
 	}else{
 		alltotal = $("#totalAmoun").val();
@@ -379,23 +305,6 @@ function calculateDiscount(){//use
 		$('#all_total').val(totalpayment);
 	}
 		doRemain();
-		sumincludeTransfer();
-		doRemain();
-}
-function sumincludeTransfer(){
-	commission = $("#commission").val();
-if(commission==''){commission=0;};
-	commission_ensur = $("#commission_ensur").val();
-	if(commission_ensur==''){commission_ensur=0;}
-	all_total = $("#all_total").val();
-	if(all_total==''){all_total=0;}
-	total=parseFloat(commission)+parseFloat(commission_ensur)+parseFloat(all_total);
-	$('#paid').val(0);
-	$("#all_totalpayment").val(total);
-	$('#remain').val(total);
-}
-function CalcualteTax() {
-	$('#status').val();
 }
 function doRemain() {
 	var all_total = parseFloat($('#all_total').val());
@@ -412,18 +321,7 @@ function doRemain() {
 	   $('#remain').val(remain.toFixed(2));
 	}
 }
-function totalQty(index){
-	qtymain = $("#qty_unit_"+index).val();
-	if(qtymain==''){qtymain=0;}
-	qty_per_unit_ = $("#qty_per_unit_"+index).val();
-	if(qty_per_unit==''){qty_per_unit=0;}
-
-	qty_detail = $("#qty_detail_"+index).val();//detail
-	if(qty_detail==''){qty_detail=0;}
-	
-	qty_buy = parseFloat(qtymain) + parseFloat(qty_per_unit_/(qty_detail));
-	$('#qty'+index).val(qty_buy);	
-	calculatePrice(index);	
+function AddLocation(){
 }
 function calculatePrice(index) {
 	var qty = $('#qty'+index).val();
@@ -455,33 +353,6 @@ function calculatePrice(index) {
 		$('#total'+index).val(parseFloat(total).toFixed(2));		
 		}
 		netTotal();
-}
-var record_id = 1;
-<?php $url_code =  $this->url(array('module'=>'purchase','controller'=>'index','action'=>'check-purchaseno')); ?>
-function CheckPOInvoice(){
-	pur_no=$("#txt_order").val();
-	if(pur_no=="" || pur_no ==null){
-		return false;
-	}
-	else{
-	$.ajax({
-			url:"<?php echo $url_code;?>",
-			type:"post",
-			data:{'pur_no':pur_no},
-			success: function(data){
-				value = $.parseJSON(data);
-				if(value=="" || value==null){
-				}
-				else{
-					alert("Invoice number is exist !");
-					$("#txt_order").css("border-color","red");
-					$("#txt_order").val("");
-				}
-			},
-			error:function(){
-			}
-		});
-	}	
 }
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dijit.form.NumberTextBox");

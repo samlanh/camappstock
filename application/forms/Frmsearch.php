@@ -28,7 +28,7 @@ class Application_Form_Frmsearch extends Zend_Form
 		$vendor_element->setMultiOptions($options);
 		$vendor_element->setAttribs(array(
 				'id'=>'suppliyer_id',
-				'dojoType'=>"dijit.form.TextBox",
+				'dojoType'=>"dijit.form.FilteringSelect",
 				'class'=>'fullside',
 		));
 		$vendor_element->setValue($vendorValue);

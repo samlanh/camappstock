@@ -8,112 +8,73 @@
 	$rs = $this->rsreceitp;
 	
 ?>
-<form  id='foundation_class' action=""  method="post" enctype="application/x-www-form-urlencoded">
-</form>
 <style>
 .hover:hover{ background: #ddd;}
 </style>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("របាយការណ៍៍វិក័យបត្រអតិថិជន");?>
-				</div>
-					<div class="btn-group pull-right">
-							 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
-							   Actions <i class="fa fa-angle-down"></i>
-							 </button>
-								<ul class="dropdown-menu" role="menu">
-									<li>
-										<a href="" onclick="doPrint();">
-											<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
-										</a>
-									</li>
-									<li>
-										<a href="#" onClick="exports()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
-									</li>
-								</ul>
-					</div>
-			</div>
-			 <div class="portlet-body form frmfilter">
-				<form method="post" action="<?php //echo $formFilter->getAction(); ?>">
-					
-				<div style="clear:both;"></div>
-				</form> 
-			</div>
-<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
-		<div id="divPrint"  >
-			<table class="table2excel" style="background:#fff; margin: 0 auto; width: 100%; padding: 0px 2px 1cm 2px;font-family: 'Hanuman';">
-							<tr style="font-size: 13px;">
-								<td colspan="3" align="center">
-									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';">របាយការណ៍៍វិក័យបត្រអតិថិជន</strong><br />
-								</td>
-							</tr>
-							<tr>
-								<td width="20%" align="left">
-								</td>
-								<td align="center">
-									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"></strong>
-								</td>
-								<td align="right" width="20%">&nbsp;</td>
-							</tr>
-							<?php 
-								$total =0;
-								$total_paid =0;
-								$total_balance=0;
-							?>
-							<tr>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+			<div id="divPrint"  >
+				<table class="table2excel" style="background:#fff; margin: 0 auto; width: 100%; padding: 0px 2px 1cm 2px;font-family: 'Hanuman';">
+					<tr style="font-size: 13px;">
+						<td colspan="3" align="center">
+							<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';">របាយការណ៍៍វិក័យបត្រអតិថិជន</strong><br />
+						</td>
+					</tr>
+					<tr>
+						<td width="20%" align="left"></td>
+						<td align="center">
+							<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"></strong>
+						</td>
+						<td align="right" width="20%">&nbsp;</td>
+					</tr>
+						<?php 
+							$total =0;
+							$total_paid =0;
+							$total_balance=0;
+						?>
+						<tr>
 		                	<td colspan="3" valign="top" style="padding-top: 25px;"><br />
 		                		<table width="100%" cellpadding="0" cellspacing="0">
 		                			<tbody>
-		                			<tr>
-		                				<td style="font-size: 12px;" valign="top" width="40%;">
-		                				<div style="width:100%;display: block;font-size:16px; font-family:'Khmer MEF2';white-space: nowrap;"><u>ពត៌មានអតិថិជន / CUSTOMER INFORMATION</u></div>
-		                				    <ul class='pur_info'>
-			                					<li style="text-align: left;"><strong>ឈ្មោះក្រុមហ៊ុន / Company Name : </strong><?php echo @$this->rsreceitp[0]['customer'];?></li>
-			                					<li style="text-align: left;"><strong>ឈ្មោះអ្នកទំនាក់ទំនង / Contact Person : </strong><?php echo @$this->rsreceitp[0]['contact_name'];?></li>
-			                					<li style="text-align: left;"><strong>លេខទូរសព្ទ / Contact Number : </strong><?php echo @$this->rsreceitp[0]['phone'];?></li>
-			                					<li style="text-align: left;"><strong>សារអេឡិចត្រូនិច / Email : </strong><?php echo @$this->rsreceitp[0]['email'];?></li>
-			                					<li style="text-align: left;"><strong>អាសយដ្ឋាន /  Address: </strong><?php echo @$this->rsreceitp[0]['address']."&nbsp;".@$this->rsreceitp[0]['province'];?></li>
-		                					</ul>
-		                				</td>
-		                				<td width="25"></td>
-		                				<td width="35%" style="text-align: left;font-size: 12px;">
-		                					<!--<div style="width:100%;display: block;font-size:16px; font-family:'Khmer MEF2';"><u>វិក័យបត្រ </u></div>
-		                					<ul class='pur_info'>
-			                					<li style="text-align: left;"><strong>សាខា​ / Location : </strong><?php echo @$this->rsreceitp[0]['prefix'];?></li>
-			                					<li style="text-align: left;"><strong>លេខវិក័យបត្រ / Invoice No. : </strong><?php echo @$this->rsreceitp[0]['invoice_no'];?></li>
-		                					    <li style="text-align: left;"><strong>កាលបរិច្ឋេទ / Date : </strong><?php echo @date("d/m/Y",strtotime($this->rsreceitp[0]['invoice_date']));?></li>
-		                						<li style="text-align: left;"><strong>លក់ដោយ / Sale Person : </strong><?php echo @$this->rsreceitp[0]['staff_name'];?></li>
-		                					    <li style="text-align: left;"><strong>ចេញដោយ / Bill Issuer : </strong><?php echo @$this->rsreceitp[0]['biller'];?></li>
-			                			    </ul>-->
-		                				</td>
-		                			</tr>
-				                </tbody></table>
+			                			<tr>
+			                				<td style="font-size: 12px;" valign="top" width="40%;">
+			                				<div style="width:100%;display: block;font-size:16px; font-family:'Khmer MEF2';white-space: nowrap;"><u>ពត៌មានអតិថិជន / CUSTOMER INFORMATION</u></div>
+			                				    <ul class='pur_info'>
+				                					<li style="text-align: left;"><strong>ឈ្មោះក្រុមហ៊ុន / Company Name : </strong><?php echo @$this->rsreceitp[0]['customer'];?></li>
+				                					<li style="text-align: left;"><strong>ឈ្មោះអ្នកទំនាក់ទំនង / Contact Person : </strong><?php echo @$this->rsreceitp[0]['contact_name'];?></li>
+				                					<li style="text-align: left;"><strong>លេខទូរសព្ទ / Contact Number : </strong><?php echo @$this->rsreceitp[0]['phone'];?></li>
+				                					<li style="text-align: left;"><strong>សារអេឡិចត្រូនិច / Email : </strong><?php echo @$this->rsreceitp[0]['email'];?></li>
+				                					<li style="text-align: left;"><strong>អាសយដ្ឋាន /  Address: </strong><?php echo @$this->rsreceitp[0]['address']."&nbsp;".@$this->rsreceitp[0]['province'];?></li>
+			                					</ul>
+			                				</td>
+			                				<td width="25"></td>
+			                				<td width="35%" style="text-align: left;font-size: 12px;">
+			                				</td>
+			                			</tr>
+				                	</tbody>
+				                </table>
 				              </td>
 				           </tr> 
 							<tr>
-									<td colspan="3">
-									<div class="contain_form" style="clear: both;">
-									<form name="list"><div style="overflow:scroll; max-height: 450px; overflow-x:hidden;" >
-									<table border="1" id="table" class="collape tablesorter" width="100%" cellspacing="0">
-		            					<tr style="font-size:12px; height: 20px;border: 1px solid #000;white-space: nowrap;background-color: #ccc;line-height:30px;font-weight: bold;" align="center" >
-											<td class="tdheader"><?php echo $tr->translate('NUM')?></td>
-											<td class="tdheader"><?php echo $tr->translate('BRANCH_NAME')?></td>
-											<td class="tdheader"><?php echo $tr->translate('Customer Name')?></td>
-											<td class="tdheader"><?php echo $tr->translate('Invoice No')?></td>
-											<td class="tdheader"><?php echo $tr->translate('Invoice Date')?></td>
-											<td class="tdheader"><?php echo $tr->translate('Total')?></td>
-											<td class="tdheader"><?php echo $tr->translate('Paid')?></td>
-											<td class="tdheader"><?php echo $tr->translate('Balance')?></td>
-											
-											<td class="tdheader"><?php echo $tr->translate('USER')?></td>
-											<td class="tdheader"><?php echo $tr->translate('VEIW')?></td>
-										</tr>
-										 <style> td{padding:0 3px; }</style>
+								<td colspan="3">
+									<form name="list">
+										<div style="overflow:scroll; max-height: 450px; overflow-x:hidden;" >
+											<table border="1" id="table" class="collape tablesorter" width="100%" cellspacing="0">
+				            					<tr style="font-size:12px; height: 20px;border: 1px solid #000;white-space: nowrap;background-color: #ccc;line-height:30px;font-weight: bold;" align="center" >
+													<td class="tdheader"><?php echo $tr->translate('NUM')?></td>
+													<td class="tdheader"><?php echo $tr->translate('BRANCH_NAME')?></td>
+													<td class="tdheader"><?php echo $tr->translate('Customer Name')?></td>
+													<td class="tdheader"><?php echo $tr->translate('Invoice No')?></td>
+													<td class="tdheader"><?php echo $tr->translate('Invoice Date')?></td>
+													<td class="tdheader"><?php echo $tr->translate('Total')?></td>
+													<td class="tdheader"><?php echo $tr->translate('Paid')?></td>
+													<td class="tdheader"><?php echo $tr->translate('Balance')?></td>
+													<td class="tdheader"><?php echo $tr->translate('USER')?></td>
+													<td class="tdheader"><?php echo $tr->translate('VEIW')?></td>
+												</tr>
+											 <style> td{padding:0 3px; }</style>
 									<?php 
-									
 										$id = "table";
 										$stringPagination = '<script type="text/javascript">
 													$(document).ready(function(){
@@ -169,19 +130,19 @@
 									<?php $counter='<strong style="float:right;padding:5px">Number of record(s): '.count($this->rsreceitp).'</strong>'; 
 											$footer = '<div class="footer_list">'.$stringPagination.$counter.'</div>';?>
 									<?php } ?>
-										
-										</table></div></form><?php echo $footer?>
-									</td>
-								</tr>
-								
-							
-			</table>
-	</div>	
-	</div>
-	</div>
+										</table>
+									</div>
+									</form>
+								<?php echo $footer?>
+							</td>
+						</tr>
+				</table>
+			</div>	
+		</div>
 	</div>
 </div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
 <script type="text/javascript">
-function doPrint() {var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();}
+	function doPrint() {var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();}
+	dojo.require("dijit.form.DateTextBox");
 </script>

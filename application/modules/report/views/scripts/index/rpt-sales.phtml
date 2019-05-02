@@ -3,30 +3,23 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 $brach_name =  $this->branch;
 ?>
 <title>Sale Report</title>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("SALES_REPORT");?>
-				</div>
-				<?php echo $this->getHeader;?>
-			</div>
-            <div class="portlet-body form frmfilter">
-				<form method="post" autocomplete="off">
-					<div class="form-group" style="padding-top: 6px;">
-						<?php $formFilter = $this->form_purchase; ?>
-						<label class="control-label col-md-2"><?php echo $formFilter->getElement('text_search');?></label>
-						<label class="control-label col-md-2"><?php echo $formFilter->getElement('branch_id');?></label>
-						<label class="control-label col-md-2"><?php echo $formFilter->getElement('customer_id');?></label>
-						<label class="control-label col-md-2"><?php echo $formFilter->getElement('start_date');?></label>
-						<label class="control-label col-md-2"><?php echo $formFilter->getElement('end_date');?></label>
-						<label class="control-label col-md-2">
-							<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
-						</label>
-					</div><div style="clear:both;"></div>	
-				</form> 
-	<div style=" min-height:28cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.2cm">
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+			<form method="post" autocomplete="off">
+				<div class="form-group" style="padding-top: 6px;">
+					<?php $formFilter = $this->form_purchase; ?>
+					<label class="control-label col-md-2"><?php echo $formFilter->getElement('text_search');?></label>
+					<label class="control-label col-md-2"><?php echo $formFilter->getElement('branch_id');?></label>
+					<label class="control-label col-md-2"><?php echo $formFilter->getElement('customer_id');?></label>
+					<label class="control-label col-md-2"><?php echo $formFilter->getElement('start_date');?></label>
+					<label class="control-label col-md-2"><?php echo $formFilter->getElement('end_date');?></label>
+					<label class="control-label col-md-2">
+						<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("REFRESH")?>" dojoType="dijit.form.Button" 
+							iconClass="dijitIconSearch" />
+					</label>
+				</div><div style="clear:both;"></div>	
+			</form> 
 	<div id="divPrint" style="width: 100%;">
 		<style>
 			.style{
@@ -51,7 +44,7 @@ $brach_name =  $this->branch;
 		        	<table width="100%" style="font-family: 'Khmer OS Battambang';" cellpadding="0" cellpadding="0">
 		            	<tbody>
 			            	<tr>
-			                	<td width="20%" valign="top"><img src="<?php echo $this->baseUrl();?>/images/logo.jpg" height="55px"></td>
+			                	<td width="20%" valign="top"></td>
 			                	<td width="60%" valign="top">
 			                		<ul>
 			                			<li style="text-align:center; font-size:16px; font-family:'Khmer MEF2'"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
@@ -102,14 +95,14 @@ $brach_name =  $this->branch;
 						   <td>&nbsp;<?php echo number_format($rs["balance"],2);?></td>
 						   <td>&nbsp;<?php echo $rs["user_name"];?></td>
 						</tr>
-						   <?php 
-								$d_netotal = $d_netotal+$rs["net_total"];
-								$d_paid = $d_paid+$rs["paid"];
-								$all_total = $all_total+$rs["all_total"];
-								$d_balance = $d_balance+$rs["balance"];
-								$discount=$discount +$rs["discount_value"];
+					<?php 
+						$d_netotal = $d_netotal+$rs["net_total"];
+						$d_paid = $d_paid+$rs["paid"];
+						$all_total = $all_total+$rs["all_total"];
+						$d_balance = $d_balance+$rs["balance"];
+						$discount=$discount +$rs["discount_value"];
                     }?>
-		                </tbody>
+		               </tbody>
 		           </table>
 		            <br>
 		             <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
@@ -139,10 +132,9 @@ $brach_name =  $this->branch;
 		</div>
 	  </div>		
 	</div>
-	 </div>
-   </div>
 </div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
 <script>
-function doPrint() {var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();}
+	function doPrint() {var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();}
+	dojo.require("dijit.form.DateTextBox");
 </script>
