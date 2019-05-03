@@ -176,7 +176,7 @@ class Sales_PossaleController extends Zend_Controller_Action
 					$agreement_id = $post['agreement_id'];
 				}
 			}
-			$rs =$db->getProductById($post['product_id'],$post['branch_id'],$agreement_id);
+			$rs =$db->getProductById($post['product_id'],$post['branch_id'],$agreement_id,$post['customer_id']);
 			print_r(Zend_Json::encode($rs));
 			exit();
 		}

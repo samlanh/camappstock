@@ -3,7 +3,6 @@
 class Purchase_ExpenseController extends Zend_Controller_Action
 {
 	const REDIRECT_URL = '/purchase/expense';
-	
     public function init()
     {
     	header('content-type: text/html; charset=utf8');
@@ -29,7 +28,6 @@ class Purchase_ExpenseController extends Zend_Controller_Action
     					'end_date'=>date('Y-m-d'),
     			);
     		}
-    		
 			$rs_rows= $db->getAllExpense($formdata);//call frome model
     		$glClass = new Application_Model_GlobalClass();
     		$list = new Application_Form_Frmlist();
@@ -40,7 +38,6 @@ class Purchase_ExpenseController extends Zend_Controller_Action
     		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('branch_name'=>$link,'title'=>$link,'invoice'=>$link,'total_amount'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
-    		echo $e->getMessage();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
 		$formFilter = new Application_Form_Frmsearch();
@@ -54,11 +51,7 @@ class Purchase_ExpenseController extends Zend_Controller_Action
 			$db = new Purchase_Model_DbTable_DbExpense();				
 			try {
 				$db->addexpense($data);
-				if(!empty($data['btnsavenew'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/purchase/expense");
-				}else{
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
-				}				
+				Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -69,7 +62,6 @@ class Purchase_ExpenseController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
     }
- 
     public function editAction()
     {
     	$id = $this->getRequest()->getParam('id');
@@ -79,7 +71,7 @@ class Purchase_ExpenseController extends Zend_Controller_Action
 			$db = new Purchase_Model_DbTable_DbExpense();				
 			try {
 				$db->updateExpense($data);				
-				Application_Form_FrmMessage::Sucessfull('ការកែប្រែ​​ជោគ​ជ័យ', self::REDIRECT_URL);		
+				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL);		
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -94,14 +86,5 @@ class Purchase_ExpenseController extends Zend_Controller_Action
     	$frm = $pructis->FrmAddExpense($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
-    	
     }
-
 }
-
-
-
-
-
-
-

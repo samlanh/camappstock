@@ -8,21 +8,10 @@ $form=$this->form;
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 ?>
 <title><?php echo $tr->translate("ADD_NEW_CUSTOMER");?></title>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="icon-home"></i><?php echo $tr->translate("ADD_NEW_CUSTOMER");?>
-				</div>
-				<div class="caption pull-right">
-					<a href="<?php echo $url_new;?>" class="btn btn-bg blue  ">
-						<i class="fa fa-undo"></i>&nbsp;<?php echo $tr->translate("GO_BACK");?>
-					</a>
-				</div>
-			</div>
-			<div class="portlet-body form">
-				<form id="frm" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post">
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+			<form id="frm" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post">
 				<div class="form-body">
 						<div class="form-group">
 							<label class="control-label col-md-2"><?php echo $tr->translate("Branch Name");?><span class="required">
@@ -237,7 +226,6 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			</div>
 		</div>
 	</div>
-</div>
 </body>
 </html>
  <script>

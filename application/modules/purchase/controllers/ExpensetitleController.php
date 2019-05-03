@@ -1,14 +1,9 @@
 <?php
 class Purchase_ExpensetitleController extends Zend_Controller_Action
 {
-public function init()
+	public function init()
     {
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    }
-    protected function GetuserInfoAction(){
-    	$user_info = new Application_Model_DbTable_DbGetUserInfo();
-    	$result = $user_info->getUserInfo();
-    	return $result;
     }
     public function indexAction()
     {
@@ -27,7 +22,6 @@ public function init()
 			Application_Form_FrmMessage::messageError("INSERT_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		
 	}
 	public function addAction()
 	{
@@ -43,7 +37,6 @@ public function init()
 	{
 		$id = ($this->getRequest()->getParam('id'))? $this->getRequest()->getParam('id'): '0';
 		$db = new Purchase_Model_DbTable_Dbexpensetitle();
-		
 		if($id==0){
 			$this->_redirect('/purchase/expensetitle/index');
 		}
@@ -58,15 +51,13 @@ public function init()
 		}
 		$this->view->rs =  $db->getTermById($id);
 	}
-	function addexpensetitleAction(){
+	function getexpensecateAction(){
 		$post=$this->getRequest()->getPost();
-		$db = new Purchase_Model_DbTable_Dbexpensetitle();
-		$pid = $db->addajaxtitle($post);
-		$result = array("id"=>$pid);
+		$db = new Application_Model_DbTable_DbGlobal();
+		$result = $db->getAllExpense(null);
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		array_unshift($result, array('id'=>-1,'name'=>$tr->translate('ADD_NEW')));
 		echo Zend_Json::encode($result);
 		exit();
 	}
-
-	
 }
-

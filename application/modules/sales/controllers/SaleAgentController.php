@@ -5,10 +5,8 @@ class Sales_SaleagentController extends Zend_Controller_Action
 
 public function init()
     {
-        /* Initialize action controller here */
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
-
     public function indexAction()
     {
     	try{
@@ -44,35 +42,24 @@ public function init()
 	    	$this->view->formFilter = $formFilter;
 	    	Application_Model_Decorator::removeAllDecorator($formFilter);
 	}
-
 	public function addAction() {
 		if($this->getRequest()->isPost()) {
 			$post = $this->getRequest()->getPost();
 			try{
 				$add_agent = new Sales_Model_DbTable_DbSalesAgent();
-				$add_agent ->addSalesAgent($post);
-				if(!empty($post['btnsavenew'])){
-					//Application_Form_FrmMessage::message("Agent Has Been Inserted !");
-				}else{
-					//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/sales/saleagent/index");
-				}
+				$add_agent->addSalesAgent($post);
+				Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message('INSERT_FAIL');
 				$err =$e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}
-			
 		}
 		$formAgent = new Sales_Form_FrmStock(null);
 		$formShowAgent = $formAgent->showSaleAgentForm(null);
 		Application_Model_Decorator::removeAllDecorator($formShowAgent);
 		$this->view->form_agent = $formShowAgent;
-		
-		$formpopup = new Application_Form_FrmPopup(null);
-		$formAdd = $formpopup->popuLocation(null);
-		Application_Model_Decorator::removeAllDecorator($formAdd);
-		$this->view->form_addstock = $formAdd;
-	}
+	}	
 	public function editAction() {
 		$session_stock=new Zend_Session_Namespace('stock');
 		$id = ($this->getRequest()->getParam('id'))? $this->getRequest()->getParam('id'): '0';

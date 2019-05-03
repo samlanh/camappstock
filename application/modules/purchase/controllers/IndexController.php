@@ -66,25 +66,14 @@ class Purchase_indexController extends Zend_Controller_Action
 		// item option in select
 		$items = new Application_Model_GlobalClass();
 		$this->view->items = $items->getProductOption();;
-		
-		$formProduct = new Product_Form_FrmProduct();
-		$formStockAdd = $formProduct->add(null);
-		Application_Model_Decorator::removeAllDecorator($formStockAdd);
-		$this->view->form = $formStockAdd;
-		
-		$formpopup = new Application_Form_FrmPopup(null);
-		$formStockAdd = $formpopup->popupVendor(null);
-		Application_Model_Decorator::removeAllDecorator($formStockAdd);
-		$this->view->form_vendor = $formStockAdd;
 	}
 	public function editAction(){
-		$db = new Application_Model_DbTable_DbGlobal();
 		if($this->getRequest()->isPost()) {
 			$data = $this->getRequest()->getPost();
 			try {
 				$db = new Purchase_Model_DbTable_DbPurchaseOrder();
 				$db->updatePurchaseOrder($data);
-				Application_Form_FrmMessage::message("Purchase has been Saved!");
+				Application_Form_FrmMessage::message("EDIT_SUCCESS");
 				Application_Form_FrmMessage::redirectUrl("/purchase/index");
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message('INSERT_FAIL');
@@ -93,11 +82,12 @@ class Purchase_indexController extends Zend_Controller_Action
 			}
 		}
 		$id = ($this->getRequest()->getParam('id'))? $this->getRequest()->getParam('id'): '0';
-		if(empty($id)){
-			Application_Form_FrmMessage::redirectUrl("/purchase/index");
-		}
 		$db = new Purchase_Model_DbTable_DbPurchaseOrder();
 		$row = $db->getPurchaseById($id);
+		if(empty($id) or empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_DATA", "/purchase/index");
+		}
+		
 		$this->view->rs = $db->getPurchaseDetailById($id);
 		
 		$frm_purchase = new Application_Form_purchase();
@@ -108,17 +98,6 @@ class Purchase_indexController extends Zend_Controller_Action
 	
 		$items = new Application_Model_GlobalClass();
 		$this->view->items = $items->getProductOption();;
-	
-		$formProduct = new Product_Form_FrmProduct();
-		$formStockAdd = $formProduct->add(null);
-		Application_Model_Decorator::removeAllDecorator($formStockAdd);
-		$this->view->form = $formStockAdd;
-	
-		$formpopup = new Application_Form_FrmPopup(null);
-		//for add vendor
-		$formStockAdd = $formpopup->popupVendor(null);
-		Application_Model_Decorator::removeAllDecorator($formStockAdd);
-		$this->view->form_vendor = $formStockAdd;
 	}
 	public function addoldAction(){
 		$db = new Application_Model_DbTable_DbGlobal();

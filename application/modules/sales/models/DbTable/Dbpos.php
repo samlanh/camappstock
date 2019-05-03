@@ -12,30 +12,33 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 		$sql="SELECT id,CONCAT(cust_name,contact_name) AS name FROM `tb_customer` WHERE status=1 ";
 		return $this->getAdapter()->fetchAll($sql);
 	}
-	function getProductById($product_id,$branch_id,$agreement_id=null){
+	function getProductById($product_id,$branch_id,$agreement_id=null,$customer_id=null){
 		$result= array();
 		if($agreement_id>0){
 			$sql="
-			SELECT ag.pro_id ,
-			p.price AS cost_price,
-			ag.price,
-			p.qty_perunit,
-			(SELECT tb_measure.name FROM `tb_measure` WHERE tb_measure.id=p.measure_id) as measue_name,
-			(SELECT qty FROM `tb_prolocation` WHERE pro_id=ag.pro_id AND location_id=$branch_id LIMIT 1) AS qty
-			FROM `tb_agreement` AS a,
-			`tb_agreement_detail`  AS ag,
-			`tb_product` AS p
-			WHERE
-			a.id=ag.agreement_id
-			AND p.id=ag.pro_id
-			AND a.id=$agreement_id
-			AND ag.pro_id=$product_id";
-		$result = $this->getAdapter()->fetchRow($sql);	
+				SELECT ag.pro_id ,
+					p.price AS cost_price,
+					ag.price,
+					p.qty_perunit,
+					(SELECT tb_measure.name FROM `tb_measure` WHERE tb_measure.id=p.measure_id) as measue_name,
+					(SELECT qty FROM `tb_prolocation` WHERE pro_id=ag.pro_id AND location_id=$branch_id LIMIT 1) AS qty
+				FROM `tb_agreement` AS a,
+				`tb_agreement_detail`  AS ag,
+				`tb_product` AS p
+				WHERE
+				a.id=ag.agreement_id
+				AND p.id=ag.pro_id
+				AND a.id=$agreement_id
+				AND ag.pro_id=$product_id";
+			$result = $this->getAdapter()->fetchRow($sql);	
 		}
 		
 		if(!empty($result)){
 			return $result;
 		}else{
+			if($customer_id!=null){
+				
+			}
 			$sql="	SELECT *,price as cost_price,
 			(SELECT price FROM `tb_product_price` WHERE type_id=1 AND pro_id=$product_id LIMIT 1) as price,
 			(SELECT qty FROM `tb_prolocation` WHERE pro_id=$product_id AND location_id=$branch_id LIMIT 1) AS qty,

@@ -1,24 +1,12 @@
 <?php 
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$url_save=$this->url(array("module"=>"sales","controller"=>"saleagent","action"=>"add"));
 $changepassword = $this->url(array("module"=>"rsvacl","controller"=>"user","action"=>"changepassword"));
 $frm_agent = $this->form_agent;
 ?>
-<title><?php echo $tr->translate("MENU_SALES_SALE_AGENT_ADD_SALE_AGENT");?></title>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="icon-home"></i><?php echo $tr->translate("MENU_SALES_SALE_AGENT_ADD_SALE_AGENT");?>
-				</div>
-				<div class="tools">
-					<label>
-						<a href="<?php echo $this->baseUrl();?>/sales/saleagent"><button type="button" class="btn red"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
-					</label>
-				</div>
-			</div>
-			<div class="portlet-body form">
+<title><?php echo $tr->translate("EDIT_STAFF");?></title>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
 				<form id="form_sample" action="" class="form-horizontal" enctype="multipart/form-data" method="post">
 				<div class="form-body">
 					<h3 class="form-section"><?php echo $tr->translate("MENU_SALES_SALE_AGENT_ADD_SALE_AGENT_INFO");?></h3>
@@ -299,8 +287,7 @@ $frm_agent = $this->form_agent;
 						</label>
 					</div>
 				</div>
-				</form>
-			</div>
+			</form>
 		</div>
 	</div>
 </div>

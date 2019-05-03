@@ -651,12 +651,13 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
     function getAllExpense($opt=null){
    	$db=$this->getAdapter();
-   	$sql=" SELECT * FROM tb_expensetitle where status=1 and title!='' ";
+   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+   	$sql=" SELECT id,title,title as name FROM tb_expensetitle where status=1 and title!='' ORDER BY title ASC ";
    	$row =  $db->fetchAll($sql);
    	if($opt==null){
    		return $row;
    	}else{
-   		$options=array(0=>"Select Expense",-1=>"Add New Expense Title");
+   		$options=array(0=>"Select Expense",-1=>$tr->translate("ADD_NEW"));
    		if(!empty($row)) foreach($row as $read) $options[$read['id']]=$read['title'];
    		return $options;
    	}

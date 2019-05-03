@@ -308,13 +308,13 @@ class Application_Form_purchase extends Zend_Form
     			$this->addElement($idElement);    			
     			$vendor_id->setValue($data["vendor_id"]);
     			$locationID->setValue($data["branch_id"]);
-    			$dateOrderElement->setValue(date("m/d/Y",strtotime($data["date_order"])));
-    			$date_inElement->setValue(date("m/d/Y",strtotime($data["date_in"])));
+    			$dateOrderElement->setValue(date("Y-m-d",strtotime($data["date_order"])));
+    			$date_inElement->setValue(date("Y-m-d",strtotime($data["date_in"])));
     			$statusElement->setValue($data["purchase_status"]);
-				$date_issuecheque->setValue(date("m/d/Y",strtotime($data["date_issuecheque"])));
-    			//$roder_element->setAttribs(array('readonly'=>'readonly'));
+				$date_issuecheque->setValue(date("Y-m-d",strtotime($data["date_issuecheque"])));
     			$roder_element->setValue($data["invoice_no"]);
     			$po_number->setValue($data["order_number"]);
+    			$dis_valueElement->setValue($data["discount_value"]);
 				$all_totalpayment->setValue($data["net_total"]);
     			
     			$descriptionElement->setValue($data["remark"]);
@@ -513,29 +513,13 @@ class Application_Form_purchase extends Zend_Form
     
     	$dateElement = new Zend_Form_Element_Text('date');
     	$this->addElement($dateElement);
-    	 
-//     	$salesElement = new Zend_Form_Element_Text('sales_ref');
-//     	$this->addElement($salesElement);
-    	
-//     	$rowsagent= $db->getGlobalDb('SELECT agent_id,name FROM tb_sale_agent ORDER BY agent_id DESC');
-//     	$option_agent=array(''=>'Please Select','-1'=>'Add New Sale Agent');
-//     	if($rowsagent) {
-//     		foreach($rowsagent as $read_agent) $option_agent[$read_agent['agent_id']]=$read_agent['name'];
-//     	}
-//     	$sales_agentElement = new Zend_Form_Element_Select('sales_ref');
-//     	$sales_agentElement->setMultiOptions($option_agent);
-//     	$sales_agentElement->setAttribs(array('Onchange'=>'showAgentPopup()'));
-//     	$this->addElement($sales_agentElement);  
 
     	$option="";
     	$sql = "SELECT id,name FROM tb_sale_agent WHERE name!='' ";
     	$option=array(""=>$tr->translate("Please_Select"),"-1"=>$tr->translate("Add_New_Sale_Agent"));
     	if($user["level"]==1 OR $user["level"]== 2){
-    		//$option=array(""=>"Please Select","-1"=>"Add New Sale Agent");
     	}
     	else{
-    		//$option=array(""=>"Please Select");
-    		//$sql.=" AND agent_id =".$user["location_id"];
     	}
     	$sql.=" ORDER BY id DESC";
     	$rs=$db->getGlobalDb($sql);

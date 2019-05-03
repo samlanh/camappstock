@@ -28,10 +28,7 @@ white-space: nowrap;font-size: 12px;line-height:33px;}
 <title>POS STOCK</title>
 <script src="<?php echo $base_url;?>/js/dojo-1.6.1/dojo/dojo.js"  djConfig="isDebug: true,parseOnLoad: true"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>/js/dojo-1.6.1/dijit/themes/soria/soria.css"/>
-<meta charset="utf-8" />
-<script>
-			
-      </script>
+
 <form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">   
    if(this.validate()) {
@@ -52,24 +49,21 @@ white-space: nowrap;font-size: 12px;line-height:33px;}
 				<div class="portlet-body form">
 					<form method="post" action="">
 							<label class="control-label col-md-9">
-								<div class="portlet box blue">
-	                                    <div class="portlet-title">
-	                                        <div class="caption">
-	                                            <i class="fa fa-shopping-cart"></i>ទំនិញដែលបានទិញ
-	                                          </div>
-	                                        <div class="tools">
-	                                            <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
-	                                        </div>
-	                                        <div class="control-label col-md-4" style="margin-top:10px;float:right">
-	                                          <lable class="col-md-13">
-												    <a href="<?php echo $url_back;?>" class="btn btn-bg blue  pull-right">
-														<i class="fa fa-back"></i>&nbsp;<?php echo $tr->translate("GO_BACK");?>
-													</a>
-												 </lable>
-	                                        </div>
-	                                    </div>
-	                                    <div class="portlet-body">
-	                                        <div class="table-responsive">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="fa fa-shopping-cart"></i>ទំនិញដែលបានទិញ
+                                          </div>
+                                        <div class="tools">
+                                            <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
+                                        </div>
+                                        <div class="control-label col-md-4" style="margin-top:10px;float:right">
+                                          <lable class="col-md-13">
+											    <a href="<?php echo $url_back;?>" class="btn btn-bg blue  pull-right">
+											<i class="fa fa-back"></i>&nbsp;<?php echo $tr->translate("GO_BACK");?>
+												</a>
+											 </lable>
+                                        </div>
+                                    </div>
 			                                    <div class="control-label col-md-12" style="background: #cccccc;padding: 10px;">
 										    		<input id="product_id" />
 										    		<input type="hidden" name="identity" id="identity" />
@@ -104,10 +98,7 @@ white-space: nowrap;font-size: 12px;line-height:33px;}
 														<textarea style="height: 120px;width:100%;" name="term_condition" id="term_condition" data-dojo-type="dijit/Editor"></textarea>
 													</div>
 												</div>
-	                                        </div>
-	                                    </div>
 	                                     <div style="clear:both;"></div>
-	                                </div>
 	                                <div style="clear:both;"></div>
 							</label>
 							<div class="control-label col-md-3" >
@@ -925,11 +916,19 @@ function Fullpaid(){
 
 var url_getproduct = '<?php echo $this->url(array('module'=>'sales','controller'=>'possale','action'=>'getproduct')); ?>';
 function getProductinfo(index,product_id){
+   customer_id = dijit.byId('customer_id').get('value');
+   if(customer_id==-1 || customer_id==''){
+	   		dijit.byId('customer_id').focus();
+			return false;
+		}
    agreement_id = 0;
 	dojo.xhrPost({
 	    url: url_getproduct,
 	    content : { 
-	    	'product_id':product_id,'branch_id':1,'agreement_id':agreement_id
+	    	'product_id':product_id,
+	    	'branch_id':1,
+	    	'agreement_id':agreement_id,
+	    	'customer_id':customer_id
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {

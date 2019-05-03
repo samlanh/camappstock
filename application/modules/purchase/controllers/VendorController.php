@@ -52,20 +52,12 @@ class Purchase_vendorController extends Zend_Controller_Action
 			try{
 				$vendor = new Purchase_Model_DbTable_DbVendor();
 				$vendor->addVendor($post);
-				
-				if(!empty($post['saveclose']))
-				{
-					Application_Form_FrmMessage::Sucessfull('INSERT_SUCCESS', self::REDIRECT_URL . '/vendor/index');
-				}else{
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
-				}
+				Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message('INSERT_FAIL');
-				$err =$e->getMessage();
-				Application_Model_DbTable_DbUserLog::writeMessageError($err);
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		/////////////////for veiw form
 		$formStock = new Purchase_Form_FrmVendor(null);
 		$formStockAdd = $formStock->AddVendorForm(null);
 		Application_Model_Decorator::removeAllDecorator($formStockAdd);
@@ -75,12 +67,20 @@ class Purchase_vendorController extends Zend_Controller_Action
 		$db = new Purchase_Model_DbTable_DbVendor();
 		if($this->getRequest()->isPost())
 		{
-			$post = $this->getRequest()->getPost();
-			$db->addVendor($post);
-			Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL . '/vendor/index');
+			try{
+				$post = $this->getRequest()->getPost();
+				$db->addVendor($post);
+				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL . '/vendor/index');
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message('EDIT_ERROR');
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
 		}
 		$id = ($this->getRequest()->getParam('id'))? $this->getRequest()->getParam('id'): '0';
-		$row= $db->getvendorById($id);
+		$row = $db->getvendorById($id);
+		if(empty($row)){
+			Application_Form_FrmMessage::Sucessfull('NO_RECORD',self::REDIRECT_URL . '/vendor/index');
+		}
 		$this->view->is_over_sea = $row["is_over_sea"];
 		$formStock = new Purchase_Form_FrmVendor();
 		$formStockAdd = $formStock->AddVendorForm($row);

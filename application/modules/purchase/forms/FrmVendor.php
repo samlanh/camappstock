@@ -1,13 +1,8 @@
 <?php 
 class Purchase_Form_FrmVendor extends Zend_Form
 {
-	public function init()
-    {	
-	}
-	/////////////	Form vendor		/////////////////
-public function AddVendorForm($data=null) {
+	public function AddVendorForm($data=null) {
 		$db=new Application_Model_DbTable_DbGlobal();
-		
 		$nameElement = new Zend_Form_Element_Text('txt_name');
 		$nameElement->setAttribs(array(
 				'dojoType'=>"dijit.form.ValidationTextBox",
@@ -90,7 +85,8 @@ public function AddVendorForm($data=null) {
 
 		$_stutas = new Zend_Form_Element_Select('status');
 		$_stutas ->setAttribs(array(
-				'class'=>' form-control',			
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'class'=>'fullside',		
 		));
 		$options= array(1=>"ប្រើប្រាស់",0=>"មិនប្រើប្រាស់");
 		$_stutas->setMultiOptions($options);

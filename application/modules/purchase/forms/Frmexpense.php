@@ -74,9 +74,10 @@ Class Purchase_Form_Frmexpense extends Zend_Form {
 		));
 		$total_amount=new Zend_Form_Element_Text('total_amount');
 		$total_amount->setAttribs(array(
-				'dojoType'=>"dijit.form.ValidationTextBox",
+				'dojoType'=>"dijit.form.NumberTextBox",
 				'class'=>'fullside',
-				'readonly'=>'readonly'
+				'readonly'=>'readonly',
+				'required'=>true,
 		));
 		
 		$dollar=new Zend_Form_Element_Text('dollar');

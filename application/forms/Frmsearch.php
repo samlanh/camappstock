@@ -30,6 +30,8 @@ class Application_Form_Frmsearch extends Zend_Form
 				'id'=>'suppliyer_id',
 				'dojoType'=>"dijit.form.FilteringSelect",
 				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*'
 		));
 		$vendor_element->setValue($vendorValue);
 		$this->addElement($vendor_element);

@@ -61,7 +61,6 @@ class Sales_Model_DbTable_DbSalesAgent extends Zend_Db_Table_Abstract
 		$new_acc_no= (int)$acc_no+1;
 		$acc_no= strlen((int)$acc_no+1);
 
-		//$pre = $prefix."EID";
 		$pre = "EID";
 		for($i = $acc_no;$i<4;$i++){
 			$pre.='0';
@@ -75,11 +74,8 @@ class Sales_Model_DbTable_DbSalesAgent extends Zend_Db_Table_Abstract
 		$db->beginTransaction();
 		$userName=$session_user->user_name;
 		$GetUserId= $session_user->user_id;
-		
 		try{
-		// photo image
 			$part= PUBLIC_PATH.'/images/stuffdocument/';
-			
 			$arr=array(
 					"username"  		=>	$data['user_name'],
 					"password"   		=> 	md5($data['password']),
@@ -125,7 +121,6 @@ class Sales_Model_DbTable_DbSalesAgent extends Zend_Db_Table_Abstract
 				$signature_name= $newfilename;
 			}
 			
-			
 			$datainfo=array(
 					"code"					=>	$data["code"],
 					"name"		 			=>	$data['name'],
@@ -152,18 +147,16 @@ class Sales_Model_DbTable_DbSalesAgent extends Zend_Db_Table_Abstract
 					'user_id'				=>	$GetUserId,
 					"date"					=>	date("Y-m-d"),
 					"acl_user"				=>	$id,
-					"status"			=>	$data["status"]
+					"status"				=>	1
 			);
 			$this->_name="tb_sale_agent";
 			$this->insert($datainfo);
 			
-			
-		$db->commit();
+			$db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
 			$err = $e->getMessage();
 			Application_Model_DbTable_DbUserLog::writeMessageError($err);
-			echo $err; exit();
 		}
 	}
 	

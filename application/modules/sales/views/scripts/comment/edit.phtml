@@ -4,19 +4,9 @@
 $user_id = Application_Model_DbTable_DbGlobal::GlobalgetUserId();		
 ?>
 <?php  $dailywork= $this->frm_comment;?>
-<div class="col-md-12">
-	<div class="portlet box blue">
-		<div class="portlet-title">
-			<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("COMMENT_CUSTOMER");?>
-			</div>
-			<div class="caption pull-right">
-				<a href="<?php echo $this->url(array('module'=>'sales','controller'=>'comment','action'=>'index')); ?>" class="btn btn-sm green  pull-right">
-						<i class="fa fa-undo"></i>&nbsp;<?php echo $tr->translate("GO_BACK");?>
-				</a>
-			</div>
-		</div>
-		<div class="portlet-body form">
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
 			<form id="frm" class="form-horizontal" method="post" action="<?php echo $this->url(array('module'=>'sales','controller'=>'comment','action'=>'edit')); ?>" >
 				<div class="form-body ">
 					<div style="margin: 0 auto;" >

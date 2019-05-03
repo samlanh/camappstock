@@ -195,7 +195,7 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 						'qty_detail'  => 	0,
 						'qty_order'	  => 	$data['qty'.$i],
 						'price'		  => 	$data['price'.$i],
-						'disc_value'	  => $data['real-value'.$i],
+						'disc_value'	  => $data['dis_value'.$i],
 						'sub_total'	  => $data['total'.$i],
 				);
 				$this->_name='tb_purchase_order_item';
@@ -210,7 +210,7 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 							'qty_detail'      => 0,
 							'qty_receive'     => $data['qty'.$i],
 							'price'		      => $data['price'.$i],
-							'disc_value'	  => $data['real-value'.$i],
+							'disc_value'	  => $data['dis_value'.$i],
 							'sub_total'	  => $data['total'.$i],
 					);
 					$db->insert("tb_recieve_order_item", $recieved_item);
@@ -258,8 +258,8 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 						if($rows)
 						{
 							$datatostock   = array(
-									'qty'   		=> $rows["qty"]-$rsitem['qty_order'],
-									'last_mod_date'	=> date("Y-m-d"),
+								'qty'   		=> $rows["qty"]-$rsitem['qty_order'],
+								'last_mod_date'	=> date("Y-m-d"),
 							);
 							$this->_name="tb_prolocation";
 							$where=" id = ".$rows['id'];
@@ -268,11 +268,8 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 					}
 				}
 			}elseif($row_oldhistory['status']==1 AND $row_oldhistory['purchase_status']==2){//activ and open
-			
 			}else{
-	
 			}
-				
 			$this->_name='tb_purchase_order_item';
 			$where =" purchase_id=".$data['id'];
 			$this->delete($where);
@@ -310,9 +307,9 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 					//"payment_number" =>     $data["payment_number"],
 					//"currency_id"    =>     $data['currency'],
 					'status'	    => $data['status_use'],
-					'commission'    => 	$data['commission'],
-					'commission_ensur'=> 	$data['commission_ensur'],
-					'bank_name'=> 	$data['bank_name'],
+					//'commission'    => 	$data['commission'],
+					//'commission_ensur'=> 	$data['commission_ensur'],
+					//'bank_name'=> 	$data['bank_name'],
 			);
 			
 			$this->_name="tb_purchase_order";
@@ -329,10 +326,10 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 						'purchase_id' => $purchase_id,
 						'pro_id'	  => $data['item_id_'.$i],
 						'qty_order'	  => $data['qty'.$i],
-						'qty_unit'    => $data['qty_unit_'.$i],
-						'qty_detail'  => $data['qty_per_unit_'.$i],
+						'qty_unit'    => $data['qty'.$i],
+						'qty_detail'  => 0,
 						'price'		  => $data['price'.$i],
-						'disc_value'  => $data['real-value'.$i],
+						'disc_value'  => $data['dis_value'.$i],
 						'sub_total'	  => $data['total'.$i],
 				);
 				$this->_name='tb_purchase_order_item';
