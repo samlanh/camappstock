@@ -51,7 +51,7 @@ class IndexController extends Zend_Controller_Action
 						$session_user->arr_actin = $arr_actin;
 												
 						$session_user->lock();
-						$_url=($arr_acl[0]!=='')? '/default/index/dashboad':'/sales/sales-order' ;//after
+						$_url=($arr_acl[0]!=='')? '/home/index':'/default/index' ;//after
 						$this->_redirect($_url);
 					//}
 				}

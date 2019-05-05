@@ -49,11 +49,13 @@ class Sales_Model_DbTable_DbCustomer extends Zend_Db_Table_Abstract
 		
 		$sql=" SELECT id,
 		(SELECT name FROM `tb_sublocation` WHERE id=branch_id LIMIT 1) AS branch_name,
-		 cust_name,(SELECT name_en FROM `tb_view` WHERE type=6 AND key_code=cu_type LIMIT 1) customer_type,
-		 contact_name,contact_phone,address,
-		 credit_team,credit_limit,
-		( SELECT name_en FROM `tb_view` WHERE type=5 AND key_code=tb_customer.status LIMIT 1) status,
-		( SELECT fullname FROM `tb_acl_user` WHERE tb_acl_user.user_id=tb_customer.user_id LIMIT 1) AS user_name
+		 cust_name,
+		 (SELECT name_en FROM `tb_view` WHERE type=6 AND key_code=cu_type LIMIT 1) customer_type,
+		 (SELECT name FROM `tb_price_type` WHERE id=tb_customer.customer_level LIMIT 1) customer_level,
+		  contact_name,contact_phone,
+		  credit_team,credit_limit,
+		 (SELECT name_en FROM `tb_view` WHERE type=5 AND key_code=tb_customer.status LIMIT 1) status,
+		 (SELECT fullname FROM `tb_acl_user` WHERE tb_acl_user.user_id=tb_customer.user_id LIMIT 1) AS user_name
 		 FROM `tb_customer` WHERE (cust_name!='' OR contact_name!='') ";
 		
 		$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
@@ -115,7 +117,6 @@ class Sales_Model_DbTable_DbCustomer extends Zend_Db_Table_Abstract
 				'credit_limit'	=>	$post["credit_limit"],
 				'credit_team'	=>	$post["credit_tearm"],
 		);
-		
 		$this->insert($data);
 	}
 	public function updateCustomer($post){
@@ -124,7 +125,6 @@ class Sales_Model_DbTable_DbCustomer extends Zend_Db_Table_Abstract
 		$GetUserId= $session_user->user_id;
 		$db = $this->getAdapter();
 		$data=array(
-				//'cu_code'		=> $post['cu_code'],
 				'cust_name'		=> $post['txt_name'],
 				'phone'			=> $post['txt_phone'],
 				'contact_name'	=> $post['txt_contact_name'],//test
@@ -168,10 +168,7 @@ class Sales_Model_DbTable_DbCustomer extends Zend_Db_Table_Abstract
 				'contact_name'	=> $post['txt_contact_name'],//test
 				'contact_phone'	=> $post['contact_phone'],//test
 				'address'		=> $post['txt_address'],
-// 				'fax'			=> $post['txt_fax'],
 				'email'			=> $post['txt_mail'],
-// 				'website'		=> $post['txt_website'],//test
-// 				'add_remark'	=>	$post['remark'],
 				'user_id'		=> $GetUserId,
 				'date'			=> date("Y-m-d"),
 				'branch_id'		=> $post['branch_id'],
@@ -180,8 +177,6 @@ class Sales_Model_DbTable_DbCustomer extends Zend_Db_Table_Abstract
 				'credit_limit'	=>	$credit_limit,
 				'credit_team'	=>	$credit_term,
 		);
-// 		$result=$db->addRecord($data, "tb_customer");
-
 		return $this->insert($data);;	
 	}
 	

@@ -57,8 +57,9 @@ class Rsvacl_Form_FrmUser extends Zend_Form
 		$ad_search=new Zend_Form_Element_Text('ad_search');
     	$ad_search->setAttribs(array(
     		'id'=>'username',
-    		'dojoType'=>"dijit.form.TextBox",
+    		'dojoType'=>"dijit.form.ValidationTextBox",
     		'class'=>'fullside',
+    		'required'=>true,
     	));
     	$ad_search->setValue($request->getParam('ad_search'));
     	$this->addElement($ad_search);
@@ -77,8 +78,9 @@ class Rsvacl_Form_FrmUser extends Zend_Form
     	$user_fullname = new Zend_Form_Element_Text("fullname");
     	$user_fullname->setAttribs(array(
     		'id'=>'fullname',
-    		'dojoType'=>"dijit.form.TextBox",
+    		'dojoType'=>"dijit.form.ValidationTextBox",
     		'class'=>'fullside',
+    		'required'=>true,
     	));
     	$this->addElement($user_fullname);
     	
@@ -103,16 +105,17 @@ class Rsvacl_Form_FrmUser extends Zend_Form
     	$password=new Zend_Form_Element_Password('password');
     	$password->setAttribs(array(
     		'id'=>'password',
-    		'dojoType'=>"dijit.form.TextBox",
-				'class'=>'fullside',
+    		'dojoType'=>"dijit.form.ValidationTextBox",
+    		'class'=>'fullside',
+    		'required'=>true,
     	));
     	$this->addElement($password);
-//confirm password    	
     	$confirm_password=new Zend_Form_Element_Password('confirm_password');
     	$confirm_password->setAttribs(array(
     		'id'=>'confirm_password',
-    		'dojoType'=>"dijit.form.TextBox",
-				'class'=>'fullside',
+    		'dojoType'=>"dijit.form.ValidationTextBox",
+    		'class'=>'fullside',
+    		'required'=>true,
     	));
     	$this->addElement($confirm_password);
     	

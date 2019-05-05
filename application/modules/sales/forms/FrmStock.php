@@ -215,6 +215,7 @@ class Sales_Form_FrmStock extends Zend_Form
     	if($data != null) {
     		$idElement = new Zend_Form_Element_Hidden('id');
     	    $this->addElement($idElement);
+    	    $satrt_working_date->setValue($data['start_working_date']);
     	    $idElement->setValue($data['id']);
     		$nameElement->setValue($data['name']);
     		$phoneElement->setValue($data['phone']);

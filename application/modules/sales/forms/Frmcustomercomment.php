@@ -26,14 +26,14 @@ class Sales_Form_Frmcustomercomment extends Zend_Form
 		
 		$start_date=new Zend_Dojo_Form_Element_TextBox("start_date");
 		$start_date->setAttribs(array(
-				'class'=>'form-control form-control-inline date-picker',
-				'data-date-format'=>"dd-mm-yyyy"));
-		
-		$start_date->setValue(date("d-m-Y"));
+				'dojoType'=>"dijit.form.DateTextBox",
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",));
+		$start_date->setValue(date("Y-m-d"));
 		
 		$_description = new Zend_Dojo_Form_Element_Textarea('description');
-		$_description->setAttribs(array('dojoType'=>'dijit.form.SimpleTextarea',
-				'class'=>'form-control',
+		$_description->setAttribs(array(
+				'class'=>'fullside',
 				'required'=>1,
 		         "style"=>'height:170px;'
 		));
@@ -58,7 +58,7 @@ class Sales_Form_Frmcustomercomment extends Zend_Form
 			$id->setValue($data['id']);
 			$_description->setValue($data['comment']);
 			$_status->setValue($data['status']);
-			$start_date->setValue(date("m/d/Y",strtotime($data['date'])));
+			$start_date->setValue(date("Y-m-d",strtotime($data['date'])));
 			$customerid->setValue($data['customer_id']);
 		}
 		$this->addElements(array($id,$start_date,$_status,$_description));

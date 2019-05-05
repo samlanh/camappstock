@@ -9,7 +9,7 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 		return $this->getAdapter()->fetchAll($sql);
 	}
 	function getAllCustomerName(){
-		$sql="SELECT id,CONCAT(cust_name,contact_name) AS name FROM `tb_customer` WHERE status=1 ";
+		$sql="SELECT id,cust_name AS name FROM `tb_customer` WHERE status=1 AND cust_name!='' ORDER BY id DESC ";
 		return $this->getAdapter()->fetchAll($sql);
 	}
 	function getProductById($product_id,$branch_id,$agreement_id=null,$customer_id=null){
@@ -37,15 +37,22 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 			return $result;
 		}else{
 			if($customer_id!=null){
-				
+				$sql="	SELECT *,price as cost_price,
+				(SELECT price FROM `tb_product_price` WHERE type_id=(SELECT customer_level FROM `tb_customer` WHERE id=$customer_id) AND pro_id=$product_id LIMIT 1) as price,
+				(SELECT qty FROM `tb_prolocation` WHERE pro_id=$product_id AND location_id=$branch_id LIMIT 1) AS qty,
+				(SELECT tb_measure.name FROM `tb_measure` WHERE tb_measure.id=measure_id) as measue_name
+				FROM tb_product WHERE id=$product_id LIMIT 1";
+				return $this->getAdapter()->fetchRow($sql);
+			}else{
+				$sql="	SELECT *,price as cost_price,
+				(SELECT price FROM `tb_product_price` WHERE type_id=1 AND pro_id=$product_id LIMIT 1) as price,
+				(SELECT qty FROM `tb_prolocation` WHERE pro_id=$product_id AND location_id=$branch_id LIMIT 1) AS qty,
+				(SELECT tb_measure.name FROM `tb_measure` WHERE tb_measure.id=measure_id) as measue_name
+				FROM tb_product WHERE id=$product_id LIMIT 1";
+				return $this->getAdapter()->fetchRow($sql);
+				//join with above sql
 			}
-			$sql="	SELECT *,price as cost_price,
-			(SELECT price FROM `tb_product_price` WHERE type_id=1 AND pro_id=$product_id LIMIT 1) as price,
-			(SELECT qty FROM `tb_prolocation` WHERE pro_id=$product_id AND location_id=$branch_id LIMIT 1) AS qty,
-			(SELECT tb_measure.name FROM `tb_measure` WHERE tb_measure.id=measure_id) as measue_name
-			FROM tb_product WHERE id=$product_id LIMIT 1";
-			return $this->getAdapter()->fetchRow($sql);
-			 //join with above sql
+			
 		}
 		
 	}

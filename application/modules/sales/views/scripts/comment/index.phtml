@@ -8,19 +8,19 @@
 	<div class="card-content">
 		<div class="card-box">
 			<form method="post" action="<?php echo $formFilter->getAction(); ?>" autocomplete="off">
-					<div class="form-group">
-						<label class=" col-md-2"><input dojoType="dijit.form.TextBox" class="fullside" id="adv_search" name="adv_search" value="<?php echo $this->row['adv_search']?>" type="text" ></label>
-						<label class=" col-md-2"><?php echo $formFilter->getElement("customer_id");?></label>
-						<label class=" col-md-2"><input dojoType="dijit.form.DateTextBox" id="start_date" name="start_date" type="text"   value="<?php echo date("m/d/Y",strtotime($this->row['start_date']));?>"  ></label>
-						<label class=" col-md-2"><input dojoType="dijit.form.DateTextBox" id="end_date" name="end_date" value="<?php echo date("m/d/Y",strtotime($this->row['end_date']));?>" type="text" ></label>
-						<label class=" col-md-2">
-							<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("REFRESH")?>" dojoType="dijit.form.Button" 
-							iconClass="dijitIconSearch" />
-						</label>
-					</div>		
-				</form> 
-			</div>
-			<div class="card-box">
+				<div class="form-group">
+					<div class=" col-md-2"><input dojoType="dijit.form.TextBox" class="fullside" id="adv_search" name="adv_search" value="<?php echo $this->row['adv_search']?>" type="text" ></div>
+					<div class=" col-md-2"><?php echo $formFilter->getElement("customer_id");?></div>
+					<div class=" col-md-2"><input dojoType="dijit.form.DateTextBox" id="start_date" name="start_date" type="text"   value="<?php echo date("m/d/Y",strtotime($this->row['start_date']));?>"  ></div>
+					<div class=" col-md-2"><input dojoType="dijit.form.DateTextBox" id="end_date" name="end_date" value="<?php echo date("m/d/Y",strtotime($this->row['end_date']));?>" type="text" ></div>
+					<div class=" col-md-2">
+						<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("REFRESH")?>" dojoType="dijit.form.Button" 
+						iconClass="dijitIconSearch" />
+					</label>
+				</div>		
+			</form> 
+		</div>
+		<div class="card-box">
 			<?php echo $this->list;?>
 		</div>
 	</div>

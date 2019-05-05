@@ -1,0 +1,55 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$frm = $this->Form;
+	$url_new = $this->url(array('module'=>'sales','controller'=>'customertype','action'=>'addcustomertype',));
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$formFilter = $this->frmAdd;
+?>
+<title> <?php echo $tr->translate("CUSTOMER_TYPE")?></title>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+			<form dojoType="dijit.form.Form" method="post" action="<?php echo $url_new;?>" >
+					<script type="dojo/method" event="onSubmit">			
+					if(this.validate()) {
+               			loadingBlock();
+						return true;
+					}else{
+						return false;
+					}
+				</script>
+				<div class="col-md-5">
+					<div class="form-group">
+						<label class="col-md-4"><?php echo $tr->translate("TITLE");?></label>
+						<div class="col-md-8">
+							<?php echo $frm->getElement('title_en');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4"><?php echo $tr->translate("credit_term");?></label>
+						<div class="col-md-8">
+							<?php echo $frm->getElement('credit_term');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4"><?php echo $tr->translate("credit_limit");?></label>
+						<div class="col-md-8">
+							<?php echo $frm->getElement('credit_limit');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4"><?php echo $tr->translate("STATUS");?></label>
+						<div class="col-md-8">
+							<?php echo $frm->getElement('status');?>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label  class="col-md-12 col-md-offset-4 col-md-8">
+                         <button type="submit" name="save_close" class="btn btn-primary"><?php echo $tr->translate("SAVE_CLOSE");?></button>
+                     </label>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

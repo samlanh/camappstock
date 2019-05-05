@@ -64,7 +64,7 @@ class Sales_quoatationController extends Zend_Controller_Action
 				}
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message('INSERT_FAIL');
-				Application_Model_DbTable_DbUserLog::writeMessageError($err);
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
 		///link left not yet get from DbpurchaseOrder

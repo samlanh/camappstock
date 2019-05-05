@@ -32,8 +32,10 @@ public function init()
     	$this->view->list=$list->getCheckList(0, $columns, $rows, array('projectname'=>$link,'customer_name'=>$link,'comment'=>$link));
  		$this->view->rst=$rows;
  		
- 		$db = new Sales_Form_Frmcustomercomment();
- 		$this->view->frm_search = $db->add();
+ 		$frm = new Sales_Form_Frmcustomercomment();
+ 		$frm_search = $frm->add();
+ 		Application_Model_Decorator::removeAllDecorator($frm_search);
+ 		$this->view->frm_search = $frm_search;
 	}
 	public function addAction()
 	{
@@ -58,11 +60,6 @@ public function init()
 		$frm_dailywork=$fm->add();
 		Application_Model_Decorator::removeAllDecorator($frm_dailywork);
 		$this->view->frm_comment= $frm_dailywork;
-		
-		$formpopup = new Sales_Form_FrmCustomer(null);
-		$formpopup = $formpopup->Formcustomer(null);
-		Application_Model_Decorator::removeAllDecorator($formpopup);
-		$this->view->form_customer = $formpopup;
 	}// Add Product 
 	public function editAction(){
 		$id=$this->getRequest()->getParam('id');

@@ -2,16 +2,8 @@
 	$url_new = $this->url(array('module'=>'sales','controller'=>'index','action'=>'add',));
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$base_url = $this->baseUrl();
-	$url_back = $this->url(array('module'=>'sales','controller'=>'index','action'=>'index',),null, true);
 ?>
 <style>
-table.calculate td,table.calculate th{padding:0px 3px !important; line-height: 20px; }
-.dijitTextBox, .dijitValidationTextBox, .dijitInputField, .dijitInputContainer, .dijitInputInner, dijitReset, .dijitRight, .dijitButtonNode, .dijitArrowButton, .dijitDownArrowButton, .dijitArrowButtonContainer {
-    height: 30px;
-}
-.dijitValidationTextBoxError input.dijitValidationInner, .dijitSelect input, .dijitTextBox input.dijitArrowButtonInner {
-	line-height:38px;
-}
 .fullside{ width:100%; height: 35px;}
 .fullblog{ width:100%; height: 30px;font-size: 15px !important;}
 td{padding: 1px !important;}
@@ -23,139 +15,124 @@ white-space: nowrap;font-size: 12px;line-height:33px;}
 .form-group .col-md-12{margin-top: 5px;}
 </style>
 <title>POS STOCK</title>
-<script src="<?php echo $base_url;?>/js/dojo-1.6.1/dojo/dojo.js"  djConfig="isDebug: true,parseOnLoad: true"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>/js/dojo-1.6.1/dijit/themes/soria/soria.css"/>
-<meta charset="utf-8" />
-<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">   
-   if(this.validate()) {
-		$("#btnsavenew").prop( "disabled",true);
-    	return true;
-   }else {
-   	 	return false;
-   }
-</script>
-	<div class="row" >
-		<div class="col-md-12">
-				<div class="portlet-body form">
-					<form method="post" action="<?php ?>">
-						<div class="control-label col-md-9">
-							<div class="portlet box blue">
-                                    <div class="portlet-title">
-                                        <div class="caption">
-                                            <i class="fa fa-shopping-cart"></i>ទំនិញដែលបានទិញ
-                                          </div>
-                                           <label class="control-label col-md-4" style="margin-top:10px;float:right">
-	                                          <lable class="col-md-13">
-												    <a href="<?php echo $url_back;?>" class="btn btn-bg blue  pull-right">
-													<i class="fa fa-back"></i>&nbsp;<?php echo $tr->translate("GO_BACK");?>
-													</a>
-											 </lable>
-                                          </label>
-                                    </div>
-                                    <div class="portlet-body">
-                                        <div class="table-responsive">
-                                        	<label class="control-label col-md-12" style="margin-left: -4px;">
-			                                    <div style="background: #cccccc;padding: 10px;">
-										    		<input id="product_id" />
-									    		</div>
-							    				<div style="padding: 10px;">
-								    				<input type="hidden" name="identity" id="identity" />
-								    				<input type="hidden" name="identity_term" id="identity_term" />
-								    				<input type="hidden" name="branch_id" id="branch_id" value="1" />
-								    				<input type="hidden" name="invoice" id="invoice" value="<?php echo $this->invoice;?>" /> 
-								    				<input type="hidden" name="sale_id" id="sale_id" value="<?php echo $this->rs['id'];?>" /> 
-							    				</div>
-							    			</label>
-	                                        <table id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
-												<thead>
-													<tr id="head-title" class="table table-bordered" align="right" style="">
-														<th class="aligncenter">#</th>
-														<th class="aligncenter">ឈ្មោះមុខទំនិញ</th>
-														<th class="aligncenter">ពណ៍នា</th>
-														<th class="aligncenter">ជាង</th>
-														<th class="aligncenter">ស្តុក</th>
-														<th class="aligncenter">បរិ.ដុំ</th>
-														<th class="aligncenter">បរិ.រាយ</th>
-														<th class="aligncenter">បរិមាណ</th>
-														<th class="aligncenter">តម្លៃលក់</th>
-														<th class="aligncenter">បញ្ចុះតម្លៃ</th>
-														<th class="aligncenter">សរុប</th>
-														<th class="aligncenter">លុប</th>
-													</tr>
-													<tr>
-														<td colspan="12" id="lbl_noproduct" align="center">មិនមាន ទំនិញ ក្នុងកន្រ្តក</td>
-													</tr>
-												</thead>
-											</table>
-											<br />
-											 <div style="clear:both;"></div>
-											  <label class="control-label col-md-12" >
-											  	Term Condition
-											  	<div style="border:1px solid #ccc;">
-													<textarea style="height: 120px;width:100%;" name="term_condition" id="term_condition" data-dojo-type="dijit/Editor"><?php echo $this->rs['term_condition'];?></textarea>
-												</div>
-											</label>
-                                        </div>
-                                    </div>
-	                                <div style="clear:both;"></div>
-	                             </div>
-	                           <div style="clear:both;"></div>
-							</div>
-							<div class="control-label col-md-3" >
-								<div class="portlet box blue">
-                                    <div class="portlet-title">
-                                        <div class="caption">
-                                            <i class="fa fa-money white"></i>អតិថិជន/ការទូទាត់
-                                        </div>
-                                        <div class="tools">
-                                        </div>
-                                    </div>
-                                    <div class="portlet-body">
-	                                    <div class="form-group">
-											<div class="col-md-12">
-												<input dojoType="dijit.form.DateTextBox" required="1" constraints="{datePattern:'dd/MM/yyyy'}"
-		                                           class="full_width" type="text" name="sale_date" id="sale_date" />
-											</div>
+
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+			<form id='office_receipt' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			  	<script type="dojo/method" event="onSubmit">   
+				   	if(this.validate()) {
+						branch_id = dijit.byId("branch_id").get("value");
+						if(branch_id==-1){
+							alert("សូមជ្រើសរើសសាខា !");
+							dijit.byId('branch_id').focus();
+							return false;
+						}
+						identity = $("#identity").val();
+						if(identity==''){
+							dijit.byId('product_id').focus();
+							return false;
+						}
+						loadingBlock();
+				    	return true;
+				   }else {
+				    	return false;
+				   }
+					</script>
+                 <div class="col-md-9">
+					 <div class="form-group">
+					 	<div class="col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i>
+							<?php echo $tr->translate("ទំនិញដែលបានទិញ");?> 
+                   		</div>
+                </div>
+                <div class="form-group" style="background: #cccccc;">
+		    		<input id="product_id" />
+		    		<input type="hidden" name="identity" id="identity" />
+    				<input type="hidden" name="identity_term" id="identity_term" />
+    				<input type="hidden" name="invoice" id="invoice" value="<?php echo $this->invoice;?>" /> 
+    				<input type="hidden" name="sale_id" id="sale_id" value="<?php echo $this->rs['id'];?>" />
+				</div>
+                 <div class="form-group">
+                      <table id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
+						<thead>
+							<tr id="head-title" class="table table-bordered" align="right" style="">
+								<th class="aligncenter">#</th>
+								<th class="aligncenter">ឈ្មោះមុខទំនិញ</th>
+								<th class="aligncenter">ពណ៍នា</th>
+								<th class="aligncenter">ជាង</th>
+								<th class="aligncenter">ស្តុក</th>
+								<th class="aligncenter">បរិ.ដុំ</th>
+								<th class="aligncenter">បរិ.រាយ</th>
+								<th class="aligncenter">បរិមាណ</th>
+								<th class="aligncenter">តម្លៃលក់</th>
+								<th class="aligncenter">បញ្ចុះតម្លៃ</th>
+								<th class="aligncenter">សរុប</th>
+								<th class="aligncenter">លុប</th>
+							</tr>
+							<tr>
+								<td colspan="12" id="lbl_noproduct" align="center">មិនមាន ទំនិញ ក្នុងកន្រ្តក</td>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				 <div class="form-group" >
+			  		Term Condition
+				  	<div style="border:1px solid #ccc;">
+						<textarea style="height: 120px;width:100%;" name="term_condition" id="term_condition" ><?php echo $this->rs['term_condition'];?></textarea>
+					</div>
+				 	</div>
+				</div>
+				<div class="col-md-3" >
+	                               <div class="form-group">
+					                   <label class="col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i>
+					                   	<?php echo $tr->translate("អតិថិជន/ការទូទាត់");?> 
+					                   </label>
+					                </div>     
+                                    <div class="form-group">
+										<div class="col-md-12">
+											<input dojoType="dijit.form.DateTextBox" required="1" constraints="{datePattern:'dd/MM/yyyy'}"
+	                                           class="full_width" type="text" name="sale_date" id="sale_date" />
 										</div>
-										<div class="form-group">
-											<div class="col-md-12">
-												<select class="fullblog" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" >
-													<option value="-1">ជ្រើសរើសសាខា</option>
-													<?php if(!empty($this->rs_branch)){ foreach($this->rs_branch as $rs){?>
-														<option value="<?php echo $rs['id']?>" ><?php echo $rs['name'];?></option>
-													<?php }}?>
-								    			</select>
-											</div>
+									</div>
+									<div class="form-group">
+										<select class="fullblog" queryExpr="*${0}*" autoComplete="false" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" >
+											<option value="-1">ជ្រើសរើសសាខា</option>
+											<?php if(!empty($this->rs_branch)){ foreach($this->rs_branch as $rs){?>
+												<option value="<?php echo $rs['id']?>" ><?php echo $rs['name'];?></option>
+											<?php }}?>
+						    			</select>
+									</div>
+									<div class="form-group">
+										<div class="col-md-8">
+											<input type="text" id="customer_id" />
 										</div>
-										<div class="form-group">
-											<div class="col-md-12">
-												<input type="text" id="customer_id" />
-											</div>
+										<div class="col-md-4">
+											<input iconClass="dijitIconUndo" type="button" label="Refresh" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
 										</div>
-										<div class="form-group">
-											<div class="col-md-12">
-												<button style="font-size: 14px;" type="button" name="btnsavenew" onclick="getSuppliyer();" class="btn red btn-block btn-md"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;បន្ថែមអតិថិជន</button>
-											</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<button style="font-size: 14px;" type="button" name="btnsavenew" onclick="getSuppliyer();" class="btn red btn-block btn-md"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;បន្ថែមអតិថិជន</button>
 										</div>
-										<div class="form-group">
-											<div class="col-md-6">JC#</div>
-											<div class="col-md-6">
-												<input type="text" class="full_width" name="cjnumber"  id="cjnumber"  dojoType="dijit.form.TextBox"/>
-											</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-6">JC#</div>
+										<div class="col-md-6">
+											<input type="text" class="full_width" name="cjnumber"  id="cjnumber"  dojoType="dijit.form.TextBox"/>
 										</div>
-										<div class="form-group">
-											<div class="col-md-6">Mileage</div>
-											<div class="col-md-6">
-												<input type="text" name="mileage" id="mileage"  class="full_width" dojoType="dijit.form.TextBox"/>
-											</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-6">Mileage</div>
+										<div class="col-md-6">
+											<input type="text" name="mileage" id="mileage"  class="full_width" dojoType="dijit.form.TextBox"/>
 										</div>
-										<div class="form-group">
-											<div class="col-md-6">
-												អាត្រាប្តូរប្រាក់ 1$=
-											</div>
-											<div class="col-md-6">
-												<input onkeyup="netTotal();" style="background:#d84a38;color:#fff" dojoType="dijit.form.NumberTextBox" class="full_width" value="<?php echo $this->rsrate;?>" type="text" name="exchange_rate" id="exchange_rate" />
+									</div>
+									<div class="form-group">
+										<div class="col-md-6">
+											អាត្រាប្តូរប្រាក់ 1$=
+										</div>
+										<div class="col-md-6">
+											<input onkeyup="netTotal();" style="background:#d84a38;color:#fff" dojoType="dijit.form.NumberTextBox" class="full_width" value="<?php echo $this->rsrate;?>" type="text" name="exchange_rate" id="exchange_rate" />
 											</div>
 										</div>
 										<div class="form-group">
@@ -165,75 +142,69 @@ white-space: nowrap;font-size: 12px;line-height:33px;}
 											<div class="col-md-6">
 												<input readonly dojoType="dijit.form.NumberTextBox" class="full_width" type="text" name="sub_total" id="sub_total" />
                                                 <input dojoType="dijit.form.TextBox" onkeyup="netTotal();" class="full_width" type="hidden" name="tax" id="tax" />
-											</div>
 										</div>
-										<div class="form-group">
-											<div class="col-md-6">
-												បញ្ចុះតម្លៃ
-											</div>
-											<div class="col-md-6"><input dojoType="dijit.form.NumberTextBox" onkeyup="netTotal();" class="full_width" type="text" name="discount" id="discount" /></div>
-										 </div>
-										 <div class="form-group">
-											<div class="col-md-6">
-												សរុបរួមជាដុល្លារ
-											</div>
-											<div class="col-md-6">
-												<input readonly type="text" style="" dojoType="dijit.form.NumberTextBox" class="full_width" name="total_dollar" id="total_dollar" />
-											</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-6">
+											បញ្ចុះតម្លៃ
 										</div>
-										<div class="form-group">
-											<div class="col-md-6">
-												សរុបរួមជារៀល
-											</div>
-											<div class="col-md-6">
-												<input readonly type="text" style="" dojoType="dijit.form.NumberTextBox" class="full_width" name="total_riel" id="total_riel" />
-											</div>
+										<div class="col-md-6"><input dojoType="dijit.form.NumberTextBox" onkeyup="netTotal();" class="full_width" type="text" name="discount" id="discount" /></div>
+									 </div>
+									 <div class="form-group">
+										<div class="col-md-6">
+											សរុបរួមជាដុល្លារ
 										</div>
-										<div class="form-group">
-											<h4 class="underline" style="font-size: 14px;">
-												<i class="fa fa-hand-o-right" aria-hidden="true"></i>
-												ការទទួលប្រាក់
-											</h4>
+										<div class="col-md-6">
+											<input readonly type="text" style="" dojoType="dijit.form.NumberTextBox" class="full_width" name="total_dollar" id="total_dollar" />
 										</div>
-										<div class="form-group">
-											<div class="col-md-6">
-												ប្រាក់ទទួលសរុប
-											</div>
-											<div class="col-md-6">
-												<input type="hidden" value="0" onkeyup="calCualtepaid();" dojoType="dijit.form.TextBox" class="full_width" name="receive_dollar" id="receive_dollar" />
-												<button type="button" name="btnsavenew" onclick="Fullpaid();" class="btn red btn-block btn-md"><i class="fa fa-usd" aria-hidden="true"></i>&nbsp;&nbsp;បង់គ្រប់</button>
-												<input type="hidden" value="0"  onkeyup="calCualtepaid();" value="0" dojoType="dijit.form.TextBox" class="full_width" name="receive_riel" id="receive_riel" />
-											</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-6">
+											សរុបរួមជារៀល
 										</div>
-										<div class="form-group">
-											<div class="col-md-6">
-											</div>
-											<div class="col-md-6">
-												<input type="text" required="true" dojoType="dijit.form.NumberTextBox" class="full_width" name="total_paid" id="total_paid" />
-											</div>
+										<div class="col-md-6">
+											<input readonly type="text" style="" dojoType="dijit.form.NumberTextBox" class="full_width" name="total_riel" id="total_riel" />
 										</div>
-										<div class="form-group">
-											<div class="col-md-6">ប្រាក់អាប់ដុល្លា</div>
-											<div class="col-md-6"><input readonly type="text" value="0" dojoType="dijit.form.NumberTextBox" class="full_width" name="return_amount" id="return_amount" /></div>
+									</div>
+									<div class="form-group">
+					                   		<label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i>
+					                   			<?php echo $tr->translate("ការទទួលប្រាក់");?> 
+					                   		</label>
+					                </div>
+									<div class="form-group">
+										<div class="col-md-6">
+											ប្រាក់ទទួលសរុប
 										</div>
-										<div class="form-group">
-											<div class="col-md-6">ជំពាក់ជាដុល្លា</div>
-											<div class="col-md-6"><input readonly type="text" value="0" dojoType="dijit.form.NumberTextBox" class="full_width" name="balance" id="balance" /></div>
+										<div class="col-md-6">
+											<input type="hidden" value="0" onkeyup="calCualtepaid();" dojoType="dijit.form.TextBox" class="full_width" name="receive_dollar" id="receive_dollar" />
+											<button type="button" name="btnsavenew" onclick="Fullpaid();" class="btn red btn-block btn-md"><i class="fa fa-usd" aria-hidden="true"></i>&nbsp;&nbsp;បង់គ្រប់</button>
+											<input type="hidden" value="0"  onkeyup="calCualtepaid();" value="0" dojoType="dijit.form.TextBox" class="full_width" name="receive_riel" id="receive_riel" />
 										</div>
-										<div class="form-group">
-	                                        <div class="col-md-12">
-	                                			<button type="submit" id="btnsavenew" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-print"></i> រក្សាទុក/បោះ ពុម្ភ</button>
-											</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-6"></div>
+										<div class="col-md-6">
+											<input type="text" required="true" dojoType="dijit.form.NumberTextBox" class="full_width" name="total_paid" id="total_paid" />
 										</div>
-	                                    <div style="clear:both;"></div>
-	                               	 </div>
-	                            </div>
-	                      </div>
-					</form> 
-			   </div>
-		</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-6">ប្រាក់អាប់ដុល្លា</div>
+										<div class="col-md-6"><input readonly type="text" value="0" dojoType="dijit.form.NumberTextBox" class="full_width" name="return_amount" id="return_amount" /></div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-6">ជំពាក់ជាដុល្លា</div>
+										<div class="col-md-6"><input readonly type="text" value="0" dojoType="dijit.form.NumberTextBox" class="full_width" name="balance" id="balance" /></div>
+									</div>
+									<div class="form-group">
+				                     <div class="col-md-12">
+				                     	<button style="background: #c7d7ea;border: 1px solid #8fa9c7;" type="submit" id="btnsavenew" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-print"></i> រក្សាទុក/បោះ ពុម្ភ</button>
+									 </div>
+								 </div>
+                </div>
+			</form> 
+	   </div>
 	</div>
-</form>
+</div>
 <div class="dijitHidden" style="width: 20cm !important; height: 12cm ; padding: 0px; margin: 0px;">
 <div id="invoice" data-dojo-type="dijit.Dialog" style="width:24cm;height: 18cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
 	<div id="PrintReceipt" style="border:1px dashed #ccc;width:18cm !important; padding: 0px; margin-bottom:30px; ">
@@ -389,184 +360,19 @@ white-space: nowrap;font-size: 12px;line-height:33px;}
 		<lable class="col-md-4"></lable>
 	</div>
 </div>
-<?php $form = $this->form_customer; ?>
-<div id="customerpopup" class="modal fade" tabindex="-1" data-width="1200">
-       <div class="modal-dialog">
-		      <div class="modal-content">
-		      <div class="modal-header">   
-				<div class="row">
-				<div class="col-md-12">
-					<div class="portlet box blue">
-					<div class="portlet-title">
-						<div class="caption">
-							<i class="icon-home"></i><?php echo $tr->translate("ADD_NEW_CUSTOMER");?>
-						</div>
-						<div class="caption pull-right">
-							<a href="<?php echo $url_new;?>" >
-								 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							</a>
-						</div>
-					</div>
-					<div class="portlet-body form">
-						<form id="frmcustomer" name="frmcustomer" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded" class="form-horizontal" enctype="multipart/form-data" method="post">
-						<div class="form-body">
-								<div class="form-group">
-									<label class="control-label col-md-2"><?php echo $tr->translate("Branch Name");?><span class="required">
-										</span>
-									</label>
-									<div class="col-md-4">
-										<div class="input-icon right">
-											<i class="fa"></i>
-											<?php echo $form->getElement("branch_id");?>
-										</div>
-									</div>
-									<label class="control-label col-md-2">
-									<?php echo $tr->translate("CU_CODE");?><span class="required">
-										</span>
-									</label>
-									<div class="col-md-4">
-										<div class="input-icon right">
-											<i class="fa"></i>
-											<?php echo $form->getElement('cu_code'); ?>
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="control-label col-md-2"><?php echo $tr->translate("COMPANY_NAME");?><span class="required"></span>
-									</label>
-									<div class="col-md-4">
-										<div class="input-icon right">
-											<i class="fa"></i>
-											<?php echo $form->getElement('txt_name'); ?>
-										</div>
-									</div>
-									<label class="control-label col-md-2">
-									<?php echo $tr->translate("COMPANY_NUMBER");?><span class="required">
-										</span>
-									</label>
-									<div class="col-md-4">
-										<div class="input-icon right">
-											<i class="fa"></i>
-											<?php echo $form->getElement('txt_phone'); ?>
-										</div>
-									</div>
-								</div>
-							<div class="form-group">
-									<label class="control-label col-md-2"><?php echo $tr->translate("CON_NAME");?><span class="required">
-										</span>
-									</label>
-									<div class="col-md-4">
-										<div class="input-icon right">
-											<i class="fa"></i>
-											<?php echo $form->getElement('txt_contact_name'); ?>
-										</div>
-									</div>
-									<label class="control-label col-md-2">
-									<?php echo $tr->translate("CON_NUMBER");?><span class="required"></span>
-									</label>
-									<div class="col-md-4">
-										<div class="input-icon right">
-											<i class="fa"></i><?php echo $form->getElement('contact_phone'); ?>
-										</div>
-									</div>
-							</div>
-							<div class="form-group">
-									<label class="control-label col-md-2"><?php echo $tr->translate("CUSTOMER_TYPE");?> <span class="required">
-										</span>
-									</label>
-									<div class="col-md-4">
-										<div class="input-icon right">
-											<i class="fa"></i>
-											<?php echo $form->getElement('customer_type'); ?>
-										</div>
-									</div>
-									<label class="control-label col-md-2">
-									<?php echo $tr->translate("Customer Level");?><span class="required">
-										</span>
-									</label>
-									<div class="col-md-4">
-										<div class="input-icon right">
-											<i class="fa"></i>
-											<?php echo $form->getElement('customer_level'); ?>
-										</div>
-									</div>
-							</div>
-							<div class="form-group">
-									<label class="control-label col-md-2"><?php echo $tr->translate("ADDRESS");?><span class="required">
-										</span>
-									</label>
-									<div class="col-md-4">
-										<div class="input-icon right">
-											<i class="fa"></i>
-											<?php echo $form->getElement("txt_address");?>
-										</div>
-									</div>
-									<label class="control-label col-md-2">
-									<?php echo $tr->translate("Province");?><span class="required">
-										</span>
-									</label>
-									<div class="col-md-4">
-										<div class="input-icon right">
-											<i class="fa"></i>
-											<?php echo $form->getElement('province'); ?>
-										</div>
-									</div>
-							</div>
-							<div class="form-group">
-									<label class="control-label col-md-2">
-									<?php echo $tr->translate("EMAIL");?><span class="required">
-										</span>
-									</label>
-									<div class="col-md-4">
-										<div class="input-icon right">
-											<i class="fa"></i>
-											<?php echo $form->getElement('txt_mail'); ?>
-										</div>
-									</div>
-								<label class="control-label col-md-2">
-									<span class="required"></span>
-								</label>
-								<div class="col-md-4">
-									<div class="input-icon right">
-										<i class="fa"></i>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label  class="col-md-12 col-md-offset-4 col-md-8">
-									<button type="button" id="save_customer" name="btnsavenew" onclick="addNewCustomer();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CLOSE")?> </button>
-								</label>
-							</div>
-						</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-          </div>
-        </div>
-    </div>
- </div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>			
+
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script>
 function getSuppliyer(){
-	$('#save_customer').attr("disabled", false);
-	$('#customerpopup').modal('show');
+	window.open('<?php echo $this->baseUrl();?>/sales/customer/add?rightclick=true','_blank');
 }
-dojo.require("dijit.form.ValidationTextBox");
-dojo.require("dijit.form.TextBox");
-dojo.require('dijit.form.FilteringSelect');
 dojo.require("dijit.form.NumberTextBox");  
-dojo.require('dijit.form.Button');
 dojo.require("dojo.NodeList-manipulate");
-dojo.require("dojo.html");
-dojo.require("dijit.form.Form");
 dojo.require("dijit.Dialog");
 dojo.require("dojo.number");
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dijit.form.DateTextBox");
-dojo.require("dijit.Editor");
 
 var product_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->rsproduct));?> );
 var client_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->rscustomer));?> );
@@ -589,15 +395,11 @@ require(["dojo/ready"], function(ready){
 		 dijit.byId('cjnumber').attr('value','<?php echo $this->rs['jcnumber'];?>');
 		 dijit.byId('mileage').attr('value','<?php echo $this->rs['mileage'];?>');
 		 dijit.byId('sale_date').attr('value','<?php echo $this->rs['date_sold'];?>');
-		 //dijit.byId('return_amountriel').attr('value',<?php //echo $this->rs['return_riel'];?>);
-		 //dijit.byId('agreement_no').attr('value',<?php //echo $this->rs['agreement_id'];?>);
-		 //dijit.byId('receive_riel').attr('value',<?php //echo $this->rs['paid_riel'];?>);		
-		 //dijit.byId('transport_fee').attr('value',<?php //echo $this->rs['transport_fee'];?>);
 	 });
 	 
 	new dijit.form.FilteringSelect({
 		store: product_store,
-		autoComplete: true,
+		autoComplete: false,
 		required: false,		           
 		name: "product_id",
 		id: "product_id",
@@ -611,7 +413,7 @@ require(["dojo/ready"], function(ready){
 
 		new dijit.form.FilteringSelect({
 			store: client_store,
-			autoComplete: true,
+			autoComplete: false,
 			required: false,		           
 			name: "customer_id",
 			id: "customer_id",
@@ -703,40 +505,11 @@ function printinvoice(){
     document.body.innerHTML = originalContents;
 	document.getElementById("office_receipt").submit();
 }
-<?php $url_add_customer =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'add-customer')); ?>
-function addNewCustomer(){
-	txt_name = $("#txt_contact_name").val();
-	if(txt_name==''){alert("សូមបញ្ជូលឈ្មោះអ្នកទិញ !"); $("#txt_contact_name").focus();return false;} 
-	$('#save_customer').attr("disabled", true);
-	   dojo.xhrPost({
-	   url: "<?php echo $url_add_customer;?>",
-	   form: dojo.byId("frmcustomer"),
-	   handleAs:"json", 
-	   load: function(data) {
-		   var itemcustomer = { 
-			    	 id: data.cus_id,
-				     name: txt_name
-				   };
-		   addDataToSelectbox(dijit.byId('customer_id'), client_store, itemcustomer, data.cus_id);
-		   dijit.byId('frmcustomer').reset();
-		   $('#frmcustomer').trigger("reset");
-		   
-		   dojo.byId("lbl_customer").innerHTML=txt_name;
-		   dojo.byId("lbl_phone").innerHTML=$("#contact_phone").val();
-		   dojo.byId("lbl_address").innerHTML=$("#txt_address").val();
-		   $('#customerpopup').modal('hide');
-	   },		
-	    error: function(err) {
-			   alert(err);
-		    }
-		});
 
-}
 <?php $url_getcustomerinfo =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'get-customerinfo')); ?>
 function getCustomerInfo(){
 	customer_id = dijit.byId("customer_id").get("value");
 	if(customer_id==-1){
-		//$('#customerpopup').modal('show');
 	}else{
 		dojo.xhrPost({
 		    url: "<?php echo $url_getcustomerinfo;?>",
@@ -750,7 +523,6 @@ function getCustomerInfo(){
 			   dojo.byId("lbl_address").innerHTML=data.address;
 		   },		
 		    error: function(err) {
-				   alert(err);
 			    }
 			});
 	}
@@ -822,7 +594,7 @@ function initailize(){
 		template+='<td style="min-width:20px;text-align:center">'+col+'</td>';
 		template+='<td style="min-width:180px;font-size:13px;"><input type="hidden" value="'+product_name+'" id="product_name'+col+'">'+product_name+'<input type="hidden"  value="'+product_id+'" id="product_id'+col+'" name="product_id'+col+'" /></td>';
 		template+='<td style="min-width:130px;font-size:12px;" valign="top"><input class="fullblog" dojoType="dijit.form.TextBox" type="text" name="note'+col+'" id="note'+col+'"/></td>';
-		template+='<td style="min-width:80px;font-size:12px;" valign="top"><select required="false" dojoType="dijit.form.FilteringSelect" name="staff_'+col+'" id="staff_'+col+'">';<?php if(!empty($this->rs_staff))foreach($this->rs_staff as $rs){ ?>
+		template+='<td style="min-width:80px;font-size:12px;" valign="top"><select queryExpr="*${0}*" autoComplete="false" required="false" dojoType="dijit.form.FilteringSelect" name="staff_'+col+'" id="staff_'+col+'">';<?php if(!empty($this->rs_staff))foreach($this->rs_staff as $rs){ ?>
 			template+='<option value="<?php echo $rs["id"];?>"><?php echo $rs["name"];?></option>';
 			<?php }?>
 			template+='</select></td>';
@@ -874,7 +646,7 @@ function addProductRow(){
 		template+='<td style="min-width:20px;text-align:center">'+col+'</td>';
 		template+='<td style="min-width:180px;font-size:13px;"><input type="hidden" value="'+product_name+'" id="product_name'+col+'">'+product_name+'<input type="hidden"  value="'+product_id+'" id="product_id'+col+'" name="product_id'+col+'" /></td>';
 		template+='<td style="min-width:130px;font-size:12px;" valign="top"><input class="fullblog" dojoType="dijit.form.TextBox" type="text" name="note'+col+'" id="note'+col+'"/></td>';
-		template+='<td style="min-width:80px;font-size:12px;" valign="top"><select required="false" dojoType="dijit.form.FilteringSelect" name="staff_'+col+'" id="staff_'+col+'">';<?php if(!empty($this->rs_staff))foreach($this->rs_staff as $rs){ ?>
+		template+='<td style="min-width:80px;font-size:12px;" valign="top"><select queryExpr="*${0}*" autoComplete="false" required="false" dojoType="dijit.form.FilteringSelect" name="staff_'+col+'" id="staff_'+col+'">';<?php if(!empty($this->rs_staff))foreach($this->rs_staff as $rs){ ?>
 			template+='<option value="<?php echo $rs["id"];?>"><?php echo $rs["name"];?></option>';
 				<?php }?>
 			template+='</select></td>';
@@ -901,6 +673,21 @@ function addProductRow(){
 		dijit.byId("product_id").focus();
 		getProductinfo(col,product_id);
 }
+<?php $url_add_customer =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'get-customer')); ?>
+function AllRefresh(){	
+	loadingBlock();
+	dojo.xhrPost({
+		url: "<?php echo $url_add_customer;?>",
+		handleAs:"json", 
+	    load: function(data) {
+			customer_store  = getDataStorefromJSON('id','name',data);
+			dijit.byId('customer_id').set('store',customer_store);  
+			HideloadingBlock(); 
+		},		
+		error: function(err) {
+		}
+	});
+}
 function calCualtePrice(index){
 	main_qty= $("#qty_"+index).val();
 	if(main_qty==''){main_qty=0;}
@@ -909,7 +696,6 @@ function calCualtePrice(index){
 	if(detail_qty==''){detail_qty=0;}
 	qty_perunit= $("#qty_perunit"+index).val();//ចំនួនក្នុង១ឯកកតា
 	qty_perunit=1;
-	//alert("qty_perunit"+qty_perunit);
 	if(qty_perunit==''){qty_perunit=0;}
 	qty_sold = parseFloat(main_qty) + parseFloat(detail_qty/(qty_perunit));
 	$('#qty_sold'+index).val(qty_sold);
@@ -919,7 +705,6 @@ function calCualtePrice(index){
 
 	discount = dijit.byId("discount_"+index).get("value");
 	discount = isNaN(tax)?0:discount;
-
 	total = (price*qty_sold)-discount;
 	dijit.byId("sub_total"+index).attr("value",total);
 	
@@ -932,7 +717,6 @@ function netTotal() {//use
 	for(var n = 0; n < rowIDArray.length; n++) {
 		netTotal += Number(dijit.byId('sub_total'+rowIDArray[n]).get('value'));
 	}
-	
 	dijit.byId("sub_total").attr("value",netTotal);
 	
 	discount = dijit.byId("discount").get("value");
@@ -984,10 +768,19 @@ function Fullpaid(){
 
 var url_getproduct = '<?php echo $this->url(array('module'=>'sales','controller'=>'possale','action'=>'getproduct')); ?>';
 function getProductinfo(index,product_id){
+	customer_id = dijit.byId('customer_id').get('value');
+	   if(customer_id==-1 || customer_id==''){
+		   		dijit.byId('customer_id').focus();
+				return false;
+			}
+	   agreement_id = 0;
 	dojo.xhrPost({
 	    url: url_getproduct,
 	    content : { 
-	    	'product_id':product_id,'branch_id':1
+	    	'product_id':product_id,
+	    	'branch_id':1,
+	    	'agreement_id':agreement_id,
+	    	'customer_id':customer_id
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
@@ -1020,9 +813,7 @@ function getProductinfo(index,product_id){
 			calCualtePrice(index);
 	   },		
 	    error: function(err) {
-			   alert(err);
 		    }
 		});
 }
-
 </script>

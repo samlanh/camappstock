@@ -2,244 +2,227 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$form=$this->form_sale;
 	$url_submit = $this->url(array('module'=>'sales','controller'=>'quoatation','action'=>'add'));
-	$url_cancel = $this->url(array('module'=>'sales','controller'=>'index','action'=>'index'));
 	$url_new = $this->url(array('module'=>'sales','controller'=>'quoatation','action'=>'add'));
 ?>
 <title><?php echo $tr->translate("QUOTATION_ORDER");?></title>
-<style>
-.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
-    padding: 0px !important;
-}.form-control{padding: 1px;}
-</style>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="icon-home"></i><?php echo $tr->translate("QUOTATION_ORDER")?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+            <div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate("QUOTATION_ORDER")?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right"></div>
+    		</div>
+	    </div>
+		<div class="card-box">
+			<form dojoType="dijit.form.Form" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post">
+				<script type="dojo/method" event="onSubmit">	
+					if(this.validate()) {
+					customer_id=dijit.byId("customer_id").get('value');
+					if(customer_id==0 || customer_id=='' || customer_id==-1){
+						alert("សូមជ្រើសរើសអតិជន");
+						dijit.byId('customer_id').focus();
+						return false;	
+					}
+					
+					identity =$("#identity").val();
+					if(identity=='' || identity==-1){
+						alert("ទិន្នន័យមិនអាចរក្សាទុកបានទេ ។សូមត្រួតពិនិត្យមើលម្តងទៀត");
+						dijit.byId('add_item').focus();
+						return false;
+					}
+					credit_term=parseInt(dijit.byId("credit_term").get('value'));
+					credit_limit=parseInt(dijit.byId("credit_limit").get('value'));
+				
+					currentcredit_term=parseInt(dijit.byId("currentcredit_term").get('value'));
+					currcredit_limit=parseInt(dijit.byId("currcredit_limit").get('value'));
+					all_total = dijit.byId("all_total").get('value');
+					loadingBlock();
+					return true;
+				}else{
+					return false;
+				}
+				</script>
+				<div class="col-md-4">
+					<div class="form-group">
+						<div class="col-md-4">
+							<?php echo $tr->translate("BRANCH_NAME");?>
+						</div>
+						<div class="col-md-8">
+							<?php echo $form->getElement('branch_id');?>
+						</div>
+					</div>
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i><?php echo $tr->translate("CUSTOMER_INFO");?> 
+	                   </label>
+	                </div>
+					<div class="form-group">
+						<div class="col-md-4">
+							<?php echo $tr->translate("CUSTOMER_NAME");?>
+						</div>
+						<div class="col-md-6">
+							<?php echo $form->getElement("customer_id");?>
+						</div>
+						<div class="col-md-2">
+                            <button type="button" onclick="popupcustomer();" class="btn green delete col-md-12 ">
+							</button>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4">
+							<?php echo $tr->translate("CREDIT_TERM");?>
+						</div>
+						<div class="col-md-8">
+							<?php echo $form->getElement("credit_term");?>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4" style="white-space: nowrap;">
+							<?php echo $tr->translate("CREDIT_LIMIT");?>($)
+						</div>
+						<div class="col-md-8">
+							<?php echo $form->getElement("credit_limit");?>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4">
+							<?php echo $tr->translate("Current");?>
+						</div>
+						<div class="col-md-8">
+							<div class="input-icon right">
+								<input type="text" dojoType="dijit.form.TextBox" class='fullside' name="currentcredit_term" id="currentcredit_term" value="" readonly="readonly" style="color:red;">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4" style="white-space: nowrap;">
+							<span title="Current Credit Limit">
+							<?php echo $tr->translate("Current");?>(CL)$
+							</span>
+						</div>
+						<div class="col-md-8">
+							<input type="text" dojoType="dijit.form.TextBox" class='fullside' name="currcredit_limit" id="currcredit_limit" value="" readonly="readonly" style="color:red;" class="form-control">
+						</div>
+					</div>
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i><?php echo $tr->translate("SALE_INFO");?> 
+	                   </label>
+	                </div>
+	                <div class="form-group">
+						<div class="col-md-4">
+							<?php echo $tr->translate("QUOTATION_NO");?>
+						</div>
+						<div class="col-md-8">
+							<?php echo $form->getElement("txt_order"); ?>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4">
+							<?php echo $tr->translate("QUOATATION_DATE");?>
+						</div>
+						<div class="col-md-8">
+							<?php echo $form->getElement("order_date");?>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4" style="white-space: nowrap;">
+							<?php echo $tr->translate("Order Type");?>
+						</div>
+						<div class="col-md-8">
+							<select dojoType="dijit.form.FilteringSelect" name="pre_order" id="pre_order" class="fullside">
+								<option value="1">Quotation</option>
+								<option value="0">Pre-Order</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4">
+							<?php  echo $tr->translate("SALE_AGENT");?>
+						</div>
+						<div class="col-md-8">
+							<?php echo $form->getElement("saleagent_id");?>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4">
+							<?php echo $tr->translate("TOTAL");?>
+						</div>
+						<div class="col-md-8">
+							<?php echo $form->getElement("totalAmoun");?>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4">
+							<?php echo $tr->translate("DISCOUNT");?>
+						</div>
+						<div class="col-md-8">
+							<?php echo $form->getElement("dis_value");?>
+						    <input type="hidden" name="discount_type" id="discount_type"/>
+						</div>	
+					</div>
+					<div class="form-group">
+						<div class="col-md-4">
+							<?php echo $tr->translate("TOTAL_AMOUNT");?>​ 
+						</div>
+						<div class="col-md-8">
+							<?php echo $form->getElement("all_total");?>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4">
+							<?php echo $tr->translate("REMARK");?>
+						</div>
+						<div class="col-md-8">
+							<?php echo $form->getElement("remark");?>
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="portlet-body form">
-				<form id="frm" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post">
-					<div class="form-body">
+				<div class="col-md-8">
+					<div class="form-group">
 						<div class="col-md-6">
-							<div class="form-group">
-								<label class="control-label col-md-4"><?php echo $tr->translate("BRANCH_NAME");?><span class="required">
-									</span>
-								</label>
-								<div class="col-md-8">
-									<div class="input-icon right">
-										<i class="fa"></i>
-										<?php echo $form->getElement('branch_id');?>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-4"><?php echo $tr->translate("CUSTOMER_NAME");?> <span class="required">
-								</span>
-								</label>
-								<div class="col-md-6">
-									<div class="input-icon right">
-										<i class="fa"></i>
-										<?php echo $form->getElement("customer_id");?>
-									</div>
-								</div>
-								<div class="col-md-2">
-	                                <button type="button" onclick="popupcustomer();" class="btn green delete col-md-12 ">
-										<i class="fa fa-plus" style="margin-left: -11px;"></i>
-										<span>Add New </span>
-									</button>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-4"><?php  echo $tr->translate("SALE_AGENT");?><span class="required">
-									 </span>
-								</label>
-								<div class="col-md-8">
-									<div class="input-icon right">
-										<?php echo $form->getElement("saleagent_id");?>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-4" style="white-space: nowrap;"><?php echo $tr->translate("Order Type");?></label>
-								<div class="col-md-8">
-									<div class="input-icon right">
-										<select name="pre_order" id="pre_order" class="form-control"><option value="1">Quotation</option><option value="0">Pre-Order</option></select>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-4"><?php echo $tr->translate("REMARK");?><span class="required">
-									 </span>
-								</label>
-								<div class="col-md-8">
-									<div class="input-icon right">
-										<?php echo $form->getElement("remark");?>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label class="control-label col-md-4"><?php echo $tr->translate("QUOTATION_NO");?><span class="required">* </span>
-								</label>
-								<div class="col-md-8">
-									<div class="input-icon right">
-										<?php echo $form->getElement("txt_order"); ?>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-4"><?php echo $tr->translate("QUOATATION_DATE");?><span class="required">
-								* </span>
-								</label>
-								<div class="col-md-8">
-									<div class="input-icon right">
-									<i class="fa fa-calendar"></i><?php echo $form->getElement("order_date");?>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-4"><?php echo $tr->translate("CREDIT_TERM");?>(Days)<span class="required"></span></label>
-								<div class="col-md-8">
-									<div class="input-icon right">
-										<?php echo $form->getElement("credit_term");?>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-4" style="white-space: nowrap;"><?php echo $tr->translate("CREDIT_LIMIT");?>($)<span class="required">
-									 </span>
-								</label>
-								<div class="col-md-8">
-									<div class="input-icon right">
-										<?php echo $form->getElement("credit_limit");?>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-4"><span title="Current Credit Term"><?php echo $tr->translate("Current");?>(CT)</span><span class="required"></span>
-								</label>
-								<div class="col-md-8">
-									<div class="input-icon right">
-										<input type="text" name="currentcredit_term" id="currentcredit_term" value="" readonly="readonly" style="color:red;" class="form-control">
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-4" style="white-space: nowrap;"><span title="Current Credit Limit"><?php echo $tr->translate("Current");?>(CL)$</span><span class="required">
-								 </span>
-								</label>
-								<div class="col-md-8">
-									<div class="input-icon right">
-										<input type="text" name="currcredit_limit" id="currcredit_limit" value="" readonly="readonly" style="color:red;" class="form-control">
-									</div>
-								</div>
-							</div>
-							
+							<select autoComplete="false" queryExpr='*${0}*' dojoType="dijit.form.FilteringSelect" class='fullside' data-placeholder="Select..." id="add_item" name="add_item" Onchange="getItemOrder();"  style="width:100% ;margin:0 auto;">
+								<?php echo $this->items; ?>
+							</select>
 						</div>
 						<div class="col-md-2">
-							<div class="form-group">
-								<button type="button" class="btn red delete" style="width:100%;">
-									<i class="fa fa-barcode"></i>
-									<span><?php echo $tr->translate("SCAN");?> </span>
-								</button>
-							</div>
+							<button type="button" class="btn delete" style="width:100%; background:#65879A;margin-bottom:5px;">
+								<strong style="color:#fff;"><?php echo $tr->translate("SEACH_PRODUCT");?></strong>
+							</button>
 						</div>
+					</div>
+					<div class="form-group">
+						<table class="table table-striped table-bordered table-hover" id="table_order" style="font-size:12px;">
+							<tr height="33px">
+								<th><?php echo $tr->translate("DEL");?></th>
+								<th><?php echo $tr->translate("NUM");?></th>
+								<th style="white-space:nowrap;"><?php echo $tr->translate("ITEM_NAME");?></th>
+								<th><?php echo $tr->translate("CURRENT_QTY");?></th>
+								<th><?php echo $tr->translate("QTY_UNIT");?></th>
+								<th><?php echo $tr->translate("QTY_PER_UNIT");?></th>
+								<th><?php echo $tr->translate("QTY_ORDER");?></th>
+								<th><?php echo $tr->translate("UNIT_PRICE_CAP");?></th>
+								<th><?php echo $tr->translate("EXTRA_PRICE");?></th>
+								<th style="white-space: nowrap;"><?php echo $tr->translate("DISCOUNT");?></th>
+								<th><?php echo $tr->translate("SUB_TOTAL_CAP");?></th>
+						 </tr>
+					 </table>
+					 <input type="hidden" id="identity" name="identity" />
+					 <input type="hidden" id="identity_term" name="identity_term" />
+				  </div>
+				  <div class="form-group">
 						<div class="col-md-6">
-							<div class="form-group">
-								<select data-placeholder="Select..." class="form-control select2me" id="add_item" name="add_item" Onchange="getItemOrder();"  style="width:100% ;margin:0 auto;">
-									<?php echo $this->items; ?>
-								</select>
-							</div>
+							<select autoComplete="false" queryExpr='*${0}*' dojoType="dijit.form.FilteringSelect" class='fullside' data-placeholder="Select..." id="term_item" name="term_item" Onchange="getTermItem();"  style="margin:0 auto; ">
+								<?php echo $this->term_opt; ?>
+							</select>
 						</div>
 						<div class="col-md-2">
+							<button type="button" class="btn delete" style="width:100%; background:#65879A;margin-bottom:5px;">
+								<strong style="color:#fff;"><?php echo $tr->translate("TERM_CONDITION");?></strong>
+							</button>
 						</div>
-						<div class="portlet-body">
-							<table class="table table-striped table-bordered table-hover" id="table_order" style="font-size:12px;">
-								<tr height="33px">
-									<th><?php echo $tr->translate("DEL");?></th>
-									<th><?php echo $tr->translate("NUM");?></th>
-									<th style="white-space:nowrap;"><?php echo $tr->translate("ITEM_NAME");?></th>
-									<th><?php echo $tr->translate("CURRENT_QTY");?></th>
-									<th><?php echo $tr->translate("QTY_UNIT");?></th>
-									<th><?php echo $tr->translate("QTY_PER_UNIT");?></th>
-									<th><?php echo $tr->translate("QTY_ORDER");?></th>
-									<th><?php echo $tr->translate("UNIT_PRICE_CAP");?></th>
-									<th><?php echo $tr->translate("EXTRA_PRICE");?></th>
-									<th style="white-space: nowrap;"><?php echo $tr->translate("DISCOUNT");?></th>
-									<th><?php echo $tr->translate("SUB_TOTAL_CAP");?></th>
-							 </tr>
-						 </table>
-						 <input type="hidden" id="identity" name="identity" />
-						 <input type="hidden" id="identity_term" name="identity_term" />
-					  </div>
-						<!-- blog bottom -->
-						<div class="form-group">
-							<label class="control-label col-md-2"><span class="required">
-								 </span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon">
-								</div>
-							</div>
-								<label class="control-label col-md-2"><?php echo $tr->translate("TOTAL");?>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon">
-								<?php echo $form->getElement("totalAmoun");?>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-md-2"><span class="required">
-								 </span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon">
-								</div>
-							</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("DISCOUNT");?><span class="required">
-								 </span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon" style="text-align: left;">
-									<?php echo $form->getElement("dis_value");?>
-								       <input type="hidden" name="discount_type" id="discount_type"/>
-								</div>
-							</div>	
-						</div>
-						<div class="form-group">
-							<label class="control-label col-md-2"><span class="required">
-							* </span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon">
-								</div>
-							</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("TOTAL_AMOUNT");?>​ :<span class="required">
-							* </span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon">
-								<?php echo $form->getElement("all_total");?>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-						<div class="col-md-2">
-							<button type="button" class="btn delete" style="width:100%; background:#65879A;">
-									<strong style="color:#fff;"><?php echo $tr->translate("TERM_CONDITION");?></strong>
-								</button>
-						</div>
-							<div class="col-md-10">
-								<select data-placeholder="Select..." class="form-control select2me" id="term_item" name="term_item" Onchange="getTermItem();"  style="margin:0 auto; ">
-										<?php echo $this->term_opt; ?>
-								</select>
-							</div>
-						</div>
-						<div class="portlet-body">
+					</div>
+					<div class="form-group">
 					  	<table class="table table-striped table-bordered table-hover" id="table_termcondition" style="font-size:12px;">
 							<tr>
 								<td width="80px;" align="center"><?php echo $tr->translate("DEL");?></td>
@@ -247,251 +230,27 @@
 								<td style="white-space:nowrap;"><?php echo $tr->translate("TERM_CONDITION");?></td>
 							</tr>	
 					  	</table>
-					  </div>
-						<div class="form-group">
-							<div class="col-md-4">
-								<a href="<?php echo $this->baseUrl();?>/sales/quoatation/"><button type="button" class="btn blue btn-block btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
-							</div>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<button type="submit" class="btn blue btn-block btn-lg" ><i class="fa fa-close"></i> <?php echo $tr->translate("SAVE_CLOSE")?></button>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<button type="submit" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_NEW")?> </button>
-							</div>
+				  	</div>
+				</div>
+				<div class="card-box">
+					<div class="border-top">
+						<div class="col-md-4"></div>
+						<div class="col-md-5" class='center'>
+							<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("SAVE_NEW")?>" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
 						</div>
-						
+						<div class="col-md-3"></div>
 					</div>
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 	</div>
-</div>
-<?php $form = $this->form_customer; ?>
-<div id="customerpopup" class="modal fade" tabindex="-1" data-width="1200">
-       <div class="modal-dialog">
-      <div class="modal-content">
-      <div class="modal-header">   
-		<div class="row">
-		<div class="col-md-12">
-			<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="icon-home"></i><?php echo $tr->translate("ADD_NEW_CUSTOMER");?>
-				</div>
-				<div class="caption pull-right">
-					<a href="<?php echo $url_new;?>" >
-						 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					</a>
-				</div>
-			</div>
-			<div class="portlet-body form">
-				<form id="frmcustomer" name="frmcustomer" class="form-horizontal" enctype="multipart/form-data" method="post">
-				<div class="form-body">
-						<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("Branch Name");?><span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement("branch_id");?>
-								</div>
-							</div>
-							<label class="control-label col-md-2">
-							<?php echo $tr->translate("COMPANY_NUMBER");?><span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement('cu_code'); ?>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("COMPANY_NAME");?> <span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement('txt_name'); ?>
-								</div>
-							</div>
-							<label class="control-label col-md-2">
-							<?php echo $tr->translate("COMPANY_NUMBER");?><span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement('txt_phone'); ?>
-								</div>
-							</div>
-						</div>
-					<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("CON_NAME");?><span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement('txt_contact_name'); ?>
-								</div>
-							</div>
-							<label class="control-label col-md-2">
-							<?php echo $tr->translate("CON_NUMBER");?><span class="required"></span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i><?php echo $form->getElement('contact_phone'); ?>
-								</div>
-							</div>
-					</div>
-					<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("CUSTOMER_TYPE");?> <span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-									<div class="input-icon right">
-										<i class="fa"></i>
-										<?php echo $form->getElement('customer_type'); ?>
-									</div>
-							</div>
-							<label class="control-label col-md-2">
-							<?php echo $tr->translate("Customer Level");?><span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement('customer_level'); ?>
-								</div>
-							</div>
-					</div>
-					<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("ADDRESS");?><span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement("txt_address");?>
-								</div>
-							</div>
-							<label class="control-label col-md-2">
-							<?php echo $tr->translate("PROVINCE");?><span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement('province'); ?>
-								</div>
-							</div>
-					</div>
-					<div class="form-group">
-							<label class="control-label col-md-2"><?php echo $tr->translate("EMAIL");?><span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php echo $form->getElement("txt_mail");?>
-								</div>
-							</div>
-							<label class="control-label col-md-2">
-							<?php //echo $tr->translate("EMAIL");?><span class="required">
-								</span>
-							</label>
-							<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php //echo $form->getElement('txt_mail'); ?>
-								</div>
-							</div>
-					</div>
-					
-					<div class="form-group">
-						<label class="control-label col-md-2"><?php //echo $tr->translate("CREDIT_LIMIT");?> <span class="required">
-								</span>
-						</label>
-						<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php //echo $form->getElement('credit_limit'); ?>
-								</div>
-						</div>
-						<label class="control-label col-md-2">
-							<?php //echo $tr->translate("CREDIT_TEARM");?><span class="required">
-								</span>
-						</label>
-						<div class="col-md-4">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<?php //echo $form->getElement("credit_tearm");?>
-								</div>
-						</div>
-						
-					</div>
-					
-					<div class="form-group">
-						<label  class="col-md-12 col-md-offset-4 col-md-8">
-							<button type="button" name="btnsavenew" onclick="addNewCustomer();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CUSTOMER")?> </button>
-						</label>
-					</div>
-				</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-          </div>
-        </div>
-    </div>
 </div>
  <script>
 $( document ).ready(function() {
 	getQuotenumber();
 	initListTermcondition();
 });
-$('#frm').submit(function() {
-	customer_id=$("#customer_id").val();
-	if(customer_id==0 || customer_id=='' || customer_id==-1){
-		alert("សូមជ្រើសរើសអតិជន!");
-		$('#customer_id').select2('open');
-		return false;	
-	}
-	identity =$("#identity").val();
-	if(identity=='' || identity==-1){
-		alert("ទិន្នន័យមិនអាចរក្សាទុកបានទេ ។សូមត្រួតពិនិត្យមើលម្តងទៀត");
-		$('#add_item').select2('open');
-		return false;
-	}
-	credit_term=parseInt($("#credit_term").val());
-	credit_limit=parseInt($("#credit_limit").val());
-
-	currentcredit_term=parseInt($("#currentcredit_term").val());
-	currcredit_limit=parseInt($("#currcredit_limit").val());
-	all_total = $("#all_total").val();
-	//currcredit_limit = currcredit_limit+parseInt(all_total);
-
-	if(currentcredit_term>=credit_term || currcredit_limit>=credit_limit){
-		//alert("អតិថននេះមិនអាចលក់ទៀតបានទេ សូមពិនិត្យលក្ខខ័ណ្ឌប្រាក់ជំពាក់និងរយៈពេលម្តងទៀត");
-        //return false;
-	}
-	
-	var r = confirm("\tសូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\t\n \tតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?\t");
-	if (r == true) {
-	    return true;
-	} else {
-	   return false;
-	    
-	}
-});
-
 function initListTermcondition() {
 	index1=0;
 	term_option = '<?php echo $this->term_opt; ?>';
@@ -521,7 +280,7 @@ var value = '';
 pqty = 1;
 var index=1;
 function addRow(item_id) {
-	index5++; //var first = index5;
+	index5++; 
 	index=index+1;
 	for(i=1; i<index5; i++){
 		new_item=parseInt(item_id);
@@ -535,15 +294,15 @@ function addRow(item_id) {
 		template+='<td ><img onClick="deleteRecord('+index5+')" src="<?php echo BASE_URL; ?>/images/icon/delete.gif" /></td>';
 	}
 	template+='<td  width="1%">'+index5+'</td>';
-	template+='<td width="30%"><select style="width:340px;" class="form-control select2me" Onchange="ShowPopupProduct('+ index5 + ');" id="item_id_'+index5+'" name="item_id_'+index5+'" >'+option5+'<option></option></select>'+inp+'</td>';
+	template+='<td style="min-width:200px;" ><select class="form-control select2me" Onchange="ShowPopupProduct('+ index5 + ');" id="item_id_'+index5+'" name="item_id_'+index5+'" >'+option5+'<option></option></select>'+inp+'</td>';
 	template+='<td><input style="background:#f5e1e1;" readonly type="text" class="form-control" id="lblcurrent_qty'+index5+'" name="lblcurrent_qty'+index5+'" /> <input  type="hidden" class="form-control" id="current_qty'+index5+'" name="current_qty'+index5+'" /></td>';
-	template+='<td ><input type="text" onkeyup="calculatePrice('+index5+'),calculateQtyWarning('+index5+',1);" class="validate[required,custom[number]] input form-control" required="1" value="1" id="qty_unit_'+index5+'" name="qty_unit_'+index5+'" /></td>';
-	template+='<td ><input type="text" onkeyup="calculatePrice('+index5+'),calculateQtyWarning('+index5+',1);" class="validate[required,custom[number]] input form-control" value="0" id="qty_per_unit_'+index5+'" name="qty_per_unit_'+index5+'" /></td>';
-	template+='<td ><input type="text" readonly onkeyup="calculatePrice('+index5+')" class="form-control" required="1" id="qty'+index5+'" name="qty'+index5+'"/><input type="hidden" readonly  class="form-control" required="1" id="qty_perunit'+index5+'" name="qty_perunit'+index5+'"/></td>';
-	template+='<td ><input type="text" onkeyup="calculatePrice('+index5+')" class="validate[required,custom[number]] input form-control" id="price'+index5+'" name="price'+index5+'" /><input type="hidden" id="oldprice_'+index5+'" name="oldprice_'+index5+'"/></td>';
-	template+='<td ><input type="text" onkeyup="calculatePrice('+index5+')" class="form-control" id="extra_price'+index5+'" name="extra_price'+index5+'" /></td>';
-	template+='<td  width="5%"><input type="text" onkeyup="calculatePrice('+index5+')" value="0" id="dis_value'+index5+'" name="dis_value'+index5+'" class="form-control" /><input type="hidden" class="input70px" id="discount_type'+index5+'" name="discount_type'+index5+'" /></td>';
-	template+='<td ><input type="text" class="form-control" readonly="readonly" id="total'+index5+'" name="total'+index5+'" /><input type="hidden" name="cost_price_'+index5+'" id="cost_price_'+index5+'" /></td>';
+	template+='<td width="80px"><input type="text" onkeyup="calculatePrice('+index5+'),calculateQtyWarning('+index5+',1);" class="validate[required,custom[number]] input form-control" required="1" value="1" id="qty_unit_'+index5+'" name="qty_unit_'+index5+'" /></td>';
+	template+='<td width="80px"><input type="text" onkeyup="calculatePrice('+index5+'),calculateQtyWarning('+index5+',1);" class="validate[required,custom[number]] input form-control" value="0" id="qty_per_unit_'+index5+'" name="qty_per_unit_'+index5+'" /></td>';
+	template+='<td width="80px"><input type="text" readonly onkeyup="calculatePrice('+index5+')" class="form-control" required="1" id="qty'+index5+'" name="qty'+index5+'"/><input type="hidden" readonly  class="form-control" required="1" id="qty_perunit'+index5+'" name="qty_perunit'+index5+'"/></td>';
+	template+='<td width="80px"><input type="text" onkeyup="calculatePrice('+index5+')" class="validate[required,custom[number]] input form-control" id="price'+index5+'" name="price'+index5+'" /><input type="hidden" id="oldprice_'+index5+'" name="oldprice_'+index5+'"/></td>';
+	template+='<td width="80px"><input type="text" onkeyup="calculatePrice('+index5+')" class="form-control" id="extra_price'+index5+'" name="extra_price'+index5+'" /></td>';
+	template+='<td width="5%"><input type="text" onkeyup="calculatePrice('+index5+')" value="0" id="dis_value'+index5+'" name="dis_value'+index5+'" class="form-control" /><input type="hidden" class="input70px" id="discount_type'+index5+'" name="discount_type'+index5+'" /></td>';
+	template+='<td width="80px"><input type="text" class="form-control" readonly="readonly" id="total'+index5+'" name="total'+index5+'" /><input type="hidden" name="cost_price_'+index5+'" id="cost_price_'+index5+'" /></td>';
 	template+="</tr>";
 	$('#table_order').append(template);
 	if($('#identity').val()!="") {
@@ -608,7 +367,6 @@ function getQtyById(index){//use
 							}
 							$("#lblcurrent_qty"+index).val(current_stock+""+qty_unitlable);
 							
-							//$("#lblcurrent_qty"+index).val(qty+""+item_qty.measue_name+""+qty_unitlable);
 							$("#current_qty"+index).val(item_qty.qty);
 							main_qty =$("#qty_unit_"+index).val();
 							detail_qty =  $("#qty_per_unit_"+index).val();
@@ -920,4 +678,5 @@ function calculateQtyWarning(index,type){//type=1 from main qty,2 from qty detai
 		}
 	}
 }
+	dojo.require("dijit.form.DateTextBox");
 </script>	

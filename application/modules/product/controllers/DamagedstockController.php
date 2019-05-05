@@ -38,8 +38,9 @@ public function init()
    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
    		}
    		$frm = new Product_Form_FrmAdjust();
+   		$frm = $frm->filter();
     	Application_Model_Decorator::removeAllDecorator($frm);
-    	$this->view->formFilter = $frm->filter();
+    	$this->view->formFilter =$frm;
    	}
     public function addAction()
     {   

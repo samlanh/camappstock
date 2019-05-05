@@ -1,0 +1,192 @@
+ <?php
+	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate("Dashboard Property Management System"));
+	echo $this->headTitle();
+	$session_user=new Zend_Session_Namespace('authinstall');
+	$level = $session_user->level;
+?>
+<style>
+ .dijitHidden{
+ 	display: none;
+}
+ </style>
+<link rel="stylesheet" href="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.css">
+<link href="<?php echo $this->baseUrl()."/"?>dashboard/css/icons.css" rel="stylesheet">
+<link href="<?php echo $this->baseUrl()."/"?>dashboard/css/style.css" rel="stylesheet">
+
+<div id="page-wrapper">
+	<!-- Page content start -->
+	<div class="page-contentbar">
+		<!-- START PAGE CONTENT -->
+		<div id="page-right-content">
+			<div class="container">
+				 <div class="row">
+					<div class="col-lg-6">
+						<div class="card-box">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<div class="accounting-management text-center">
+									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 capital-box" style="width: 100%; background: #203864; color: #fff">
+										<span data-bind="text: txnRecorded"></span>
+										<p class="month" style="width: 70%; text-align: center; margin: 0 auto;" data-bind="text: lang.lang.transactions_recorded"><?php echo $tr->translate("Net Income")?></p>
+									</div>
+									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
+										<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 capital-box" style="background: #0077c5;">
+											<span data-bind="text: currentRatio"></span> 
+											<p class="month" data-bind="text: lang.lang.current_ratio"><?php echo $tr->translate("Total Income")?></p>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 capital-box" style="background: #21abf6; color: #fff;">
+											<span data-bind="text: quickRatio"></span> 
+											<p class="month" style="color: #fff;" data-bind="text: lang.lang.quick_ratio"><?php echo $tr->translate("Total Expense")?></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-box">
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<h4 class="m-t-0"><?php echo $tr->translate("Monthly Sale")?></h4>
+								<div class="text-center">
+									<ul class="list-inline chart-detail-list">
+										<li>
+											<h5 class="font-normal"><i class="fa fa-circle m-r-10 text-primary"></i><?php echo $tr->translate("Number Of Sale")?></h5>
+										</li>
+									</ul>
+								</div>
+								<div id="dashboard-bar-stacked" style="height: 200px;"></div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<h4 class="m-t-0"><?php echo $tr->translate("Monthly Net Income")?></h4>
+								<div class="text-center">
+									<ul class="list-inline chart-detail-list">
+										<li>
+											<h5 class="font-normal"><i class="fa fa-circle m-r-10 text-muted"></i><?php echo $tr->translate("Net Income")?></h5>
+										</li>
+									</ul>
+								</div>
+								<div id="dashboard-bar-income" style="height: 200px;"></div>
+							</div>
+						</div> 
+					</div> <!-- end col -->	  
+					 <div class="col-lg-6">
+						<div class="card-box">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+									<p><span data-bind="text: lang.lang.performance"><?php echo $tr->translate("Property Infomation")?></span></p>
+									<table class="performance">
+										<tbody>
+											<tr>
+												<td><a href="<?php echo $this->baseUrl()."/report/paramater/rpt-properties";?>"><span data-bind="text: lang.lang.income"><?php echo $tr->translate("All Property")?></span></a></td>
+												<td></td>
+												<td align="right"><span data-bind="text: obj.income"></span></td>
+											</tr>
+											<tr>
+												<td><span data-bind="text: lang.lang.expense"><?php echo $tr->translate("Property Sold")?></span></td>
+												<td></td>
+												<td align="right"><span data-bind="text: obj.expense"></span></td>
+											</tr>
+											<tr>
+												<td><b><span data-bind="text: lang.lang.net_income"><?php echo $tr->translate("Property Available")?></span></b></td>
+												<td></td>
+												<td align="right"><b data-bind="text: obj.net_income"></b></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+									<p><span data-bind="text: lang.lang.performance"><?php echo $tr->translate("Customer / Agency Infomation")?></span></p>
+									<table class="performance">
+										<tbody>
+											<tr>
+												<td><a href=""><span data-bind="text: lang.lang.income"><?php echo $tr->translate("Customers")?></span></a></td>
+												<td></td>
+												<td align="right"><span data-bind="text: obj.income"></span></td>
+											</tr>
+											<tr>
+												<td><a href=""><span data-bind="text: lang.lang.expense"><?php echo $tr->translate("Agency")?></span></a></td>
+												<td></td>
+												<td align="right"><span data-bind="text: obj.expense"></span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<p><span data-bind="text: lang.lang.performance"><?php echo $tr->translate("Sale Information")?></span></p>
+									<div class="widget-body alert-info welcome-nopadding">
+											<table width="100%" class="saleInfo">
+												<thead>
+													<tr align="center">
+														<td>										
+															&nbsp;
+														</td>
+														<td>
+															<span data-bind="text: obj.ar_customer"></span>
+														</td>
+														<td>
+															<span data-bind="text: obj.ar_overdue"></span>
+														</td>
+													</tr>
+												</thead>
+												<tbody>
+													<tr align="left">
+														<td class="border-rig">										
+															<span data-bind="text: obj.ar_open"></span>
+														</td>
+														<td align="center">
+															<span data-bind="text: obj.ar_customer"></span>
+														</td>
+														<td align="center">
+															<span data-bind="text: obj.ar_overdue"></span>
+														</td>
+													</tr>
+													<tr align="left">
+														<td class="border-rig">										
+															<span data-bind="text: obj.ar_open"></span>
+														</td>
+														<td align="center">
+															<span data-bind="text: obj.ar_customer"></span>
+														</td>
+														<td align="center">
+															<span data-bind="text: obj.ar_overdue"></span>
+														</td>
+													</tr>
+													<tr align="left">
+														<td class="border-rig">										
+															<span data-bind="text: obj.ar_open"></span>
+														</td>
+														<td align="center">
+															<span data-bind="text: obj.ar_customer"></span>
+														</td>
+														<td align="center">
+															<span data-bind="text: obj.ar_overdue"></span>
+														</td>
+													</tr>
+												</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						  <div class="card-box">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<div class="accounting-management text-center">
+									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
+										<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 capital-box" style="background: #203864; color: #fff;">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> <!-- end col -->	  
+				</div> <!-- end row -->
+                 <div class="row-fluid">
+					<div style="margin-top: 10px; margin-left: 0;" align="center">
+						
+					</div>	
+				</div>       
+			</div>
+		</div>
+	</div>
+</div>
