@@ -30,16 +30,6 @@ class Purchase_Model_DbTable_Dbexpensetitle extends Zend_Db_Table_Abstract
 		$where = $db->quoteInto("id=?", $data["id"]);
 		$this->update($arr, $where);
 	}
-// 	public function addajaxtitle($data){
-// 		$db = $this->getAdapter();
-// 		$arr = array(
-// 				'title'	=>	$data["expense_title"],
-// 				'status'		=>	1,
-// 				'date'		=>	date("Y-m-d"),
-// 				'user_id'=>$this->getUserId()
-// 		);
-// 		return $this->insert($arr);
-// 	}
 	public function getAllTerm(){
 		$db = $this->getAdapter();
 		$sql = "SELECT 
@@ -48,7 +38,8 @@ class Purchase_Model_DbTable_Dbexpensetitle extends Zend_Db_Table_Abstract
 				   t.title_en,
 				  t.status	  
 				FROM
-				  tb_expensetitle AS t ORDER BY id desc ";
+				  tb_expensetitle AS t
+			WHERE title!='' OR title_en!=''	ORDER BY id desc ";
 		return $db->fetchAll($sql);
 	}
 	public function getTermById($id){

@@ -192,7 +192,7 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<table class="table table-striped table-bordered table-hover" id="table_order" style="font-size:12px;">
+						<table class="table table-striped table-bordered table-hover" style="font-size:12px;">
 							<tr height="33px">
 								<th><?php echo $tr->translate("DEL");?></th>
 								<th><?php echo $tr->translate("NUM");?></th>
@@ -200,12 +200,14 @@
 								<th><?php echo $tr->translate("CURRENT_QTY");?></th>
 								<th><?php echo $tr->translate("QTY_UNIT");?></th>
 								<th><?php echo $tr->translate("QTY_PER_UNIT");?></th>
-								<th><?php echo $tr->translate("QTY_ORDER");?></th>
+								<th style="white-space: nowrap;"><?php echo $tr->translate("QTY_ORDER");?></th>
 								<th><?php echo $tr->translate("UNIT_PRICE_CAP");?></th>
 								<th><?php echo $tr->translate("EXTRA_PRICE");?></th>
 								<th style="white-space: nowrap;"><?php echo $tr->translate("DISCOUNT");?></th>
 								<th><?php echo $tr->translate("SUB_TOTAL_CAP");?></th>
 						 </tr>
+						 <tbody id="table_row" style="font-size:12px;">
+						</tbody>
 					 </table>
 					 <input type="hidden" id="identity" name="identity" />
 					 <input type="hidden" id="identity_term" name="identity_term" />
@@ -246,7 +248,9 @@
 		</div>
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
  <script>
+ 
 $( document ).ready(function() {
 	getQuotenumber();
 	initListTermcondition();
@@ -268,7 +272,6 @@ function initListTermcondition() {
 			$('#identity_term').val(identity+','+index1);
 		} else {$('#identity_term').val(index1);}
 		$("#termid_"+index1).val("<?php echo $rt['id'];?>");
-		$("#row_term_0").remove();	
 	<?php } }?>
 }
 
@@ -280,68 +283,64 @@ var value = '';
 pqty = 1;
 var index=1;
 function addRow(item_id) {
+	product_name = dijit.byId("add_item").attr("displayedValue");
+	product_id = dijit.byId("add_item").get('value');
+	if(product_name=='' ){return false;}
 	index5++; 
 	index=index+1;
 	for(i=1; i<index5; i++){
 		new_item=parseInt(item_id);
 		items = parseInt($("#item_id_"+i).val());
 	}
-	template='<tr id="row_order_'+index5+'" style="height:33px;">';
 	var inp = '';
-	if(index5 == 1) {
-		template+='<td >&nbsp;</td>';
-	} else {
-		template+='<td ><img onClick="deleteRecord('+index5+')" src="<?php echo BASE_URL; ?>/images/icon/delete.gif" /></td>';
-	}
-	template+='<td  width="1%">'+index5+'</td>';
-	template+='<td style="min-width:200px;" ><select class="form-control select2me" Onchange="ShowPopupProduct('+ index5 + ');" id="item_id_'+index5+'" name="item_id_'+index5+'" >'+option5+'<option></option></select>'+inp+'</td>';
+	template='<td width="5"><img onClick="deleteRecord('+index5+')" src="<?php echo BASE_URL; ?>/images/icon/delete.gif" /></td>';
+	template+='<td width="5">'+index5+'</td>';
+	template+='<td style="min-width:200px;" ><input type="hidden" value="'+product_id+'" id="item_id_'+index5+'" name="item_id_'+index5+'" >'+product_name+'</td>';
 	template+='<td><input style="background:#f5e1e1;" readonly type="text" class="form-control" id="lblcurrent_qty'+index5+'" name="lblcurrent_qty'+index5+'" /> <input  type="hidden" class="form-control" id="current_qty'+index5+'" name="current_qty'+index5+'" /></td>';
-	template+='<td width="80px"><input type="text" onkeyup="calculatePrice('+index5+'),calculateQtyWarning('+index5+',1);" class="validate[required,custom[number]] input form-control" required="1" value="1" id="qty_unit_'+index5+'" name="qty_unit_'+index5+'" /></td>';
-	template+='<td width="80px"><input type="text" onkeyup="calculatePrice('+index5+'),calculateQtyWarning('+index5+',1);" class="validate[required,custom[number]] input form-control" value="0" id="qty_per_unit_'+index5+'" name="qty_per_unit_'+index5+'" /></td>';
-	template+='<td width="80px"><input type="text" readonly onkeyup="calculatePrice('+index5+')" class="form-control" required="1" id="qty'+index5+'" name="qty'+index5+'"/><input type="hidden" readonly  class="form-control" required="1" id="qty_perunit'+index5+'" name="qty_perunit'+index5+'"/></td>';
-	template+='<td width="80px"><input type="text" onkeyup="calculatePrice('+index5+')" class="validate[required,custom[number]] input form-control" id="price'+index5+'" name="price'+index5+'" /><input type="hidden" id="oldprice_'+index5+'" name="oldprice_'+index5+'"/></td>';
-	template+='<td width="80px"><input type="text" onkeyup="calculatePrice('+index5+')" class="form-control" id="extra_price'+index5+'" name="extra_price'+index5+'" /></td>';
-	template+='<td width="5%"><input type="text" onkeyup="calculatePrice('+index5+')" value="0" id="dis_value'+index5+'" name="dis_value'+index5+'" class="form-control" /><input type="hidden" class="input70px" id="discount_type'+index5+'" name="discount_type'+index5+'" /></td>';
-	template+='<td width="80px"><input type="text" class="form-control" readonly="readonly" id="total'+index5+'" name="total'+index5+'" /><input type="hidden" name="cost_price_'+index5+'" id="cost_price_'+index5+'" /></td>';
-	template+="</tr>";
-	$('#table_order').append(template);
+	template+='<td width="80px"><input class="fullsite" dojoType="dijit.form.NumberTextBox" type="text" onkeyup="calculatePrice('+index5+'),calculateQtyWarning('+index5+',1);"  required="1" value="1" id="qty_unit_'+index5+'" name="qty_unit_'+index5+'" /></td>';
+	template+='<td width="80px"><input class="fullsite" dojoType="dijit.form.NumberTextBox" type="text" onkeyup="calculatePrice('+index5+'),calculateQtyWarning('+index5+',1);"  value="0" id="qty_per_unit_'+index5+'" name="qty_per_unit_'+index5+'" /></td>';
+	template+='<td width="80px"><input class="fullsite" dojoType="dijit.form.NumberTextBox" class="fullsite" dojoType="dijit.form.NumberTextBox"  type="text" readonly required="1" id="qty'+index5+'" name="qty'+index5+'"/><input type="hidden" readonly  required="1" id="qty_perunit'+index5+'" name="qty_perunit'+index5+'"/></td>';
+	template+='<td width="80px"><input class="fullsite" dojoType="dijit.form.NumberTextBox"type="text" onkeyup="calculatePrice('+index5+')" class="validate[required,custom[number]] input form-control" id="price'+index5+'" name="price'+index5+'" /><input type="hidden" id="oldprice_'+index5+'" name="oldprice_'+index5+'"/></td>';
+	template+='<td width="80px"><input class="fullsite" dojoType="dijit.form.NumberTextBox"type="text" onkeyup="calculatePrice('+index5+')" class="form-control" id="extra_price'+index5+'" name="extra_price'+index5+'" /></td>';
+	template+='<td width="5%"><input class="fullsite" dojoType="dijit.form.NumberTextBox"type="text" onkeyup="calculatePrice('+index5+')" value="0" id="dis_value'+index5+'" name="dis_value'+index5+'"  /><input type="hidden" class="input70px" id="discount_type'+index5+'" name="discount_type'+index5+'" /></td>';
+	template+='<td width="80px"><input class="fullsite" dojoType="dijit.form.NumberTextBox" type="text" class="form-control" readonly="readonly" id="total'+index5+'" name="total'+index5+'" /><input type="hidden" name="cost_price_'+index5+'" id="cost_price_'+index5+'" /></td>';
+
+	tmp='<tr id="row'+index5+'">';
+	tmp+="</tr>";
+	$('#table_row').append(tmp);
+	dojo.html.set(dojo.byId('row'+index5),template , {
+	     parseContent: true,
+	});
+	
 	if($('#identity').val()!="") {
 		var identity = $('#identity').val();
 		$('#identity').val(identity+','+index5);
 	} else {$('#identity').val(index5);}
-	$("#item_id_"+index5).val(item_id);
-	$("#item_id_"+index5).select2();
-	getQtyById(index5);
-	//getProductPrice(item_id,index5);
-	$("#paid").val(0);
-	$("#row_order_0").remove();
-	$("#frm").validationEngine();
+	getQtyById(product_id,index5);
 }
 term_option = '<?php echo $this->term_opt; ?>';
 index1 = 0;
 function addtermcondition(t_id){
+	term_label=dijit.byId("term_item").attr('displayedValue');
 	index1++; 
 	template='<tr id="row_term_'+index1+'" style="height:33px;">';
-    template+='<td width="20px" ><img onClick="deleteTermRecord('+index1+')" src="<?php echo BASE_URL; ?>/images/icon/delete.gif" /></td>';
-	template+='<td  width="2%">'+index1+'</td>';
-	template+='<td><select class="form-control select2me" id="termid_'+index1+'" name="termid_'+index1+'" >'+term_option+'<option></option></select></td>';
+    template+='<td width="10px" ><img onClick="deleteTermRecord('+index1+')" src="<?php echo BASE_URL; ?>/images/icon/delete.gif" /></td>';
+	template+='<td  width="10px">'+index1+'</td>';
+	template+='<td><input type="hidden" value="'+t_id+'" id="termid_'+index1+'" name="termid_'+index1+'" >'+term_label+'</td>';
 	template+="</tr>";
 	$('#table_termcondition').append(template);
 	if($('#identity_term').val()!="") {
 		var identity = $('#identity_term').val();
 		$('#identity_term').val(identity+','+index1);
 	} else {$('#identity_term').val(index1);}
-	$("#termid_"+index1).val(t_id);
-	$("#termid_"+index1).select2();
-	$("#row_term_0").remove();	
+	$("#term_item").val("");
 }
 <?php $url_qty =  $this->url(array('module'=>'purchase','controller'=>'index','action'=>'getqtybyid')); ?>
-function getQtyById(index){//use
-				item_id=$("#item_id_"+index).val();
+function getQtyById(item_id , index){//use
 				qty_unit=$("#qty_unit_"+index).val();
 				qty_per_unit=$("#qty_per_unit_"+index).val();
 
-				branch_id = $("#branch_id").val();
+				branch_id = dijit.byId("branch_id").get('value');
 				if(branch_id=='' || branch_id==-1){alert("Please Select Branch First ");}
 				if(qty_unit==null || qty_unit==""){
 					if(qty_per_unit!==null && qty_per_unit!==""){
@@ -353,10 +352,11 @@ function getQtyById(index){//use
 						type:"post",
 						data:{'item_id':item_id,'branch_id':branch_id},
 						success: function(data){
+							
 							item_qty = $.parseJSON(data);	
 							qty = item_qty.qty;
 							if(qty==null){qty=0;}
-							qtyall_detail = qty*(item_qty.qty_perunit);//eg;qty 1.5 and 1unit =24cans; =>1.5*24 =36cans.
+							qtyall_detail = qty*(item_qty.qty_perunit);
 							qty_unitlable = qtyall_detail % (item_qty.qty_perunit);//រកចំនួនរាយ
 							qty_unitlable = qty_unitlable.toFixed(2)
 							if(qty_unitlable>0){qty_unitlable=qty_unitlable+""+item_qty.unit_label;}else{qty_unitlable=""; }
@@ -375,22 +375,21 @@ function getQtyById(index){//use
 							$("#qty"+index).val(total_qty.toFixed(3));
 							
 							$("#qty_perunit"+index).val(item_qty.qty_perunit);
-							$('#cost_price_'+index).val(item_qty.price);
+							//$('#cost_price_'+index).val(item_qty.price);
 							getProductPrice(item_id,index);
 						},
 						error:function(e){
-							alert(e);
 						}
 				});
 			}
 }
 <?php $url_price =  $this->url(array('module'=>'sales','controller'=>'index','action'=>'getproductprice')); ?>
 function getProductPrice(product_id,recordid){
-	customer_id=$("#customer_id").val();
+	customer_id=dijit.byId("customer_id").get('value');
 	if(customer_id==null || customer_id=="" || customer_id==-1){
 		alert("Please Select Customer First !");
 		return fale;
-		$("#customer_id").focus();
+		dijit.byId("customer_id").focus();
 	}else{
 		$.ajax({
 			url:"<?php echo $url_price;?>",
@@ -400,7 +399,6 @@ function getProductPrice(product_id,recordid){
 				data = $.parseJSON(data);			
 				$("#price"+recordid).val(data.price);
 				$("#oldprice_"+recordid).val(data.price);
-				calculatePrice(recordid);
 			},
 			error:function(e){
 				alert(e);
@@ -409,29 +407,34 @@ function getProductPrice(product_id,recordid){
   }
 }
 function getItemOrder(){
-	item_ids=$("#add_item").val();
-	$('#add_item').val('').trigger("liszt:updated");
+	customer_id=dijit.byId("customer_id").get('value');
+	if(customer_id==0 || customer_id=="" || customer_id==-1){
+		alert("Please Select Customer");
+		dijit.byId("customer_id").focus();
+		return fale;
+	}
+	branch_id = dijit.byId("branch_id").get('value');
+	if(branch_id=='' || branch_id==-1){
+		alert("Please Select Branch");
+		dijit.byId("branch_id").focus();
+		return fale;
+	}
+	
+	item_ids=dijit.byId("add_item").get('value');
 	if(item_ids==-1){
 		return false;
 	}
-	customer_id=$("#customer_id").val();
-	if(customer_id==null || customer_id=="" || customer_id==-1){
-			alert("Please Select Customer First !");
-			return fale;
-	}else{
-		addRow(item_ids);
-		getProductPrice(item_ids);
-	}
-	$("#add_item").val("");
+	addRow(item_ids);
+	//getProductPrice(item_ids);
+	//$("#add_item").val("");
 }
 function getTermItem(){
-	termid=$("#term_item").val();
-	$('#term_item').val('').trigger("liszt:updated");
+	termid=dijit.byId("term_item").get('value');
 	if(termid==-1){
 		return false;
 	}
 	addtermcondition(termid);
-	$("#term_item").val("");
+	
 }
 var record_index= 1;
 function deleteRecord(index) {
@@ -551,19 +554,9 @@ function calculatePrice(index) {
 		netTotal();
 }
  var record_id = 1;
-function ShowPopupProduct(recordid){
-	item_id = $("#item_id_"+ recordid).val();
-	record_id = recordid;
-	if(item_id==-1){
-		$('#productpopup').modal('show');
-	}
-	else{
-		getQtyById(recordid);
-		getProductPrice(recordid);
-	}
-}
 <?php $url_getcustomerinfo =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'get-customerinfo')); ?>
 function getCustomerInfo(){
+	return false;
 	customer_id = $("#customer_id").val();
 	if(customer_id==-1){
 		$('#customerpopup').modal('show');
@@ -678,5 +671,8 @@ function calculateQtyWarning(index,type){//type=1 from main qty,2 from qty detai
 		}
 	}
 }
+function getsaleOrderNumber(){
+}
 	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.NumberTextBox");
 </script>	

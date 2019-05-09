@@ -3,7 +3,6 @@ class Sales_TermcondictionController extends Zend_Controller_Action
 {
 public function init()
     {
-        /* Initialize action controller here */
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
     protected function GetuserInfoAction(){
@@ -37,7 +36,6 @@ public function init()
 			}
 			else{
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-				//Application_Form_FrmMessage::redirectUrl('/sales/termcondiction/index/add');
 			}
 		}
 		$formFilter = new Sales_Form_FrmTermCondiction();

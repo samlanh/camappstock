@@ -44,6 +44,7 @@ class Rsvacl_UsertypeController extends Zend_Controller_Action
     	$db = new Rsvacl_Model_DbTable_DbUserType();
         $rs = $db->getUserTypeInfo('SELECT * FROM tb_acl_user_type where user_type_id='.$user_type_id);
 		Application_Model_Decorator::setForm($form, $rs);
+		Application_Model_Decorator::removeAllDecorator($form);
 
     	$this->view->form = $form;
     	$this->view->user_id = $user_type_id;

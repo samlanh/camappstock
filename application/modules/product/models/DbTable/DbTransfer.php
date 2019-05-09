@@ -103,10 +103,13 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 	function getTransfer($data){
 		$db = $this->getAdapter();
 		$sql = "SELECT 
-				  p.*,
-				  (SELECT s.name FROM `tb_sublocation` AS s WHERE s.id=p.`cur_location`) AS cur_location,
-				  (SELECT s.name FROM `tb_sublocation` AS s WHERE s.id=p.`tran_location`) AS tran_location,
-  				  (SELECT u.`fullname` FROM `tb_acl_user` AS u WHERE u.`user_id`=p.`user_mod`) AS user_tran
+					 p.id,
+					 p.tran_no,
+					 p.`date` as transfer_date,
+				  (SELECT s.name FROM `tb_sublocation` AS s WHERE s.id=p.`cur_location` LIMIT 1) AS cur_location,
+				  (SELECT s.name FROM `tb_sublocation` AS s WHERE s.id=p.`tran_location` LIMIT 1) AS tran_location,
+  				  (SELECT u.`fullname` FROM `tb_acl_user` AS u WHERE u.`user_id`=p.`user_mod` LIMIT 1) AS by_user,
+  				  (SELECT name_en FROM `tb_view` WHERE TYPE=5 AND key_code=p.status LIMIT 1) AS status
 				FROM
 				  `tb_product_transfer` AS p 
 				WHERE 1 ";
@@ -126,9 +129,6 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 	  	if($data["status"]!=""){
 	  		$where.=' AND p.status='.$data["status"];
 	  	}
-// 	  	if($data["to_loc"]!=""){
-// 	  		$where.=' AND p.tran_location='.$data["to_loc"];
-// 	  	}
 	  	$where.=" ORDER BY p.id DESC ";
 		return $db->fetchAll($sql.$where);
 	}
@@ -1116,23 +1116,16 @@ class Product_Model_DbTable_DbTransfer extends Zend_Db_Table_Abstract
 		$sql = "SELECT 
 				  rt.id,
 				  rt.`tran_no`,
-				  rt.`date`,
-				  rt.`date_tran`,
-				  (SELECT s.`name` FROM `tb_sublocation` AS s WHERE s.`id`=rt.`cur_location` LIMIT 1) AS re_tran ,
-				  (SELECT s.`name` FROM `tb_sublocation` AS s WHERE s.`id`=rt.`tran_location` LIMIT 1) AS to_tran ,
-				  rt.`remark`,
-				  rt.`is_approved`,
-				  rt.`approved_by`,
-				  rt.status,
-				  rt.is_transfer,
-				  rt.appr_pedding as ap_pedding,
+				  (SELECT s.`name` FROM `tb_sublocation` AS s WHERE s.`id`=rt.`cur_location` LIMIT 1) AS re_tranlocation ,
+				  (SELECT s.`name` FROM `tb_sublocation` AS s WHERE s.`id`=rt.`tran_location` LIMIT 1) AS to_tranlocation ,
+				  rt.date_tran,
 				  (SELECT v.name_en FROM `tb_view` AS v WHERE v.key_code = rt.`appr_status` AND v.type=7 LIMIT 1) AS appr_status,
 				  (SELECT v.name_en FROM `tb_view` AS v WHERE v.key_code = rt.`appr_pedding` AND v.type=13 LIMIT 1) AS appr_pedding,
-				  (SELECT u.`fullname` FROM  `tb_acl_user` AS u WHERE u.`user_id`=rt.`user_id`) AS `user`,
-				  (SELECT `is_receive` FROM `tb_product_transfer` AS p WHERE p.id=rt.`is_transfer`) AS receive_id
+				  (SELECT u.`fullname` FROM  `tb_acl_user` AS u WHERE u.`user_id`=rt.`user_id` LIMIT 1) AS `user`,
+				  (SELECT name_en FROM `tb_view` WHERE TYPE=5 AND key_code=status LIMIT 1) AS status
 				FROM
 				  `tb_request_transfer` AS rt 
-					WHERE rt.`date_tran` BETWEEN '".$start_date."' AND '".$end_date."'";
+				WHERE rt.`date_tran` BETWEEN '".$start_date."' AND '".$end_date."'";
 		$where = '';
 	  	if($data["avd_search"]!=""){
 	  		$s_where=array();

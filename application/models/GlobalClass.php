@@ -58,7 +58,6 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		if($rows){
 			$imgnone='<img src="'.$base_url.'/images/icon/cross.png"/>';
 			$imgtick='<img src="'.$base_url.'/images/icon/tick.png"/>';
-	
 			foreach ($rows as $i =>$row){
 				if($row['IsActive'] == 1){
 					$rows[$i]['IsActive'] = $imgtick;
@@ -74,7 +73,6 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		if($rows){
 			$imgnone='<img src="'.$base_url.'/images/icon/cross.png"/>';
 			$imgtick='<img src="'.$base_url.'/images/icon/tick.png"/>';
-	
 			foreach ($rows as $i =>$row){
 				if($row['public'] == 1){
 					$rows[$i]['public'] = $imgtick;
@@ -88,10 +86,6 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 	}
 	public function getTransactionType($rows,$base_url, $case=''){
 		if($rows){
-			//$adjust    = "Stock Adjustment";
-			//$transfer_stock = "Stock Transfer";
-			//$received  = "Received";
-			//$return  = "Return Stock Out(V)";
 			foreach ($rows as $i =>$row){
 				if($row['transaction_type'] == 1){
 					$rows[$i]['transaction_type'] = "Stock Adjustment";
@@ -114,7 +108,6 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 				else{
 					$rows[$i]['transaction_type'] = "Return Stock In(C)";
 				}
-				
 			}
 		}
 		return $rows;
@@ -178,7 +171,6 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 				elseif($row['status'] == 0){
 					$rows[$i]['status'] =  "Returned";
 				}
-				
 				else{
 					$rows[$i]['status'] = " ";
 				}
@@ -208,21 +200,20 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 	public function getDayName($key = ''){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$day_name = array(
-							'su' => $tr->translate('SU'),
-							'mo' => $tr->translate('MO'),
-							'tu' => $tr->translate('TU'),
-							'we' => $tr->translate('WE'),
-							'th' => $tr->translate('TH'),
-							'fr' => $tr->translate('FR'),
-							'sa' => $tr->translate('SA')							
-						 );
+			'su' => $tr->translate('SU'),
+			'mo' => $tr->translate('MO'),
+			'tu' => $tr->translate('TU'),
+			'we' => $tr->translate('WE'),
+			'th' => $tr->translate('TH'),
+			'fr' => $tr->translate('FR'),
+			'sa' => $tr->translate('SA')							
+		);
 		if(empty($key)){
 			return $day_name;
 		}
 		return  $day_name[$key];
 	}
 	 public function getYesNoOption(){
-		//Select Public for report
 			$myopt = '<option value="" label="---Select----">---Select----</option>';
 			$myopt .= '<option value="Yes" label="Yes">Yes</option>';
 			$myopt .= '<option value="No" label="No">No</option>';
@@ -233,7 +224,6 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			$result = $user_info->getUserInfo();
 			return $result;
 		}
-	//get location on select
 	public function getLocationOption(){
 		$db = $this->getAdapter();
 		$user = $this->GetuserInfoAction();
@@ -249,7 +239,6 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			$option .= '<option label="'.htmlspecialchars($value['Name'], ENT_QUOTES).'" value="'.$value['LocationId'].'">'.htmlspecialchars($value['Name'], ENT_QUOTES).'</option>';
 		}
 		if($user["level"]==1 OR $user["level"]==2){
-			//$option = '<option label="Select Location" value="">Select Location</option>';
 			$option.= '<option label="Add New Location" value="-1">Add New Location</option>';
 		}
 		return $option;
@@ -266,35 +255,8 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		}
 		return $option;
 	}
-	
-// 	public function getLocationSelected($id, $currentItem = null){
-// 		$user = $this->GetuserInfoAction();		
-// 		$db = $this->getAdapter();
-// 		$sql = "SELECT l.LocationId,l.Name FROM tb_sublocation AS l ";
-// 		if($user["level"]!=1){
-// 			$sql .= "WHERE l.LocationId = ".$user["location_id"];
-// 		}		
-// 		$rows = $db->fetchAll($sql);
-// 		$option = '';
-// 		foreach($rows as $value){
-// 			$option .= '<option value="'.$value['LocationId'].'" label="'.htmlspecialchars($value['Name'], ENT_QUOTES).'">'.htmlspecialchars($value['Name'], ENT_QUOTES).'</option>';
-// 		}
-// 		return $option;
-// 	}
-	
-// 	public function tolocationOption(){
-// 		$user = $this->GetuserInfoAction();
-// 		$db = $this->getAdapter();
-// 		$sql = "SELECT l.LocationId,l.Name FROM tb_sublocation AS l WHERE l.Name!='' AND l.status = 1";
-// 		$rows = $db->fetchAll($sql);
-// 		$options = '';
-// 		foreach($rows as $value){
-// 			$options .= '<option value="'.$value['LocationId'].'" label="'.htmlspecialchars($value['Name'], ENT_QUOTES).'">'.htmlspecialchars($value['Name'], ENT_QUOTES).'</option>';
-// 		}
-// 		return $options;
-// 	}
-	
 	public function getProductOption(){
+		
 		$db = $this->getAdapter();
 		$user_info = new Application_Model_DbTable_DbGetUserInfo();
 		$result = $user_info->getUserInfo();
@@ -307,32 +269,15 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		if($result["level"]==1 OR $result["level"]==2){
 			$option .= '<option value="-1">Please Select Product</option>';
 		}
+		
+		$db_g = new Application_Model_DbTable_DbGlobal();
 		foreach($row_cate as $cate){
 			$option .= '<optgroup  label="'.htmlspecialchars($cate['name'], ENT_QUOTES).'">';
-			if($result["level"]==1){
-				$sql = "SELECT id,item_name,
-				(SELECT tb_measure.name FROM `tb_measure` WHERE tb_measure.id=measure_id LIMIT 1) as measue_name,
-				unit_label,qty_perunit,
-				(SELECT tb_brand.name FROM `tb_brand` WHERE tb_brand.id=brand_id limit 1) As brand_name,
-				barcode AS item_code FROM tb_product WHERE cate_id = ".$cate['id']." 
-						AND item_name!='' AND status=1 ORDER BY item_name ASC";
-			}else{
-				$sql = " SELECT p.id,p.item_name,p.barcode AS item_code ,
-				(SELECT tb_measure.name FROM `tb_measure` WHERE tb_measure.id=p.measure_id LIMIT 1) as measue_name,
-				p.unit_label,p.qty_perunit,
-				(SELECT tb_brand.name FROM `tb_brand` WHERE tb_brand.id=p.brand_id limit 1) As brand_name
-				 FROM tb_product AS p				
-				WHERE p.cate_id = ".$cate['id']."
-				AND p.item_name!='' AND p.status=1 ORDER BY p.item_name ASC ";
-			}//AND p.item_name!='' AND p.status=1  ORDER BY p.item_name ASC ";
-			//INNER JOIN tb_prolocation As pl ON p.id = pl.pro_id
-			//AND pl.location_id =".$result['branch_id']." 
-			
-				$rows = $db->fetchAll($sql);
+			$rows= $db_g->getAllProduct($cate['id']);
 				if($rows){
 					foreach($rows as $value){
 						$option .= '<option value="'.$value['id'].'" >'.
-							htmlspecialchars($value['item_name']." ".$value['brand_name'], ENT_QUOTES)." ".htmlspecialchars($value['item_code'].'(1'.$value['measue_name'].'='.$value['qty_perunit'].$value['unit_label'].')', ENT_QUOTES)
+							htmlspecialchars($value['name'], ENT_QUOTES)
 						.'</option>';
 					}
 				}
@@ -372,7 +317,6 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		}
 		return $option;
 	}
-	
 	public function getTypePriceOption(){
 		$db = $this->getAdapter();
 		$sql = 'SELECT type_id, price_type_name FROM tb_price_type WHERE public = 1 AND price_type_name!=""';
@@ -392,11 +336,8 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$option = '<option value="" label="--- Select ---">--- Select ---</option>';
 		foreach($db->fetchAll($sql) as $r){
-				
 			$option .= '<option value="'.$r[$value].'" label="'.htmlspecialchars($r[$display], ENT_QUOTES).'">'.htmlspecialchars($r[$display], ENT_QUOTES).'</option>';
 		}
 		return $option;
 	}
-	
 }
-

@@ -217,7 +217,6 @@ require(["dojo/ready"], function(ready){
 	 ready(function(){
 		dijit.byId('price_type').attr('value',1);
 		addProLocation();
-		//addNewPriceType();
 	});
 });
 function getMeasureLabel(){
@@ -251,7 +250,7 @@ function doTotalQty(){
 	}
 }
 index = 0;
-function addProLocation(){//initialize
+function addProLocation(){
 	template='';
 	<?php if(!empty($this->branch)){foreach ($this->branch as $key=> $rs){?>
 	index++;
@@ -323,16 +322,20 @@ function addNewPriceType(){
 				 }
 			}
 		}
-			
 		var price_text = dijit.byId("price_type").attr("displayedValue");
 		indexs++;
-		template='<tr id="row_price_'+indexs+'">';
-		template+='<td >'+indexs+'</td>';
+		template='<td style="white-space:nowrap">'+indexs+'</td>'
 		template+='<td style="white-space:nowrap">'+price_text+'<input type="hidden" id="price_type_'+indexs+'" name="price_type_'+indexs+'" value="'+price_id+'" </td>';
 		template+='<td><input type="text" required="true" dojoType="dijit.form.NumberTextBox" id="price_'+indexs+'" name="price_'+indexs+'" value="0" class="form-control"></td>'; 
 		template+='<td><img onClick="deleteRecord('+indexs+',2)" src="<?php echo $this->baseUrl();?>/images/Delete_16.png" /></td>';
-		template+='</tr>';
-		$('#tr_price_type').append(template);
+
+		tmp='<tr id="row_price_'+indexs+'">';
+		tmp+="</tr>";
+		$('#tr_price_type').append(tmp);
+		dojo.html.set(dojo.byId('row_price_'+indexs),template , {
+		     parseContent: true,
+		});
+		
 		if($('#identity_price').val()!="") {
 			var identity_price = $('#identity_price').val();
 			$('#identity_price').val(identity_price+','+indexs);

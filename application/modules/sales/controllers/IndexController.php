@@ -78,7 +78,6 @@ class Sales_IndexController extends Zend_Controller_Action
 		Application_Model_Decorator::removeAllDecorator($form_sale);
 		$this->view->form_sale = $form_sale;
 		 
-		// item option in select
 		$items = new Application_Model_GlobalClass();
 		$this->view->items = $items->getProductOption();
 		$this->view->term_opt = $db->getAllTermCondition(1);

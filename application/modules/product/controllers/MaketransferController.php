@@ -19,7 +19,14 @@ public function init()
 	    				'branch'		=>	-1,
 	    		);
 	    	}
-	    	$this->view->product = $db->getRequestTransfer($data);
+	    	$rows = $db->getRequestTransfer($data);
+	    	$columns=array("TRANSFER_NUM","REQUET_TO_FROM","REQUET_TO_BRANCH","TRANSFER_DATE","STATUS","PEDDING","USER","STATUS");
+	    	$link=array(
+	    			'module'=>'product','controller'=>'maketransfer','action'=>'add',
+	    	);
+	    	$list = new Application_Form_Frmlist();
+	    	$this->view->list=$list->getCheckList(0, $columns, $rows,array('tran_no'=>$link,'re_tranlocation'=>$link,'to_tranlocation'=>$link,'date_tran'=>$link));
+	    	 
     	}catch (Exception $e){
     		Application_Form_FrmMessage::messageError("INSERT_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

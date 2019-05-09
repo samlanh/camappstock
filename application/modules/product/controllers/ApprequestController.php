@@ -27,13 +27,22 @@ public function init()
 	    		);
 	    	}
 	    	$this->view->product = $db->getRequestTransfer($data);
-	    	$formFilter = new Product_Form_FrmTransfer();
-	    	$this->view->formFilter = $formFilter->frmFilter();
-	    	Application_Model_Decorator::removeAllDecorator($formFilter);
+	    	$rows = $db->getRequestTransfer($data);
+	    	$columns=array("TRANSFER_NUM","REQUET_TO_FROM","REQUET_TO_BRANCH","TRANSFER_DATE","STATUS","PEDDING","USER","STATUS");
+	    	$link=array(
+	    			'module'=>'product','controller'=>'reqtransfer','action'=>'edit',
+	    	);
+	    	$list = new Application_Form_Frmlist();
+	    	$this->view->list=$list->getCheckList(0, $columns, $rows,array('tran_no'=>$link,'re_tranlocation'=>$link,'to_tranlocation'=>$link,'date_tran'=>$link));
+	    	 
     	}catch (Exception $e){
     		Application_Form_FrmMessage::messageError("INSERT_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
+    	
+    	$formFilter = new Product_Form_FrmTransfer();
+    	$this->view->formFilter = $formFilter->frmFilter();
+    	Application_Model_Decorator::removeAllDecorator($formFilter);
 }
 	function addAction(){
 		$id = $this->getRequest()->getParam("id");

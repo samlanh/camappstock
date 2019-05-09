@@ -14,7 +14,9 @@
 	$db_user=new Application_Model_DbTable_DbUsers();
 	$vdgb = new Application_Model_DbTable_DbGlobal();
 	
-	
+	$vdgb = new Application_Model_DbTable_DbGlobal();
+	$alllang =  $vdgb->getLaguage();
+	$currentlang = $vdgb->currentlang();
 	
 	$session_user=new Zend_Session_Namespace('auth');
 	$username = $session_user->fullname;
@@ -143,7 +145,24 @@
 				              </div>
               				  <ul class="nav navbar-nav navbar-right">
 			              	      <li>
-			              	      	 
+			              	      	  <li>
+			              	      	 <?php  foreach ($alllang as $ll){ ?>
+              							<?php if ($currentlang == $ll['id']){?>
+			              		     <a title="Khmer" href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+				              			<img src="<?php echo $this->baseUrl()."/images/".$ll['iconImage']?>"> 
+				              		</a>
+				              		<?php break;}?>
+              						<?php }?>
+	              		              	<ul class="dropdown-menu dropdown-usermenu pull-right lang-ul">
+	              		              	<?php  foreach ($alllang as $ll){ ?>
+		              			            <li class="lang">
+				                 				<a href="javascript:;" onclick="changeLange(<?php echo $ll['id'];?>);"> 
+			                 						<img src="<?php echo $this->baseUrl()."/images/".$ll['iconImage']?>">
+			                 					</a>
+	                 						</li>
+	                 					 <?php }?>
+	                	                </ul>
+              					</li>
               					</li>
 			                	<li class="">
 				                  	<a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -151,7 +170,7 @@
 				                    <?php echo $username;?> <span class=" fa fa-angle-down"></span>
 					                 </a>
 				                  <ul class="dropdown-menu dropdown-usermenu pull-right">
-					                    <li><a href="<?php echo $this->url(array('module'=>'','controller'=>'index','action'=>'changepassword')); ?>"> <i class="fa fa-key pull-right"></i> <?php echo $tr->translate("Change Password");?></a></li>
+					                    <li><a href="<?php echo $this->url(array('module'=>'rsvacl','controller'=>'user','action'=>'changepassword')); ?>"> <i class="fa fa-key pull-right"></i> <?php echo $tr->translate("Change Password");?></a></li>
 					                    <li><a href="<?php echo $this->url(array('module'=>'','controller'=>'index','action'=>'logout','value'=>'1')); ?>">
 					                    <i class="fa fa-sign-out pull-right"></i> <?php echo $tr->translate("SIGN_OUT");?></a>
 					                    </li>

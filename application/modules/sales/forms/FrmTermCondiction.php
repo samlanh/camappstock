@@ -8,17 +8,30 @@ class Sales_Form_FrmTermCondiction extends Zend_Form
 public function Formterm($data=null) {
 		$db = new Sales_Model_DbTable_DbTermCondiction();
 		$rs_type = $db->getTermcondictionType();
-		$name_en = new Zend_Form_Element_Textarea('name_en');
-		$name_en->setAttribs(array('class'=>'validate[required] form-control','placeholder'=>'Enter Name EN',"style"=>"height:40px;"));
+		$name_en = new Zend_Form_Element_Text('name_en');
+		$name_en->setAttribs(array(
+				'dojoType'=>"dijit.form.ValidationTextBox",
+				'class'=>'fullside',
+				'required'=>"1",
+				'placeholder'=>'Enter Name EN',"style"=>"height:40px;"));
     	$this->addElement($name_en);
     	
-    	$name_kh = new Zend_Form_Element_Textarea('name_kh');
-    	$name_kh->setAttribs(array('class'=>'validate[required] form-control','placeholder'=>'Enter Name KM',"style"=>"height:40px;"));
+    	$name_kh = new Zend_Form_Element_Text('name_kh');
+    	$name_kh->setAttribs(array(
+    			'dojoType'=>"dijit.form.ValidationTextBox",
+				'class'=>'fullside',
+				'required'=>"1",
+    			'placeholder'=>'Enter Name KM',"style"=>"height:40px;"));
     	$this->addElement($name_kh);
     	
     	$opt= array('1'=>'Active',0=>'Deactive');
     	$status = new Zend_Form_Element_Select('status');
-    	$status->setAttribs(array('class'=>'form-control select2me'));
+    	$status->setAttribs(array(
+    		'dojoType'=>"dijit.form.FilteringSelect",
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'class'=>'fullside',
+    			));
     	$status->setMultiOptions($opt);
     	$this->addElement($status);
     	
@@ -29,7 +42,12 @@ public function Formterm($data=null) {
 			}
 		}
     	$type = new Zend_Form_Element_Select('type');
-    	$type->setAttribs(array('class'=>'validate[required] form-control select2me'));
+    	$type->setAttribs(array(
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
+    			));
     	$type->setMultiOptions($opt_type);
     	$this->addElement($type);
     	 

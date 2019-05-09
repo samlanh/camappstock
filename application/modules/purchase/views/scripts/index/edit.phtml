@@ -46,11 +46,14 @@
 					</div>
 					<div class="form-group">
 						<div class="col-md-4"><?php echo $tr->translate("VENDOR_NAME");?></div>
-						<div class="col-md-8">
+						<div class="col-md-6">
 							<?php echo $form->getElement("v_name");?>
 							<?php echo $form->getElement("id");?>
 							<?php echo $form->getElement("old_status");?>
 							<?php echo $form->getElement("old_location");?>
+						</div>
+						<div class="col-md-2">
+							<input class='fullside' iconClass="dijitIconUndo" type="button" dojoType="dijit.form.Button" onclick="refresh();"/>
 						</div>
 					</div>
 					<div class="form-group">
@@ -115,8 +118,9 @@
 								<?php echo $this->items; ?>
 								</select>
 							</div>
-							<div class="col-md-2 col-lg-2 col-sm-12">
-								<input type="button" onclick="popupProduct();" value="btnsavenew"  label="<?php echo $tr->translate("ADD_PRODUCT")?>" dojoType="dijit.form.Button" 
+							<div class="col-md-4">
+								<input title='Refresh product'  iconClass="dijitIconUndo" type="button" dojoType="dijit.form.Button" onclick="refreshProduct();"/>
+								<input type="button" onclick="window.open('<?php echo $this->baseUrl();?>/product/index/add?rightclick=true','_blank');;" value="btnsavenew"  label="<?php echo $tr->translate("ADD_NEW")?>" dojoType="dijit.form.Button" 
 									iconClass="dijitIconSearch" />
 							</div>
 						</div>
@@ -183,55 +187,74 @@
 						</div>
 				</div>
 			</div>
-			<div class="form-group">
-			    <div class="col-md-3"></div>
-				<div class="col-md-2"></div>
-				<div class="col-md-2">
-					<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("GO_EDIT")?>" dojoType="dijit.form.Button" 
-					iconClass="dijitIconSearch" />
+				<div class="form-group">
+				    <div class="card-box">
+						<div class="border-top" >
+							<div class="col-md-4"></div>
+							<div class="col-md-5" class='center'>
+								<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("GO_EDIT")?>" dojoType="dijit.form.Button" 
+								iconClass="dijitIconSearch" />
+							</div>
+							<div class="col-md-4"></div>
+						</div>
+					</div>
 				</div>
-			<div class="col-md-3"></div>
-	  		</div>
 			</form>
 		</div>
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script>
+dojo.require("dojo.data.ItemFileWriteStore");  
 function getSuppliyer(){
 	v_id = $("#v_name").val();
 	if(v_id==-1){
-		//$('#dialogvendor').modal('show');
 	}
 }
 function popupProduct(){
-	//$('#productpopup').modal('show');
 }
-<?php $url_add_new =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-newproudct')); ?>
-function addProduct(){
-		branch_id = $("#LocationId").val();
-		$.ajax({
-	        url: "<?php echo $url_add_new;?>",
-	        type: "post",
-	        data: $('#frmproduct').serialize()+'&'+$.param({ 'branch_id': branch_id}),
-	        success: function(data){
-		      data = $.parseJSON(data);
-		      $('#add_item').append($("<option></option>").attr("value",data['pro_id']).attr("selected",true).text($("#name").val()));                       
-			  $("#add_item").select2();
-		      $('#productpopup').modal('hide');
-			  addRow(data['pro_id']);
-			  $('#item_id_'+index5).append($("<option></option>").attr("value",data['pro_id']).attr("selected",true).text($("#name").val()));                       
-				 $("#item_id_"+index5).select2();
-	        },
-	        error:function(){
-	        }
-	    });	
+<?php $url_getsupplier =  $this->url(array('module'=>'purchase','controller'=>'vendor','action'=>'get-vendor')); ?>
+function getSuppliyer(){
+	supplier_id=dijit.byId('v_name').get('value');
+	if(supplier_id==-1){
+		window.open('<?php echo $this->baseUrl();?>/purchase/vendor/add?rightclick=true','_blank');
+	}
+}
+function refresh(){
+	loadingBlock();
+	dojo.xhrPost({
+		url: "<?php echo $url_getsupplier;?>",
+		handleAs:"json", 
+	    load: function(data) {
+			supplier_store  = getDataStorefromJSON('id','name',data);
+			dijit.byId('v_name').set('store',supplier_store);  
+			HideloadingBlock(); 
+		},		
+		error: function(err) {
+		}
+	});
+}
+<?php $url_getproduct =  $this->url(array('module'=>'product','controller'=>'index','action'=>'get-allproduct')); ?>
+function refreshProduct(){
+	loadingBlock();
+	dojo.xhrPost({
+		url: "<?php echo $url_getproduct;?>",
+		handleAs:"json", 
+	    load: function(data) {
+			supplier_store  = getDataStorefromJSON('id','name',data);
+			dijit.byId('add_item').set('store',supplier_store);  
+			HideloadingBlock(); 
+		},		
+		error: function(err) {
+			HideloadingBlock(); 
+		}
+	});
 }
 $(document).ready(function() {
 	initList();	
 });
 function initList() {
 	index5=0;
-	var option5 = '<?php echo $this->items;?>';
 	<?php if(!empty($this->rs)) {
 		foreach($this->rs AS $i=>$r){?>
 	index5++; 
@@ -271,8 +294,6 @@ function initList() {
 		<?php } }?>
 }
 var index5 = 0;num=0;
-var option5 = '<?php echo $this->items; ?>';
-var baseUrl = '<?php echo BASE_URL; ?>';
 var template = '';
 var value = '';
 pqty = 1;

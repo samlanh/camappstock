@@ -4,69 +4,53 @@
 	$form=$this->form;
 ?>
 <title><?php echo $tr->translate("EDIT_USER_TYPE");?></title>
-<script type="text/javascript">
-	$(document).ready(function() { 
-			jQuery('#frm').validationEngine('attach', {promptPosition : "centerRight"});		
-	});
-</script>
-<style>
-	fieldset.fifthy {	
-		border-right: 0px;
-		width: 50%;
-	}
-	table.user td{
-		vertical-align: top;  
-	}
-</style> 
-<div class="portlet box blue">
-<div class="portlet-title">
-	<div class="caption">
-		<i class="icon-home"></i><?php echo $tr->translate("EDIT_USER_TYPE")?>
-	</div>
-	<div class="tools" >
-		<a href="<?php echo $url_cancel;?>" class="btn btn-sm pull-right" style="color:white;">
-			<i class="fa fa-undo"></i>	&nbsp;<?php echo $tr->translate("GO_BACK");?>
-		</a>
-	</div>
-</div>
-	<div class="portlet-body">
-		<div class="tabbable-custom">
-			<div class="portlet-body form">
-				<div class="form-body">
-					<form id="frm" class="form-horizontal" enctype="multipart/form-data" method="post">
-						<div class="col-md-6">
-							<div class="form-group">
-								<label class="control-label col-md-4"><?php echo $tr->translate('USER_TYPE');?><span class="required"></span></label>
-								<div class="col-md-8">
-									<div class="input-icon right">
-										<i class="fa"></i>
-										<?php echo $form->getElement('user_type');?>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-4"><?php echo $tr->translate('PARENT');?><span class="required"></span></label>
-								<div class="col-md-8">
-									<div class="input-icon right">
-										<i class="fa"></i>
-										<?php echo $form->getElement('parent_id');?>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-md-4">
-									<div class="input-icon right">
-									</div>
-								</div>
-								<div class="col-md-4">
-									<button type="submit" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-save"></i> <?php echo $tr->translate("GO_EDIT")?> </button>
-								</div>
-								<div class="col-md-4"></div>
-							</div>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+            <div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_USER_TYPE');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right"></div>
+    		</div>
+    	</div>
+		<div class="card-box">
+			<form dojoType="dijit.form.Form" class="form-horizontal" enctype="multipart/form-data" method="post">
+				<script type="dojo/method" event="onSubmit">			
+					if(this.validate()) {
+               			loadingBlock();
+						return true;
+					}else{
+						return false;
+					}
+				</script>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label class="control-label col-md-4">
+							<?php echo $tr->translate('USER_TYPE');?>
+						</label>
+						<div class="col-md-8">
+							<?php echo $form->getElement('user_type');?>
 						</div>
-					</form>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-4">
+							<?php echo $tr->translate('PARENT');?>
+						</label>
+						<div class="col-md-8">
+							<?php echo $form->getElement('parent_id');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<input type="submit" value="SAVE_NEW" tabindex="1" label="<?php echo $tr->translate("GO_EDIT")?>" id="save_new" dojoType="dijit.form.Button" name="save_new"
+							iconClass="dijitEditorIcon dijitEditorIconSave"/> 
+						</div>
+						<div class="col-md-4"></div>
+					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 	</div>
 </div>

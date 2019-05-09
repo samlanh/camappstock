@@ -7,6 +7,14 @@
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content">
 		<div class="card-box">
+            <div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_CUSTOMER');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right"></div>
+    		</div>
+    	</div>
+		<div class="card-box">
 			<form dojoType="dijit.form.Form" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post">
 					<script type="dojo/method" event="onSubmit">			
 					if(this.validate()) {
@@ -23,14 +31,6 @@
 					}
 				</script>
 				<div class="col-md-6">
-					<div class="form-group">
-						<div class="col-md-4">
-							<?php echo $tr->translate("Branch Name");?>
-						</div>
-						<div class="col-md-8">
-							<?php echo $form->getElement("branch_id");?>
-						</div>
-					</div>
 					<div class="form-group">
 						<div class="col-md-4">
 							<?php echo $tr->translate("CU_CODE");?>
@@ -177,42 +177,34 @@
 	</div>
 </div>
  <script>
- $(document).ready(function() {
-	getCustomerLimit();
-});
+ require(["dojo/ready"], function(ready){
+	 ready(function(){
+		 getCustomerLimit();
+	  });
+ });
  <?php $url_customer_limit =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'getcustomerlimit')); ?>
-function getCustomerLimit(){
-	id=$("#customer_type").val();
-	$.ajax({
-			url:"<?php echo $url_customer_limit;?>",
-			type:"post",
-			data:{'id':id},
-			success: function(data){
-				value = $.parseJSON(data);
-				if(value!=""){
-					$('#credit_limit').val(value.credit_limit);
-					$("#credit_tearm").val(value.credit_term);
+	function getCustomerLimit(){
+		dijit.byId('credit_limit').attr('value',0);
+		dijit.byId("credit_tearm").attr('value',0);
+		customer_type=dijit.byId("customer_type").get('value');
+		if(customer_type==''){
+			return false;
+		}
+		$.ajax({
+				url:"<?php echo $url_customer_limit;?>",
+				type:"post",
+				data:{'id':customer_type},
+				success: function(data){
+					value = $.parseJSON(data);
+					if(value!=""){
+						dijit.byId('credit_limit').attr('value',value.credit_limit);
+						dijit.byId("credit_tearm").attr('value',value.credit_term);
+					}
+				},
+				error:function(e){
 				}
-			},
-			error:function(e){
-			}
-		});
-}
-</script>
-<script>
-<?php $url_code =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'get-cu-code')); ?>
-function getCustomerCode(){
-	id=$("#branch_id").val();
-	$.ajax({
-			url:"<?php echo $url_code;?>",
-			type:"post",
-			data:{'id':id},
-			success: function(data){
-				value = $.parseJSON(data);
-					$("#cu_code").val(value);
-			},
-			error:function(e){
-			}
-		});
-}
+			});
+	}
+	function getCustomerCode(){
+	}
 </script>

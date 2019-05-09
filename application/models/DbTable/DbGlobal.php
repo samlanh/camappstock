@@ -260,47 +260,19 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	INNER JOIN tb_product AS p ON p.pro_id = pl.pro_id
     	WHERE pl.LocationId = ".$locationid. " AND pl.pro_id= ".$itemId." LIMIT 1";
     	
-//     	$sql="SELECT pl.ProLocationID, pl.`qty_onorder` ,pl.qty, p.qty_onhand,p.qty_available
-//     	FROM tb_prolocation AS pl
-//     	INNER JOIN tb_product AS p ON p.pro_id = pl.pro_id
-//     	WHERE pl.LocationId = ".$locationid. " AND pl.pro_id= ".$itemId." LIMIT 1";
     	$row=$db->fetchRow($sql);
     	return $row;
     }
-    
-    
-    
-    /**
-     * insert record to table $tbl_name
-     * @param array $data
-     * @param string $tbl_name
-     */
-    public function addRecord($data,$tbl_name){
-    	$this->setName($tbl_name);
-    	return $this->insert($data);
-    }
-    
-    
-    /**
-     * update record to table $tbl_name
-     * @param array $data
-     * @param int $id
-     * @param string $tbl_name
-     */
 	public function updateRecord($data,$id,$updateby,$tbl_name){
 		$tb = $this->setName($tbl_name);
 		$where=$this->getAdapter()->quoteInto($updateby.'=?',$id);
 		$rs = $this->update($data,$where);
-		//echo $rs;//exit();
-		
 	}
-    
     public function DeleteRecord($tbl_name,$id){
     	$db = $this->getAdapter();
 		$sql = "UPDATE ".$tbl_name." SET status=0 WHERE id=".$id;
 		return $db->query($sql);
     }
-
     public function deleteRecords($sql){
     	$db = $this->getAdapter();
 		return $db->query($sql);
@@ -439,10 +411,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     public function getSettingById($id){
     	$sql = "SELECT CODE,key_name,key_value FROM tb_setting where code = ".$id;
     	return $this->getAdapter()->fetchRow($sql);
-    }
-    public function getMeasureById($id){
-    	$db = $this->getAdapter();
-    	$sql = "SELECT `qty_perunit` FROM tb_product WHERE pro_id= '$item_id' LIMIT 1 ";
     }
     public function getQuoationNumber($branch_id = 1){
     	$this->_name='tb_quoatation';
@@ -726,20 +694,20 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	}
     }
 	function getAllInvoicePO($completed=null,$opt=null){
-   	$db= $this->getAdapter();
-   	$sql=" SELECT id,invoice_no,(SELECT v_name FROM `tb_vendor` WHERE tb_vendor.vendor_id = p.vendor_id) AS vendor_name FROM `tb_purchase_order` AS p WHERE  p.status=1 and p.balance>0 ";
-   	if($completed!=null){
-   		$sql.="  AND p.is_completed=0 ";
-   	}
-   	$sql.=" ORDER BY id DESC ";
-   	$row =  $db->fetchAll($sql);
-   	if($opt==null){
-   		return $row;
-   	}else{
-   		$options=array(-1=>"Select Invoice");
-   		if(!empty($row)) foreach($row as $read) $options[$read['id']]=$read['invoice_no']."-".$read['vendor_name'];
-   		return $options;
-   	}
+	   	$db= $this->getAdapter();
+	   	$sql=" SELECT id,invoice_no,(SELECT v_name FROM `tb_vendor` WHERE tb_vendor.vendor_id = p.vendor_id) AS vendor_name FROM `tb_purchase_order` AS p WHERE  p.status=1 and p.balance>0 ";
+	   	if($completed!=null){
+	   		$sql.="  AND p.is_completed=0 ";
+	   	}
+	   	$sql.=" ORDER BY id DESC ";
+	   	$row =  $db->fetchAll($sql);
+	   	if($opt==null){
+	   		return $row;
+	   	}else{
+	   		$options=array(-1=>"Select Invoice");
+	   		if(!empty($row)) foreach($row as $read) $options[$read['id']]=$read['invoice_no']."-".$read['vendor_name'];
+	   		return $options;
+	   	}
    }
    function getAllInvoicePaymentPurchase($post_id,$type){
    	$db= $this->getAdapter();
@@ -847,6 +815,34 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$sql = "SELECT v.`id`,v.`name_en` as name,v.`status`,v.`key_code`,`type` FROM `tb_view` AS v WHERE v.`type` = 4";
    	return $db->fetchAll($sql);
    }
-   	
+   public function getLaguage(){
+   	$db = $this->getAdapter();
+   	$sql="SELECT * FROM `ln_language` AS l WHERE l.`status`=1 ORDER BY l.ordering ASC";
+   	return $db->fetchAll($sql);
+   }
+   function currentlang(){
+   	$session_lang=new Zend_Session_Namespace('lang');
+   	return $session_lang->lang_id;
+   }
+   function getAllProduct($cate_id = null,$is_service = 0){
+   		$db = $this->getAdapter();
+	   	$sql="SELECT 
+	   			id,
+	   			CONCAT(COALESCE(item_name,''),' ',COALESCE(barcode,''))
+	   			AS name
+	   		
+	   		FROM tb_product 
+					WHERE 
+					item_name!='' 
+	   				AND status=1 ";
+	   	if($cate_id!=null){
+	   		$sql.=" AND cate_id = $cate_id ";
+	   	}
+	   	if($is_service!=1){
+	   		$sql.=" AND is_service = ".$is_service;
+	   	}
+	   	$order=' ORDER BY cate_id DESC ,item_name ASC ';
+	   	return $db->fetchAll($sql.$order);
+   }
 }
 ?>

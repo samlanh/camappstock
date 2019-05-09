@@ -5,75 +5,60 @@ $url_getcurrentitem =  $this->url(array('module'=>'product','controller'=>'adjus
 $formFilter = $this->formFilter;
 ?>
 <title><?php echo $tr->translate("ADJUST_STOCK");?></title>
-<div class="portlet box blue">
-		<div class="portlet-title">
-			<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("ADJUST_STOCK");?>
-			</div>
-			<div class="tools">
-				<a href="<?php echo $url_cancel;?>"><button type="button" name="calcel" class="btn red"><?php echo $tr->translate("GO_BACK");?></button></a>
-			</div>
-		</div>
-		<div class="portlet-body form">
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
 			<form id="frm" class="form-horizontal" method="post" action="" >
-				<div class="form-body">	
-					<div class="form-group">
-						<label class="col-md-2 control-label"></label>
-						<div class="col-md-4">
-						</div>
-						<label class="col-md-2 control-label"><?php echo $tr->translate("BRANCH");?></label>
-						<div class="col-md-4">
-							<?php echo $formFilter->getElement('from_loc');?>
+				<div class="form-group">
+					<label class="col-md-2 control-label"></label>
+					<div class="col-md-4">
+					</div>
+					<label class="col-md-2 control-label"><?php echo $tr->translate("BRANCH");?></label>
+					<div class="col-md-4">
+						<?php echo $formFilter->getElement('from_loc');?>
+					</div>
+				</div>
+				<div class="portlet box blue">
+					<div class="portlet-title">
+						<div class="caption" style="width:100%">
+							<?php echo $formFilter->getElement('pro_name');?>
 						</div>
 					</div>
-					<div class="portlet box blue">
-						<div class="portlet-title">
-							<div class="caption" style="width:100%">
-								<?php echo $formFilter->getElement('pro_name');?>
-							</div>
-						</div>
+				</div>
+				<div class="form-group">
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th><?php echo $tr->translate("PRODUCT_NAME");?></th>
+									<th><?php echo $tr->translate("CURRENT_QTY");?></th>
+									<th><?php echo $tr->translate("ADJUST_QTY_UNIT");?></th>
+									<th><?php echo $tr->translate("ADJUST_QTY_PER_UNIT");?></th>
+									<th><?php echo $tr->translate("ADJUST_TOTAL_QTY");?></th>
+									<th><?php echo $tr->translate("REMARK");?></th>
+									<th><?php echo $tr->translate("ACTION");?></th>
+								</tr>
+							</thead>
+							<tbody id="tr_location" style="font-size:12px;">
+							</tbody>
+						</table>
 					</div>
-													
-					<div class="portlet box blue">
-						<div class="portlet-title">
-							<div class="caption">
-								<i class="fa fa-cogs"></i><?php echo $tr->translate("PRODUCT_LIST");?>
-							</div>
-						</div>	
-							<div class="portlet-body">
-								<div class="table-responsive">
-									<table class="table table-bordered">
-										<thead>
-											<tr>
-												<th>#</th>
-												<th><?php echo $tr->translate("PRODUCT_NAME");?></th>
-												<th><?php echo $tr->translate("CURRENT_QTY");?></th>
-												<th><?php echo $tr->translate("ADJUST_QTY_UNIT");?></th>
-												<th><?php echo $tr->translate("ADJUST_QTY_PER_UNIT");?></th>
-												<th><?php echo $tr->translate("ADJUST_TOTAL_QTY");?></th>
-												<th><?php echo $tr->translate("REMARK");?></th>
-												<th><?php echo $tr->translate("ACTION");?></th>
-											</tr>
-										</thead>
-										<tbody id="tr_location" style="font-size:12px;">
-										</tbody>
-									</table>
-								</div>
-								<input type="hidden" name="identity" id="identity" value="<?php //echo $identity;?>" >
-							</div>
-							<div class="form-group">
-								<div  class="col-md-12 col-md-offset-4 col-md-8">
-									<a href="<?php echo $this->baseUrl();?>/product/adjust"><button type="button" class="btn red"><i class="fa fa-times"></i> <?php echo $tr->translate("EXIT")?></button></a>
-									<button type="submit" name="saveclose" value="saveclose" class="btn btn-primary" ><i class="glyphicon glyphicon-log-in"></i> <?php echo $tr->translate("SAVE_CLOSE")?></button>
-									<button type="submit" name="btnsavenew" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_NEW")?> </button>
-									
-								</div>
-							</div>
+					<input type="hidden" name="identity" id="identity" value="<?php //echo $identity;?>" >
+				</div>
+				<div class="form-group">
+					<div  class="col-md-12 col-md-offset-4 col-md-8">
+						<a href="<?php echo $this->baseUrl();?>/product/adjust"><button type="button" class="btn red"><i class="fa fa-times"></i> <?php echo $tr->translate("EXIT")?></button></a>
+						<button type="submit" name="saveclose" value="saveclose" class="btn btn-primary" ><i class="glyphicon glyphicon-log-in"></i> <?php echo $tr->translate("SAVE_CLOSE")?></button>
+						<button type="submit" name="btnsavenew" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_NEW")?> </button>
+						
 					</div>
 				</div>
 			</form>
 		</div>
+	</div>
 </div>
+
 <script type="text/javascript">
 var index=0;
 url_get_qty = '<?php echo $this->url(array('module'=>'product','controller'=>'adjust','action'=>'getproduct'))?>';

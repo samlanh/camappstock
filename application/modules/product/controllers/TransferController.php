@@ -25,7 +25,15 @@ public function init()
 	    			'status'	=>	1,
 	    		);
 	    	}
-	    	$this->view->product = $db->getTransfer($data);
+	    	$rows = $db->getTransfer($data);
+	    	
+	    	$columns=array("TRANSFER_NUM","FROM_BRANCH","TO_BRANCH","TRANSFER_DATE","TRANSFER_BY","STATUS");
+	    	$link=array(
+	    			'module'=>'product','controller'=>'transfer','action'=>'edit',
+	    	);
+	    	$list = new Application_Form_Frmlist();
+	    	$this->view->list=$list->getCheckList(0, $columns, $rows,array('tran_no'=>$link,'transfer_date'=>$link,'cur_location'=>$link,'tran_location'=>$link));
+	    	
     	}catch (Exception $e){
     		Application_Form_FrmMessage::messageError("INSERT_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

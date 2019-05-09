@@ -45,24 +45,15 @@ public function viewAction()
     		$userAccessQuery = "SELECT user_type_id, user_type, status from tb_acl_user_type where user_type_id=".$id;
     		$rows = $db->getUserTypeInfo($userAccessQuery);
     		$this->view->rs=$rows;
-    		 
-    		//////////////////////////////
-//     		$db = new RsvAcl_Model_DbTable_DbUserAccess();
-//     		$this->view->all_module = $db->getAllModule();
     		$this->view->user_type = $id;
     		
-    		//Add filter search
     		$gc = new Application_Model_GlobalClass();
-    		// For list all module
     		$sql = "SELECT DISTINCT acl.`module` FROM `tb_acl_acl` AS acl";
     		$this->view->optoin_mod =  $gc->getOptonsHtml($sql, "module", "module");
-    		// For list all controller
     		$sql = "SELECT DISTINCT acl.`controller` FROM `tb_acl_acl` AS acl WHERE acl.`status` = 1";
     		$this->view->optoin_con =  $gc->getOptonsHtml($sql, "controller", "controller");
-    		// For List all action
     		$sql = "SELECT DISTINCT acl.`action` FROM `tb_acl_acl` AS acl WHERE acl.`status` = 1";
     		$this->view->optoin_act =  $gc->getOptonsHtml($sql, "action", "action");
-    		//For Status enable or disable
     		$this->view->optoin_status =  $gc->getYesNoOption();
     		 
     		$where = " ";
@@ -70,22 +61,6 @@ public function viewAction()
     		 
     		if($this->getRequest()->isPost()){
     			$post = $this->getRequest()->getPost();
-    
-    			if(!empty($post['fmod'])){
-    				$where .= " AND acl.`module` = '" . $post['fmod'] . "' ";
-    			}
-    			if(!empty($post['fcon'])){
-    				$where .= " AND acl.`controller` = '" . $post['fcon'] . "' ";
-    			}
-    			if(!empty($post['fact'])){
-    				$where .= " AND acl.`action` = '" . $post['fact'] . "' ";
-    			}
-    			if(!empty($post['fstatus'])){
-    				$status = ($post['fstatus'] === "Yes")? 1 : 0;
-    				//$where .= " AND  acl.`status` = " . $st ;
-    			}
-    			 
-    			//echo $where; exit;
     		}else{
     			$post =array(
     					'fmod'=>'',
@@ -96,28 +71,18 @@ public function viewAction()
     		}
     		$this->view->data = $post;
     		 
-    		 
-    		 
-    		//Sophen add here
-    		//to assign project list in view
     		$db_acl=new Application_Model_DbTable_DbGlobal();
     		 
     		$sqlNotParentId = "SELECT user_type_id FROM `tb_acl_user_type` WHERE `parent_id` =".$id;
     		$notParentId = $db_acl->getGlobalDb($sqlNotParentId);
     		$usernotparentid = $notParentId[0]['user_type_id'];
     		 
-    		 
     		if($id == 1){
-    			//Display all for admin id = 1
-    			//Do not change admin id = 1 in database
-    			//Otherwise, it error
     			$sql = "select acl.acl_id,acl.label,CONCAT(acl.module,'/', acl.controller,'/', acl.action) AS user_access , acl.status, acl.module, acl.is_menu
     			from tb_acl_acl as acl
     			WHERE 1 " . $where;
     		}
-    		 
     		else {
-    			//Display all of his/her parent access
     			$sql="SELECT acl.acl_id,acl.label, CONCAT(acl.module,'/', acl.controller,'/', acl.action) AS user_access, acl.status, acl.module, acl.is_menu
     			FROM tb_acl_user_access AS ua
     			INNER JOIN tb_acl_user_type AS ut ON (ua.user_type_id = ut.parent_id)
@@ -125,26 +90,20 @@ public function viewAction()
     		}
     		
     		$order = " order by acl.module ASC, acl.rank ASC,acl.controller ASC,acl.is_menu DESC ";
-    		
-    		//echo $sql.$order; exit;
     		$acl=$db_acl->getGlobalDb($sql.$order);
     		$acl = (is_null($acl))? array(): $acl;
-    		//print_r($acl);
-    		$this->view->acl=$acl;
+//     		$this->view->acl=$acl;
     		 
     		if(!$usernotparentid){
-    			///Display only of his/her parent access	and not have user_type_id of user access in user type parent id
-    			//ua.user_type_id != ut.parent_id
     			$sql_acl = "SELECT acl.acl_id,acl.label, CONCAT(acl.module,'/', acl.controller,'/', acl.action) AS user_access, acl.status, acl.status , acl.is_menu
     			FROM tb_acl_user_access AS ua
-    			INNER JOIN tb_acl_user_type AS ut ON (ua.user_type_id = ut.user_type_id)
-    			INNER JOIN tb_acl_acl AS acl ON (acl.acl_id = ua.acl_id) WHERE ua.user_type_id =".$id . $where;
+	    			INNER JOIN tb_acl_user_type AS ut ON (ua.user_type_id = ut.user_type_id)
+	    			INNER JOIN tb_acl_acl AS acl ON (acl.acl_id = ua.acl_id) WHERE ua.user_type_id =".$id . $where;
     		}else{
-    			//Display only he / she access in rsv_acl_user_access
     			$sql_acl = "SELECT acl.acl_id,acl.label, CONCAT(acl.module,'/', acl.controller,'/', acl.action) AS user_access, acl.status, acl.status , acl.is_menu
-    			FROM tb_acl_user_access AS ua
-    			INNER JOIN tb_acl_user_type AS ut ON (ua.user_type_id = ut.parent_id)
-    			INNER JOIN tb_acl_acl AS acl ON (acl.acl_id = ua.acl_id) WHERE ua.user_type_id =".$id . $where;
+	    			FROM tb_acl_user_access AS ua
+	    			INNER JOIN tb_acl_user_type AS ut ON (ua.user_type_id = ut.parent_id)
+	    			INNER JOIN tb_acl_acl AS acl ON (acl.acl_id = ua.acl_id) WHERE ua.user_type_id =".$id . $where;
     		}
     		 
     		$acl_name = $db_acl->getGlobalDb($sql_acl.$order);
@@ -171,16 +130,12 @@ public function viewAction()
     			}
     			$rows[] = array("acl_id"=>$com['acl_id'],"label"=>$tr->translate($com['label']), "url"=>$com['user_access'], "img"=>$img,"module"=>$com['module'] , "is_menu"=>$com['is_menu']) ;
     		}
-    		 
-//     		print_r($rows);exit();
     		
     		$this->view->rows = $rows;
-    		
-    		//     		$list=new Application_Form_Frmlist();
-    		$list = new Application_Form_Frmlist();
-    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    		$columns=array("Label",$tr->translate('URL'), $tr->translate('STATUS'));
-    		$this->view->list = $list->getCheckList('radio', $columns, $rows);
+//     		$list = new Application_Form_Frmlist();
+//     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+//     		$columns=array("Label",$tr->translate('URL'), $tr->translate('STATUS'));
+//     		$this->view->list = $list->getCheckList('radio', $columns, $rows);
     	}  	 
     }
 	public function addAction()
@@ -189,20 +144,7 @@ public function viewAction()
 			{
 				$db=new Rsvacl_Model_DbTable_DbUserAccess();	
 				$post=$this->getRequest()->getPost();			
-				//if(!$db->isUserExist($post['username'])){
-					
-						$id=$db->insertUserAccess($post);
-						//write log file 
-// 				             $userLog= new Application_Model_Log();
-// 				    		 $userLog->writeUserLog($id);
-				     	  //End write log file
-				
-						//Application_Form_FrmMessage::message('One row affected!');
-						//Application_Form_FrmMessage::redirector('/rsvAcl/user-access/index');		
-						//$this->_redirect('rsvAcl/user-access/index');																	
-// 				}else {
-// 				 Application_Form_FrmMessage::message('User had existed already');
-// 				}
+				$id=$db->insertUserAccess($post);
 			}
 			$form=new Rsvacl_Form_FrmUserAccess();
 			$db = new Application_Model_DbTable_DbGlobal();

@@ -1,51 +1,26 @@
 <?php 
 $tr=Application_Form_FrmLanguages::getCurrentlanguage();
-//print_r($this->sale_term_defual);
 ?>
 <title><?php echo $tr->translate("QUOTATION_APPROVED");?></title>
-<marquee style="margin-top:-20px;" behavior="scroll" direction="left" onmouseout="this.start()" onmouseover="this.stop()" scrollamount="5">យើងត្រូវការ ការយល់ព្រមពី ប្រធានផ្នែកលក់ ឫអ្នកដែលមានសិទ្ធ ដើម្បី <span style="color:red;">បង្កើតជាតារាងតម្លៃលក់(Sale Quotation)</span> / We need approval from sale manager or person who have permission to <span style="color:red;">issue Sale Quotation</span> ! </marquee>
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="fa fa-globe"></i><?php echo $tr->translate("QUOTATION_APPROVED");?>
-				</div>
-						<div class="btn-group pull-right">
-							 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
-							   Actions <i class="fa fa-angle-down"></i>
-							 </button>
-								<ul class="dropdown-menu" role="menu">
-									<li>
-										<a href="" onclick="doPrint();">
-											<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
-										</a>
-									</li>
-									
-								</ul>
-					</div>
-			</div>
-            <div class="portlet-body form frmfilter">
-					<div style="clear:both;"></div>	
-	<div style=" min-height:28cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.2cm">
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
 	 <?php $url_submit = $this->url(array('module'=>'sales','controller'=>'quoteapprove','action'=>'approved'));?>
 		<form id="form_sample_2" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post">
-		
-	<div id="divPrint" style="width: 100%;">
-	<style>
-		.style{
-			line-height: 20px;font-size: 9px !important;
-			font-family: 'Khmer OS Battambang';
-		}
-		ul{margin: 0;padding:0;}
-		table tr td ul li{text-align: center;list-style: none;line-height: 25px; font-weight: bold;}
-		th{padding: 5px;}
-		ul.pur_info li{line-height:18px; 
-				font-weight: normal !important;}
-		ul.pur_info li strong{font-weight: bold;}
-       .hover:hover{background: #ccc;}
-	</style>
-	
+			<div id="divPrint" style="width: 100%;">
+				<style>
+					.style{
+						line-height: 20px;font-size: 9px !important;
+						font-family: 'Khmer OS Battambang';
+					}
+					ul{margin: 0;padding:0;}
+					table tr td ul li{text-align: center;list-style: none;line-height: 25px; font-weight: bold;}
+					th{padding: 5px;}
+					ul.pur_info li{line-height:18px; 
+							font-weight: normal !important;}
+					ul.pur_info li strong{font-weight: bold;}
+			       .hover:hover{background: #ccc;}
+				</style>
 		<table style="font-family: 'Khmer OS Content'; width:100%;">
 			<tbody>
 			<tr>

@@ -87,7 +87,6 @@ class Purchase_indexController extends Zend_Controller_Action
 		if(empty($id) or empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_DATA", "/purchase/index");
 		}
-		
 		$this->view->rs = $db->getPurchaseDetailById($id);
 		
 		$frm_purchase = new Application_Form_purchase();

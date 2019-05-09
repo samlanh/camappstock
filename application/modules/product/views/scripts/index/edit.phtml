@@ -278,16 +278,21 @@ function addNewProLocation(){
 	index++;
 	var branch_text = $("#branch");
 	var branch_text = dijit.byId("branch").attr('displayedValue');
-	template='<tr id="row_location_'+index+'">';
-	template+='<td>'+index+'</td>';
+	template='<td>'+index+'</td>';
 	template+='<td>'+branch_text+'<input type="hidden" id="branch_id_'+index+'" name="branch_id_'+index+'" value="'+branch_id+'" </td>';
-	template+='<td><input type="text" id="current_qty_'+index+'" onKeyup="totalQty('+index+')" name="current_qty_'+index+'" value="0" class="form-control"></td>'; 
-	template+='<td><input type="text" id="other_qty_'+index+'" onKeyup="totalQty('+index+')" name="other_qty_'+index+'" value="0" class="form-control"></td>'; 
-	template+='<td><input type="text" id="total_qty_'+index+'" name="total_qty_'+index+'" value="0" class="form-control"></td>'; 
-	template+='<td><input type="text" id="qty_warning_'+index+'" name="qty_warnning_'+index+'" value="0" class="form-control"></td>';
+	template+='<td><input required="true" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="current_qty_'+index+'" onKeyup="totalQty('+index+')" name="current_qty_'+index+'" value="0" ></td>'; 
+	template+='<td><input required="true" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="other_qty_'+index+'" onKeyup="totalQty('+index+')" name="other_qty_'+index+'" value="0" ></td>'; 
+	template+='<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="total_qty_'+index+'" name="total_qty_'+index+'" value="0" ></td>'; 
+	template+='<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="qty_warning_'+index+'" name="qty_warnning_'+index+'" value="0" ></td>';
 	template+='<td style="width:20px;"><img onClick="deleteRecord('+index+',1)" src="<?php echo $this->baseUrl();?>/images/Delete_16.png" /></td>';
-	template+='</tr>';
-	$('#tr_location').append(template);
+
+	tmp='<tr id="row_location_'+index+'">';
+	tmp+="</tr>";
+	$('#tr_location').append(tmp);
+	dojo.html.set(dojo.byId('row_location_'+index),template , {
+	     parseContent: true,
+	});
+	
 	if($('#identity').val()!="") {
 		var identity = $('#identity').val();
 		$('#identity').val(identity+','+index);
@@ -325,13 +330,20 @@ function addPriceType(){
 	indexs++;
 	id_price = '<?php echo $rs["type_id"];?>';
 	inx_price = '<?php echo $key+1;?>';
-		template='<tr id="row_price_<?php echo $key+1;?>">';
-		template+='<td><?php echo $key+1;?></td>';
+		//template='<tr id="row_price_<?php //echo $key+1;?>">';
+		template='<td><?php echo $key+1;?></td>';
 		template+='<td style="width:100px;"><?php echo $rs["name"];?><input type="hidden" id="price_type_<?php echo $key+1;?>" name="price_type_<?php echo $key+1;?>" value="'+id_price+'"</td>';
-		template+='<td><input type="text" id="price_<?php echo $key+1;?>" name="price_<?php echo $key+1;?>" value="<?php echo $rs["price"];?>" class="form-control"></td>'; 
+		template+='<td><input dojoType="dijit.form.NumberTextBox" type="text" id="price_<?php echo $key+1;?>" name="price_<?php echo $key+1;?>" value="<?php echo $rs["price"];?>" class="form-control"></td>'; 
 		template+='<td style="width:20px;"><img onClick="deleteRecord(<?php echo $key+1;?>,2)" src="<?php echo $this->baseUrl();?>/images/Delete_16.png" /></td>';
-		template+='</tr>';
-		$('#tr_price_type').append(template);
+
+		tmp='<tr id="row_price_'+<?php echo $key+1;?>+'">';
+		tmp+="</tr>";
+		$('#tr_price_type').append(tmp);
+		
+		dojo.html.set(dojo.byId('row_price_'+<?php echo $key+1;?>),template , {
+		     parseContent: true,
+		});
+		
 		if($('#identity_price').val()!="") {
 			var identity_price = $('#identity_price').val();
 			$('#identity_price').val(identity_price+','+inx_price);
@@ -357,13 +369,19 @@ function addNewPriceType(){
 		}
 	}
 	var price_text = dijit.byId("price_type").attr("displayedValue");
-	template='<tr id="row_price_'+indexs+'">';
-	template+='<td>'+indexs+'</td>';
+	template='<td>'+indexs+'</td>';
 	template+='<td>'+price_text+'<input type="hidden" id="price_type_'+indexs+'" name="price_type_'+indexs+'" value="'+price_id+'" </td>';
-	template+='<td><input type="text" id="price_'+indexs+'" name="price_'+indexs+'" class="form-control"></td>'; 
-	template+='<td><button type="button" onClick="deleteRecord('+indexs+',2)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
-	template+='</tr>';
-	$('#tr_price_type').append(template);
+	template+='<td><input required="true" dojoType="dijit.form.NumberTextBox" type="text" id="price_'+indexs+'" name="price_'+indexs+'" class="form-control"></td>'; 
+	template+='<td><img onClick="deleteRecord('+indexs+',2)" src="<?php echo $this->baseUrl();?>/images/Delete_16.png" /></td>';
+
+	tmp='<tr id="row_price_'+indexs+'">';
+	tmp+="</tr>";
+	$('#tr_price_type').append(tmp);
+	
+	dojo.html.set(dojo.byId('row_price_'+indexs),template , {
+	     parseContent: true,
+	});
+	
 	if($('#identity_price').val()!="") {
 		var identity_price = $('#identity_price').val();
 		$('#identity_price').val(identity_price+','+indexs);

@@ -162,14 +162,13 @@ public function init()
 			}
 		}
 	}
-	public function addNewproudctAction(){
+	public function getAllproductAction(){
 		if($this->getRequest()->isPost()){
 			try {
 				$post=$this->getRequest()->getPost();
-				$db = new Product_Model_DbTable_DbProduct();
-				$pro_id =$db->addAjaxProduct($post);
-				$result = array('pro_id'=>$pro_id);
-				echo Zend_Json::encode($result);
+				$db = new Application_Model_DbTable_DbGlobal();
+				$rs= $db->getAllProduct();
+				echo Zend_Json::encode($rs);
 				exit();
 			}catch (Exception $e){
 				$result = array('err'=>$e->getMessage());

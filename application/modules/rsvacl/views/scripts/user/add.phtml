@@ -27,6 +27,14 @@ $( document ).ready(function() {
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content">
 		<div class="card-box">
+            <div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_USER');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right"></div>
+    		</div>
+    	</div>
+		<div class="card-box">
 				<form dojoType="dijit.form.Form" autocomplete="off" class="form-horizontal" enctype="multipart/form-data" method="post">
 					<script type="dojo/method" event="onSubmit">			
 					if(this.validate()) {

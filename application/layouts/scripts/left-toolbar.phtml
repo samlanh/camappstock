@@ -11,9 +11,9 @@
 	$newarray=array();
 	if(!empty($arr_module)){
 		foreach ($arr_module as $key => $rs){
-			if($rs['module']=='report' AND $rs['controller']!='loan'){
-				continue;
-			}
+// 			if($rs['module']=='report' AND $rs['controller']!='loan'){
+// 				continue;
+// 			}
 			$lblcontroller = $rs['label'];
 			if($module!=$rs['module']){
 				$newarray= array($rs['controller']=>$tr->translate(strtoupper($lblcontroller)));
@@ -56,18 +56,15 @@
                 		$title = $rs;
                 		if ($title=="purchase"){
                 			$title='PURCHASING';
+                		}
+                		elseif($title=="product"){
+                			$title='STOCK_MNG';
                 		}	
                 		$title=$tr->translate(strtoupper($rs));
                 	?>
                 	<li <?php if ($rs==$module ){ echo 'class="active"';}?>>
-                		<?php if ($rs=="report"){?>
-                			<a href="<?php echo $this->url(array('module'=>$rs,'controller'=>'index','action'=>'index'), null, true);;?>">
-                			<?php echo $array_icon[$rs];?> <?php echo $title;?> 
-	                		</a>
-                		<?php }else{?>
-                		
                 			<?php if (count($arr_param_menu[$rs])>1){?>
-		                		<a><?php echo $array_icon[$rs];?> <?php echo $title;?> 
+		                		<a><?php echo $array_icon[$rs];?> <?php echo $title;?>			
 		                		<?php if (!empty($arr_param_menu[$rs])){?><span class="fa fa-chevron-down"></span><?php }?>
 		                		</a>
 		                		<?php if (!empty($arr_param_menu[$rs])){?>
@@ -92,7 +89,6 @@
 		                		</a>
 		                		<?php }?>
 		                    <?php }?>
-	                    <?php }?>
                  	 </li>
                 	<?php }
                 	}?>

@@ -88,12 +88,13 @@ class Purchase_vendorController extends Zend_Controller_Action
 		$this->view->form = $formStockAdd;
 	}
 	//for add vendor from purchase
-	final function addvendorAction(){
+	final function getVendorAction(){
 		$post=$this->getRequest()->getPost();
-		$db = new Purchase_Model_DbTable_DbVendor();
-		$vid = $db->addnewvendor($post);
-		$result = array('vid'=>$vid);
-		echo Zend_Json::encode($result);
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$db = new Application_Model_DbTable_DbGlobal();
+		$rs = $db->getAllVendor(null);
+		array_unshift($rs, array('id'=>-1,'name'=>$tr->translate('ADD_NEW')));
+		echo Zend_Json::encode($rs);
 		exit();
 	}
 	

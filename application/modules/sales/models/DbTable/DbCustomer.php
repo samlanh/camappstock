@@ -48,7 +48,6 @@ class Sales_Model_DbTable_DbCustomer extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		
 		$sql=" SELECT id,
-		(SELECT name FROM `tb_sublocation` WHERE id=branch_id LIMIT 1) AS branch_name,
 		 cust_name,
 		 (SELECT name_en FROM `tb_view` WHERE type=6 AND key_code=cu_type LIMIT 1) customer_type,
 		 (SELECT name FROM `tb_price_type` WHERE id=tb_customer.customer_level LIMIT 1) customer_level,
@@ -111,7 +110,6 @@ class Sales_Model_DbTable_DbCustomer extends Zend_Db_Table_Abstract
 				'add_remark'	=>	$post['remark'],
 				'user_id'		=> $GetUserId,
 				'date'			=> date("Y-m-d"),
-				'branch_id'		=> $post['branch_id'],
 				'customer_level'=> $post['customer_level'],
 				'cu_type'		=>	$post["customer_type"],
 				'credit_limit'	=>	$post["credit_limit"],
@@ -137,7 +135,6 @@ class Sales_Model_DbTable_DbCustomer extends Zend_Db_Table_Abstract
 				'add_remark'	=>	$post['remark'],
 				'user_id'		=> $GetUserId,
 				'date'			=> date("Y-m-d"),
-				'branch_id'		=> $post['branch_id'],
 				'customer_level'=> $post['customer_level'],
 				'cu_type'		=>	$post["customer_type"],
 				'credit_limit'	=>	$post["credit_limit"],
