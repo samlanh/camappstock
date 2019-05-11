@@ -63,8 +63,8 @@ class Sales_Model_DbTable_Dbpayment extends Zend_Db_Table_Abstract
 			$info_purchase_order=array(
 					"branch_id"   	=> 	1,//$branch_id['branch_id'],
 					"customer_id"   => 	$data["customer_id"],
-					"payment_type"  => 	$data["payment_method"],//payment by customer/invoice
-					"payment_id"    => 	$data["payment_name"],	//payment by cash/paypal/cheque
+					"payment_type"  => 	1,//payment by customer/invoice
+					"payment_id"    => 	$data["payment_name"],
 					"receipt_no"    => 	$data['receipt'],
 					"receipt_date"  =>  date("Y-m-d",strtotime($data['date_in'])),
 					"date_input"    =>  date("Y-m-d"),
@@ -89,7 +89,6 @@ class Sales_Model_DbTable_Dbpayment extends Zend_Db_Table_Abstract
 			$compelted = 0;
 			foreach ($ids as $key => $i)
 			{
-				
 				$paid = $paid -($data['balance_after'.$i]);
 				$recipt_paid = 0;
 				if ($paid>=0){
@@ -118,7 +117,7 @@ class Sales_Model_DbTable_Dbpayment extends Zend_Db_Table_Abstract
 				$rsinvoice = $this->getSaleById($data['invoice_no'.$i]);
 				if(!empty($rsinvoice)){
 					$data_invoice = array(
-						'balance'=>$rsinvoice['balance']-$paided,
+						'all_totalafter'=>$rsinvoice['all_totalafter']-$paided,
 					);
 					$this->_name='tb_sales_order';
 					$where = 'id = '.$rsinvoice['id'];

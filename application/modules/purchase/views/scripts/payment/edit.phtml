@@ -12,128 +12,137 @@
 		    	<div class="col-sm-8 pd-0">
 		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('Edit Customer Payment');?></h4>
     			</div>
-    			<div class="col-sm-4 text-right">
-    			</div>
+    			<div class="col-sm-4 text-right"></div>
     		</div>
     	</div>
-		<div class="card-box">
-			<form id="frm" class="form-horizontal" enctype="multipart/form-data" method="post">
-					<div class="form-group">
-						<label class="control-label col-md-2"><?php echo $tr->translate("PAYMENT_METHOD");?> 
-						</label>
-						<div class="col-md-4">
-							<?php echo $form->getElement("payment_method");?>
-						</div>
-						<label class="control-label col-md-2"><?php echo $tr->translate("VENDOR_NAME");?></label>
-						<div class="col-md-4">
-							<?php echo $form->getElement("customer_id");?>
-						</div>
+		<div class="card-box">		
+		<form id="frm" class="form-horizontal" enctype="multipart/form-data" method="post">
+			<div class="col-md-4">
+				<div class="form-group">
+					<div class="col-md-4">
+						<?php echo $tr->translate("PAYMENT_METHOD");?> 
 					</div>
-					<div class="form-group">
-						<label class="control-label col-md-2"><?php echo $tr->translate("Invoice");?>
-						</label>
-						<div class="col-md-4">
-							<?php echo $form->getElement('invoice_id');?>
-						</div>
-						<label class="control-label col-md-2"><?php echo $tr->translate("Expense Date");?>
-						</label>
-						<div class="col-md-4">
-							<?php echo $form->getElement("expense_date");?>
-						</div>
+					<div class="col-md-8">
+						<?php echo $form->getElement("payment_method");?>
 					</div>
-					<div class="form-group">
-						<label class="control-label col-md-2"><?php echo $tr->translate("PAYMENT_TYPE");?><span class="required">
-						*</span>
-						</label>
-						<div class="col-md-4">
-							<?php echo $form->getElement("payment_name");?>
-						</div>
-						<label class="control-label col-md-2"><?php echo $tr->translate("CHEQUE");?></label>
-						<div class="col-md-2">
-							<?php echo $form->getElement("cheque");?>
-						</div>
-						<div class="col-md-2">
-							<?php echo $form->getElement("bank_name");?>
-						</div>
+				</div>	
+				<div class="form-group">
+					<div class="col-md-4">
+						<?php echo $tr->translate("VENDOR_NAME");?>
 					</div>
-					<div class="form-group">
-						<label class="control-label col-md-2"><?php echo $tr->translate("ឈ្មោះអ្នកដកសែក");?>
-						</label>
-						<div class="col-md-4">
-							<?php echo $form->getElement("holder_name"); ?>
-						</div>
-						<label class="control-label col-md-2"><?php echo $tr->translate("ថ្ងៃចេញសែក");?></label>
-						<div class="col-md-2">
-							<?php echo $form->getElement("cheque_issuedate"); ?>
-						</div>
-						<label class="control-label col-md-1"><?php echo $tr->translate("ថ្ងៃបើកសែក");?>
-						</label>
-						<div class="col-md-1">
-							<?php echo $form->getElement("cheque_withdrawdate"); ?>
-						</div>
+					<div class="col-md-8">
+						<?php echo $form->getElement("customer_id");?>
 					</div>
-				    <div class="form-group">
-						<label class="control-label col-md-2"><?php echo $tr->translate("REMARK");?></label>
-						<div class="col-md-4">
-							<?php echo $form->getElement("remark");?>
-						</div>
-				    </div>
-					<div class="portlet-body">
-						<table class="table table-striped table-bordered table-hover" id="table_order" style="font-size:12px;">
-							<tr height="33px">
-								<th><?php echo $tr->translate("DEL");?></th>
-								<th><?php echo $tr->translate("NUM");?></th>
-								<th style="white-space:nowrap;"><?php echo $tr->translate("ថ្ងៃ/ខែ/ឆ្នាំ");?></th>
-								<th><?php echo $tr->translate("វិក័យបត្រ");?></th>
-								<th><?php echo $tr->translate("ចំនួនទឹកប្រាក់");?></th>
-								<th><?php echo $tr->translate("បញ្ចុះតម្លៃ");?></th>
-								<th><?php echo $tr->translate("ទឹកប្រាក់បានបង់");?></th>
-								<th><?php echo $tr->translate("ទឹកប្រាក់នៅខ្វះ");?></th>
+				</div>
+				<div class="form-group">
+					<div class="col-md-4">
+						<?php echo $tr->translate("Invoice");?>
+					</div>
+					<div class="col-md-8">
+						<?php echo $form->getElement('invoice_id');?>
+					</div>
+				</div>	
+				<div class="form-group">
+					<div class="col-md-4">
+						<?php echo $tr->translate("Expense Date");?>
+					</div>
+					<div class="col-md-8">
+						<?php echo $form->getElement("expense_date");?>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-4">
+						<?php echo $tr->translate("PAYMENT_TYPE");?>
+					</div>
+					<div class="col-md-8">
+						<?php echo $form->getElement("payment_name");?>
+					</div>
+				</div>	
+				<div class="form-group">
+					<div class="col-md-4">
+						<?php echo $tr->translate("CHEQUE");?>
+					</div>
+					<div class="col-md-4">
+						<?php echo $form->getElement("cheque");?>
+					</div>
+					<div class="col-md-4">
+						<?php echo $form->getElement("bank_name");?>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-4">
+						<?php echo $tr->translate("ឈ្មោះអ្នកដកសែក");?>
+					</div>
+					<div class="col-md-8">
+						<?php echo $form->getElement("holder_name"); ?>
+					</div>
+				</div>	
+				<div class="form-group">
+					<div class="col-md-4">
+						<?php echo $tr->translate("ថ្ងៃចេញសែក");?>
+					</div>
+					<div class="col-md-8">
+						<?php echo $form->getElement("cheque_issuedate"); ?>
+					</div>
+				</div>	
+				<div class="form-group">
+					<div class="col-md-4">
+						<?php echo $tr->translate("ថ្ងៃបើកសែក");?>
+					</div>
+					<div class="col-md-8">
+						<?php echo $form->getElement("cheque_withdrawdate"); ?>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-4">
+						<?php echo $tr->translate("ជំពាក់សរុប​ :");?>
+					</div>
+					<div class="col-md-8">
+						<?php echo $form->getElement("all_total");?>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-4">
+						<?php echo $tr->translate("ប្រាក់បានបង់សរុប");?>
+					</div>
+					<div class="col-md-8">
+						<?php echo $form->getElement("paid");?>
+					</div>	
+				</div>
+				<div class="form-group">
+					<div class="col-md-4">
+						ប្រាក់នៅសល់
+					</div>
+					<div class="col-md-8">
+						<?php echo $form->getElement("balance");?>
+					</div>
+				</div>
+			    <div class="form-group">
+					<div class="col-md-4">
+						<?php echo $tr->translate("REMARK");?>
+					</div>
+					<div class="col-md-8">
+						<?php echo $form->getElement("remark");?>
+					</div>
+			    </div>
+			  </div>
+			  <div class="col-md-8">
+			  	<div class="form-group">
+					<table class="table table-striped table-bordered table-hover" id="table_order" style="font-size:12px;">
+						<tr height="33px">
+							<th><?php echo $tr->translate("DEL");?></th>
+							<th><?php echo $tr->translate("NUM");?></th>
+							<th style="white-space:nowrap;"><?php echo $tr->translate("ថ្ងៃ/ខែ/ឆ្នាំ");?></th>
+							<th><?php echo $tr->translate("វិក័យបត្រ");?></th>
+							<th><?php echo $tr->translate("ចំនួនទឹកប្រាក់");?></th>
+							<th><?php echo $tr->translate("បញ្ចុះតម្លៃ");?></th>
+							<th><?php echo $tr->translate("ទឹកប្រាក់បានបង់");?></th>
+							<th><?php echo $tr->translate("ទឹកប្រាក់នៅខ្វះ");?></th>
 						</tr>
 					 </table>
 					 <input type="hidden" id="identity" name="identity" />
+			    </div>			
 				</div>
-					<div class="form-group">
-						<label class="control-label col-md-2">
-						</label>
-						<label class="control-label col-md-2">
-						</label>
-						<div class="col-md-2">
-							<div class="input-icon right">
-							</div>
-						</div>
-							<label class="control-label col-md-2"><?php echo $tr->translate("ជំពាក់សរុប​ :");?> Total<span class="required">
-						* </span>
-						</label>
-						<div class="col-md-4">
-							<div class="input-icon right">
-							<?php echo $form->getElement("all_total");?>
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-md-2">
-						</label>
-						<div class="col-md-4">
-							<div class="input-icon right"></div>
-						</div>
-						<label class="control-label col-md-2"><?php echo $tr->translate("ប្រាក់បានបង់សរុប");?> (Paid)
-						</label>
-						<div class="col-md-4">
-							<?php echo $form->getElement("paid");?>
-						</div>	
-					</div>
-					<div class="form-group">
-						<label class="control-label col-md-2">
-						</label>
-						<div class="col-md-4">
-						</div>
-						<label class="control-label col-md-2">ប្រាក់នៅសល់ (Balance)​ :
-						</label>
-						<div class="col-md-4">
-							<?php echo $form->getElement("balance");?>
-						</div>
-					</div>
 					<div class="form-group">
 						<label  class="col-md-12 col-md-offset-4 col-md-8">
 							<button type="button" name="btnsavenew" onclick="addNewBrand();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CLOSE")?> </button>

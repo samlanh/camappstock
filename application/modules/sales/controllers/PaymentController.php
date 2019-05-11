@@ -69,16 +69,10 @@ class Sales_PaymentController extends Zend_Controller_Action
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}
 		}
-		///link left not yet get from DbpurchaseOrder
 		$frm = new Sales_Form_FrmPayment(null);
 		$form_pay = $frm->Payment(null);
 		Application_Model_Decorator::removeAllDecorator($form_pay);
 		$this->view->form_sale = $form_pay;
-		 
-		// item option in select
-		$items = new Application_Model_GlobalClass();
-		$this->view->items = $items->getProductOption();
-		
 	}
 	function editAction(){
 		$id = ($this->getRequest()->getParam('id'))? $this->getRequest()->getParam('id'): '0';

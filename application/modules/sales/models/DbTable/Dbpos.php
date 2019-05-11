@@ -85,6 +85,7 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 					"sale_no"       => $so,//$data['txt_order'],
 					"date_sold"     => $data['sale_date'],
 					"all_total"     => $data['total_dollar'],
+					'all_totalafter'=> $data['total_dollar'],
 					//"currency_id"    => 1,//$data['currency'],
 					'discount_value' =>empty($data['discount'])?0:$data['discount'],
 					//"discount_type"  => 	$data['discount_type'],
