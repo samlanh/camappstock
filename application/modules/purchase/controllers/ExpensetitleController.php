@@ -13,7 +13,7 @@ class Purchase_ExpensetitleController extends Zend_Controller_Action
 			$glClass = new Application_Model_GlobalClass();
 			$rows = $glClass->getImgStatus($rows, BASE_URL, true);
 			$list = new Application_Form_Frmlist();
-			$columns=array("TITLE","NAME_ENTITLE","STATUS");
+			$columns=array("TITLE","NAME_ENTITLE","PARENTS","STATUS");
 			$link=array(
 					'module'=>'purchase','controller'=>'expensetitle','action'=>'edit',
 			);
@@ -32,6 +32,8 @@ class Purchase_ExpensetitleController extends Zend_Controller_Action
 			$db->add($data);
 			Application_Form_FrmMessage::message("INSERT_SUCCESS");
 		}
+		$db = new Purchase_Model_DbTable_Dbexpensetitle();
+		$this->view->parent = $db->getParentCateExpense();
 	}
 	public function editAction()
 	{
@@ -50,6 +52,8 @@ class Purchase_ExpensetitleController extends Zend_Controller_Action
 			}
 		}
 		$this->view->rs =  $db->getTermById($id);
+		$db = new Purchase_Model_DbTable_Dbexpensetitle();
+		$this->view->parent = $db->getParentCateExpense();
 	}
 	function getexpensecateAction(){
 		$post=$this->getRequest()->getPost();

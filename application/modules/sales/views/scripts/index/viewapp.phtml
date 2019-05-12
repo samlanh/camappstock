@@ -122,13 +122,13 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 			              <table align="center" width="100%" >
 							   <tbody>
 							   <tr style="font-size: 11px;">
-							        <td style="width:20%;font-family:'Khmer MEF2';white-space: nowrap;text-align: center;">
+							        <td style="width:20%;font-family:'Khmer OS Muol Light';white-space: nowrap;text-align: center;">
 							       		<strong style="text-align: center;"><?php echo $tr->translate("APPROVED_STATUS");?> : <?php echo $this->product[0]['approval_status'];?> / <?php echo $tr->translate("APPROVED_BY");?> : <?php echo $this->product[0]['approved_by'];?></strong>
 							        </td>
 							        <td><input type="hidden" name="id" id="id" value="<?php echo $this->product[0]['id'];?>" />
 							        	<input type="hidden" name="quote_id" id="quote_id" value="<?php echo $this->product[0]['quote_id'];?>" />
 							        </td>
-							        <td  valign="top" style="text-align:center;font-family:'Khmer MEF2';white-space: nowrap;" rowspan="2">
+							        <td  valign="top" style="text-align:center;font-family:'Khmer OS Muol Light';white-space: nowrap;" rowspan="2">
 								        <div class="form-group">
 											<label class="control-label col-md-6">
 											        <select name="approved_name" id="approved_name" class="form-control select2me">
@@ -153,11 +153,11 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 							        
 							   </tr>
 							   <tr style="font-size: 11px; height: 75px;">
-							        <td valign="bottom" style="width:40%;text-align:center; font-family:'Khmer MEF2';white-space: nowrap;"><span  class="form-control" style="border: 2px dotted #ddd; height: 100px;"><?php echo $this->product[0]['approved_note'];?></span></td>
+							        <td valign="bottom" style="width:40%;text-align:center; font-family:'Khmer OS Muol Light';white-space: nowrap;"><span  class="form-control" style="border: 2px dotted #ddd; height: 100px;"><?php echo $this->product[0]['approved_note'];?></span></td>
 							        <td></td>
 							   </tr>
 							   <tr style="font-size: 11px; height: 75px;">
-							        <td valign="top" style="width:50%;text-align:center; font-family:'Khmer MEF2';white-space: nowrap;">
+							        <td valign="top" style="width:50%;text-align:center; font-family:'Khmer OS Muol Light';white-space: nowrap;">
 							        <strong style="font-family'Khmer OS Content'">ថ្ងៃខែយល់ព្រម /Approved Date</strong><span name="app_date" id="app_date" class="form-control form-control-inline" ><?php echo empty($this->product[0]['approved_date'])?"":date("d/m/Y",strtotime($this->product[0]['approved_date']));?></span></td>
 							        <td></td>
 							        <td valign="top" style="text-align:center;white-space: nowrap;">

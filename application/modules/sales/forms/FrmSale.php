@@ -18,7 +18,10 @@ class Sales_Form_FrmSale extends Zend_Form
 
     	$customerid=new Zend_Form_Element_Select('customer_id');
     	$customerid ->setAttribs(array(
-    			'class' => 'form-control select2me',
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
     			'Onchange'=>'getCustomerInfo()',
     			));
     	$options = $db->getAllCustomer(1);
@@ -26,7 +29,10 @@ class Sales_Form_FrmSale extends Zend_Form
     	$this->addElement($customerid);
     	
     	$roder_element= new Zend_Form_Element_Text("txt_order");
-    	$roder_element->setAttribs(array('placeholder' => 'Optional','class'=>'form-control',"readonly"=>true,
+    	$roder_element->setAttribs(array(
+    			'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
+    			"readonly"=>true,
     			"onblur"=>"CheckPOInvoice();"));
     	$this->addElement($roder_element);
     	$qo = $db->getSalesNumber(1);
@@ -37,7 +43,12 @@ class Sales_Form_FrmSale extends Zend_Form
     	$options="";
 		
     	$locationID = new Zend_Form_Element_Select('branch_id');
-    	$locationID ->setAttribs(array('class'=>'form-control select2me'));
+    	$locationID ->setAttribs(array(
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
+    			));
 		$options = $db->getAllLocation(1);
     	$locationID->setMultiOptions($options);
     	$locationID->setattribs(array(
@@ -51,22 +62,36 @@ class Sales_Form_FrmSale extends Zend_Form
     	$paymentmethodElement = new Zend_Form_Element_Select('payment_name');
     	$paymentmethodElement->setMultiOptions($options_cg);
     	$this->addElement($paymentmethodElement);
-    	$paymentmethodElement->setAttribs(array("class"=>"form-control select2me"));
+    	$paymentmethodElement->setAttribs(array(
+    			'dojoType'=>"dijit.form.FilteringSelect",
+    			'autoComplete'=>"false",
+    			'queryExpr'=>'*${0}*',
+    			'class'=>'fullside',
+    		));
     	$rowsPayment = $db->getGlobalDb('SELECT id, description,symbal FROM tb_currency WHERE status = 1 ');
     	if($rowsPayment) {
     		foreach($rowsPayment as $readPayment) $options_cur[$readPayment['id']]=$readPayment['description'].$readPayment['symbal'];
     	}	 
     	$currencyElement = new Zend_Form_Element_Select('currency');
-    	$currencyElement->setAttribs(array('class'=>'demo-code-language form-control select2me'));
+    	$currencyElement->setAttribs(array(
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',));
     	$currencyElement->setMultiOptions($options_cur);
     	$this->addElement($currencyElement);
     	
     	$descriptionElement = new Zend_Form_Element_Textarea('remark');
-    	$descriptionElement->setAttribs(array("class"=>'form-control',"rows"=>3));
+    	$descriptionElement->setAttribs(array(
+    			"class"=>'form-control',
+    			"rows"=>3));
     	$this->addElement($descriptionElement);
     	
     	$allTotalElement = new Zend_Form_Element_Text('all_total');
-    	$allTotalElement->setAttribs(array("class"=>"form-control",'readonly'=>'readonly','style'=>'text-align:right'));
+    	$allTotalElement->setAttribs(array(
+    			'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',	
+    			'readonly'=>'readonly','style'=>'text-align:right'));
     	$this->addElement($allTotalElement);
     	
     	$netTotalElement = new Zend_Form_Element_Text('net_total');
@@ -79,65 +104,108 @@ class Sales_Form_FrmSale extends Zend_Form
     		foreach($rows as $rs) $opt[$rs['id']]=$rs['name'];
     	}
     	$saleagent_id = new Zend_Form_Element_Select('saleagent_id');
-    	$saleagent_id->setAttribs(array('class'=>'demo-code-language form-control select2me'));
+    	$saleagent_id->setAttribs(array(
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
+    			));
     	$saleagent_id->setMultiOptions($opt);
     	$this->addElement($saleagent_id);
     	
     	
     	$discountValueElement = new Zend_Form_Element_Text('discount_value');
-    	$discountValueElement->setAttribs(array('class'=>'input100px form-control','onblur'=>'doTotal()',));
+    	$discountValueElement->setAttribs(array(
+    			'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',	
+    			'onblur'=>'doTotal()',));
     	$this->addElement($discountValueElement);
     	
     	$discountRealElement = new Zend_Form_Element_Text('discount_real');
-    	$discountRealElement->setAttribs(array('readonly'=>'readonly','class'=>'input100px form-control',));
+    	$discountRealElement->setAttribs(array(
+    			'readonly'=>'readonly',
+    			'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside'));
     	$this->addElement($discountRealElement);
     	
     	$globalRealElement = new Zend_Form_Element_Hidden('global_disc');
-    	$globalRealElement->setAttribs(array("class"=>"form-control"));
+    	$globalRealElement->setAttribs(array(
+    			'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
+    			));
     	$this->addElement($globalRealElement);
     	
     	$credit_term = new Zend_Form_Element_Text('credit_term');
-    	$credit_term->setAttribs(array('readonly'=>'readonly','style'=>'',"class"=>"form-control"
+    	$credit_term->setAttribs(array(
+    			'readonly'=>'readonly',
+    			'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
     	));
     	$this->addElement($credit_term);
     	 
     	$credit_limit = new Zend_Form_Element_Text('credit_limit');
-    	$credit_limit->setAttribs(array('readonly'=>'readonly','style'=>'',"class"=>"form-control"
+    	$credit_limit->setAttribs(array(
+    			'readonly'=>'readonly',
+    			'dojoType'=>"dijit.form.TextBox",
+    			'class'=>'fullside',
     	));
     	$this->addElement($credit_limit);
     	
     	$discountValueElement = new Zend_Form_Element_Text('discount_value');
-    	$discountValueElement->setAttribs(array('class'=>'input100px','onblur'=>'doTotal();','style'=>'text-align:right'));
+    	$discountValueElement->setAttribs(array(
+    			'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
+    			'onblur'=>'doTotal();','style'=>'text-align:right'));
     	$this->addElement($discountValueElement);
     	
     	$dis_valueElement = new Zend_Form_Element_Text('dis_value');
-    	$dis_valueElement->setAttribs(array("required"=>1,'placeholder' => 'Discount Value','style'=>'text-align:right'));
+    	$dis_valueElement->setAttribs(array(
+    			'dojoType'=>"dijit.form.TextBox",
+    			"onkeyup"=>"calculateDiscount();",
+    			'class'=>'fullside',
+    			));
     	$dis_valueElement->setValue(0);
-    	$dis_valueElement->setAttribs(array("onkeyup"=>"calculateDiscount();","class"=>"form-control"));
     	$this->addElement($dis_valueElement);
     	
     	$totalAmountElement = new Zend_Form_Element_Text('totalAmoun');
-    	$totalAmountElement->setAttribs(array('readonly'=>'readonly','style'=>'text-align:right',"class"=>"form-control"
+    	$totalAmountElement->setAttribs(array('readonly'=>'readonly',
+    			'dojoType'=>"dijit.form.NumberTextBox",
+				'class'=>'fullside',	
     	));
     	$this->addElement($totalAmountElement);
     	
     	$remainlElement = new Zend_Form_Element_Text('remain');
-    	$remainlElement->setAttribs(array('readonly'=>'readonly','style'=>'text-align:right',"class"=>"red form-control"));
+    	$remainlElement->setAttribs(array('readonly'=>'readonly',
+    			'dojoType'=>"dijit.form.NumberTextBox",
+				'class'=>'fullside',
+    			));
     	$this->addElement($remainlElement);
     	
     	$balancelElement = new Zend_Form_Element_Text('balance');
-    	$balancelElement->setAttribs(array('readonly'=>'readonly','style'=>'text-align:right',"class"=>"form-control"));
+    	$balancelElement->setAttribs(array(
+    			'readonly'=>'readonly',
+    			'dojoType'=>"dijit.form.NumberTextBox",
+    			'class'=>'fullside',
+    			"class"=>"form-control"));
     	$this->addElement($balancelElement);
     	
     	$date_inElement = new Zend_Form_Element_Text('date_in');
     	$date =new Zend_Date();
-    	$date_inElement ->setAttribs(array('class'=>'validate[required] form-control form-control-inline date-picker','data-date-format'=>"dd-mm-yyyy"));
-    	$date_inElement ->setValue(date("d-m-Y"));
+    	$date_inElement ->setAttribs(array(
+    			'dojoType'=>"dijit.form.DateTextBox",
+    			'class'=>'fullside',
+    			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+    			));
+    	$date_inElement ->setValue(date("Y-m-d"));
     	$this->addElement($date_inElement);
     	
     	$dateOrderElement = new Zend_Form_Element_Text('order_date');
-    	$dateOrderElement ->setAttribs(array('class'=>'col-md-3 validate[required] form-control form-control-inline date-picker','placeholder' => 'Click to Choose Date','data-date-format'=>"dd-mm-yyyy"));
-    	$dateOrderElement ->setValue(date("d-m-Y"));
+    	$dateOrderElement ->setAttribs(array(
+    			'dojoType'=>"dijit.form.DateTextBox",
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}"
+    		));
+    	$dateOrderElement ->setValue(date("Y-m-d"));
     	$this->addElement($dateOrderElement);
     	
     	$dateElement = new Zend_Form_Element_Text('date');
@@ -147,22 +215,27 @@ class Sales_Form_FrmSale extends Zend_Form
     	$this->addElement($totalElement);
     	
     	$totaTaxElement = new Zend_Form_Element_Text('total_tax');
-    	$totaTaxElement->setAttribs(array('class'=>'custom[number] form-control','style'=>'text-align:right'));
+    	$totaTaxElement->setAttribs(array(
+    			'dojoType'=>"dijit.form.NumberTextBox",
+    			'class'=>'fullside',
+    			'style'=>'text-align:right'
+    		));
     	$this->addElement($totaTaxElement);
     	
     	$paidElement = new Zend_Form_Element_Text('paid');
-    	$paidElement->setAttribs(array('class'=>'custom[number] form-control','onkeyup'=>'doRemain();','style'=>'text-align:right'));
+    	$paidElement->setAttribs(array(
+    			'dojoType'=>"dijit.form.NumberTextBox",
+    			'class'=>'fullside',
+    			'onkeyup'=>'doRemain();',
+    			'style'=>'text-align:right'));
     	$this->addElement($paidElement);
     	
-    	Application_Form_DateTimePicker::addDateField(array('order_date','date_in'));
     		if($data != null) {
     			$idElement = new Zend_Form_Element_Hidden('id');
     			$this->addElement($idElement);
     			$idElement ->setValue($data["id"]);
-    			
     			$customerid->setValue($data["customer_id"]);
     			$locationID->setValue($data['branch_id']);
-    			
     			$currencyElement->setValue($data['currency_id']);
     			$saleagent_id->setValue($data['saleagent_id']);
     			$descriptionElement->setValue($data['remark']);
@@ -172,7 +245,6 @@ class Sales_Form_FrmSale extends Zend_Form
     			if($data['discount_type']==1){$data['discount_value']=$data['discount_value']."%";}
     			$dis_valueElement->setValue($data['discount_value']);
     			$allTotalElement->setValue($data['net_total']);
-    		
     		} else {
     	}
      	return $this;

@@ -33,65 +33,39 @@ white-space: nowrap;font-size: 14px;line-height:33px;}
     return false;
    }
 </script>
-	<div class="row" >
-		<div class="col-md-12">
-				<div class="portlet-body form">
-					<form method="post" action="<?php ?>">
-							<label class="control-label col-md-9">
-								<div class="portlet box blue">
-	                                    <div class="portlet-title">
-	                                        <div class="caption">
-	                                            <i class="fa fa-cogs"></i>ទំនិញដែលត្រូវចុះកិច្ចសន្យា
-	                                          </div>
-	                                        <div class="tools">
-	                                            <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
-	                                        </div>
-	                                        <label class="control-label col-md-4" style="margin-top:10px;float:right">
-	                                          <lable class="col-md-13">
-												    <a href="<?php echo $url_back;?>" class="btn btn-bg blue  pull-right">
-														<i class="fa fa-back"></i>&nbsp;<?php echo $tr->translate("GO_BACK");?>
-													</a>
-												 </lable>
-	                                          </label>
-	                                    </div>
-	                                    <div class="portlet-body">
-	                                        <div class="table-responsive">
-	                                        	<label class="control-label col-md-12" style="margin-left: -4px;">
-				                                    <div style="background: #cccccc;padding: 10px;">
-											    		<input id="product_id" />
-										    		</div>
-								    			
-								    				<div style="padding: 10px;">
-									    				<input type="hidden" name="identity" id="identity" />
-									    				<input type="hidden" name="identity_term" id="identity_term" />
-									    				<input type="hidden" name="branch_id" id="branch_id" value="1" />
-									    				<input type="hidden" name="invoice" id="invoice" value="<?php echo $this->invoice;?>" /> 
-								    				</div>
-								    			</label>
-		                                        <table id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
-													<thead>
-														<tr id="head-title" class="table table-bordered" align="right" style="">
-															<th class="aligncenter">#</th>
-															<th class="aligncenter">ឈ្មោះមុខទំនិញ</th>
-															<th class="aligncenter">ឯកត្តា</th>
-															<th class="aligncenter">បរិមាណ</th>
-															<th class="aligncenter">តម្លៃលក់</th>
-															<th class="aligncenter">បញ្ចុះតម្លៃ</th>
-															<th class="aligncenter">សរុប</th>
-															<th class="aligncenter">លុប</th>
-														</tr>
-														<tr>
-															<td colspan="11" id="lbl_noproduct" align="center">មិនមាន ទំនិញ ក្នុងកន្រ្តក</td>
-														</tr>
-													</thead>
-												</table><br />
-												 <div style="clear:both;"></div>
-												  <label class="control-label col-md-12" >
-												  	<div>Term Condition</div>
-												  	<div style="border:1px solid #ccc;">
-												 	<textarea style="height: 120px;width:100%;" name="term_condition" id="term_condition" data-dojo-type="dijit/Editor"></textarea>
-													</div>
-												</label>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+			<form method="post" action="<?php ?>">
+				<div class="form-group">
+		    		<input id="product_id" />
+    				<input type="hidden" name="identity" id="identity" />
+    				<input type="hidden" name="identity_term" id="identity_term" />
+    				<input type="hidden" name="branch_id" id="branch_id" value="1" />
+    				<input type="hidden" name="invoice" id="invoice" value="<?php echo $this->invoice;?>" /> 
+			    </div>
+			    <div class="form-group">
+			    	<table id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
+						<thead>
+							<tr id="head-title" class="table table-bordered" align="right" style="">
+								<th class="aligncenter">#</th>
+								<th class="aligncenter">ឈ្មោះមុខទំនិញ</th>
+								<th class="aligncenter">ឯកត្តា</th>
+								<th class="aligncenter">បរិមាណ</th>
+								<th class="aligncenter">តម្លៃលក់</th>
+								<th class="aligncenter">បញ្ចុះតម្លៃ</th>
+								<th class="aligncenter">សរុប</th>
+								<th class="aligncenter">លុប</th>
+							</tr>
+							<tr>
+								<td colspan="11" id="lbl_noproduct" align="center">មិនមាន ទំនិញ ក្នុងកន្រ្តក</td>
+							</tr>
+						</thead>
+					</table>
+					<div class="form-group" >
+						Term Condition
+				 		<textarea style="height: 120px;width:100%;" name="term_condition" id="term_condition" data-dojo-type="dijit/Editor"></textarea>
+					</div>
 	                                        </div>
 	                                    </div>
 	                                     <div style="clear:both;"></div>
@@ -200,9 +174,9 @@ white-space: nowrap;font-size: 14px;line-height:33px;}
 						<tr>
 							<td width="40%" valign="top" align="center">
 								<img style="height:45px" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.jpg'?>"><br />
-								<div style="font-size: 10px;font-family:'Khmer MEF2';text-align: center;width:100%;"><?php echo $tr->translate("COMPANY_CUSTOMER"); ?></div>
+								<div style="font-size: 10px;font-family:'Khmer OS Muol Light';text-align: center;width:100%;"><?php echo $tr->translate("COMPANY_CUSTOMER"); ?></div>
 							</td>
-							<td width="20%" align="center" valign="top" style=""><div style="font-size: 14px;font-family:'Khmer MEF2';">វិក្កយបត្រ</div>INVOICE
+							<td width="20%" align="center" valign="top" style=""><div style="font-size: 14px;font-family:'Khmer OS Muol Light';">វិក្កយបត្រ</div>INVOICE
 							</td>
 							<td width="40%" valign="top">
 								<div style="white-space: nowrap;"><?php echo $tr->translate("ADDRESS_COMPANY"); ?></div>

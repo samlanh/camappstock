@@ -527,7 +527,7 @@ class Application_Form_FrmGlobal
 				<td width="65%" align="center" valign="top" style=""><div ></div>
 				<table width="100%" style="line-height:16px;">
 					<tr>
-						<td colspan="2" style="line-height:20px;font-size: 14px;font-family:Khmer MEF2;">'.$tr->translate("COMPANY_CUSTOMER").'</td>
+						<td colspan="2" style="line-height:20px;font-size: 14px;font-family:Khmer OS Muol Light;">'.$tr->translate("COMPANY_CUSTOMER").'</td>
 					</tr>
 					<tr>
 						<td colspan="2" style="font-size: 12px;font-family:khmer os battambang;white-space:nowrap;">'.$tr->translate("ADDRESS_COMPANY").'</td>
@@ -549,7 +549,7 @@ class Application_Form_FrmGlobal
 	}
 	function frmCustomerFooter(){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$str='<table width="100%" border="0" style="font-size: 12px;font-family:Khmer MEF2;white-space:nowrap;border-collapse:collapse;font-size:12px;line-height:16px;">	
+		$str='<table width="100%" border="0" style="font-size: 12px;font-family:Khmer OS Muol Light;white-space:nowrap;border-collapse:collapse;font-size:12px;line-height:16px;">	
 				<tbody><tr>
 					<td width="25%" align="center">អតិថិជន</td>
 					<td width="25%" align="center"></td>

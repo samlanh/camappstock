@@ -164,11 +164,11 @@ class Application_Form_Frmsearch extends Zend_Form
 		$str='<table align="center" width="100%">
 			   <tbody>
 			   	<tr style="font-size: 14px;">
-			        <td style="width:20%;text-align:center;font-family:Khmer MEF2">យល់ព្រមដោយ</td>
+			        <td style="width:20%;text-align:center;font-family:Khmer OS Muol Light">យល់ព្រមដោយ</td>
 			        <td></td>
-			        <td style="width:20%;text-align:center; font-family:Khmer MEF2">ត្រួតពិនិត្យដោយ</td>
+			        <td style="width:20%;text-align:center; font-family:Khmer OS Muol Light">ត្រួតពិនិត្យដោយ</td>
 			        <td></td>
-			        <td style="width:20%;text-align:center;font-family:Khmer MEF2">រៀបចំដោយ</td>
+			        <td style="width:20%;text-align:center;font-family:Khmer OS Muol Light">រៀបចំដោយ</td>
 			   </tr>
 			</tbody>
 		</table>';

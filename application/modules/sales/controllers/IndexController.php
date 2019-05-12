@@ -83,10 +83,10 @@ class Sales_IndexController extends Zend_Controller_Action
 		$this->view->term_opt = $db->getAllTermCondition(1);
 		$this->view->sale_term_defual = $db->getAllTermCondition(null,2,1);
 		
-		$formpopup = new Sales_Form_FrmCustomer(null);
-		$formpopup = $formpopup->Formcustomer(null);
-		Application_Model_Decorator::removeAllDecorator($formpopup);
-		$this->view->form_customer = $formpopup;
+// 		$formpopup = new Sales_Form_FrmCustomer(null);
+// 		$formpopup = $formpopup->Formcustomer(null);
+// 		Application_Model_Decorator::removeAllDecorator($formpopup);
+// 		$this->view->form_customer = $formpopup;
 		
 		$this->view->userinfo = $this->GetuserInfoAction();
 	}

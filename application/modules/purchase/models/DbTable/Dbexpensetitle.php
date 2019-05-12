@@ -12,6 +12,7 @@ class Purchase_Model_DbTable_Dbexpensetitle extends Zend_Db_Table_Abstract
 		$arr = array(
 				'title'		=> $data["title"],
 				'title_en'	=> $data["name_en"],
+				'parent_id'	=> $data["parent"],
 				'status'	=> 1,
 				'date'		=> date("Y-m-d"),
 				'user_id'	=> $this->getUserId()
@@ -23,6 +24,7 @@ class Purchase_Model_DbTable_Dbexpensetitle extends Zend_Db_Table_Abstract
 		$arr = array(
 				'title'	=>	$data["title"],
 				'title_en'	=>	$data["name_en"],
+				'parent_id'	=> $data["parent"],
 				'status'		=>	$data["status"],
 				'date'		=>	date("Y-m-d"),
 				'user_id'=>$this->getUserId()
@@ -35,12 +37,34 @@ class Purchase_Model_DbTable_Dbexpensetitle extends Zend_Db_Table_Abstract
 		$sql = "SELECT 
 				  t.id,
 				  t.title,
-				   t.title_en,
+				  t.title_en,
+				  (SELECT title FROM tb_expensetitle WHERE tb_expensetitle.id = t.parent_id LIMIT 1) AS parent_name,
 				  t.status	  
 				FROM
 				  tb_expensetitle AS t
-			WHERE title!='' OR title_en!=''	ORDER BY id desc ";
+			WHERE title!='' OR title_en!=''	ORDER BY t.parent_id ";
 		return $db->fetchAll($sql);
+	}
+	public function getParentCateExpense($cate_id='',$parent = 0, $spacing = '', $cate_tree_array = ''){
+		$db=$this->getAdapter();
+		if (!is_array($cate_tree_array)){
+			$cate_tree_array = array();
+		}
+		$sql = " SELECT id , title as name from tb_expensetitle where status=1 AND `parent_id` = $parent ";
+		if (!empty($cate_id)){
+			$sql.=" AND id != $cate_id";
+		}
+		$query = $db->fetchAll($sql);
+		$rowCount = count($query);
+	
+		$id='';
+		if ($rowCount > 0) {
+			foreach ($query as $row){
+				$cate_tree_array[] = array("id" => $row['id'], "name" => $spacing . $row['name']);
+				$cate_tree_array = $this->getParentCateExpense($cate_id,$row['id'], $spacing . ' - ', $cate_tree_array);
+			}
+		}
+		return $cate_tree_array;
 	}
 	public function getTermById($id){
 		$db = $this->getAdapter();

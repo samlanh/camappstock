@@ -30,8 +30,8 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		                	<td width="20%" valign="top"><!--<img src="<?php //echo $this->baseUrl();?>/images/logo.jpg" height="55px"> --></td>
 		                	<td width="60%" valign="top">
 		                		<ul>
-		                			<li style="text-align:center; font-size:18px; font-family:'Khmer MEF2'"><?php echo $this->product[0]['branch_code'];?></li>
-		                			<li style="text-align:center; font-size:13px; font-family:'Khmer MEF2'"><?php echo $tr->translate("QUOTATION_APPROVED");?></li>
+		                			<li style="text-align:center; font-size:18px; font-family:'Khmer OS Muol Light'"><?php echo $this->product[0]['branch_code'];?></li>
+		                			<li style="text-align:center; font-size:13px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("QUOTATION_APPROVED");?></li>
 		                		</ul>
 		                	</td>
 		                    <td width="20%"></td>
@@ -202,7 +202,7 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 										<h4><b>សម្គាល់ពី បុគ្គលិកផ្នែកលក់</b></h4>
 									<?php echo ($this->product[0]['remark']);?>
 									</td>
-							        <td style="width:20%;font-family:'Khmer MEF2';white-space: nowrap;">
+							        <td style="width:20%;font-family:'Khmer OS Muol Light';white-space: nowrap;">
 									<input type="hidden" name="id" id="id" value="<?php echo $this->product[0]['id'];?>" />
 							        <select name="approved_name" id="approved_name" class="form-control select2me">
 							        	<option value="1" <?php if($this->product[0]['is_approved']==1)echo"selected"; ?>>Approved</option>
@@ -212,7 +212,7 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 							   </tr>
 							   <tr style="font-size: 11px; height: 75px;">
 							       
-							        <td valign="bottom" style="width:50%;text-align:center; font-family:'Khmer MEF2';white-space: nowrap;"><textarea name="app_remark" id="app_remark" class="form-control" rows="3" cols="80" placeHolder="Approval Comment Here"><?php echo $this->product[0]['approval_note'];?></textarea></td>
+							        <td valign="bottom" style="width:50%;text-align:center; font-family:'Khmer OS Muol Light';white-space: nowrap;"><textarea name="app_remark" id="app_remark" class="form-control" rows="3" cols="80" placeHolder="Approval Comment Here"><?php echo $this->product[0]['approval_note'];?></textarea></td>
 							       
 							   </tr>
 							   <tr style="font-size: 11px;">
