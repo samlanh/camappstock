@@ -13,7 +13,7 @@ public function init()
     }
 	function indexAction(){
 		try{
-		$db = new Product_Model_DbTable_DbTransfer();
+		$db = new Product_Model_DbTable_DbRequesttransfer();
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
     	}else{

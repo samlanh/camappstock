@@ -1,10 +1,9 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$url_cancel =  $this->url(array('module'=>'product','controller'=>'transfer','action'=>'index'));
 	$url_getProduct =  $this->url(array('module'=>'product','controller'=>'adjust','action'=>'getproduct'));
 	$formFilter = $this->formFilter;
 ?>
-<title><?php echo $tr->translate("TRANSFER_STOCK");?></title>
+<title><?php echo $tr->translate("ADD_NEW_TRANSFER");?></title>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content">
 		<div class="card-box">
@@ -123,7 +122,12 @@ var index=0;
 col=0;
 function addNew(){
 	id = dijit.byId("pro_name").get('value');
+	if(id==''){
+		return false;
+	}
+	product_label = dijit.byId("pro_name").attr('displayedValue');
 	branch_id = dijit.byId("from_loc").get('value');	
+	
 	if(branch_id==''){return false;}
 	index++;
 	$.ajax({
@@ -145,7 +149,7 @@ function addNew(){
 			data = $.parseJSON(data);
 			col++;
 			template='<td>'+index+'</td>';
-			template+='<td style="white-space: nowrap;">'+data.item_name+'<input type="hidden" id="pro_id_'+index+'" name="pro_id_'+index+'" value="'+id+'" </td>';
+			template+='<td style="white-space: nowrap;">'+product_label+'<input type="hidden" id="pro_id_'+index+'" name="pro_id_'+index+'" value="'+id+'" </td>';
 			template+='<td style="width:90px;"><input class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" type="text" name="qty_'+index+'" id="qty_'+index+'" value="'+data.qty+'" /></td>';
 			template+='<td style="width:90px;"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" required="true" id="qty_tran_'+index+'" onKeyup="checkQTY('+index+')" name="qty_tran_'+index+'" value="1" ></td>'; 
 			template+='<td><input class="fullside" dojoType="dijit.form.TextBox" type="text" id="remark_'+index+'" name="remark_'+index+'"></td>';
@@ -174,14 +178,6 @@ function checkQTY(index){
 	if(qty_tran>qty){
 		alert("This Product is remain "+qty+" Only");
 		$('#qty_tran_'+index).val(qty)
-	}
-}
-function transferType(){
-	var type= $('#type').val();
-	if(type==1){
-		document.getElementById('lb_br').innerHTML = "From ";
-	}else if(type==2){
-		document.getElementById('lb_br').innerHTML = "To ";
 	}
 }
 function deleteRecord(index,type) {

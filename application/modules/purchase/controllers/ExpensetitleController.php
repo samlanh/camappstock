@@ -13,7 +13,7 @@ class Purchase_ExpensetitleController extends Zend_Controller_Action
 			$glClass = new Application_Model_GlobalClass();
 			$rows = $glClass->getImgStatus($rows, BASE_URL, true);
 			$list = new Application_Form_Frmlist();
-			$columns=array("TITLE","NAME_ENTITLE","PARENTS","STATUS");
+			$columns=array("TITLE","NAME_ENTITLE","PARENT","STATUS");
 			$link=array(
 					'module'=>'purchase','controller'=>'expensetitle','action'=>'edit',
 			);

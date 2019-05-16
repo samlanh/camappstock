@@ -48,7 +48,7 @@ class Product_Form_FrmTransfer extends Zend_Form
 				'class'=>'fullside',
     	));
 		
-		$opt = array(''=>$tr->translate("SELECT BRANCH"));
+		$opt = array(''=>$tr->translate("SELECT_BRANCH"));
 		if(!empty($rs_from_loc)){
     		foreach ($rs_from_loc as $rs){
     			$opt[$rs["id"]] = $rs["name"];
@@ -57,7 +57,7 @@ class Product_Form_FrmTransfer extends Zend_Form
     	$from_loc->setMultiOptions($opt);
 		
     	
-    	$opt = array(''=>$tr->translate("SELECT BRANCH"));
+    	$opt = array(''=>$tr->translate("SELECT_BRANCH"));
     	$to_loc = new Zend_Form_Element_Select("to_loc");
     	$to_loc->setAttribs(array(
     			'dojoType'=>"dijit.form.FilteringSelect",
@@ -80,7 +80,7 @@ class Product_Form_FrmTransfer extends Zend_Form
 				'class'=>'fullside',
     			'onChange'=>'addNew();'
     	));
-    	$opt= array(''=>$tr->translate("SELECT PRODUCT"));
+    	$opt= array(''=>$tr->translate("SELECT_PRODUCT"));
 		$row_product = $db_stock->getProductName();
     	if(!empty($row_product)){
     		foreach ($row_product as $rs){
@@ -146,12 +146,20 @@ class Product_Form_FrmTransfer extends Zend_Form
 		$tran_num->setValue($db->getRequestTransferNo($result["branch_id"]));
     	
     	$date =date("Y-m-d");
-    	$tran_date = new Zend_Form_Element_Text('tran_date');
+    	$tran_date = new Zend_Form_Element_Text('date_request');
     	$tran_date->setValue($date);
     	$tran_date->setAttribs(array(
     			'dojoType'=>"dijit.form.DateTextBox",
 				'class'=>'fullside',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+    			'required'=>'true'));
+    	
+    	$date_in = new Zend_Form_Element_Text('date_in');
+    	$date_in->setValue($date);
+    	$date_in->setAttribs(array(
+    			'dojoType'=>"dijit.form.DateTextBox",
+    			'class'=>'fullside',
+    			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
     			'required'=>'true'));
     	
     	$remark = new Zend_Form_Element_Textarea("remark");
@@ -170,7 +178,7 @@ class Product_Form_FrmTransfer extends Zend_Form
 				'onChange'=>'getRequestNo()'
     	));
 		
-		$opt = array(''=>$tr->translate("SELECT BRANCH"));
+		$opt = array(''=>$tr->translate("SELECT_BRANCH"));
 		if(!empty($rs_from_loc)){
     		foreach ($rs_from_loc as $rs){
     			$opt[$rs["id"]] = $rs["name"];
@@ -179,7 +187,7 @@ class Product_Form_FrmTransfer extends Zend_Form
     	$from_loc->setMultiOptions($opt);
 		$from_loc->setValue($result["branch_id"]);
     	
-    	$opt = array(''=>$tr->translate("SELECT BRANCH"));
+    	$opt = array(''=>$tr->translate("SELECT_BRANCH"));
     	$to_loc = new Zend_Form_Element_Select("to_loc");
     	$to_loc->setAttribs(array(
     			'dojoType'=>"dijit.form.FilteringSelect",
@@ -202,7 +210,7 @@ class Product_Form_FrmTransfer extends Zend_Form
 				'class'=>'fullside',
     			'onChange'=>'addNew();'
     	));
-    	$opt= array(''=>$tr->translate("SELECT PRODUCT"));
+    	$opt= array(''=>$tr->translate("SELECT_PRODUCT"));
 		$row_product=$db_stock->getProductName();
     	if(!empty($row_product)){
     		foreach ($row_product as $rs){
@@ -235,13 +243,14 @@ class Product_Form_FrmTransfer extends Zend_Form
     	
     	if($data != null) {
     		$tran_num->setValue($data["re_no"]);
-    		$tran_date->setValue($data["re_date"]);
+    		$tran_date->setValue($data["date_request"]);
+    		$date_in->setValue($data["date_in"]);
     		$remark->setValue($data["remark"]);
 			$from_loc->setValue($data["cur_location"]);
     		$to_loc->setValue($data["tran_location"]);
     		$status->setValue($data["status"]);
     	}
-    	$this->addElements(array($status,$type,$pro_name,$tran_num,$tran_date,$remark,$from_loc,$to_loc));
+    	$this->addElements(array($date_in,$status,$type,$pro_name,$tran_num,$tran_date,$remark,$from_loc,$to_loc));
     	return $this;
 	}
 	
@@ -309,7 +318,7 @@ class Product_Form_FrmTransfer extends Zend_Form
     			'readonly'=>'readonly'
     	));
 		
-		$opt = array(''=>$tr->translate("SELECT BRANCH"));
+		$opt = array(''=>$tr->translate("SELECT_BRANCH"));
 		if(!empty($rs_from_loc)){
     		foreach ($rs_from_loc as $rs){
     			$opt[$rs["id"]] = $rs["name"];
@@ -318,7 +327,7 @@ class Product_Form_FrmTransfer extends Zend_Form
     	$from_loc->setMultiOptions($opt);
 		$from_loc->setValue($result["branch_id"]);
 		
-		$opt = array(''=>$tr->translate("SELECT BRANCH"));
+		$opt = array(''=>$tr->translate("SELECT_BRANCH"));
 		if(!empty($rs_loc)){
     		foreach ($rs_loc as $rs){
     			$opt[$rs["id"]] = $rs["name"];
@@ -326,7 +335,7 @@ class Product_Form_FrmTransfer extends Zend_Form
     	}
 		$from_loc->setMultiOptions($opt);
     	
-    	$opt = array(''=>$tr->translate("SELECT BRANCH"));
+    	$opt = array(''=>$tr->translate("SELECT_BRANCH"));
     	$to_loc = new Zend_Form_Element_Select("to_loc");
     	$to_loc->setAttribs(array(
     			'dojoType'=>"dijit.form.FilteringSelect",
@@ -350,7 +359,7 @@ class Product_Form_FrmTransfer extends Zend_Form
 				'class'=>'fullside',
     			'onChange'=>'addNew();'
     	));
-    	$opt= array(''=>$tr->translate("SELECT PRODUCT"));
+    	$opt= array(''=>$tr->translate("SELECT_PRODUCT"));
 		$row_product=$db_stock->getProductName();
     	if(!empty($row_product)){
     		foreach ($row_product as $rs){
@@ -398,7 +407,8 @@ class Product_Form_FrmTransfer extends Zend_Form
 			}else{
     		$tran_num->setValue($db->getTransferNo($data["tran_location"]));
 			}
-			$re_date->setValue(date("Y-m-d",strtotime($data["re_date"])));
+			$re_date->setValue(date("Y-m-d",strtotime($data["date_request"])));
+			
     		$remark->setValue($data["remark"]);
     		$to_loc->setValue($data["tran_location"]);
 			$from_loc->setValue($data["cur_location"]);
@@ -466,7 +476,7 @@ class Product_Form_FrmTransfer extends Zend_Form
 				'onChange'=>'gettransferNo()'
     	));
 		
-		$opt = array(''=>$tr->translate("SELECT BRANCH"));
+		$opt = array(''=>$tr->translate("SELECT_BRANCH"));
 		if(!empty($rs_from_loc)){
     		foreach ($rs_from_loc as $rs){
     			$opt[$rs["id"]] = $rs["name"];
@@ -475,7 +485,7 @@ class Product_Form_FrmTransfer extends Zend_Form
     	$from_loc->setMultiOptions($opt);
 		$from_loc->setValue($result["branch_id"]);
 		
-		$opt = array(''=>$tr->translate("SELECT BRANCH"));
+		$opt = array(''=>$tr->translate("SELECT_BRANCH"));
 		if(!empty($rs_loc)){
     		foreach ($rs_loc as $rs){
     			$opt[$rs["id"]] = $rs["name"];
@@ -483,7 +493,7 @@ class Product_Form_FrmTransfer extends Zend_Form
     	}
 		$from_loc->setMultiOptions($opt);
     	
-    	$opt = array(''=>$tr->translate("SELECT BRANCH"));
+    	$opt = array(''=>$tr->translate("SELECT_BRANCH"));
     	$to_loc = new Zend_Form_Element_Select("to_loc");
     	$to_loc->setAttribs(array(
     			'dojoType'=>"dijit.form.FilteringSelect",
@@ -506,7 +516,7 @@ class Product_Form_FrmTransfer extends Zend_Form
 				'class'=>'fullside',
     			'onChange'=>'addNew();'
     	));
-    	$opt= array(''=>$tr->translate("SELECT PRODUCT"));
+    	$opt= array(''=>$tr->translate("SELECT_PRODUCT"));
 		$row_product=$db_stock->getProductName();
     	if(!empty($row_product)){
     		foreach ($row_product as $rs){
@@ -618,7 +628,7 @@ class Product_Form_FrmTransfer extends Zend_Form
 				'onChange'=>'gettransferNo()'
     	));
 		
-		$opt = array(''=>$tr->translate("SELECT BRANCH"));
+		$opt = array(''=>$tr->translate("SELECT_BRANCH"));
 		if(!empty($rs_from_loc)){
     		foreach ($rs_from_loc as $rs){
     			$opt[$rs["id"]] = $rs["name"];
@@ -627,7 +637,7 @@ class Product_Form_FrmTransfer extends Zend_Form
     	$from_loc->setMultiOptions($opt);
 		$from_loc->setValue($result["branch_id"]);
 		
-		$opt = array(''=>$tr->translate("SELECT BRANCH"));
+		$opt = array(''=>$tr->translate("SELECT_BRANCH"));
 		if(!empty($rs_loc)){
     		foreach ($rs_loc as $rs){
     			$opt[$rs["id"]] = $rs["name"];
@@ -635,7 +645,7 @@ class Product_Form_FrmTransfer extends Zend_Form
     	}
 		$from_loc->setMultiOptions($opt);
     	
-    	$opt = array(''=>$tr->translate("SELECT BRANCH"));
+    	$opt = array(''=>$tr->translate("SELECT_BRANCH"));
     	$to_loc = new Zend_Form_Element_Select("to_loc");
     	$to_loc->setAttribs(array(
     			'dojoType'=>"dijit.form.FilteringSelect",
@@ -658,7 +668,7 @@ class Product_Form_FrmTransfer extends Zend_Form
 				'class'=>'fullside',
     			'onChange'=>'addNew();'
     	));
-    	$opt= array(''=>$tr->translate("SELECT PRODUCT"));
+    	$opt= array(''=>$tr->translate("SELECT_PRODUCT"));
 		$row_product=$db_stock->getProductName();
     	if(!empty($row_product)){
     		foreach ($row_product as $rs){
@@ -781,7 +791,7 @@ class Product_Form_FrmTransfer extends Zend_Form
 		$status->setMultiOptions($opt);
 		$status->setValue($request->getParam("status"));
 		
-		$opt = array('-1'=>$tr->translate("SELECT BRANCH"));
+		$opt = array('-1'=>$tr->translate("SELECT_BRANCH"));
 		$to_loc = new Zend_Form_Element_Select("branch");
 		$to_loc->setAttribs(array(
 				'dojoType'=>"dijit.form.FilteringSelect",

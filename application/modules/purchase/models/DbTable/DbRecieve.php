@@ -114,12 +114,10 @@ class Purchase_Model_DbTable_DbRecieve extends Zend_Db_Table_Abstract
 		$db->beginTransaction();
 		$user = $this->GetuserInfo();
 		$GetUserId = $user['user_id'];
-		//print_r($data);
 		
 		try{
 			$identity = $data["identity"];
 			if($identity!=""){
-				
 				$orderdata = array(
 					'purchase_id'		=>	$data["pu_code"],
 					"vendor_id"      	=> 	$data['vendor'],
@@ -129,20 +127,16 @@ class Purchase_Model_DbTable_DbRecieve extends Zend_Db_Table_Abstract
 					"date_in"     		=> 	$data['date_in'],
 					"purchase_status"   => 	1,
 					"payment_method" 	=> 	$data['payment_name'],
-					"currency_id"    	=> 	$data['currency'],
+					"currency_id"    	=> 	1,
 					"remark"         	=> 	$data['remark'],
 					"all_total"      	=> 	$data['totalAmoun'],
-					//"all_total_after"   => 	$data['totalAmoun_after'],
 					"tax"				=>	$data["total_tax"],
 					"discount_value" 	=> 	$data['dis_value'],
 					"discount_real"  	=> 	$data['global_disc'],
 					"net_total"      	=> 	$data['all_total'],
-					//"net_total_after"   => 	$data['all_total_after'],
 					"paid"           	=> 	$data['paid'],
 					"balance"        	=> 	$data['remain'],
-					//"balance_after"		=>	$data["remain_after"],
 					"user_mod"       	=> 	$GetUserId,
-					//"date"      		=> 	$data["date_recieve"],
 					"date"				=>	date("Y-m-d"),
 				);
 				
@@ -152,7 +146,6 @@ class Purchase_Model_DbTable_DbRecieve extends Zend_Db_Table_Abstract
 				$ids=explode(',',$data['identity']);
 				$locationid=$data['branch'];
 				foreach ($ids as $i){
-					//calcualte cost average
 					$rsproduct = $this->getProductCostAndQty($data['item_id_'.$i]);
 					$cost_avg = (($rsproduct['qty']*$rsproduct['price'])+$data['cost_price'.$i]) / ($rsproduct['qty']+$data['qty_recieve_'.$i]);
 					$array=array(
@@ -195,8 +188,7 @@ class Purchase_Model_DbTable_DbRecieve extends Zend_Db_Table_Abstract
 				
 			}else{
 			}
-			$arr = array(
-				
+			$arr = array(				
 				'purchase_status'	=>	5,
 			);
 			$where = "id=".$data["id"];
@@ -209,9 +201,7 @@ class Purchase_Model_DbTable_DbRecieve extends Zend_Db_Table_Abstract
 		}catch(Exception $e){
 			$db->rollBack();
 			$err =$e->getMessage();
-			
 			Application_Model_DbTable_DbUserLog::writeMessageError($err);	
-			echo $err;exit();			
 		}
 	}
 	

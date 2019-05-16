@@ -13,7 +13,7 @@ public function init()
     }
 	function indexAction(){
 		try{
-			$db = new Product_Model_DbTable_DbTransfer();
+			$db = new Product_Model_DbTable_DbRequesttransfer();
 	    	if($this->getRequest()->isPost()){
 	    		$data = $this->getRequest()->getPost();
 	    	}else{
@@ -26,7 +26,7 @@ public function init()
 	    		);
 	    	}
 	    	$rows = $db->getRequestTransfer($data);
-	    	$columns=array("TRANSFER_NUM","REQUET_TO_FROM","REQUET_TO_BRANCH","TRANSFER_DATE","STATUS","PEDDING","USER","STATUS");
+	    	$columns=array("TRANSFER_NUM","REQUEST_DATE","DATE_IN","REQUET_TO_FROM","REQUET_TO_BRANCH","STATUS","PEDDING","USER","STATUS");
 	    	$link=array(
 	    			'module'=>'product','controller'=>'reqtransfer','action'=>'edit',
 	    	);
@@ -44,7 +44,7 @@ public function init()
 			if($this->getRequest()->isPost()){ 
 				try{
 					$post = $this->getRequest()->getPost();
-					$db = new Product_Model_DbTable_DbTransfer();
+					$db = new Product_Model_DbTable_DbRequesttransfer();
 					$db->addRequest($post);
 					Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				  }catch (Exception $e){
@@ -59,7 +59,7 @@ public function init()
 	}
 	function editAction(){
 		$id = $this->getRequest()->getParam("id");
-		$db = new Product_Model_DbTable_DbTransfer();
+		$db = new Product_Model_DbTable_DbRequesttransfer();
 			if($this->getRequest()->isPost()){ 
 				try{
 					$post = $this->getRequest()->getPost();
@@ -84,9 +84,24 @@ public function init()
 		if(empty($id)){
 			$this->_redirect("/report/index/rpt-purchase");
 		}
-		$query = new Product_Model_DbTable_DbTransfer();
+		$query = new Product_Model_DbTable_DbRequesttransfer();
 		$rs = $query->getRequestPrint($id);
 		$this->view->product =  $query->getRequestPrint($id);	
 		$this->view->title_reprot = $query->getTitleReport($rs[0]["cur_location"]);
+	}
+	public function getrequestTransfernoAction(){
+		if($this->getRequest()->isPost()){
+			try {
+				$post=$this->getRequest()->getPost();
+				$db = new Product_Model_DbTable_DbTransfer();
+				$no =$db->getRequestTransferNo($post["id"]);
+				echo Zend_Json::encode($no);
+				exit();
+			}catch (Exception $e){
+				$result = array('err'=>$e->getMessage());
+				echo Zend_Json::encode($result);
+				exit();
+			}
+		}
 	}
 }

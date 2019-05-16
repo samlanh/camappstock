@@ -2,7 +2,7 @@
 
 class Product_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 {
-	protected $_name = "tb_sublocation";
+	//protected $_name = "tb_sublocation";
 	
 	public function getUserId(){
 		return Application_Model_DbTable_DbGlobal::GlobalgetUserId();
@@ -10,6 +10,7 @@ class Product_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	public function add($data){
 		$db = $this->getAdapter();
 		$part= PUBLIC_PATH.'/images/logo/';
+		$photo_name='';
 		$photo = $_FILES['logo'];
 		if($photo["name"]!=""){
 			$temp = explode(".", $photo["name"]);
@@ -42,6 +43,7 @@ class Product_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$part= PUBLIC_PATH.'/images/logo/';
 		$photo = $_FILES['logo'];
+		$photo_name='';
 		if($photo["name"]!=""){
 			$temp = explode(".", $photo["name"]);
 			$newfilename =str_replace(" ","",$data["branch_name"]).str_replace(" ","",$data["code"]). '.' . end($temp);

@@ -1,20 +1,10 @@
 <?php
 class Product_indexController extends Zend_Controller_Action
 {
-public function init()
+	public function init()
     {
-        /* Initialize action controller here */
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
-    protected function GetuserInfoAction(){
-    	$user_info = new Application_Model_DbTable_DbGetUserInfo();
-    	$result = $user_info->getUserInfo();
-    	return $result;
-    }
-	function updatecodeAction(){
-		$db = new Product_Model_DbTable_DbProduct();
-		$db->getProductCoded();
-	}
     public function indexAction()
     {
     	try{
@@ -64,7 +54,6 @@ public function init()
 			}
 			$rs_branch = $db->getBranch();
 			$this->view->branch = $rs_branch;
-			//$this->view->price_type = $db->getPriceType();
 			$formProduct = new Product_Form_FrmProduct();
 			$formStockAdd = $formProduct->add(null);
 			Application_Model_Decorator::removeAllDecorator($formStockAdd);
@@ -93,8 +82,6 @@ public function init()
 			Application_Form_FrmMessage::Sucessfull("NO_DATA", '/product/index');
 		}
 		$this->view->rs = $rs;
-		
-		
 		$formProduct = new Product_Form_FrmProduct();
 		$formStockAdd = $formProduct->add($rs);
 		Application_Model_Decorator::removeAllDecorator($formStockAdd);
@@ -176,47 +163,5 @@ public function init()
 				exit();
 			}
 		}
-	}
-	function outstockAction(){
-		$db = new Product_Model_DbTable_DbProduct();
-    	if($this->getRequest()->isPost()){
-    		$data = $this->getRequest()->getPost();
-    	}else{
-    		$data = array(
-    			'ad_search'	=>	'',
-    			'branch'	=>	'',
-    			'brand'		=>	'',
-    			'category'	=>	'',
-    			'model'		=>	'',
-    			'color'		=>	'',
-    			'size'		=>	'',
-    			'status'	=>	1
-    		);
-    	}
-    	$this->view->product = $db->getAllProductOutStock($data);
-    	$formFilter = new Product_Form_FrmProduct();
-    	$this->view->formFilter = $formFilter->productFilter();
-    	Application_Model_Decorator::removeAllDecorator($formFilter);
-	}
-	function lowstockAction(){
-		$db = new Product_Model_DbTable_DbProduct();
-    	if($this->getRequest()->isPost()){
-    		$data = $this->getRequest()->getPost();
-    	}else{
-    		$data = array(
-    			'ad_search'	=>	'',
-    			'branch'	=>	'',
-    			'brand'		=>	'',
-    			'category'	=>	'',
-    			'model'		=>	'',
-    			'color'		=>	'',
-    			'size'		=>	'',
-    			'status'	=>	1
-    		);
-    	}
-    	$this->view->product = $db->getAllProductLowStock($data);
-    	$formFilter = new Product_Form_FrmProduct();
-    	$this->view->formFilter = $formFilter->productFilter();
-    	Application_Model_Decorator::removeAllDecorator($formFilter);
 	}
 }

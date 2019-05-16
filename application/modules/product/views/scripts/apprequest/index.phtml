@@ -9,11 +9,14 @@
 		<div class="card-box">
 			<form dojoType="dijit.form.Form" id="frm" method="post" action="" enctype="multipart/form-data" autocomplete="off" >				
 				<div class="form-group">
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<?php echo $formFilter->getElement('avd_search');?>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<?php echo $formFilter->getElement('branch');?>
+					</div>
+					<div class="col-md-2">
+						<?php echo $formFilter->getElement('check_stat');?>
 					</div>
 					<div class="col-md-2">
 						<?php echo $formFilter->getElement('start_date');?>

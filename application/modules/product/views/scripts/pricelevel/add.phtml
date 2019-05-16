@@ -1,7 +1,6 @@
 <?php 
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$url_save=$this->url(array("module"=>"sales","controller"=>"saleagent","action"=>"add"));
-	$frm_agent = $this->form_agent;
+	$frm = $this->form_agent;
 ?>
 <title><?php echo $tr->translate("PRICE_LEVEL");?></title>
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -28,22 +27,22 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<label class="control-label col-md-4">
-							<?php echo $tr->translate("LEVEL_NAME");?>
+							<?php echo $tr->translate("PRICE_LEVEL");?>
 							</label>
 							<div class="col-md-8">
-									<?php echo $frm_agent->getElement("price_name");?>
+									<?php echo $frm->getElement("price_name");?>
 							</div>
 					</div>
 					<div class="form-group">
 						<label class="control-label col-md-4"><?php echo $tr->translate("REMARK");?></label>
 						<div class="col-md-8">
-							<?php echo $frm_agent->getElement("price_decs");?>
+							<?php echo $frm->getElement("price_decs");?>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="control-label col-md-4"><?php echo $tr->translate("STATUS");?></label>
 						<div class="col-md-8">
-							<?php echo $frm_agent->getElement("status");?>
+							<?php echo $frm->getElement("status");?>
 						</div>
 					</div>
 					<div class="form-group">

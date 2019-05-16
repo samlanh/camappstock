@@ -14,7 +14,7 @@ public function init()
    
 	function indexAction(){
 		try{
-			$db = new Product_Model_DbTable_DbTransfer();
+			$db = new Product_Model_DbTable_DbRequesttransfer();
 	    	if($this->getRequest()->isPost()){
 	    		$data = $this->getRequest()->getPost();
 	    	}else{
@@ -22,15 +22,17 @@ public function init()
 	    			'avd_search'	=>	'',
 	    			'start_date'	=>	date("d-m-Y"),
 	    			'end_date'		=>	date("d-m-Y"),
+	    			'check_stat'	=>-1,
 	    			'status'		=>	1,
 	    			'branch'		=>	-1,
 	    		);
 	    	}
 	    	$this->view->product = $db->getRequestTransfer($data);
 	    	$rows = $db->getRequestTransfer($data);
-	    	$columns=array("TRANSFER_NUM","REQUET_TO_FROM","REQUET_TO_BRANCH","TRANSFER_DATE","STATUS","PEDDING","USER","STATUS");
+	    	$columns=array("TRANSFER_NUM","REQUEST_DATE","DATE_IN","REQUET_TO_FROM","REQUET_TO_BRANCH","ORDER_STATUS","PEDDING","USER","STATUS");
+	    	
 	    	$link=array(
-	    			'module'=>'product','controller'=>'reqtransfer','action'=>'edit',
+	    		'module'=>'product','controller'=>'apprequest','action'=>'add',
 	    	);
 	    	$list = new Application_Form_Frmlist();
 	    	$this->view->list=$list->getCheckList(0, $columns, $rows,array('tran_no'=>$link,'re_tranlocation'=>$link,'to_tranlocation'=>$link,'date_tran'=>$link));
@@ -46,7 +48,7 @@ public function init()
 }
 	function addAction(){
 		$id = $this->getRequest()->getParam("id");
-		$db = new Product_Model_DbTable_DbTransfer();
+		$db = new Product_Model_DbTable_DbRequesttransfer();
 			if($this->getRequest()->isPost()){ 
 				try{
 					$post = $this->getRequest()->getPost();
@@ -60,7 +62,7 @@ public function init()
     				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				  }
 			}
-			$this->view->rs= $db->getReqTransferById($id);
+			$this->view->rs = $db->getReqTransferById($id);
 			$this->view->rs_detail = $db->getReqTransferDetail($id);
 	}
 }

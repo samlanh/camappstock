@@ -8,7 +8,7 @@ class Product_Form_FrmCategory extends Zend_Form
 	}
 	/////////////	Form Product		/////////////////
 	public function cat($data=null){
-		$db = new Category_Model_DbTable_DbCategory();
+		$db = new Product_Model_DbTable_DbCategory();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$name = new Zend_Form_Element_Text('cat_name');
 		$name->setAttribs(array(
@@ -64,7 +64,7 @@ class Product_Form_FrmCategory extends Zend_Form
 	
 	public function categoryFilter(){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$db = new Category_Model_DbTable_DbCategory();
+		$db = new Product_Model_DbTable_DbCategory();
 		$name = new Zend_Form_Element_Text('name');
 		$name->setAttribs(array(
 			'dojoType'=>"dijit.form.TextBox",

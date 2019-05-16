@@ -2,7 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$form=$this->form_sale;
 	$url_submit = $this->url(array('module'=>'sales','controller'=>'quoatation','action'=>'add'));
-	$url_new = $this->url(array('module'=>'sales','controller'=>'quoatation','action'=>'add'));
 ?>
 <title><?php echo $tr->translate("QUOTATION_ORDER");?></title>
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -57,16 +56,21 @@
 	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i><?php echo $tr->translate("CUSTOMER_INFO");?> 
 	                   </label>
 	                </div>
+	                <div class="form-group">
+						<div class="col-md-4"></div>
+						<div class="col-md-8">
+                           <input iconClass="dijitIconTask" type="button" label="<?php echo $tr->translate("ADD_NEW_CUSTOMER");?>" dojoType="dijit.form.Button" onclick="getcustomer();"/>
+						</div>
+					</div>
 					<div class="form-group">
 						<div class="col-md-4">
 							<?php echo $tr->translate("CUSTOMER_NAME");?>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-5">
 							<?php echo $form->getElement("customer_id");?>
 						</div>
-						<div class="col-md-2">
-                            <button type="button" onclick="popupcustomer();" class="btn green delete col-md-12 ">
-							</button>
+						<div class="col-md-3">
+                           <input iconClass="dijitIconUndo" type="button" label="Refresh" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
 						</div>
 					</div>
 					<div class="form-group">
@@ -187,7 +191,7 @@
 						</div>
 						<div class="col-md-2">
 							<button type="button" class="btn delete" style="width:100%; background:#65879A;margin-bottom:5px;">
-								<strong style="color:#fff;"><?php echo $tr->translate("SEACH_PRODUCT");?></strong>
+								<strong style="color:#fff;"><?php echo $tr->translate("SEARCH_PRODUCT");?></strong>
 							</button>
 						</div>
 					</div>
@@ -250,11 +254,30 @@
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
  <script>
- 
+ function getcustomer(){
+		window.open('<?php echo $this->baseUrl();?>/sales/customer/add?rightclick=true','_blank');
+	}
+ dojo.require("dojo.data.ItemFileWriteStore");
 $( document ).ready(function() {
 	getQuotenumber();
 	initListTermcondition();
 });
+<?php $url_add_customer =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'get-customer')); ?>
+function AllRefresh(){	
+	loadingBlock();
+	dojo.xhrPost({
+		url: "<?php echo $url_add_customer;?>",
+		handleAs:"json", 
+	    load: function(data) {
+			customer_store  = getDataStorefromJSON('id','name',data);
+			dijit.byId('customer_id').set('store',customer_store);  
+			HideloadingBlock(); 
+		},		
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
 function initListTermcondition() {
 	index1=0;
 	term_option = '<?php echo $this->term_opt; ?>';
@@ -310,8 +333,7 @@ function addRow(item_id) {
 	$('#table_row').append(tmp);
 	dojo.html.set(dojo.byId('row'+index5),template , {
 	     parseContent: true,
-	});
-	
+	});	
 	if($('#identity').val()!="") {
 		var identity = $('#identity').val();
 		$('#identity').val(identity+','+index5);
@@ -375,7 +397,6 @@ function getQtyById(item_id , index){//use
 							$("#qty"+index).val(total_qty.toFixed(3));
 							
 							$("#qty_perunit"+index).val(item_qty.qty_perunit);
-							//$('#cost_price_'+index).val(item_qty.price);
 							getProductPrice(item_id,index);
 						},
 						error:function(e){
@@ -401,7 +422,6 @@ function getProductPrice(product_id,recordid){
 				$("#oldprice_"+recordid).val(data.price);
 			},
 			error:function(e){
-				alert(e);
 			}
 	});
   }
@@ -410,14 +430,16 @@ function getItemOrder(){
 	customer_id=dijit.byId("customer_id").get('value');
 	if(customer_id==0 || customer_id=="" || customer_id==-1){
 		alert("Please Select Customer");
+		$("#add_item").val("");
 		dijit.byId("customer_id").focus();
-		return fale;
+		return false;
 	}
 	branch_id = dijit.byId("branch_id").get('value');
 	if(branch_id=='' || branch_id==-1){
 		alert("Please Select Branch");
+		$("#add_item").val("");
 		dijit.byId("branch_id").focus();
-		return fale;
+		return false;
 	}
 	
 	item_ids=dijit.byId("add_item").get('value');
@@ -426,7 +448,7 @@ function getItemOrder(){
 	}
 	addRow(item_ids);
 	//getProductPrice(item_ids);
-	//$("#add_item").val("");
+	$("#add_item").val("");
 }
 function getTermItem(){
 	termid=dijit.byId("term_item").get('value');
@@ -434,7 +456,6 @@ function getTermItem(){
 		return false;
 	}
 	addtermcondition(termid);
-	
 }
 var record_index= 1;
 function deleteRecord(index) {
@@ -445,7 +466,7 @@ function deleteRecord(index) {
 	}
 	var strings = arrays.join(',');
 	$('#identity').val(strings);
-	$("#row_order_"+index).remove();
+	$("#row"+index).remove();
 	netTotal();
 }
 function deleteTermRecord(termid){
@@ -486,17 +507,13 @@ function calculateDiscount(){//use
 			    $('#discount_type').val(0);
 				alltotal = $("#totalAmoun").val();
 				totalpayment = alltotal - discountValue;
-				$('#all_total').val(totalpayment);
-				
+				$('#all_total').val(totalpayment);				
 		}
 	}else{
 		alltotal = $("#totalAmoun").val();
 		totalpayment = alltotal - 0;
 		$('#all_total').val(totalpayment);
 	}
-}
-function CalcualteTax() {
-	$('#status').val();
 }
 function totalQty(index){
 	getQtyById(index);
@@ -542,7 +559,6 @@ function calculatePrice(index) {
 				discount = parseFloat(ds).toFixed(2);
 				after_discount = total - discount;
 			}else{
-				//discount=$('#dis_value'+index).val(0);
 				after_discount = total;
 			}
 			$('#total'+index).val(parseFloat(after_discount).toFixed(2));
@@ -551,15 +567,14 @@ function calculatePrice(index) {
 	}else{
 		$('#total'+index).val(parseFloat(total).toFixed(2));
 	}
-		netTotal();
+	netTotal();
 }
  var record_id = 1;
 <?php $url_getcustomerinfo =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'get-customerinfo')); ?>
 function getCustomerInfo(){
-	return false;
-	customer_id = $("#customer_id").val();
+	customer_id = dijit.byId("customer_id").get('value');
 	if(customer_id==-1){
-		$('#customerpopup').modal('show');
+		return false;
 	}else{
 		$("#credit_term").val(0);
 		$("#credit_limit").val(0);
@@ -591,62 +606,34 @@ function getCustomerInfo(){
 					var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
 					$("#currentcredit_term").val(diffDays);
 				},
-				error:function(){
+				error:function(e){
 				}
 			});
 	}
 }
-function popupcustomer(){
-	$('#customerpopup').modal('show');
-}
-<?php $url_add_customer =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'add-customer')); ?>
-function addNewCustomer(){
-	txt_contact_name = $("#txt_contact_name").val();
-	if(txt_contact_name==''){alert("សូមបញ្ជូលឈ្មោះអ្នកទំនាក់ទំនង !"); $("#txt_contact_name").focus();return false;} 
-	contact_phone = $("#contact_phone").val();
-	if(contact_phone==''){alert("សូមបញ្ជូលលេខទំនាក់ទំនង !"); $("#contact_phone").focus();return false;} 
-	txt_address = $("#txt_address").val();
-	if(txt_address==''){alert("សូមបញ្ជូលអាសយដ្ឋានរបស់អតិថិជន !"); $("#txt_address").focus();return false;} 
-	$.ajax({
-        url: "<?php echo $url_add_customer;?>",
-        type: "post",
-        data: $('#frmcustomer').serialize(),
-        success: function(data){
-            rs = $.parseJSON(data);
-             $('#customer_id').append($("<option></option>").attr("value",rs['cus_id']).attr("selected",true).text(txt_contact_name));                       
-             $("#customer_id").select2();
-			$('#customerpopup').modal('hide');
-			$('#frmcustomer').trigger("reset");
-        },
-        error:function(err){
-            alert("faile insert");
-           
-        }
-    });
-}
 function filterBranch(){
-	 getQuotenumber();
+ 	getQuotenumber();
 }
 <?php $url_code =  $this->url(array('module'=>'sales','controller'=>'quoatation','action'=>'getquoteno')); ?>
 function getQuotenumber(){
 	$("#txt_order").val("");
-				branch_id=$("#branch_id").val();
-				if(branch_id=="" || branch_id ==null || branch_id==-1){
-					return false;
-				}
-				else{
-				$.ajax({
-						url:"<?php echo $url_code;?>",
-						type:"post",
-						data:{'branch_id':branch_id},
-						success: function(data){
-							qo = $.parseJSON(data);
-							$("#txt_order").val(qo);
-						},
-						error:function(){
-						}
-					});
-				}	
+	branch_id=$("#branch_id").val();
+	if(branch_id=="" || branch_id ==null || branch_id==-1){
+		return false;
+	}
+	else{
+	$.ajax({
+			url:"<?php echo $url_code;?>",
+			type:"post",
+			data:{'branch_id':branch_id},
+			success: function(data){
+				qo = $.parseJSON(data);
+				$("#txt_order").val(qo);
+			},
+			error:function(){
+			}
+		});
+	}	
 }
 function calculateQtyWarning(index,type){//type=1 from main qty,2 from qty detail
 	current_so = parseFloat($("#qty"+index).val()).toFixed(2);
@@ -659,7 +646,6 @@ function calculateQtyWarning(index,type){//type=1 from main qty,2 from qty detai
             $("#qty"+index).val(current_qty);
             }
 			else{
-        	//$("#qty_per_unit_"+index).val(current_qty);
           }
 			user_access='<?php echo $this->userinfo['level'];?>';
 			if(user_access!=1){

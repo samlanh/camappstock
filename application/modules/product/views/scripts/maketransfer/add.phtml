@@ -29,49 +29,57 @@
 						return false;
 					}
 			</script>
-				<div class="form-body">	
+				<div class="col-md-4">	
 					<div class="form-group">
-						<label class="col-md-2 control-label"><?php echo $tr->translate("REQUET_TO_FROM");?></label>
-						<div class="col-md-4">
+						<div class="col-md-4"><?php echo $tr->translate("REQUET_TO_FROM");?></div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('from_loc');?>
 						</div>
-						
-						<label class="col-md-2 control-label"><?php echo $tr->translate("REQUET_TO_BRANCH");?></label>
-						<div class="col-md-4">
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"><?php echo $tr->translate("REQUET_TO_BRANCH");?></div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('to_loc');?>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-2 control-label"><?php echo $tr->translate("TRANSFER_NUM");?></label>
-						<div class="col-md-4">
+						<div class="col-md-4"><?php echo $tr->translate("TRANSFER_NUM");?></div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('tran_num');?>
 						</div>
-						<label class="col-md-2 control-label"><?php echo $tr->translate("REQUEST_NUM");?></label>
-						<div class="col-md-4">
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"><?php echo $tr->translate("REQUEST_NUM");?></div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('re_num');?>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-2 control-label"><?php echo $tr->translate("REQUEST_DATE");?></label>
-						<div class="col-md-4">
+						<div class="col-md-4"><?php echo $tr->translate("REQUEST_DATE");?></div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('re_date');?>
 						</div>
-						
-						<label class="col-md-2 control-label"><span id="lb_br"></span><?php echo $tr->translate("TRANSFER_DATE");?></label>
-						<div class="col-md-4">
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"><span id="lb_br"></span><?php echo $tr->translate("TRANSFER_DATE");?></div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('tran_date');?>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-2 control-label"><?php echo $tr->translate("REMARK");?></label>
-						<div class="col-md-4">
+						<div class="col-md-4"><?php echo $tr->translate("REMARK");?></div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('remark');?>
 						</div>	
-						<label class="col-md-2 control-label"><?php echo $tr->translate("STATUS");?></label>
-						<div class="col-md-4">
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"><?php echo $tr->translate("STATUS");?></div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('status');?>
 						</div>
 					</div>
+				</div>
+				<div class="col-md-8">
 					<div class="table-responsive">
 						<table class="table table-bordered">
 							<thead>
@@ -93,7 +101,7 @@
 				</div>
 				<div class="card-box">
 					<div class="border-top">
-						<div class="col-md-4"></div>
+						<div class="col-md-8"></div>
 						<div class="col-md-5" class='center'>
 							<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("SAVE_NEW")?>" dojoType="dijit.form.Button" 
 							iconClass="dijitEditorIcon dijitEditorIconSave" />

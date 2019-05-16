@@ -38,12 +38,19 @@ public function init()
 	public function addAction()
 	{
 		$session_stock = new Zend_Session_Namespace('stock');
-		if($this->getRequest()->isPost()) {
-			$data = $this->getRequest()->getPost();
-			$db = new Product_Model_DbTable_DbBranch();
-			$db->add($data);
-			Application_Form_FrmMessage::Sucessfull("INSER_SUCCESS");
-		}
+		
+			if($this->getRequest()->isPost()) {
+				try{
+					$data = $this->getRequest()->getPost();
+					$db = new Product_Model_DbTable_DbBranch();
+					$db->add($data);
+					Application_Form_FrmMessage::message("INSER_SUCCESS");
+				}catch (Exception $e){
+					Application_Form_FrmMessage::messageError("INSERT_ERROR");
+					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				}
+			}
+			
 		$formFilter = new Product_Form_FrmBranch();
 		$formAdd = $formFilter->branch();
 		$this->view->frmAdd = $formAdd;

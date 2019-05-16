@@ -34,8 +34,12 @@
 	 	 					dijit.byId('pro_name').focus();
 	   						return false;
      					}
+						loadingBlock();
+						return true;
+					}else{
+						return false;
 					}
-				</script>	
+				</script>
 				<div class="col-md-4">
 					<div class="form-group">
 						<div class="col-md-4"><?php echo $tr->translate("TRANSFER_NUM");?></div>
@@ -149,8 +153,7 @@ function oldRow(){
 		dojo.html.set(dojo.byId("row"+col),template , {
 		     parseContent: true,
 		});
-	<?php }}?>
-	
+	<?php }}?>	
 }
 function addNew(){
 	id = dijit.byId("pro_name").get('value');
@@ -206,14 +209,6 @@ function checkQTY(index){
 	if(qty_tran>qty){
 		alert("This Product is remain "+qty+" Only");
 		$('#qty_tran_'+index).val(qty)
-	}
-}
-function transferType(){
-	var type= $('#type').val();
-	if(type==1){
-		document.getElementById('lb_br').innerHTML = "From ";
-	}else if(type==2){
-		document.getElementById('lb_br').innerHTML = "To ";
 	}
 }
 function deleteRecord(index) {

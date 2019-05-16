@@ -8,7 +8,7 @@ class Product_Form_FrmBrand extends Zend_Form
 	}
 	/////////////	Form Product		/////////////////
 	public function Brand($data=null){
-		$db = new Brand_Model_DbTable_DbBrand();
+		$db = new Product_Model_DbTable_DbBrand();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$name = new Zend_Form_Element_Text('brand_name');
 		$name->setAttribs(array(
@@ -64,7 +64,7 @@ class Product_Form_FrmBrand extends Zend_Form
 	public function BrandFilter(){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$request=Zend_Controller_Front::getInstance()->getRequest();
-		$db = new Brand_Model_DbTable_DbBrand();
+		$db = new Product_Model_DbTable_DbBrand();
 		$name = new Zend_Form_Element_Text('name');
 		$name->setAttribs(array(
 				'dojoType'=>"dijit.form.TextBox",

@@ -24,13 +24,13 @@ class Application_Form_FrmMessage
 		         alert("'.$tr->translate($msg).'");						      
 		      </script>';
 	}	
-	public static function messageError($sms,$err)
+	public static function messageError($err)
 	{
 		Application_Model_DbTable_DbGlobal::writeMessageErr($err);
-		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		echo '<script language="javascript">
-		alert("'.$tr->translate("$sms").'");
-		</script>';
+		//$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		//echo '<script language="javascript">
+		//alert("'.$tr->translate("$sms").'");
+		//</script>';
 	} 
 	public static function redirector($url){
 		$base_url=Zend_Controller_Front::getInstance()->getBaseUrl();

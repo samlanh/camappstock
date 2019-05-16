@@ -330,7 +330,6 @@ function addPriceType(){
 	indexs++;
 	id_price = '<?php echo $rs["type_id"];?>';
 	inx_price = '<?php echo $key+1;?>';
-		//template='<tr id="row_price_<?php //echo $key+1;?>">';
 		template='<td><?php echo $key+1;?></td>';
 		template+='<td style="width:100px;"><?php echo $rs["name"];?><input type="hidden" id="price_type_<?php echo $key+1;?>" name="price_type_<?php echo $key+1;?>" value="'+id_price+'"</td>';
 		template+='<td><input dojoType="dijit.form.NumberTextBox" type="text" id="price_<?php echo $key+1;?>" name="price_<?php echo $key+1;?>" value="<?php echo $rs["price"];?>" class="form-control"></td>'; 

@@ -3,13 +3,13 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$formFilter = $this->frmAdd;
 ?>
-<title><?php echo $tr->translate("ADD_BRAND");?></title>
+<title><?php echo $tr->translate("ADD_NEW_BRAND");?></title>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content">
 		<div class="card-box">
             <div class="col-sm-12 border-botom">
 		    	<div class="col-sm-8 pd-0">
-		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_BRAND');?></h4>
+		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_NEW_BRAND');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -27,19 +27,19 @@
 				</script>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label class="col-md-4 "><?php echo $tr->translate("PARENT");?></label>
+						<div class="col-md-4 "><?php echo $tr->translate("PARENT");?></div>
 						<div class="col-md-8">
 							<?php echo $formFilter->getElement('parent');?>
 						</div>
 					</div>
 					<div class="form-group">	
-						<label class="col-md-4 "><?php echo $tr->translate("BRAND_NAME");?></label>
+						<div class="col-md-4 "><?php echo $tr->translate("BRAND_NAME");?></div>
 						<div class="col-md-8">
 							<?php echo $formFilter->getElement('brand_name');?>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-4 "><?php echo $tr->translate("REMARK");?></label>
+						<div class="col-md-4 "><?php echo $tr->translate("REMARK");?></div>
 						<div class="col-md-8">
 							<?php echo $formFilter->getElement('remark');?>
 						</div>

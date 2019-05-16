@@ -52,13 +52,22 @@
 								<?php echo $form->getElement('branch_id');?>
 							</div>
 						</div>
+						 <div class="form-group">
+							<div class="col-md-4"></div>
+							<div class="col-md-8">
+	                           <input iconClass="dijitIconTask" type="button" label="<?php echo $tr->translate("ADD_NEW_CUSTOMER");?>" dojoType="dijit.form.Button" onclick="getcustomer();"/>
+							</div>
+						</div>
 						<div class="form-group">
 							<div class="col-md-4">
 								<?php echo $tr->translate("CUSTOMER_NAME");?>
 							</div>
-							<div class="col-md-8">
+							<div class="col-md-5">
 								<?php echo $form->getElement("customer_id");?>
 								<?php echo $form->getElement("id");?>
+							</div>
+							<div class="col-md-3">
+	                           <input iconClass="dijitIconUndo" type="button" label="Refresh" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
 							</div>
 						</div>
 						<div class="form-group">
@@ -162,7 +171,7 @@
 							</div>
 							<div class="col-md-2">
 								<button type="button" class="btn delete" style="width:100%; background:#65879A;margin-bottom:5px;">
-									<strong style="color:#fff;"><?php echo $tr->translate("SEACH_PRODUCT");?></strong>
+									<strong style="color:#fff;"><?php echo $tr->translate("SEARCH_PRODUCT");?></strong>
 								</button>
 							</div>
 						</div>
@@ -219,57 +228,28 @@
 		</div>
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script>
-$('#frm').submit(function() {
-	customer_id=$("#customer_id").val();
-	if(customer_id==0 || customer_id=='' || customer_id==-1){
-		alert("សូមជ្រើសរើសអតិជន!");
-		$('#customer_id').select2('open');
-		return false;	
-	}
-	identity =$("#identity").val();
-	if(identity=='' || identity==-1){
-		alert("ទិន្នន័យមិនអាចរក្សាទុកបានទេ ។សូមត្រួតពិនិត្យមើលម្តងទៀត");
-		$('#add_item').select2('open');
-		return false;
-	}
-	
-	var r = confirm("\tសូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\t\n \tតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?\t");
-	if (r == true) {
-	    return true;
-	} else {
-	   return false;
-	}
-});
-function popupcustomer(){
-	$('#customerpopup').modal('show');
+function getcustomer(){
+	window.open('<?php echo $this->baseUrl();?>/sales/customer/add?rightclick=true','_blank');
 }
-<?php $url_add_customer =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'add-customer')); ?>
-function addNewCustomer(){
-	txt_contact_name = $("#txt_contact_name").val();
-	if(txt_contact_name==''){alert("សូមបញ្ជូលឈ្មោះអ្នកទំនាក់ទំនង !"); $("#txt_contact_name").focus();return false;} 
-	contact_phone = $("#contact_phone").val();
-	if(contact_phone==''){alert("សូមបញ្ជូលលេខទំនាក់ទំនង !"); $("#contact_phone").focus();return false;} 
-	txt_address = $("#txt_address").val();
-	if(txt_address==''){alert("សូមបញ្ជូលអាសយដ្ឋានរបស់អតិថិជន !"); $("#txt_address").focus();return false;} 
-	$.ajax({
-        url: "<?php echo $url_add_customer;?>",
-        type: "post",
-        data: $('#frmcustomer').serialize(),
-        success: function(data){
-            rs = $.parseJSON(data);
-             $('#customer_id').append($("<option></option>").attr("value",rs['cus_id']).attr("selected",true).text(txt_contact_name));                       
-             $("#customer_id").select2();
-			$('#customerpopup').modal('hide');
-			$('#frmcustomer').trigger("reset");
-        },
-        error:function(err){
-            alert("faile insert");
-           
-        }
-    });
-}
-
+dojo.require("dojo.data.ItemFileWriteStore");
+<?php $url_add_customer =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'get-customer')); ?>
+ function AllRefresh(){	
+ 	loadingBlock();
+ 	dojo.xhrPost({
+ 		url: "<?php echo $url_add_customer;?>",
+ 		handleAs:"json", 
+ 	    load: function(data) {
+ 			customer_store  = getDataStorefromJSON('id','name',data);
+ 			dijit.byId('customer_id').set('store',customer_store);  
+ 			HideloadingBlock(); 
+ 		},		
+ 		error: function(err) {
+ 		}
+ 	});
+ }
+ 
 var index5 = 0;num=0;
 var option5 = '<?php echo $this->items; ?>';
 var baseUrl = '<?php echo BASE_URL; ?>';
@@ -309,7 +289,6 @@ function addRow(item_id) {
 	} else {$('#identity').val(index5);}
 	$("#item_id_"+index5).val(item_id);
 	getQtyById(index5);
-	//getProductPrice(item_id,index5);
 	$("#paid").val(0);
 	$("#row_order_0").remove();
 	$("#frm").validationEngine();
@@ -362,19 +341,14 @@ function initList() {
 	$("#dis_value"+index5).val("<?php echo $r['disc_value'];if($r['disc_type']==1){echo '%';} ?>");
 	$("#discount_type"+index5).val("<?php echo $r['disc_type'];?>");
 	$("#cost_price_"+index5).val("<?php echo $r['cost_price'];?>");
-	
-	//getQtyById(index5);	
 	getQtyById(index5,1);
-
 	if($('#identity').val()!="") {
 		var identity = $('#identity').val();
 		$('#identity').val(identity+','+index5);
 	} else {$('#identity').val(index5);}
 	
 	$("#paid").val(0);
-	$("#row_order_0").remove();
-		<?php } }?>
-		$("#frm").validationEngine();
+	<?php } }?>
 }
 function initListTermcondition() {
 	index1=0;
@@ -440,15 +414,6 @@ function getQtyById(index,set=0){//use
 					qty=parseInt(qty);
 					$("#lblcurrent_qty"+index).val(qty+""+item_qty.measue_name+""+qty_unitlable);
 					$("#current_qty"+index).val(item_qty.qty);
-					
-					//main_qty =$("#qty_unit_"+index).val();
-					//detail_qty =  $("#qty_per_unit_"+index).val();
-					//total_qty = parseFloat(main_qty) + parseFloat(detail_qty/(item_qty.qty_perunit));
-					//$("#qty"+index).val(total_qty.toFixed(3));
-					//$("#qty_perunit"+index).val(item_qty.qty_perunit);
-	
-					//getProductPrice(item_id,index);
-
 				}else{
 					qty = item_qty.qty;
 					qtyall_detail = qty*(item_qty.qty_perunit);//eg;qty 1.5 and 1unit =24cans; =>1.5*24 =36cans.
@@ -464,12 +429,10 @@ function getQtyById(index,set=0){//use
 					$("#qty"+index).val(total_qty.toFixed(3));
 					$("#qty_perunit"+index).val(item_qty.qty_perunit);
 					$('#cost_price_'+index).val(item_qty.price);
-	
 					getProductPrice(item_id,index);
 				}
 			},
 			error:function(e){
-				alert(e);
 			}
 	});
   }
@@ -493,7 +456,6 @@ function getProductPrice(product_id,recordid){
 				calculatePrice(recordid);
 			},
 			error:function(e){
-				//alert(e);
 			}
 	});
   }
@@ -517,7 +479,6 @@ function getItemOrder(){
 }
 function getTermItem(){
 	termid=$("#term_item").val();
-	$('#term_item').val('').trigger("liszt:updated");
 	if(termid==-1){
 		return false;
 	}
@@ -580,69 +541,12 @@ function calculateDiscount(){//use
 		totalpayment = alltotal - 0;
 		$('#all_total').val(totalpayment);
 	}
-	/*var discountValue = ($('#dis_value').val());
-	if(discountValue.length!=0){
-		if(discountValue.indexOf("%")!==-1){
-			var pds=discountValue.split("%");
-			    alltotal = $("#totalAmoun").val();
-				var discount=(alltotal*parseFloat(pds[0]))/100;
-				totalpayment = alltotal - discount;
-				$('#all_total').val(totalpayment);
-		}else{
-				alltotal = $("#totalAmoun").val();
-				totalpayment = alltotal - discountValue;
-				$('#all_total').val(totalpayment);
-		}
-	}else{
-		alltotal = $("#totalAmoun").val();
-		totalpayment = alltotal - 0;
-		$('#all_total').val(totalpayment);
-	}*/
-}
-function CalcualteTax() {
-	$('#status').val();
 }
 function totalQty(index){
 	getQtyById(index);
 }
 function calculatePrice(index) {
-	/*var qty = $('#qty'+index).val();
-	var price = $('#price'+index).val();
-	var extra_price = parseFloat($('#extra_price'+index).val());
-	if(price==""){price=0;}
-	if(qty==""){qty=0;}
-	if(extra_price==""){extra_price=0;}
-	if(isNaN(extra_price)){extra_price=0;};
-	var total = (parseFloat(price)+parseFloat(extra_price)) * parseFloat(qty);
-	var ds = $('#dis_value'+index).val();
-	if(ds.length!=0){
-		if(ds.indexOf("%")!==-1){//if have %
-			var pds=ds.split("%");
-			if(!isNaN(pds[0])){
-				var discount=(total*parseFloat(pds[0]))/100;
-				after_discount = total - discount;
-				
-			}else{
-				after_discount = total - discount;
-			}
-			$('#total'+index).val(after_discount.toFixed(2));
-		}else{
-			after_discount=0;
-			if(!isNaN(ds)&&ds!=0){
-				discount = parseFloat(ds).toFixed(2);
-				after_discount = total - discount;
-			}else{
-				//discount=$('#dis_value'+index).val(0);
-				after_discount = total;
-			}
-			$('#total'+index).val(parseFloat(after_discount).toFixed(2));
-		}
-		
-	}else{
-		$('#total'+index).val(parseFloat(total).toFixed(2));
-	}*/
 	main_qty= $("#qty_unit_"+index).val();
-	
 	if(main_qty==''){main_qty=0;}
 	detail_qty= $("#qty_per_unit_"+index).val();
 	if(detail_qty==''){detail_qty=0;}
@@ -653,15 +557,11 @@ function calculatePrice(index) {
 	if(qty_perunit==0){
 		qty_perunit=1;
 	}
-	//a = (parseFloat(detail_qty)/parseFloat(qty_perunit))
-
 	qty = parseFloat(main_qty)+(parseFloat(detail_qty)/parseFloat(qty_perunit));
-	//alert(qty);
 	$('#qty'+index).val(qty);
 	current_qty = $("#current_qty").val();
 	if(current_qty<qty){alert("សូមបញ្ចូលចំនួនផលិតផលលក់ តូចជាងឫស្មើរ ចំនួននៅក្នុងស្តុក !");$('#qty'+index).focus();}
 	
- 	
 	var price = $('#price'+index).val();
 	var extra_price = parseFloat($('#extra_price'+index).val());
 	if(price==""){price=0;}
@@ -678,7 +578,6 @@ function calculatePrice(index) {
 			if(!isNaN(pds[0])){
 				var discount=(total*parseFloat(pds[0]))/100;
 				after_discount = total - discount;
-				
 			}else{
 				after_discount = total - discount;
 			}
@@ -690,7 +589,6 @@ function calculatePrice(index) {
 				discount = parseFloat(ds).toFixed(2);
 				after_discount = total - discount;
 			}else{
-				//discount=$('#dis_value'+index).val(0);
 				after_discount = total;
 			}
 			$('#total'+index).val(parseFloat(after_discount).toFixed(2));
@@ -703,7 +601,6 @@ function calculatePrice(index) {
 }
  var record_id = 1;
 function ShowPopupProduct(recordid){
-	//alert(recordid+"ddddd");
 	item_id = $("#item_id_"+ recordid).val();
 	record_id = recordid;
 	if(item_id==-1){
@@ -719,31 +616,6 @@ function getCustomerInfo(){
 	if(v_id==-1){
 		$('#dialogvendor').modal('show');
 	}
-}
-<?php $url_add_vendor =  $this->url(array('module'=>'purchase','controller'=>'vendor','action'=>'add-vendor')); ?>
-function addNewVendor(){
-	var v_name  = $("#vendor_name").val();
-	var contact = $("#txt_contact_name").val();
-	var phone   = $("#v_phone").val();
-	var address = $("#txt_address").val();
-	var txt_mail= $("#txt_mail").val();
-	validate_text('#vendor_name');
-	$.ajax({
-        url: "<?php echo $url_add_vendor;?>",
-        type: "post",
-        data: {'v_name':v_name,'contact':contact,'phone':phone,'address':address,'txt_mail':txt_mail},
-        success: function(data){
-            val = $.parseJSON(data);
-	        $('#v_name').append($("<option></option>").attr("value",val['vid']).attr("selected",true).text(v_name));  
-            $("#contact").val(contact);
-            $("#txt_phone").val(phone);   
-            $("#vendor_address").val(address);     
-            document.getElementById("frmvendor").reset();
-            HideDialogVendor();
-        },
-        error:function(){
-        }
-    });
 }
 function filterBranch(){
 	var location_id= $("#branch_id").val();

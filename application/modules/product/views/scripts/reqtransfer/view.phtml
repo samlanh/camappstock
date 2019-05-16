@@ -48,20 +48,24 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 				                				<td width="30%" style="text-align: left;font-size: 12px;" valign="top">
 													<table width="100%" style="font-size: 12px; font-weight:600;">
 														<tr style="line-height:20px;">
+															<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("REQUEST_NO");?> :</td>
+															<td style="text-align: right;white-space: nowrap;"><?php echo $this->product[0]['req_no'];?></td>
+														</tr>
+														<tr style="line-height:20px;">
+															<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("REQUEST_DATE");?> :</td>
+															<td style="text-align: right;white-space: nowrap;"><?php echo date("d/m/Y",strtotime($this->product[0]['date_request']));?></td>
+														</tr>
+														<tr style="line-height:20px;">
+															<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("DATE_IN");?> :</td>
+															<td style="text-align: right;white-space: nowrap;"><?php echo date("d/m/Y",strtotime($this->product[0]['date_in']));?></td>
+														</tr>
+														<tr style="line-height:20px;">
 															<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("REQUET_TO_FROM");?> :</td>
 															<td style="text-align: right;"><?php echo $this->product[0]['req_location'];?></td>
 														</tr>
 														<tr style="line-height:20px;">
 															<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("REQUET_TO_BRANCH");?> :</td>
 															<td style="text-align: right;"><?php echo $this->product[0]['tran_location'];?></td>
-														</tr>
-														<tr style="line-height:20px;">
-															<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("REQUEST_NO");?> :</td>
-															<td style="text-align: right;white-space: nowrap;"><?php echo $this->product[0]['req_no'];?></td>
-														</tr>
-														<tr style="line-height:20px;">
-															<td style="text-align: right;white-space: nowrap;"><?php echo $tr->translate("TRANSFER_DATE");?> :</td>
-															<td style="text-align: right;white-space: nowrap;"><?php echo date("d/m/Y",strtotime($this->product[0]['date_tran']));?></td>
 														</tr>
 													</table>
 				                				</td>
@@ -107,8 +111,6 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 								<?php if($count<10){
 										$count_i = 10-$count;
 										for($i=1;$i<=$count_i;$i++){
-											
-										
 								?>
 									<tr style="line-height: 25px;">
 										<td class="center"><?php echo $index+$i; ?></td>
@@ -141,7 +143,6 @@ $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 										<td></td>
 								        <td valign="bottom" style="width:20%;text-align:center;font-family:'Khmer OS Muol Light';white-space: nowrap;border-bottom:1px solid #000;"></td>
 								   </tr>
-								   
 								</tbody>
 							</table>	
 				    		</td>

@@ -13,15 +13,25 @@ public function init()
     }
     public function indexAction()
     {
-    	try{
+    	
 			$db = new Product_Model_DbTable_DbMeasure();
 			$list = new Application_Form_Frmlist();
-			$result = $db->getAllMeasure();
-			$this->view->resulr = $result;
+			try{
+				if($this->getRequest()->isPost()){
+					$data = $this->getRequest()->getPost();
+				}else{
+					$data = array(
+						'ad_search'	=>	'',
+						'status'	=>	1
+					);
+				}
+			
+				$this->view->resulr = $db->getAllMeasure($data);
 			}catch (Exception $e){
 				Application_Form_FrmMessage::messageError("INSERT_ERROR");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
+			$this->view->search = $data;
 			$formFilter = new Product_Form_FrmMeasure();
 			$frmsearch = $formFilter->MeasureFilter();
 			$this->view->formFilter = $frmsearch;

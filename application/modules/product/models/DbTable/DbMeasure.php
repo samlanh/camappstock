@@ -42,10 +42,21 @@ class Product_Model_DbTable_DbMeasure extends Zend_Db_Table_Abstract
 		$this->_name = "tb_measure";
 		return $this->insert($arr);
 	}
-	public function getAllMeasure(){
+	public function getAllMeasure($data=null){
 		$db = $this->getAdapter();
-		$sql = "SELECT m.id,m.`name`,m.`status`,m.`remark` FROM `tb_measure` AS m ";
-		return $db->fetchAll($sql);
+		$sql = " SELECT m.id,m.`name`,m.`status`,m.`remark` FROM `tb_measure` AS m ";
+		$where = ' WHERE 1 ';
+		if($data["ad_search"]!="" AND !empty($data["ad_search"])){
+			$string = str_replace(' ','',$data['ad_search']);
+			$s_where=array();
+			$s_search = addslashes(trim($string));
+			$s_where[]=" REPLACE(m.name,' ','') LIKE '%{$s_search}%'";
+			$where.=' AND ('.implode(' OR ', $s_where).')';
+		}
+		if($data["status"]!=""){
+			$where.=' AND `status`='.$data["status"];
+		}
+		return $db->fetchAll($sql.$where);
 	}
 	
 	public function getMeasure($id){

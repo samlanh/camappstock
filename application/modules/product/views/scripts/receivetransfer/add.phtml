@@ -30,63 +30,86 @@
 					return false;
 				}
 			     </script>
+				<div class="col-md-4">
 					<div class="form-group">
-						<label class="col-md-2 control-label"></label>
-						<div class="col-md-4">
-						</div>
-						<label class="col-md-2 control-label"><?php echo $tr->translate("RECEIVE_NUM");?></label>
-						<div class="col-md-4">
+						<div class="col-md-4"><?php echo $tr->translate("RECEIVE_NUM");?></div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('receive_num');?>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-2 control-label"><?php echo $tr->translate("RECEIVE_FROM");?></label>
 						<div class="col-md-4">
+							<?php echo $tr->translate("RECEIVE_FROM");?>
+						</div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('from_loc');?>
 						</div>
-						<label class="col-md-2 control-label"><?php echo $tr->translate("សាខាទទួល");?></label>
+					</div>
+					<div class="form-group">
 						<div class="col-md-4">
+							<?php echo $tr->translate("សាខាទទួល");?>
+						</div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('to_loc');?>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-2 control-label"><?php echo $tr->translate("TRANSFER_NUM");?></label>
 						<div class="col-md-4">
+							<?php echo $tr->translate("TRANSFER_NUM");?></div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('tran_num');?>
 						</div>
-						<label class="col-md-2 control-label"><?php echo $tr->translate("REQUEST_NUM");?></label>
+					</div>
+					<div class="form-group">
 						<div class="col-md-4">
+							<?php echo $tr->translate("REQUEST_NUM");?>
+						</div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('re_num');?>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-2 control-label"><?php echo $tr->translate("REQUEST_DATE");?></label>
 						<div class="col-md-4">
+							<?php echo $tr->translate("REQUEST_DATE");?>
+						</div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('tran_date');?>
 						</div>
-						<label class="col-md-2 control-label"><span id="lb_br"></span><?php echo $tr->translate("TRANSFER_DATE");?></label>
-						<div class="col-md-4">
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"><span id="lb_br"></span>
+							<?php echo $tr->translate("TRANSFER_DATE");?>
+						</div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('re_date');?>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-2 control-label"><?php echo $tr->translate("REMARK");?></label>
 						<div class="col-md-4">
+							<?php echo $tr->translate("REMARK");?>
+						</div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('remark');?>
-						</div>	
-						<label class="col-md-2 control-label"><?php echo $tr->translate("STATUS");?></label>
+						</div>
+					</div>
+					<div class="form-group">	
 						<div class="col-md-4">
+							<?php echo $tr->translate("STATUS");?>
+						</div>
+						<div class="col-md-8">
 							<?php echo $formFilter->getElement('status');?>
 						</div>
 					</div>
+				</div>
+				<div class="col-md-8">
 					<div class="table-responsive">
 						<table class="table table-bordered">
 							<thead>
 								<tr>
 									<th>#</th>
 									<th><?php echo $tr->translate("PRODUCT_NAME");?></th>
-									<th><?php echo $tr->translate("QTY_REQUEST");?></th>
-									<th><?php echo $tr->translate("QTY_TRANSFER");?></th>
+									<th style="white-space: nowrap;"><?php echo $tr->translate("QTY_REQUEST");?></th>
+									<th style="white-space: nowrap;"><?php echo $tr->translate("QTY_TRANSFER");?></th>
 									<th><?php echo $tr->translate("UNIT_QTY");?></th>
 									<th><?php echo $tr->translate("QTY_PER_UNIT");?></th>
 									<th><?php echo $tr->translate("QTY_RECEIVE");?></th>
@@ -97,6 +120,7 @@
 							</tbody>
 						</table>
 					</div>
+				</div>
 					<div class="form-group">
 						<label  class="col-md-12 col-md-offset-4 col-md-8">
                                <input type="hidden" name="identity" id="identity" value="" >

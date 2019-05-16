@@ -13,11 +13,8 @@
 				<div class="form-body">
 					<div class="form-group">
 						<div class="col-md-3">
-							<?php echo $formFilter->getElement('name');?>
+							<input type="text" name="ad_search" id="ad_search" value="<?php echo $this->search['ad_search'];?>" dojoType="dijit.form.TextBox" class="fullside" >
 						</div>				
-						<div class="col-md-3">
-							<?php echo $formFilter->getElement('parent');?>
-						</div>
 						<div class="col-md-3">
 							<?php echo $formFilter->getElement('status');?>
 						</div>
@@ -34,8 +31,8 @@
 				<thead>
 					<tr>
 						<th><?php echo $tr->translate("NO");?></th>
-						<th><?php echo $tr->translate("MEASURE_NAME");?></th>
-						<th><?php echo $tr->translate("REMRK");?></th>
+						<th><?php echo $tr->translate("MESUER_NAME");?></th>
+						<th><?php echo $tr->translate("REMARK");?></th>
 						<th><?php echo $tr->translate("STATUS");?></th>
 						<th><?php echo $tr->translate("ACTION");?></th>
 					</tr>
