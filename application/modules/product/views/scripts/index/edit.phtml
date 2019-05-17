@@ -7,6 +7,11 @@
 	}
 ?>						 
 <title><?php echo $tr->translate("EDIT_PRODUCT");?></title>
+<style>
+.table>tbody>tr>td, .table>tfoot>tr>td, .table>thead>tr>td {
+    padding: 0px 2px;
+}
+</style>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content">
 		<div class="card-box">
@@ -224,6 +229,10 @@ $( document ).ready(function() {
 	});
 });
 function getMeasureLabel(){
+	document.getElementById('lb_measure').innerHTML = ''; 
+	if(dijit.byId("measure").get('value')==-1 || dijit.byId("measure").get('value')==''){
+		return false;
+	}
 	var measur_label = dijit.byId("measure").attr("displayedValue");
 	document.getElementById('lb_measure').innerHTML = measur_label; 
 }

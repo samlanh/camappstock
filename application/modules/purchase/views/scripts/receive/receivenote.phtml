@@ -12,11 +12,11 @@
 					font-family: 'Khmer OS Battambang';
 				}
 				ul{margin: 0;padding:0;}
-				table tr td ul li{text-align: center;list-style: none;line-height: 25px; font-weight: bold;}
+				table tr td ul li{text-align: center;list-style: none;line-height: 25px; font-weight: normal;}
 				th{}
 				ul.pur_info li{line-height:18px; 
 						font-weight: normal !important;}
-				ul.pur_info li strong{font-weight: bold;}
+				ul.pur_info li strong{font-weight: normal;}
 		       .hover:hover{background: #ccc;}
 			   .center{text-align:center;}
 			</style>
@@ -174,6 +174,22 @@
 	 	 </div>		
 	</div>
 </div>
+ <div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
+		<div class="ptss__toggle-btn  js-ptss-toggle-btn ">
+			<i class="fa fa-print"></i>
+		</div>
+		<div class="ptss__header"><?php echo $tr->translate("PRINT");?></div>
+		<div class="ptss__settings">
+			<div class="ptss__single-setting" id="ptss__layout">
+				<div class="ptss__setting-control">
+					<div class="ptss__layout-wrapper">
+						<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrint();" ><i class="fa fa-print" aria-hidden="true"></i></a>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
 <script>
 function doPrint() {

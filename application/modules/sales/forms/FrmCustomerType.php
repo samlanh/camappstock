@@ -25,7 +25,7 @@ class Sales_Form_FrmCustomerType extends Zend_Form
 		$_status_opt = array(
 				-1=>$tr->translate("ALL"),
 				1=>$tr->translate("ACTIVE"),
-				0=>$tr->translate("DACTIVE"));
+				0=>$tr->translate("DEACTIVE"));
 		$status_search->setMultiOptions($_status_opt);
 		
 		
@@ -49,7 +49,7 @@ class Sales_Form_FrmCustomerType extends Zend_Form
 				'class'=>'fullside',		
 				
 				));
-		$_arr = array(1=>$tr->translate("ACTIVE"),0=>$tr->translate("DACTIVE"));
+		$_arr = array(1=>$tr->translate("ACTIVE"),0=>$tr->translate("DEACTIVE"));
 		$_status = new Zend_Form_Element_Select("status");
 		$_status->setMultiOptions($_arr);
 		$_status->setAttribs(array(

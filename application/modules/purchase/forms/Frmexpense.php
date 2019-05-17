@@ -9,6 +9,17 @@ Class Purchase_Form_Frmexpense extends Zend_Form {
 		
 		$db = new Application_Model_DbTable_DbGlobal();
 		$optexpense = $db->getAllExpense(1);
+		
+		$dbexpense = new Purchase_Model_DbTable_Dbexpensetitle();
+		$optexpense = $dbexpense->getParentCateExpense('',0,'','',1);
+		
+// 		$options_exp=array(0=>"Select Expense",-1=>"ADD_NEW");
+// 		if(!empty($optexpense)){
+// 			foreach($optexpense AS $read){
+// 				$options_exp[$read['id']]=$read['name'];
+// 			}
+// 		}
+		
 		$title = new Zend_Form_Element_Select('title');
 		$title->setAttribs(array(
 				'dojoType'=>"dijit.form.FilteringSelect",

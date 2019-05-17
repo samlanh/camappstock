@@ -1,8 +1,6 @@
 <?php 
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$form = $this->form_sale;
-	$url_submit = $this->url(array('module'=>'sales','controller'=>'payment','action'=>'edit',null));
-	$url_cancel = $this->url(array('module'=>'sales','controller'=>'payment','action'=>'index',null));
 ?>
 <title><?php echo $tr->translate("Edit Customer Payment");?></title>
 <div class="card pb-10 pt-10 pl-10 pr-10">

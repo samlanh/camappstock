@@ -320,10 +320,6 @@ class Product_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$db->beginTransaction();
 		$user_info = new Application_Model_DbTable_DbGetUserInfo();
-		$result = $user_info->getUserInfo();
-		$session_user=new Zend_Session_Namespace('auth');
-		$request=Zend_Controller_Front::getInstance()->getRequest();
-		 $level = $result["level"];
     	try {
     		$arr = array(
     				'item_name'		=>	$data["name"],
@@ -401,7 +397,6 @@ class Product_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     		$db->commit();
     	}catch (Exception $e){
     		$db->rollBack();
-    		echo $e->getMessage();exit();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     }

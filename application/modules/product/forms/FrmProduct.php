@@ -137,7 +137,7 @@ class Product_Form_FrmProduct extends Zend_Form
 		));
 		$qty_per_unit->setValue(1);
 		 
-		$opt = array(''=>$tr->translate("SELECT_MEASURE"),-1=>$tr->translate("ADD_NEW_MEASURE"));
+		$opt = array(''=>$tr->translate("SELECT_MEASURE"),-1=>$tr->translate("ADD_NEW"));
 		$measure = new Zend_Form_Element_Select("measure");
 		$measure->setAttribs(array(
 				'dojoType'=>"dijit.form.FilteringSelect",'autoComplete'=>"false",

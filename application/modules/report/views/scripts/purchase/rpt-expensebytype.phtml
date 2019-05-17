@@ -1,8 +1,5 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	
-	$session_user=new Zend_Session_Namespace('auth');
-	$user_id=$session_user->user_id;
 ?>
 <title><?php echo $tr->translate("RPT_EXPENSE_TYPE");?></title>
 <style>
@@ -14,39 +11,35 @@
 			<form method="post" autocomplete="off">
 				<div class="form-group" style="padding-top: 6px;">
 					<?php $formFilter = $this->formFilter; ?>
-					<label class="control-label col-md-2"><?php echo $formFilter->getElement('text_search');?></label>
-					<label class="control-label col-md-2"><?php echo $formFilter->getElement('branch_id');?></label>
-					<label class="control-label col-md-2"><?php echo $formFilter->getElement('title');?></label>
-					<label class="control-label col-md-2"><div class="input-icon right"><i class="icon-calendar"></i><?php echo $formFilter->getElement('start_date');?></div></label>
-					<label class="control-label col-md-2"><div class="input-icon right"><i class="icon-calendar"></i><?php echo $formFilter->getElement('end_date');?></div></label>
-					<label class="control-label col-md-2">
-						<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
-					</label>
-				</div><div style="clear:both;"></div>	
+					<div class="control-label col-md-2"><?php echo $formFilter->getElement('text_search');?></div>
+					<div class="control-label col-md-2"><?php echo $formFilter->getElement('branch_id');?></div>
+					<div class="control-label col-md-2"><?php echo $formFilter->getElement('title');?></div>
+					<div class="control-label col-md-2"><?php echo $formFilter->getElement('start_date');?></div>
+					<div class="control-label col-md-2"><?php echo $formFilter->getElement('end_date');?></div>
+					<div class="control-label col-md-2">
+						<input type="submit" value="SAVE_NEW" tabindex="1" label="<?php echo $tr->translate("REFRESH")?>" id="save_new" dojoType="dijit.form.Button" name="save_new"
+						iconClass="dijitEditorIcon dijitEditorIconSave"/> 
+					</div>
+				</div>
 			</form> 
 		<div id="divPrint"  >
-			<table style="background:#fff; margin: 0 auto; width: 100%; padding: 0px 10px 1cm 10px;font-family: 'Hanuman';">
-							<tr style="font-size: 13px;">
+			<table style="background:#fff; margin: 0 auto; width: 100%; padding: 0px 10px 1cm 10px;font-family: 'khmer os battambang';">
+							<tr style="font-size: 12px;">
 								<td colspan="3" align="center">
-									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("COMPANY_CUSTOMER");?></strong><br />
-									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_EXPENSE_TYPE");?></strong><br />
-									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong>
+									<span style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("COMPANY_CUSTOMER");?></span><br />
+									<span style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_EXPENSE_TYPE");?></span><br />
+									<span style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></span>
 								</td>
 							</tr>
 							<tr>
 								<td width="20%" align="left">
 								</td>
 								<td align="center">
-									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Muol Light';"></strong>
+									<span style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Muol Light';"></span>
 								</td>
 								<td align="right" width="20%">&nbsp;</td>
 							</tr>
 							<?php 
-								$total_income_kh=0;
-								$total_income_dollar=0;
-								$total =0;
-								$total_paid =0;
-								$total_expense_kh=0;
 								$total_expense_dollar=0;
 							?>
 							<tr>
@@ -66,7 +59,7 @@
 											<td style="border: 1px solid #000;"><?php echo $row['branch_name'];?></td>
 											<td style="border: 1px solid #000;text-align: left;"><span style="width:120px;font-family:'Khmer OS Content'"></span><?php echo $row['title'];?></td>
 											<td align="canter" style="border: 1px solid #000;"><?php echo $row['title_en'];?></td>
-											<td style="border: 1px solid #000;background: #c6e2fb;"><?php echo number_format($row['total_amount'],2);?><?php if($row['curr_type']==1){echo ' $';}else{echo ' រៀល​ ';}?></td>
+											<td style="border: 1px solid #000;background: #c6e2fb;"><?php echo number_format($row['total_amount'],2);?></td>
 										</tr>
 											<?php 
 												$total_expense_dollar = $total_expense_dollar + $row['total_amount'];
@@ -78,16 +71,16 @@
 											<td style="border: 1px solid #000;"><?php echo $row['branch_name'];?></td>
 											<td style="border: 1px solid #000;text-align: left;"><span style="width:120px;font-family:'Khmer OS Content'"></span><?php echo "ចំណាយលើអ្នកផ្គត់ផ្គង់".$row['title_kh'];?></td>
 											<td align="center" style="border: 1px solid #000;"><?php echo "Supplier's Expense".$row['title_en'];?></td>
-											<td style="border: 1px solid #000;background: #c6e2fb;"><?php echo number_format($row['total_paid'],2);?>&nbsp;$<?php //if($row['curr_type']==1){echo ' $';}else{echo ' រៀល​ ';}?></td>
+											<td style="border: 1px solid #000;background: #c6e2fb;"> <?php echo number_format($row['total_paid'],2);?>&nbsp;</td>
 										</tr>
 											<?php 
-													$total_expense_dollar = $total_expense_dollar + $row['total_paid'];
+												$total_expense_dollar = $total_expense_dollar + $row['total_paid'];
 											?> 
 										 <?php } ?>
 										 <tr class="hover" style="font-size:12px; height: 30px;border: 1px solid #000;" align="center" >
 											<td style="border: 1px solid #fff;border-right: 1px solid #000;" colspan="3"></td>
 											<td style="border: 1px solid #000;white-space: nowrap;">សរុបរួម/Grand Total</td>
-											<td style="border: 1px solid #000;"><?php echo  number_format($total_expense_dollar,2);?></td>
+											<td style="border: 1px solid #000;">$ <?php echo  number_format($total_expense_dollar,2);?></td>
 										</tr>
 										</table>
 									</td>

@@ -45,7 +45,7 @@ class Purchase_Model_DbTable_Dbexpensetitle extends Zend_Db_Table_Abstract
 			WHERE title!='' OR title_en!=''	ORDER BY t.parent_id ";
 		return $db->fetchAll($sql);
 	}
-	public function getParentCateExpense($cate_id='',$parent = 0, $spacing = '', $cate_tree_array = ''){
+	public function getParentCateExpense($cate_id='',$parent = 0, $spacing = '', $cate_tree_array = '',$option = null){
 		$db=$this->getAdapter();
 		if (!is_array($cate_tree_array)){
 			$cate_tree_array = array();
@@ -61,10 +61,12 @@ class Purchase_Model_DbTable_Dbexpensetitle extends Zend_Db_Table_Abstract
 		if ($rowCount > 0) {
 			foreach ($query as $row){
 				$cate_tree_array[] = array("id" => $row['id'], "name" => $spacing . $row['name']);
-				$cate_tree_array = $this->getParentCateExpense($cate_id,$row['id'], $spacing . ' - ', $cate_tree_array);
+				$cate_tree_array = $this->getParentCateExpense($cate_id,$row['id'], $spacing . ' - ', $cate_tree_array,$option);
 			}
 		}
+	
 		return $cate_tree_array;
+	
 	}
 	public function getTermById($id){
 		$db = $this->getAdapter();

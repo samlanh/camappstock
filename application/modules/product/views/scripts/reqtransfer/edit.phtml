@@ -142,7 +142,7 @@ function oldRow(){
 			template+='<td width="80px"><input dojoType="dijit.form.NumberTextBox" class="fullside" type="text" id="qty_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_unit_'+index+'" value="<?php echo $rs['qty_unit']?>" class="validate[required,custom[number]] input form-control" /></td>'; 
 			template+='<td width="80px"><input dojoType="dijit.form.NumberTextBox" class="fullside" type="text" id="qty_per_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_per_unit_'+index+'" value="<?php echo $rs['qty_per_unit']?>" class="validate[required,custom[number]] input form-control" /></td>'; 
 			template+='<td width="80px"><input dojoType="dijit.form.NumberTextBox" class="fullside" type="text" id="qty_tran_'+index+'" readOnly="readOnly" name="qty_tran_'+index+'" value="<?php echo $rs['qty']?>" class="form-control" /> <input type="hidden" id="old_qty_trans_'+index+'" readOnly="readOnly" name="old_qty_tran_'+index+'" value="<?php echo $rs['qty']?>" class="form-control" /> <input type="hidden" name="qty_measure_'+index+'" id="qty_measure_'+index+'" value="<?php echo $rs['qty_measure']?>"/></td>'; 
-			template+='<td><input type="text" id="remark_'+index+'" name="remark_'+index+'" class="form-control"></td>';
+			template+='<td><input class="fullside" dojoType="dijit.form.TextBox" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
 			template+='<td><button type="button" onClick="deleteRecord('+index+',1)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
 			template+='</tr>';
 			$('#tr_location').append(template);
@@ -177,16 +177,23 @@ function addNew(){
 				}
 			}
 			 data = $.parseJSON(val);
-			template='<tr id="row_location_'+index+'">';
-			template+='<td>'+index+'</td>';
+			template='<td>'+index+'</td>';
 			template+='<td style="white-space: nowrap;">'+data.item_name+'<input type="hidden" id="pro_id_'+index+'" name="pro_id_'+index+'" value="'+data.id+'" </td>';
-			template+='<td width="80px"><input type="text" id="qty_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_unit_'+index+'" value="1" class="validate[required,custom[number]] input form-control" /></td>'; 
-			template+='<td width="80px"><input type="text" id="qty_per_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_per_unit_'+index+'" value="0" class="validate[required,custom[number]] input form-control" /></td>'; 
-			template+='<td width="80px"><input type="text" id="qty_tran_'+index+'" readOnly="readOnly" name="qty_tran_'+index+'" value="1" class="form-control" /><input type="hidden" id="old_qty_tran_'+index+'" readOnly="readOnly" name="old_qty_tran_'+index+'" value="1" class="form-control" /> <input type="hidden" name="qty_measure_'+index+'" id="qty_measure_'+index+'" value="'+data.qty_perunit+'"/></td>'; 
-			template+='<td><input type="text" id="remark_'+index+'" name="remark_'+index+'" class="form-control"></td>';
+			template+='<td width="80px"><input dojoType="dijit.form.NumberTextBox" type="text" id="qty_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_unit_'+index+'" value="1"  /></td>'; 
+			template+='<td width="80px"><input dojoType="dijit.form.NumberTextBox" type="text" id="qty_per_unit_'+index+'" onKeyup="TotalQty('+index+')" name="qty_per_unit_'+index+'" value="0"  /></td>'; 
+			template+='<td width="80px"><input dojoType="dijit.form.NumberTextBox" type="text" id="qty_tran_'+index+'" readOnly="readOnly" name="qty_tran_'+index+'" value="1" /><input type="hidden" id="old_qty_tran_'+index+'" readOnly="readOnly" name="old_qty_tran_'+index+'" value="1" class="form-control" /> <input type="hidden" name="qty_measure_'+index+'" id="qty_measure_'+index+'" value="'+data.qty_perunit+'"/></td>'; 
+			template+='<td><input class="fullside" type="text" dojoType="dijit.form.TextBox" id="remark_'+index+'" name="remark_'+index+'" ></td>';
 			template+='<td><button type="button" onClick="deleteRecord('+index+',1)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
-			template+='</tr>';
-			$('#tr_location').append(template);
+			
+			//$('#tr_location').append(template);
+			
+			tmp='<tr id="row_location_'+index+'">';
+			tmp+="</tr>";
+			$('#tr_location').append(tmp);
+			dojo.html.set(dojo.byId('row_location_'+index),template , {
+			     parseContent: true,
+			});
+			
 			if($('#identity').val()!="") {
 				var identity = $('#identity').val();
 				$('#identity').val(identity+','+index);

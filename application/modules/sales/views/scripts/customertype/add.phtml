@@ -1,5 +1,4 @@
 <?php
-	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$frm = $this->Form;
 	$url_new = $this->url(array('module'=>'sales','controller'=>'customertype','action'=>'addcustomertype',));
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -20,29 +19,29 @@
 				</script>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label class="col-md-4"><?php echo $tr->translate("TITLE");?></label>
+						<div class="col-md-4"><?php echo $tr->translate("TITLE");?></div>
 						<div class="col-md-8">
 							<?php echo $frm->getElement('title_en');?>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-4"><?php echo $tr->translate("credit_term");?></label>
+						<div class="col-md-4"><?php echo $tr->translate("CREDIT_TERM");?></div>
 						<div class="col-md-8">
 							<?php echo $frm->getElement('credit_term');?>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-4"><?php echo $tr->translate("credit_limit");?></label>
+						<div class="col-md-4"><?php echo $tr->translate("CREDIT_LIMIT");?></div>
 						<div class="col-md-8">
 							<?php echo $frm->getElement('credit_limit');?>
 						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-4"></label>
-					<label  class="col-md-8" style="text-align: left;">
-                         <button type="submit" name="save_close" class="btn btn-primary"><?php echo $tr->translate("SAVE_CLOSE");?></button>
-                     </label>
+					<div class="form-group">
+						<div class="col-md-4"></div>
+						<div  class="col-md-8" >
+	                         <button type="submit" name="save_close" class="btn btn-primary"><?php echo $tr->translate("SAVE_CLOSE");?></button>
+	                     </div>
+					</div>
 				</div>
 			</form>
 		</div>

@@ -30,7 +30,7 @@ class Product_indexController extends Zend_Controller_Action
 				'module'=>'product','controller'=>'index','action'=>'edit',
 			);
 			$list = new Application_Form_Frmlist();
-			$this->view->list=$list->getCheckList(0, $columns, $rows,array('item_name'=>$link,'item_code'=>$link,'barcode'=>$link,'branch'=>$link));
+			$this->view->list=$list->getCheckList(0, $columns, $rows,array('is_service'=>$link,'item_name'=>$link,'item_code'=>$link,'barcode'=>$link,'branch'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::messageError("INSERT_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -109,6 +109,8 @@ class Product_indexController extends Zend_Controller_Action
 				$post=$this->getRequest()->getPost();
 				$db = new Product_Model_DbTable_DbCategory();
 				$result =$db->getAllCategory($post);
+				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+				array_unshift($result, array ( 'id' =>-1,'name' =>$tr->translate("ADD_NEW")));
 				echo Zend_Json::encode($result);
 				exit();
 			}catch (Exception $e){
@@ -136,10 +138,12 @@ class Product_indexController extends Zend_Controller_Action
 	public function getOtherAction(){
 		if($this->getRequest()->isPost()){
 			try {
+				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 				$post=$this->getRequest()->getPost();
 				$db = new Application_Model_DbTable_DbGlobal();
 				$result =$db->getColor($post);
-				array_unshift($result, array ( 'id' =>-1,'name' =>"ADD_NEW"));
+				
+				array_unshift($result, array ( 'id' =>-1,'name' =>$tr->translate("ADD_NEW")));
 				echo Zend_Json::encode($result);
 				exit();
 			}catch (Exception $e){
