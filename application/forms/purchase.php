@@ -53,11 +53,14 @@ class Application_Form_purchase extends Zend_Form
     	$vendor_id->setValue($customerValue);
     	$this->addElement($vendor_id);
     	
+    	$po_code = $db->getPurchaseCode();
     	$po_number= new Zend_Form_Element_Text("txt_order");
     	$po_number->setAttribs(array(
-    			'dojoType'=>"dijit.form.TextBox",
-    			'class'=>'fullside',
-    			));
+    		'dojoType'=>"dijit.form.TextBox",
+    		'class'=>'fullside',
+    		'readonly'=>'readonly'
+    	));
+    	$po_number->setValue($po_code);
     	$this->addElement($po_number);
     	
     	$roder_element= new Zend_Form_Element_Text("invoice_no");
@@ -111,7 +114,7 @@ class Application_Form_purchase extends Zend_Form
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
 				'class'=>'fullside',
-    			));
+    	));
     	 
     	$descriptionElement = new Zend_Form_Element_Textarea('remark');
     	$descriptionElement->setAttribs(array(
@@ -331,7 +334,6 @@ class Application_Form_purchase extends Zend_Form
 				$bank_name->setvalue($data["bank_name"]);
 				$commission->setvalue($data["commission"]);
 				$all_totalpayment->setValue($data["net_total"]);
-    		
     		} else {$discountTypeElement->setValue(1);
     	}
      	return $this;

@@ -9,43 +9,23 @@
 		<div class="card-box">
             <div class="col-sm-12 border-botom">
 		    	<div class="col-sm-8 pd-0">
-		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_RECEIVED');?></h4>
+		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RECEIVED_ITEM');?></h4>
     			</div>
     			<div class="col-sm-4 text-right"></div>
     		</div>
     	</div>
 		<div class="card-box">
-			<form id="frm" class="form-horizontal" enctype="multipart/form-data" method="post">
+			<form dojoType="dijit.form.Form" class="form-horizontal" enctype="multipart/form-data" method="post">
+				<script type="dojo/method" event="onSubmit">			
+					loadingBlock();
+				</script>
 				<div class="col-md-4">
-					<div class="form-group">
-						<div class="col-md-4">
-							<?php echo $tr->translate("PURCHASE_NO");?> 
-						</div>
-						<div class="col-md-8">
-							<?php echo $form->getElement("pu_code");?>
-							<input type="hidden" name="branch_id" id="branch_id" />
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-md-4"><?php echo $tr->translate("RECIEVE_NO");?></div>
-						<div class="col-md-8">
-							<?php echo $form->getElement('recieve_no');?>
-						</div>
-					</div>
 					<div class="form-group">
 						<div class="col-md-4">
 							<?php echo $tr->translate("BRANCH");?> :
 						</div>
 						<div class="col-md-8">
 							<?php echo $form->getElement("branch");?>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-md-4">
-							<?php echo $tr->translate("DATE_ORDER");?>
-						</div>
-						<div class="col-md-8">
-							<?php echo $form->getElement('date_order');?>
 						</div>
 					</div>
 					<div class="form-group">
@@ -58,7 +38,30 @@
 					</div>
 					<div class="form-group">
 						<div class="col-md-4">
-							<?php echo $tr->translate("RECIEVE_DATE");?> 
+							<?php echo $tr->translate("PURCHASE_ORDER");?> 
+						</div>
+						<div class="col-md-8">
+							<?php echo $form->getElement("pu_code");?>
+							<input type="hidden" name="branch_id" id="branch_id" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"><?php echo $tr->translate("RECEIVE_NO");?></div>
+						<div class="col-md-8">
+							<?php echo $form->getElement('recieve_no');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4">
+							<?php echo $tr->translate("ORDER_DATE");?>
+						</div>
+						<div class="col-md-8">
+							<?php echo $form->getElement('date_order');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4">
+							<?php echo $tr->translate("RECEIVE_DATE");?> 
 						</div>
 						<div class="col-md-8">
 							<?php echo $form->getElement('date_in');?>
@@ -155,7 +158,6 @@ function initList() {
 	<?php 
 		$cost_price =$r['sub_total']+(($r['sub_total']*($this->po['commission_ensur']+$this->po['commission']))/$this->po['all_total']);
 	?>
-	
 	$("#cost_price"+index5).val("<?php echo number_format($cost_price,2);?>");
 	$("#qty_recieve_"+index5).val("<?php echo $r['qty_order'];?>");
 	$("#item_id_"+index5).val("<?php echo $r['pro_id'];?>");
@@ -163,42 +165,27 @@ function initList() {
 	$("#qty_unit_"+index5).val("<?php echo $r['qty_unit'];?>");
 	$("#qty_per_unit_"+index5).val("<?php echo $r['qty_detail'];?>");
 	$("#qty_recieve_"+index5).val("<?php echo $r['qty_order'];?>");
-	
 	$("#total_after_"+index5).val("<?php echo $r['sub_total'];?>");
 	$("#sub_total_receive_"+index5).val("<?php echo $r['sub_total'];?>");
-	
 	$("#total_"+index5).val("<?php echo $r['sub_total'];?>");
 	$("#price_"+index5).val("<?php echo $r['price'];?>");
 	$("#oldprice_"+index5).val("<?php echo $r['price'];?>");
 	$("#dis_value"+index5).val("<?php echo $r['disc_value'];?>");
-	
 	$("#unit_measure_"+index5).val("<?php echo $r['qty_perunit'];?>");
-	
-	//getQtyById(index5);
-	
-
 	if($('#identity').val()!="") {
 		var identity = $('#identity').val();
 		$('#identity').val(identity+','+index5);
 	} else {$('#identity').val(index5);}
-	
-	$("#row_order_0").remove();
-		<?php } }?>
+	<?php } }?>
 }
 
 function doTotalQty(index){
-	
 	main_qty =$("#qty_unit_"+index).val();
 	detail_qty =  $("#qty_per_unit_"+index).val();
 	unit_measure = $("#unit_measure_"+index).val();
 	total_qty = parseFloat(main_qty) + parseFloat(detail_qty/(unit_measure));
 	$("#qty_recieve_"+index).val(total_qty.toFixed(3));
-	
 	dis_value =$("#dis_value"+index).val();
-	//price =$("#price_"+index).val();
-	//total_price = total_qty*price;
-	
-	//$("#sub_total_receive_"+index).val(total_price.toFixed(2));
 	total_price= parseFloat($('#sub_total_receive_'+index).val());
 	commission_ensur = $('#commission_ensur').val();
 	commission = $('#commission').val();
@@ -207,90 +194,33 @@ function doTotalQty(index){
 	cost_price = total_price+(total_price*total_commission/all_total);
 	$('#cost_price'+index).val(cost_price.toFixed(2));
 }
-
-<?php $url_pu =  $this->url(array('module'=>'purchase','controller'=>'receive','action'=>'get-purchase-item')); ?>
-function getItem(){
-	var id = $('#pu_code').val();
-	if(id=="" || id ==null){
-		return false;
-	}else{
-		$.ajax({
-			url:"<?php echo $url_pu;?>",
-			type:"post",
-			data:{'id':id},
-			success: function(data){
-				//alert(data);
-				values = $.parseJSON(data);
-				num=0;
-				
-				if(values=="" || values==null){
-					//alert("No Result!");
-				}else{
-					for(i=0;i<=values.length;i++){
-						item_name = values[i].item_name;
-						qty_order = values[i].qty_order;
-						price = values[i].price;
-						sub_total = values[i].sub_total;
-						disc_value = values[i].disc_value;
-						num++;
-						template='<tr id="row_order_'+num+'" style="height:33px;">';
-						template+='<td  width="2%">'+num+'</td>';
-						template+='<td width="30%">'+item_name+'<input type="hidden" name="item_id_'+num+'" id="item_id_'+num+'" /></td>';
-						template+='<td ><input type="text" class="validate[required,custom[number]] input form-control" required="1" readOnly="readOnly" value="'+qty_order+'" id="qty_order_'+num+'" name="qty_order_'+num+'" /></td>';
-						template+='<td ><input type="text" class="validate[required,custom[number]] input form-control" onKeyup="calculatePrice('+num+')" value="'+qty_order+'" id="qty_recieve_'+num+'" name="qty_recieve_'+num+'" /></td>';
-						template+='<td ><input type="text" class="form-control" id="remark_'+num+'" name="remark_'+num+'" /> <input type="hidden" name="price_'+num+'" id="price_'+num+'" value="'+price+'" /> <input type="hidden" name="total_after_'+num+'" id="total_after_'+num+'" value="'+sub_total+'" /><input type="hidden" name="total_'+num+'" id="total_'+num+'" value="'+sub_total+'" /><input type="hidden" value="'+disc_value+'" id="dis_value'+num+'" name="dis_value'+num+'" class="form-control" /><input type="hidden" name="sub_total_receive_'+num+'" id="sub_total_receive_'+num+'" /> </td>';
-						template+="</tr>";
-						$('#table_order').innerHTML = template;
-						if($('#identity').val()!="") {
-							var identity = $('#identity').val();
-							$('#identity').val(identity+','+num);
-						} else {$('#identity').val(num);}
-						//$("#item_id_"+num).val(item_id);
-					}
-				}
-			},
-			error:function(){
-			}
-		});
-	}	
-}
 <?php $url_qty =  $this->url(array('module'=>'purchase','controller'=>'index','action'=>'getqtybyid')); ?>
 function getQtyById(index){//use
-				item_id=$("#item_id_"+index).val();
-				qty_unit=$("#qty_unit_"+index).val();
-				qty_per_unit=$("#qty_per_unit_"+index).val();
-				if(qty_unit==null || qty_unit==""){
-					if(qty_per_unit!==null && qty_per_unit!==""){
-						$("#qty"+index).val(qty_per_unit);
-					}
-				}else{
-					$.ajax({
-						url:"<?php echo $url_qty;?>",
-						type:"post",
-						data:{'item_id':item_id},
-						success: function(data){
-							item_qty = $.parseJSON(data);			
-							main_qty =$("#qty_unit_"+index).val();
-							detail_qty =  $("#qty_per_unit_"+index).val();
-							total_qty = parseFloat(main_qty) + parseFloat(detail_qty/(item_qty.qty_perunit));
-							$("#qty"+index).val(total_qty.toFixed(3));
-						},
-						error:function(e){
-							//alert(e);
-						}
-				});
+		item_id=$("#item_id_"+index).val();
+		qty_unit=$("#qty_unit_"+index).val();
+		qty_per_unit=$("#qty_per_unit_"+index).val();
+		if(qty_unit==null || qty_unit==""){
+			if(qty_per_unit!==null && qty_per_unit!==""){
+				$("#qty"+index).val(qty_per_unit);
 			}
-}
-function getItemOrder(){
-	item_ids=$("#add_item").val();
-	$('#add_item').val('').trigger("liszt:updated");
-	if(item_ids==-1){
-		return false;
+		}else{
+			$.ajax({
+				url:"<?php echo $url_qty;?>",
+				type:"post",
+				data:{'item_id':item_id},
+				success: function(data){
+					item_qty = $.parseJSON(data);			
+					main_qty =$("#qty_unit_"+index).val();
+					detail_qty =  $("#qty_per_unit_"+index).val();
+					total_qty = parseFloat(main_qty) + parseFloat(detail_qty/(item_qty.qty_perunit));
+					$("#qty"+index).val(total_qty.toFixed(3));
+				},
+				error:function(e){
+				}
+		});
 	}
-	addRow(item_ids);
-	$("#add_item").val("");
 }
-var record_index= 1;
+
 function deleteRecord(index) {
 	var identity = $('#identity').val();
 	var arrays = identity.split(',');
@@ -302,7 +232,6 @@ function deleteRecord(index) {
 	$("#row_order_"+index).remove();
 	netTotal();
 }
-
 function netTotal() {//use
 	var cur_type = $('#currency').val();
 	var netTotal=0;
@@ -321,20 +250,17 @@ function calculateDiscount(){//use
 	if(discountValue.length!=0){
 		if(discountValue.indexOf("%")!==-1){
 			var pds=discountValue.split("%");
-			    alltotal = $("#totalAmoun").val();
-				var discount=(alltotal*parseFloat(pds[0]))/100;
-				totalpayment = alltotal - discount;
-				$('#all_total').val(totalpayment);
+		    alltotal = $("#totalAmoun").val();
+			var discount=(alltotal*parseFloat(pds[0]))/100;
+			totalpayment = alltotal - discount;
+			$('#all_total').val(totalpayment);
 		}else{
-				alltotal = $("#totalAmoun").val();
-				totalpayment = alltotal - discountValue;
-				$('#all_total').val(totalpayment);
+			alltotal = $("#totalAmoun").val();
+			totalpayment = alltotal - discountValue;
+			$('#all_total').val(totalpayment);
 		}
 		doRemain();
 	}
-}
-function CalcualteTax() {
-	$('#status').val();
 }
 function doRemain() {
 	var all_total = $('#all_total').val();
@@ -346,13 +272,12 @@ function doRemain() {
 	   remain = all_total-paid;
 	   $('#remain').val(remain.toFixed(2));
 	}
-	
 }
 function totalQty(index){
 	calculatePrice(index);
 	getQtyById(index);
 }
-function calculatePrice(index) {
+function calculatePrice(index){
 	var qty = $('#qty_recieve_'+index).val();
 	var price = $('#price_'+index).val();
 	var total = price * qty;
@@ -363,7 +288,6 @@ function calculatePrice(index) {
 			if(!isNaN(pds[0])){
 				var discount=(total*parseFloat(pds[0]))/100;
 				after_discount = total - discount;
-				
 			}else{
 				after_discount = total - discount;
 			}
@@ -381,158 +305,17 @@ function calculatePrice(index) {
 		netTotal();
 	}
 }
- var record_id = 1;
-function ShowPopupProduct(product_id){
-	item_id = $("#item_id_"+ product_id).val();
-	record_id = product_id;
-	if(item_id==-1){
-		$('#productpopup').modal('show');
-	}
-	else{
-		getQtyById(product_id);
-	}
-}
-function AddLocation(){
-	var location_id= $("#LocationId").val();
-	if(location_id==-1){
-		$('#popup_location').modal('show');
-	  }	
-}
-
-function getCustomerInfo(){
-	v_id = $("#v_name").val();
-	if(v_id==-1){
-		$('#dialogvendor').modal('show');
-	}
-}
-<?php $url_add_new =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-newproudct')); ?>
-function addProduct(){
-	var pro_name = $("#txt_name").val();
-	var pro_code = $("#item_code").val();
-	var category_id = $("#category_id").val();
-	var brand_id = $("#brand_id").val();
-	var remark = $("#remark_order").val();
-	validate_text('#txt_name');
-	validate_text('#item_code');
-		$.ajax({
-	        url: "<?php echo $url_add_new;?>",
-	        type: "post",
-	        data: {'pro_name':pro_name,'pro_code':pro_code,'category_id':category_id,'brand_id':brand_id,'remark':remark},
-	        success: function(data){
-		        alert(data);
-	          // val = $.parseJSON(data);
-	           //$('#item_id_'+record_id).append($('<option></option>').attr('value',val['pid']).attr("selected",true).text(pro_name)); 
-	           //$('#item_id_'+record_id).trigger("liszt:updated");
-	           // document.getElementById("frm1").reset();
-	            //$('#productpopup').modal('hidden');
-	        },
-	        error:function(){
-	           alert('There is error while submit');
-	        }
-	    });	
-}
-
-<?php $url_add_vendor =  $this->url(array('module'=>'purchase','controller'=>'vendor','action'=>'addvendor')); ?>
-function addNewVendor(){
-	var v_name  = $("#vendor_name").val();
-	var com_phone   = $("#com_phone").val();
-	
-	if(com_phone==''){
-		return false;
-	}
-	if(v_name==''){
-		return false;
-	}
-	var contact = $("#txt_contact_name").val();
-	var phone   = $("#v_phone").val();
-	var address = $("#txt_address").val();
-	var txt_mail= $("#txt_mail").val();
-	//validate_text('#vendor_name');
-	return false;
-	$.ajax({
-        url: "<?php echo $url_add_vendor;?>",
-        type: "post",
-        data: {'v_name':v_name,'contact':contact,'phone':phone,'address':address,'txt_mail':txt_mail},
-        success: function(data){
-            val = $.parseJSON(data);
-            alert(val);
-	        // $('#v_name').append($("<option></option>").attr("value",val['vid']).attr("selected",true).text(v_name));  
-            //$("#contact").val(contact);
-            //$("#txt_phone").val(phone);   
-            //$("#vendor_address").val(address);     
-            //document.getElementById("frmvendor").reset();
-            // HideDialogVendor();
-        },
-        error:function(){
-            alert("faile insert");
-            $("#result").html('There is error while submit');
-        }
-    });
-}
-
-<?php $url_add_location =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-new-location')); ?>
-function addNewLocation(){
-	var location_name = $("#StockName").val();
-	var ContactName   = $("#ContactName").val();
-	var ContactNumber = $("#ContactNumber").val();
-	var location_add  = $("#location_add").val();
-	var remark_add    = $("#description").val();
-	validate_text('#StockName');
-	$.ajax({
-        url: "<?php echo $url_add_location;?>",
-        type: "post",
-        data: {'location_name':location_name,'ContactName':ContactName,'ContactNumber':ContactNumber,'location_add':location_add,'remark_add':remark_add},
-        success: function(data){
-           val = $.parseJSON(data);
-            $('#LocationId').append($("<option></option>").attr("value",val['LocationId']).attr("selected",true).text(location_name)); 
-            document.getElementById("frm-location").reset();
-            HideDialoglocation();
-        },
-        error:function(){
-            alert("faile insert");
-            $("#result").html('There is error while submit');
-        }
-    });
-}
-<?php $url_code =  $this->url(array('module'=>'purchase','controller'=>'index','action'=>'check-purchaseno')); ?>
-function CheckPOInvoice(){
-				pur_no=$("#txt_order").val();
-				if(pur_no=="" || pur_no ==null){
-					return false;
-				}
-				else{
-				$.ajax({
-						url:"<?php echo $url_code;?>",
-						type:"post",
-						data:{'pur_no':pur_no},
-						success: function(data){
-							value = $.parseJSON(data);
-							if(value=="" || value==null){
-							}
-							else{
-								alert("Invoice number is exist !");
-								$("#txt_order").css("border-color","red");
-								$("#txt_order").val("");
-							}
-						},
-						error:function(){
-						}
-					});
-				}	
-}
 function calculatePrice(index) {
 	var qty = $('#qty_recieve_'+index).val();
 	var price = $('#price_'+index).val();
 	var total = price * qty;
 	var ds = $('#dis_value'+index).val();
-	//alert();
 	if(ds.length!=0){
 		if(ds.indexOf("%")!==-1){//if have %
 			var pds=ds.split("%");
 			if(!isNaN(pds[0])){
 				var discount=(total*parseFloat(pds[0]))/100;
 				after_discount = total - discount;
-				
 			}else{
 				after_discount = total - discount;
 			}
@@ -561,7 +344,6 @@ function netTotal() {//use
 	}
 	$('#totalAmoun_after').val(netTotal.toFixed(2));
 	$('#all_total_after').val(netTotal.toFixed(2));
-	//calculateDiscount();
 	 doRemain();
 }
 function doRemain() {
@@ -576,111 +358,6 @@ function doRemain() {
 	}
 	
 }
-<?php $url_vendor =  $this->url(array('module'=>'purchase','controller'=>'receive','action'=>'get-purchase-vendor')); ?>
-function getVendor(){
-	var id = $('#pu_code').val();
-	if(id=="" || id ==null){
-		return false;
-	}else{
-		$.ajax({
-			url:"<?php echo $url_vendor;?>",
-			type:"post",
-			data:{'id':id},
-			success: function(data){
-				value = $.parseJSON(data);
-				//alert(data);
-				if(value=="" || value==null){
-					//alert("No Result!");
-				}else{
-					//alert(value.is_over_sea);
-					/*if(value.is_over_sea==1){
-						$('.hides').hide();
-					}else{
-						$('.hides').show();
-					}
-					$('#vendor_name').text(value.v_name);
-					$('#vendor_phone').text(value.v_phone);
-					$('#contact_name').text(value.contact_name);
-					$('#contact_phone').text(value.phone_person);
-					$('#email').text(value.email);
-					$('#address').text(value.add_name);
-					$('#branch_id').val(value.branch_id);
-					$('#vendor_id').val(value.vendor_id);*/
-					$('#vendor').attr("value",value.vendor_id).attr("selected",true).attr("readOnly",true);                       
-					$("#vendor").select2();
-					$('#branch').attr("value",value.branch_id).attr("selected",true).attr("readOnly",true);                       
-					$("#branch").select2();
-					$('#date_order').val('11/13/2016');
-					$('#date_in').val(value.date_in);
-					$('#payment_name').val(value.payment_method);
-					$('#currency').val(value.currency_id);
-					$('#total_tax').val(value.tax);
-					$('#paid').val(value.paid);
-					$('#totalAmoun').val(value.all_total);
-					$('#dis_value').val(value.discount_value);
-					$('#all_total').val(value.net_total);
-					$('#remain').val(value.balance);
-					
-				}
-			},
-			error:function(){
-			}
-		});
-	}	
-}
 
-<?php $url_pu =  $this->url(array('module'=>'purchase','controller'=>'receive','action'=>'get-purchase-item')); ?>
-function getItem(){
-	var id = $('#pu_code').val();
-	if(id=="" || id ==null){
-		return false;
-	}else{
-		$.ajax({
-			url:"<?php echo $url_pu;?>",
-			type:"post",
-			data:{'id':id},
-			success: function(data){
-				//alert(data);
-				values = $.parseJSON(data);
-				num=0;
-				
-				if(values=="" || values==null){
-					//alert("No Result!");
-				}else{
-					for(i=0;i<=values.length;i++){
-						item_name = values[i].item_name;
-						qty_order = values[i].qty_order;
-						price = values[i].price;
-						sub_total = values[i].sub_total;
-						disc_value = values[i].disc_value;
-						num++;
-						template='<tr id="row_order_'+num+'" style="height:33px;">';
-						template+='<td  width="2%">'+num+'</td>';
-						template+='<td width="30%">'+item_name+'<input type="hidden" name="item_id_'+num+'" id="item_id_'+num+'" /></td>';
-						template+='<td ><input type="text" class="validate[required,custom[number]] input form-control" required="1" readOnly="readOnly" value="'+qty_order+'" id="qty_order_'+num+'" name="qty_order_'+num+'" /></td>';
-						template+='<td ><input type="text" class="validate[required,custom[number]] input form-control" onKeyup="calculatePrice('+num+')" value="'+qty_order+'" id="qty_recieve_'+num+'" name="qty_recieve_'+num+'" /></td>';
-						template+='<td ><input type="text" class="form-control" id="remark_'+num+'" name="remark_'+num+'" /> <input type="hidden" name="price_'+num+'" id="price_'+num+'" value="'+price+'" /> <input type="hidden" name="total_after_'+num+'" id="total_after_'+num+'" value="'+sub_total+'" /><input type="hidden" name="total_'+num+'" id="total_'+num+'" value="'+sub_total+'" /><input type="hidden" value="'+disc_value+'" id="dis_value'+num+'" name="dis_value'+num+'" class="form-control" /><input type="hidden" name="sub_total_receive_'+num+'" id="sub_total_receive_'+num+'" /> </td>';
-						template+="</tr>";
-						$('#table_order').innerHTML = template;
-						if($('#identity').val()!="") {
-							var identity = $('#identity').val();
-							$('#identity').val(identity+','+num);
-						} else {$('#identity').val(num);}
-						//$("#item_id_"+num).val(item_id);
-					}
-				}
-			},
-			error:function(){
-			}
-		});
-	}	
-}
-
-function doAmoutReceive(num){
-	qty = $('#qty_recieve_'+num).val();
-	price = $('#price'+num).val();
-	total_amount = parseFloat(qty)*parseFloat(price);
-	$('#sub_total_receive'+num).val(total_amount.toFixed(2));
-}
 	dojo.require("dijit.form.DateTextBox");
 </script>

@@ -6,16 +6,17 @@ class Purchase_Model_DbTable_DbRecieveOrder extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql=" SELECT 
 				  p.`id`,
-				  p.`order_number`,
-				  p.`date_order`,
-				  p.`invoice_no`,
-				  purchase_status,
 				  (SELECT s.name FROM `tb_sublocation` AS s WHERE s.id=p.`branch_id` LIMIT 1) AS branch,
 				  (SELECT v.`v_name` FROM `tb_vendor` AS v WHERE v.`vendor_id`=p.`vendor_id` LIMIT 1) AS vendor,
-				  (SELECT v.`purchase_id` FROM `tb_recieve_order` AS v WHERE v.`purchase_id`=p.`id` LIMIT 1) AS receive_id,
-				  (SELECT v.name_en FROM `tb_view` AS v WHERE v.key_code = p.`purchase_status` AND v.`type`=1 LIMIT 1) AS p_status
+				  p.`date_order`,
+				  p.date_in,
+				  p.`order_number`,
+				  p.`invoice_no`,
+				 (SELECT v.name_en FROM `tb_view` AS v WHERE v.key_code = p.`purchase_status` AND v.`type`=1 LIMIT 1) AS p_status,
+				 (SELECT recieve_number FROM `tb_recieve_order` WHERE purchase_id=p.`id` LIMIT 1) AS recieve_number
 				FROM
-				  `tb_purchase_order` AS p WHERE p.`date_order` BETWEEN '".date("Y-m-d",strtotime($search["start_date"]))."' AND '".date("Y-m-d",strtotime($search["end_date"]))."'";
+				  `tb_purchase_order` AS p 
+				   WHERE p.`date_order` BETWEEN '".date("Y-m-d",strtotime($search["start_date"]))."' AND '".date("Y-m-d",strtotime($search["end_date"]))."'";
 		$order=" ORDER BY p.`purchase_status` ASC,p.id DESC  ";
 		$where = '';
 		if($search["text_search"]!=""){
@@ -28,21 +29,12 @@ class Purchase_Model_DbTable_DbRecieveOrder extends Zend_Db_Table_Abstract
 		if($search["purchase_status"]!=0){
 			$where .=' AND p.`purchase_status`='.$search["purchase_status"];
 		}
-// 		$db = new Application_Model_DbTable_DbGlobal();
-// 		$user = $this->GetuserInfoAction();
-// 		$str_condition = " AND p.LocationId" ;
-// 		$vendor_sql .= $db->getAccessPermission($user["level"], $str_condition, $user["location_id"]);
-// 		if($post['order'] !=''){
-// 			$vendor_sql .= " AND ro.recieve_no LIKE '%".$post['order']."%'";
-// 		}
-// 		if($post['vendor_name'] !='' AND $post['vendor_name'] !=0){
-// 			$vendor_sql .= " AND ro.user_recieve =".$post['vendor_name'];
-// 		}
-// 		$start_date = $post['search_start_date'];
-// 		$end_date = $post['search_end_date'];
-// 		if($start_date != "" && $end_date != "" && strtotime($end_date) >= strtotime($start_date)) {
-// 			$vendor_sql .= " AND ro.date_recieve BETWEEN '$start_date' AND '$end_date'";
-// 		}
+		if($search["branch_id"]>0){
+			$where .=' AND p.`branch_id`='.$search["branch_id"];
+		}
+		if($search["suppliyer_id"]>0){
+			$where .=' AND p.`vendor_id`='.$search["suppliyer_id"];
+		}
 		return $db->fetchAll($sql.$where.$order);
 	}
 	

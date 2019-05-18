@@ -64,18 +64,10 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 		try{
 			$db_global = new Application_Model_DbTable_DbGlobal();
 			$session_user=new Zend_Session_Namespace('auth');
-			$userName=$session_user->user_name;
 			$GetUserId= $session_user->user_id;
-			$idrecord=$data['v_name'];
-			$date= new Zend_Date();
-			$number_transaction = $date->get('hh-mm-ss');
-			if($data['txt_order']==""){
-				$PO = "PO";
-				$order_add=$PO.$number_transaction;
-			}
-			else{
-				$order_add=$data['txt_order'];
-			}
+// 			$idrecord=$data['v_name'];
+			$order_add = $db_global->getPurchaseCode();
+			
 			$info_purchase_order=array(
 					"vendor_id"      => $data['v_name'],
 					"branch_id"      => $data["LocationId"],
@@ -113,24 +105,24 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 			
 			if($data['paid']>0){
 				$info_purchase_order=array(
-						"branch_id"   	=> $data["LocationId"],
-						"vendor_id"     => $data["v_name"],
-						"payment_type"  => 1, //payment by​ invoice
-						"payment_id"    => 1, //payment by cash/paypal/cheque
-						"receipt_no"    => '',//$data['receipt'],
-						"date_input"    => date("Y-m-d"),
-						"che_issuedate" => date("Y-m-d",strtotime($data['date_in'])),
-						"che_withdrawaldate" => date("Y-m-d",strtotime($data['date_in'])),
-						"expense_date"  => date("Y-m-d",strtotime($data['date_in'])),
-						"total"         => $data['all_totalpayment'],
-						"paid"          => $data['paid'],
-						"balance"       => $data['remain'],
-						"remark"        => $data['remark'],
-						"user_id"       => $GetUserId,
-						'status'        => 1,
-						"bank_name" 	=> '',
-						"cheque_number" => '',
-						"withdraw_name" => '',
+					"branch_id"   	=> $data["LocationId"],
+					"vendor_id"     => $data["v_name"],
+					"payment_type"  => 1, //payment by​ invoice
+					"payment_id"    => 1, //payment by cash/paypal/cheque
+					"receipt_no"    => '',//$data['receipt'],
+					"date_input"    => date("Y-m-d"),
+					"che_issuedate" => date("Y-m-d",strtotime($data['date_in'])),
+					"che_withdrawaldate" => date("Y-m-d",strtotime($data['date_in'])),
+					"expense_date"  => date("Y-m-d",strtotime($data['date_in'])),
+					"total"         => $data['all_totalpayment'],
+					"paid"          => $data['paid'],
+					"balance"       => $data['remain'],
+					"remark"        => $data['remark'],
+					"user_id"       => $GetUserId,
+					'status'        => 1,
+					"bank_name" 	=> '',
+					"cheque_number" => '',
+					"withdraw_name" => '',
 				);
 				$this->_name="tb_vendor_payment";
 				$reciept_id = $this->insert($info_purchase_order);
@@ -150,26 +142,24 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 			}
 			
 			if($data["status"]==5 OR $data["status"]==4){
-				$RO = "R";
-				$date= new Zend_Date();
-				$recieve_no=$RO.$number_transaction;
+				$recieve_no=$db_global->getReceivedCode();
 				$orderdata = array(
-						'purchase_id'	 =>$purchase_id,
-						"vendor_id"      => $data['v_name'],
-						"LocationId"     => $data["LocationId"],
-						"recieve_number" => $recieve_no,
-						"date_order"     => $data['order_date'],
-						"date_in"     	 => $data['date_in'],
-						"purchase_status"=> $data['status'],
-						"remark"         => $data['remark'],
-						"all_total"      => $data['totalAmoun'],
-						"discount_value" => $data['dis_value'],
-						"discount_real"  => $data['global_disc'],
-						"net_total"      => $data['all_totalpayment'],
-						"paid"           => $data['paid'],
-						"balance"        => $data['remain'],
-						"user_mod"       => $GetUserId,
-						"date"      	 => new Zend_Date(),
+					'purchase_id'	 =>$purchase_id,
+					"vendor_id"      => $data['v_name'],
+					"LocationId"     => $data["LocationId"],
+					"recieve_number" => $recieve_no,
+					"date_order"     => $data['order_date'],
+					"date_in"     	 => $data['date_in'],
+					"purchase_status"=> $data['status'],
+					"remark"         => $data['remark'],
+					"all_total"      => $data['totalAmoun'],
+					"discount_value" => $data['dis_value'],
+					"discount_real"  => $data['global_disc'],
+					"net_total"      => $data['all_totalpayment'],
+					"paid"           => $data['paid'],
+					"balance"        => $data['remain'],
+					"user_mod"       => $GetUserId,
+					"date"      	 => new Zend_Date(),
 				);
 				$this->_name='tb_recieve_order';
 				$recieved_order = $this->insert($orderdata);
@@ -203,23 +193,23 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 	
 				if($data["status"]==5 OR $data["status"]==4){
 					$recieved_item = array(
-							'recieve_id'	  => $recieved_order,
-							'pro_id'	  	  => $data['item_id_'.$i],
-							'qty_order'	      => $data['qty'.$i],
-							'qty_unit'        => $data['qty'.$i],
-							'qty_detail'      => 0,
-							'qty_receive'     => $data['qty'.$i],
-							'price'		      => $data['price'.$i],
-							'disc_value'	  => $data['dis_value'.$i],
-							'sub_total'	  => $data['total'.$i],
+						'recieve_id'	  => $recieved_order,
+						'pro_id'	  	  => $data['item_id_'.$i],
+						'qty_order'	      => $data['qty'.$i],
+						'qty_unit'        => $data['qty'.$i],
+						'qty_detail'      => 0,
+						'qty_receive'     => $data['qty'.$i],
+						'price'		      => $data['price'.$i],
+						'disc_value'	  => $data['dis_value'.$i],
+						'sub_total'	  => $data['total'.$i],
 					);
 					$db->insert("tb_recieve_order_item", $recieved_item);
-
 					unset($recieved_item);
-					$rows = $db_global ->productLocationInventory($data['item_id_'.$i], $locationid);
-					if(!empty($rows))
-					{
-						if($data["status"]==4 OR $data["status"]==5){
+					
+					if($data["status"]==4 OR $data["status"]==5){
+						$rows = $db_global ->productLocationInventory($data['item_id_'.$i], $locationid);
+						if(!empty($rows))
+						{
 							$datatostock   = array(
 								'qty'   			=> 	$rows["qty"]+$data['qty'.$i],
 								'last_mod_date'		=>	date("Y-m-d"),
@@ -228,9 +218,18 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 							$this->_name="tb_prolocation";
 							$where=" id = ".$rows['id'];
 							$this->update($datatostock, $where);
+							
+						}else{//add product to location
+							$datatostock   = array(
+								'qty'   		 => $data['qty'.$i],
+								'last_mod_date'	 => date("Y-m-d"),
+								'last_mod_userid'=> $GetUserId,
+								'pro_id'		 => $data['item_id_'.$i],
+								'location_id'	 => $locationid
+							);
+							$this->_name="tb_prolocation";
+							$this->insert($datatostock);
 						}
-					}else{//add product to location 
-						
 					}
 				}
 			}
@@ -238,9 +237,7 @@ class Purchase_Model_DbTable_DbPurchaseOrder extends Zend_Db_Table_Abstract
 		}catch(Exception $e){
 			$db->rollBack();
 			Application_Form_FrmMessage::message('INSERT_FAIL');
-			$err =$e->getMessage();
-			echo $err;exit();
-			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	public function updatePurchaseOrder($data)

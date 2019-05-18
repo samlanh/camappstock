@@ -79,15 +79,10 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	try{
     	$row = $db->fetchRow($sql);
     	}catch (Exception $e){
-    		var_dump($sql);
-    		die($e->getMessage());
     	}
-    	//echo $sql;exit();
-    	
     	return $row;
     }
     //get value in product inventory with product location (Joint)
-    
     public function productLocationInventory($pro_id, $location_id){
     	$db=$this->getAdapter();
     	$sql="SELECT id,pro_id,location_id,qty,qty_warning,user_id,last_mod_date,last_mod_userid
@@ -122,16 +117,41 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	}  	
     }
     //for get product product inventory but if have in prodcut location
-    public function productInventoryExist($itemId){
-    	$db=$this->getAdapter();
-    	$sql="SELECT pl.ProLocationID, pl.qty, iv.QuantityOnHand, iv.QuantityAvailable
-				FROM tb_prolocation AS pl
-				INNER JOIN tb_inventorytotal AS iv ON iv.ProdId = pl.pro_id WHERE pl.pro_id=".$itemId." LIMIT 1";
-    	$row = $db->fetchRow($sql);
-    	if(!$row) return false;
-    	return $row;    	
+//     public function productInventoryExist($itemId){
+//     	$db=$this->getAdapter();
+//     	$sql="SELECT pl.ProLocationID, pl.qty, iv.QuantityOnHand, iv.QuantityAvailable
+// 				FROM tb_prolocation AS pl
+// 				INNER JOIN tb_inventorytotal AS iv ON iv.ProdId = pl.pro_id WHERE pl.pro_id=".$itemId." LIMIT 1";
+//     	$row = $db->fetchRow($sql);
+//     	if(!$row) return false;
+//     	return $row;    	
+//     }
+    function getPurchaseCode(){
+    	$db = $this->getAdapter();
+    	$sql="SELECT COUNT(id) FROM `tb_purchase_order` LIMIT 1";
+    	$acc_no = $db->fetchOne($sql);
+    	$PO = "PO";
+    	$new_acc_no= (int)$acc_no+1;
+    	$acc_no= strlen((int)$acc_no+1);
+    	$pre='';
+    	for($i = $acc_no;$i<5;$i++){
+    		$pre.='0';
+    	}
+    	return $PO.$pre.$new_acc_no;
     }
-    
+    function getReceivedCode(){
+    	$db = $this->getAdapter();
+    	$sql="SELECT COUNT(order_id) FROM `tb_recieve_order`";
+    	$acc_no = $db->fetchOne($sql);
+    	$RO = "R";
+    	$new_acc_no= (int)$acc_no+1;
+    	$acc_no= strlen((int)$acc_no+1);
+    	$pre='';
+    	for($i = $acc_no;$i<5;$i++){
+    		$pre.='0';
+    	}
+    	return $RO.$pre.$new_acc_no;
+    }
     //to get and check if product total inventory exist 8/26/13
     public function InventoryExist($pro_id){
     	$db=$this->getAdapter();
@@ -199,7 +219,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	$row = $db->fetchAll($sql);
     	if(!$row) return false;
     	return $row;
-    	
     }
     //for check order history exist 
     final public function orderHistoryExitRow($order_id){
@@ -207,23 +226,18 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	$sql="SELECT * FROM `tb_order_history` WHERE `order`= ".$order_id." LIMIT 1";
     	$row=$db->fetchRow($sql);
     	return $row;
-    	
     }
     final public function purchaseOrderHistoryExitAll($order_id){
     	$db=$this->getAdapter();
     	$sql="SELECT * FROM `tb_purchase_order_history` WHERE type=1 AND `order`=". $order_id;
     	$rows=$db->fetchAll($sql);
-    	//if(!$rows) return false;
     	return $rows;
-    	 
     }
     final public function purchaseOrderHistory($order_id){
     	$db=$this->getAdapter();
    	$sql="SELECT * FROM `tb_purchase_order_history` WHERE type=1 AND `order`=". $order_id;
     	$rows=$db->fetchAll($sql);
-    	//if(!$rows) return false;
     	return $rows;
-    
     }
     final public function salesOrderHistoryExitAll($order_id){
     	$db=$this->getAdapter();
@@ -231,7 +245,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	$rows=$db->fetchAll($sql);
     	if(!$rows) return false;
     	return $rows;
-    
     }
     final public function inventoryLocation($locationid, $itemId){
     	$db=$this->getAdapter();
@@ -259,7 +272,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	FROM tb_prolocation AS pl
     	INNER JOIN tb_product AS p ON p.pro_id = pl.pro_id
     	WHERE pl.LocationId = ".$locationid. " AND pl.pro_id= ".$itemId." LIMIT 1";
-    	
     	$row=$db->fetchRow($sql);
     	return $row;
     }
@@ -277,24 +289,17 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
 		return $db->query($sql);
     } 
-
      public function DeleteData($tbl_name,$where){
     	$db = $this->getAdapter();
 		$sql = "DELETE FROM ".$tbl_name.$where;
 		return $db->query($sql);
     } 
-    
     public function convertStringToDate($date, $format = "Y-m-d H:i:s")
     {
     	if(empty($date)) return NULL;
     	$time = strtotime($date);
     	return date($format, $time);
     }
-    /* @Desc: add or sub qty of item depend on item and stock
-     * @param $stockID stock id
-     * @param $itemQtys array of item id and item qty
-     * @param $sign: + | -
-     * */
     public function query($sql){
     	$db = $this->getAdapter();
     	return $db->query($sql);	
@@ -312,7 +317,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	$info = array("user_name"=>$userName,"user_id"=>$GetUserId,"level"=>$level,"branch_id"=>$location_id);
     	return $info;
     }
-    
     public function getAccessPermission($branch='branch_id'){
     	$result = $this->getUserInfo();
     	if($result['level']==1){
@@ -350,7 +354,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	}
     	$sql=" SELECT * FROM `tb_acl_ubranch` WHERE user_id=$user_id ";
     	
-    	
     	$rows = $db->fetchAll($sql);
     	$s_where = array();
     	$where='';
@@ -362,7 +365,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	}
     	return $where;
     }
-   
     public function getSetting(){
     	$DB = $this->getAdapter();
     	$sql="SELECT * FROM `tb_setting` ";
@@ -372,7 +374,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	$session_user=new Zend_Session_Namespace('auth');
     	return $session_user->user_id;
     }
-	
     public static function writeMessageErr($err=null)
     {
     	$request=Zend_Controller_Front::getInstance()->getRequest();
@@ -389,7 +390,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
     	$stringData = "[".date("Y-m-d H:i:s")."]"." [user]:".$user_name." [module]:".$module." [controller]:".$controller. " [action]:".$action." [Error]:".$err. "\n";
     	fwrite($Handle, $stringData);
     	fclose($Handle);
-    
     }
     
     // ****************** Check Product Location  **************************
@@ -594,13 +594,14 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	}
    }
    function getAllVendor($opt=null){
+   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$db=$this->getAdapter();
    	$sql=" SELECT vendor_id As id,vendor_id,v_name as name, v_name FROM tb_vendor WHERE v_name!='' AND status = 1 ORDER BY vendor_id DESC";
    	$row =  $db->fetchAll($sql);
    	if($opt==null){
    		return $row;
    	}else{
-   		$options=array(0=>"Select Vendor",-1=>"Add Vendor");
+   		$options=array(0=>$tr->translate("SELECT_VENDOR"),-1=>$tr->translate("ADD_NEW"));
    		if(!empty($row)) foreach($row as $read) $options[$read['vendor_id']]=$read['v_name'];
    		return $options;
    	}

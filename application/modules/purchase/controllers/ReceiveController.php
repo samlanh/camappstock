@@ -21,21 +21,21 @@ class Purchase_ReceiveController extends Zend_Controller_Action
 					$search= array(
 						'text_search' 		=> "",
 						'purchase_status'	=>	0,
-						'start_date'		=>	1,
+						'branch_id'			=> -1,
+						'suppliyer_id'		=> 0,
+						'start_date'		=>	date("Y-m-d"),
 						'end_date'			=>	date("Y-m-d"),
 					);
 				}
 				$db = new Purchase_Model_DbTable_DbRecieveOrder();
 				$rows = $db->getAllReceivedOrder($search);
-				$this->view->rs = $rows;
-				$glClass = new Application_Model_GlobalClass();
-				$columns=array("PURCHASE_ORDER_CAP","ORDER_DATE_CAP", "VENDOR_NAME_CAP","TOTAL_CAP_DOLLAR","BY_USER_CAP");
-				$link=array(
-						'module'=>'purchase','controller'=>'receive','action'=>'detail-purchase-order',
-				);
-				$urlEdit = BASE_URL . "/purchase/index/update-purchase-order-test";
+				
 				$list = new Application_Form_Frmlist();
-				$this->view->list=$list->getCheckList(1, $columns, $rows, array('order'=>$link),$urlEdit);
+				$columns=array("LOCATION_NAME","VENDOR_NAME","ORDER_DATE","DATE_IN","PURCHASE_ORDER", "INVOICE_NO","PENDING_STATUS","RECEIVE_NO");
+				$link=array(
+						'module'=>'purchase','controller'=>'receive','action'=>'receivenote',
+				);
+				$this->view->list=$list->getCheckList(0, $columns, $rows, array('branch'=>$link,'vendor'=>$link,'date_order'=>$link,'date_in'=>$link));
 			}catch (Exception $e){
 				Application_Form_FrmMessage::messageError("INSERT_ERROR");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

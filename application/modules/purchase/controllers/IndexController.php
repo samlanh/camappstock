@@ -51,7 +51,7 @@ class Purchase_indexController extends Zend_Controller_Action
 			 if(!empty($data['identity'])){
 				$db->addPurchaseOrder($data);
 			 }
-			Application_Form_FrmMessage::message("INSERT_SUCESS");
+			Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message('INSERT_FAIL');
 				$err =$e->getMessage();
