@@ -15,7 +15,6 @@ class Report_PurchaseController extends Zend_Controller_Action
     }
     public function indexAction()
     {
-    
     }
     public function rptPurchaseAction()//purchase report
     {

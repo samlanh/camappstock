@@ -1,9 +1,5 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$session_user=new Zend_Session_Namespace('auth');
-	$user_id=$session_user->user_id;
-	$originalDate = "2012-10-31";
-	$newDate = date("m/d/Y", strtotime($originalDate));
 ?>
 
 <style>
@@ -14,7 +10,7 @@
 	<div class="card-content">
 		<div class="card-box">
 			<form method="post" autocomplete="off">
-				<div class="form-group" style="padding-top: 6px;">
+				<div class="form-group" >
 					<?php $formFilter = $this->formFilter; ?>
 					<div class="col-md-2"><?php echo $formFilter->getElement('text_search');?></div>
 					<div class="col-md-2"><?php echo $formFilter->getElement('branch_id');?></div>
@@ -28,12 +24,18 @@
 				</div>
 			</form> 
 	<div id="divPrint"  >
+		<style>
+			.style{
+				line-height: 25px;font-size: 12px !important;
+				font-family: 'Khmer OS Battambang';
+			}	
+		</style>
 		<table class="table2excel" style="background:#fff; margin: 0 auto; width: 100%; padding: 0px 2px 1cm 2px;font-family: 'Hanuman';">
 		<tr style="font-size: 13px;">
 			<td colspan="3" align="center">
-				<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("COMPANY_CUSTOMER");?></strong><br />
-				<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_EXPENSE");?></strong><br />
-				<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Muol Light';">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong>
+				<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 12px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("COMPANY_CUSTOMER");?></strong><br />
+				<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 12px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_EXPENSE");?></strong><br />
+				<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 12px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search["start_date"])){echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php } echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong>
 			</td>
 		</tr>
 		<tr>
@@ -54,8 +56,8 @@
 		?>
 		<tr>
 			<td colspan="3">
-				<table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
-            			<tr style="font-size:12px; height: 20px;border: 1px solid #000;white-space: nowrap;background-color: #ccc;line-height:30px;font-weight: bold;" align="center" >
+				<table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;font-family:Khmer OS Battambang;" width="100%" cellspacing="0">
+            		<tr class="style" style="font-size:12px; height: 20px;border: 1px solid #000;white-space: nowrap;background:#ccd9ff;line-height:30px;font-weight: bold;" align="center" >
 						<td style="border: 1px solid #000;"><?php echo $tr->translate('NUM')?></td>
 						<td style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH_NAME')?></td>
 						<td style="border: 1px solid #000;"><?php echo $tr->translate('EXPENSE_TITLE')?></td>
@@ -90,7 +92,7 @@
 						<td style="border: 1px solid #000;text-align: left;"><span style="width:120px;font-family:'Khmer OS Content'"></span><?php echo "ចំណាយលើអ្នកផ្គត់ផ្គង់(".$row['vendor'].")";?></td>
 						<td align="center" style="border: 1px solid #000;"><?php echo "Supplier's Expense(".$row['vendor'].")";?></td>
 						<td style="border: 1px solid #000;"><?php echo $row['receipt_no'];?></td>
-						<td style="border: 1px solid #000;background: #c6e2fb;"><?php echo number_format($row['total_paid'],2);?>&nbsp;$<?php //if($row['curr_type']==1){echo ' $';}else{echo ' រៀល​ ';}?></td>
+						<td style="border: 1px solid #000;background: #c6e2fb;"><?php echo number_format($row['total_paid'],2);?>&nbsp;$</td>
 						<td style="border: 1px solid #000;"><?php echo date("d-M-Y",strtotime($row['expense_date']));?></td>
 						<td style="border: 1px solid #000;"><?php echo $row['remark'];?></td>
 						<td style="border: 1px solid #000;"><?php echo $row['user'];?></td>
@@ -99,10 +101,10 @@
 								$total_expense_dollar = $total_expense_dollar + $row['total_paid'];
 						?> 
 					 <?php } ?>
-					 <tr class="hover" style="font-size:11px; height: 20px;border: 1px solid #000;" align="center" >
+					 <tr class="hover" style="height: 30px; font-weight:bold; text-align: center;font-size: 14px;" align="center" >
 						<td style="border: 1px solid #fff;border-right: 1px solid #000;" colspan="7"></td>
-						<td style="border: 1px solid #000; white-space: nowrap;">សរុបរួម/Grand Total</td>
-						<td style="border: 1px solid #000;"><?php echo number_format($total_expense_dollar,2);?></td>
+						<td style="border: 1px solid #000; white-space: nowrap;background:#87acff;font-weight: bolder;">សរុបរួម/Grand Total</td>
+						<td style="border: 1px solid #000;background:#87acff;font-weight: bolder;"><?php echo number_format($total_expense_dollar,2);?></td>
 					</tr>
 					</table>
 				</td>

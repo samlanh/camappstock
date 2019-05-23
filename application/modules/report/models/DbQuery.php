@@ -15,20 +15,18 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 	public function getAllPurchaseReport($search){//1
 		$db= $this->getAdapter();
 		$sql=" SELECT id,
-		(SELECT name FROM `tb_sublocation` WHERE tb_sublocation.id = branch_id AND status=1 AND name!='' LIMIT 1) AS branch_name,
-		(SELECT v_name FROM `tb_vendor` WHERE tb_vendor.vendor_id=tb_purchase_order.vendor_id LIMIT 1 ) AS vendor_name,
-		order_number,invoice_no,date_order,date_in,
-		(SELECT symbal FROM `tb_currency` WHERE id= currency_id limit 1) As curr_name,
-		currency_id,
-		net_total,paid,balance,balance_after,
-		(SELECT payment_name FROM `tb_paymentmethod` WHERE payment_typeId=payment_method LIMIT 1 ) as payment_method,
-		(SELECT name_en FROM `tb_view` WHERE key_code = purchase_status AND `type`=1 LIMIT 1 ) As purchase_status,
-		(SELECT name_en FROM `tb_view` WHERE key_code =tb_purchase_order.status AND type=2 LIMIT 1),
-		(SELECT u.username FROM tb_acl_user AS u WHERE u.user_id = user_mod LIMIT 1 ) AS user_name
+			(SELECT name FROM `tb_sublocation` WHERE tb_sublocation.id = branch_id AND status=1 AND name!='' LIMIT 1) AS branch_name,
+			(SELECT v_name FROM `tb_vendor` WHERE tb_vendor.vendor_id=tb_purchase_order.vendor_id LIMIT 1 ) AS vendor_name,
+			order_number,invoice_no,date_order,date_in,
+			net_total,paid,balance,balance_after,
+			(SELECT payment_name FROM `tb_paymentmethod` WHERE payment_typeId=payment_method LIMIT 1 ) as payment_method,
+			(SELECT name_en FROM `tb_view` WHERE key_code = purchase_status AND `type`=1 LIMIT 1 ) As purchase_status,
+			(SELECT name_en FROM `tb_view` WHERE key_code =tb_purchase_order.status AND type=2 LIMIT 1),
+			(SELECT u.username FROM tb_acl_user AS u WHERE u.user_id = user_mod LIMIT 1 ) AS user_name
 		FROM `tb_purchase_order`  ";
 		$from_date =(empty($search['start_date']))? '1': " date_order >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " date_order <= '".$search['end_date']." 23:59:59'";
-		$where = " WHERE status=1 and ".$from_date." AND ".$to_date;
+		$where = " WHERE status=1 AND ".$from_date." AND ".$to_date;
 		if(!empty($search['text_search'])){
 			$s_where = array();
 			$s_search = trim(addslashes($search['text_search']));
@@ -44,7 +42,6 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 		if($search['branch_id']>0){
 			$where .= " AND branch_id =".$search['branch_id'];
 		}
-		
 		if($search['status_paid']>0){
 			if($search['status_paid']==1){
 				$where .= " AND balance <=0 ";
@@ -52,29 +49,27 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 			elseif($search['status_paid']==2){
 				$where .= " AND balance >0 ";
 			}
-				
 		}
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbg->getAccessPermission();
 		$order=" ORDER BY date_order ASC ";
-		//echo $sql.$where.$order;
 		return $db->fetchAll($sql.$where.$order);
 	}
 	public function getAllPurchasebySupplier($search){//1
 		$db= $this->getAdapter();
 		$sql=" SELECT id,
-		(SELECT name FROM `tb_sublocation` WHERE tb_sublocation.id = branch_id AND status=1 AND name!='' LIMIT 1) AS branch_name,
-		(SELECT v_name FROM `tb_vendor` WHERE tb_vendor.vendor_id=tb_purchase_order.vendor_id LIMIT 1 ) AS vendor_name,
-		(SELECT v_phone FROM `tb_vendor` WHERE tb_vendor.vendor_id=tb_purchase_order.vendor_id LIMIT 1 ) AS v_phone,
-		SUM(net_total) AS net_total,
-		SUM(paid) AS paid,
-		SUM(balance) AS balance,
-		SUM(balance_after) AS balance_after,
+				(SELECT name FROM `tb_sublocation` WHERE tb_sublocation.id = branch_id AND status=1 AND name!='' LIMIT 1) AS branch_name,
+				(SELECT v_name FROM `tb_vendor` WHERE tb_vendor.vendor_id=tb_purchase_order.vendor_id LIMIT 1 ) AS vendor_name,
+				(SELECT v_phone FROM `tb_vendor` WHERE tb_vendor.vendor_id=tb_purchase_order.vendor_id LIMIT 1 ) AS v_phone,
+				SUM(net_total) AS net_total,
+				SUM(paid) AS paid,
+				SUM(balance) AS balance,
+				SUM(balance_after) AS balance_after,
 		(SELECT name_en FROM `tb_view` WHERE key_code = purchase_status AND `type`=1 LIMIT 1 ) As purchase_status
 		FROM `tb_purchase_order`  ";
 		$from_date =(empty($search['start_date']))? '1': " date_order >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " date_order <= '".$search['end_date']." 23:59:59'";
-		$where = " WHERE status=1 and ".$from_date." AND ".$to_date;
+		$where = " WHERE status=1 AND ".$from_date." AND ".$to_date;
 		if(!empty($search['text_search'])){
 			$s_where = array();
 			$s_search = trim(addslashes($search['text_search']));
