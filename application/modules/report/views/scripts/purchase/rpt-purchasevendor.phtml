@@ -9,8 +9,8 @@
 				<?php $formFilter = $this->form_purchase; ?>
 					<div class="form-group" style="padding-top: 6px;">
 					<div class="col-md-3"><?php echo $formFilter->getElement('text_search');?></div>
-					<div class="col-md-3"><?php echo $formFilter->getElement('suppliyer_id');?></div>
 					<div class="col-md-3"><?php echo $formFilter->getElement('branch_id');?></div>
+					<div class="col-md-3"><?php echo $formFilter->getElement('suppliyer_id');?></div>
 					<div class="col-md-3"><?php echo $formFilter->getElement('status_paid');?></div>
 				</div>
 				<div class="form-group">
@@ -27,11 +27,11 @@
 	<div id="divPrint" style="width: 100%;">
 	<style>
 		.style{
-			line-height: 25px;font-size: 14px !important;
+			line-height: 25px;font-size: 12px !important;
 			font-family: 'Khmer OS Battambang';
 		}
 		ul{margin: 0;padding:0;}
-		table tr td ul li{text-align: center;list-style: none;line-height: 25px; font-weight: bold;}
+		table tr td ul li{text-align: center;list-style: none;line-height: 25px;}
 		th{padding: 5px;}
 		.hover:hover{background: #ccc;}
 		table { page-break-inside:auto }
@@ -41,7 +41,7 @@
 		  page-break-inside:avoid; page-break-after:auto;
 		}
 	</style>
-		<table style="font-family: 'Khmer OS Content'; width:100%;">
+		<table style="font-family: 'Khmer OS Battambang'; width:100%;">
 			<tbody>
 			<tr>
 		    	<td align="center">
@@ -51,9 +51,9 @@
 			                	<td width="20%" valign="top"></td>
 			                	<td width="60%" valign="top">
 			                		<ul>
-			                			<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
-			                			<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("RPT_PURCHASE_VENDOR");?></li>
-			                			<li style="text-align:center; font-size:14px;"><?php echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
+			                			<li style="text-align:center; font-size:14px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
+			                			<li style="text-align:center; font-size:14px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("RPT_PURCHASE_VENDOR");?></li>
+			                			<li style="text-align:center; font-size:14px;"><?php if(!empty($this->rssearch['start_date'])){echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php } echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
 			                		</ul>
 			                	</td>
 			                    <td width="20%"></td>
@@ -64,9 +64,9 @@
 		    </tr>
 		    <tr>
 		    	<td class="table2excel" id="exportExcel">
-		            <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:14px;" width="100%" cellspacing="0">
+		            <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
 		               <thead>
-		                 <tr bgcolor="#b0bdfd" class="style" align="center" style="font-weight:bold; line-height: 25px; font-size:12px; padding:1px 0px; white-space: nowrap; ">
+		                 <tr class="style" align="center" style="background:#ccd9ff;font-weight:bold; line-height: 25px; font-size:12px; padding:1px 0px; white-space: nowrap; ">
 			                <td>&nbsp;<?php echo $tr->translate("NUM");?></td>
 							<td>&nbsp;<?php echo $tr->translate("VENDOR_NAME");?></td>
 							<td>&nbsp;<?php echo $tr->translate("CONTACT_NUMBER");?></td>
@@ -92,7 +92,7 @@
 								$d_paid = $d_paid+$rs["paid"];
 								$d_balance = $d_balance+$rs["balance_after"];
                     		}?>
-			                <tr class="style" style=" line-height: 24px; font-size:11px;">
+			                <tr class="style" style="height: 30px; font-weight:bold; text-align: center;font-size: 14px; background:#87acff;">
 			                    <td colspan="3" align="center"><strong>សរុបចំណាយរួម</strong></td>
 			                    <td style="font-family:Times New Roman;font-weight: bold;text-align: right">$&nbsp;<?php echo number_format($d_netotal,2);?>&nbsp;</td>
 			                    <td style="font-family:Times New Roman;font-weight: bold;text-align: right">$&nbsp;<?php echo number_format($d_paid,2);?>&nbsp;</td>
@@ -100,11 +100,12 @@
 			                 </tr>
 		                </tbody>
 		           </table>
+		           	   <br />
 		              <?php echo $this->getFooter;?>
 		    		</td>
 		    	</tr>
 			</tbody>
-		</table>
+			</table>
 		</div>
 	  </div>		
 	</div>

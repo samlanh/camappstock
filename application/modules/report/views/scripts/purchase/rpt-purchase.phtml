@@ -8,13 +8,13 @@
 		<div class="card-box">
 			<form method="post" autocomplete="off">
 				<?php $formFilter = $this->form_purchase; ?>
-					<div class="form-group" style="padding-top: 6px;">
+					<div class="form-group" >
 					<div class=" col-md-3"><?php echo $formFilter->getElement('text_search');?></div>
-					<div class=" col-md-3"><?php echo $formFilter->getElement('suppliyer_id');?></div>
 					<div class=" col-md-3"><?php echo $formFilter->getElement('branch_id');?></div>
+					<div class=" col-md-3"><?php echo $formFilter->getElement('suppliyer_id');?></div>
 					<div class=" col-md-3"><?php echo $formFilter->getElement('status_paid');?></div>
 				</div>
-				<div class="form-group" style="padding-top: 6px;">
+				<div class="form-group">
 					<div class=" col-md-3"><?php echo $formFilter->getElement('purchase_status');?></div>
 					<div class=" col-md-3"><?php echo $formFilter->getElement('start_date');?></div>
 					<div class=" col-md-3"><?php echo $formFilter->getElement('end_date');?></div>
@@ -28,11 +28,11 @@
 	<div id="divPrint" style="width: 100%;">
 	<style>
 		.style{
-			line-height: 25px;font-size: 14px !important;
+			line-height: 25px;font-size: 12px !important;
 			font-family: 'Khmer OS Battambang';
 		}
 		ul{margin: 0;padding:0;}
-		table tr td ul li{text-align: center;list-style: none;line-height: 25px; font-weight: bold;}
+		table tr td ul li{text-align: center;list-style: none;line-height: 25px;}
 		th{padding: 5px;}
 		.hover:hover{background: #ccc;}
 		table { page-break-inside:auto }
@@ -52,8 +52,8 @@
 				                	<td width="20%" valign="top"></td>
 				                	<td width="60%" valign="top">
 				                		<ul>
-				                			<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
-				                			<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("RPT_PURCHASE");?></li>
+				                			<li style="text-align:center; font-size:14px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
+				                			<li style="text-align:center; font-size:14px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("RPT_PURCHASE");?></li>
 				                			<li style="text-align:center; font-size:14px;"><?php echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
 				                		</ul>
 				                	</td>
@@ -67,7 +67,7 @@
 		    	<td class="table2excel" id="exportExcel">
 		            <table  border="1" style="border-collapse:collapse;border:1px solid #000; font-size:14px;" width="100%" cellspacing="0">
 		                 <thead>
-		                 	<tr bgcolor="#b0bdfd" class="style" align="center" style="font-weight:bold; line-height: 25px; font-size:12px; padding:1px 0px; white-space: nowrap; ">
+		                 	<tr class="style" align="center" style="background:#ccd9ff;font-weight:bold; line-height: 25px; font-size:12px; padding:1px 0px; white-space: nowrap; ">
 			                    <td>&nbsp;<?php echo $tr->translate("NUM");?></td>
 								<td><?php echo $tr->translate("BRANCH_NAME");?></td>
 								<td>&nbsp;<?php echo $tr->translate("VENDOR_NAME");?></td>
@@ -78,7 +78,7 @@
 								<td width="12%">&nbsp;<?php echo $tr->translate("PAID");?></td>
 								<td>&nbsp;<?php echo $tr->translate("BALANCE");?></td>
 						        <td>&nbsp;<?php echo $tr->translate("BY_USER");?></td>
-		               	 </tr>
+		               	 	</tr>
 		                <thead>
 		                <?php $num=1; 
 		                $r_netotal = 0;$r_paid = 0; $r_balance = 0;
@@ -103,21 +103,14 @@
 							$d_balance = $d_balance+$rs["balance_after"];
                     }?>
 		                </tbody>
-		           </table>
-		            <br>
-		             <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
-		                <tbody><tr height="30px;" bgcolor="#ccc" class="style" align="center" style="floafont-weight:bold; line-height: 14px; font-size:12px; padding:2px 0px; ">
-		                    <td><strong><?php echo $tr->translate("PURCHASE_AMOUNT");?></strong></td>
-		                    <td><strong><?php echo $tr->translate("PAID");?></strong></td>
-		                    <td><strong><?php echo $tr->translate("BALANCE");?></strong></td>
+		                <tr style="height: 30px; font-weight:bold; text-align: center;font-size: 14px; background:#87acff;">
+		                	<td colspan="6"></td>
+		                	<td><?php echo number_format($d_netotal,2);?></td>
+		                	<td>&nbsp;<?php echo number_format($d_paid,2);?>&nbsp;</td>
+		                	<td>&nbsp;<?php echo number_format($d_balance,2);?>&nbsp;</td>
+		                	<td></td>
 		                </tr>
-		                 <tr class="style" style=" line-height: 24px; font-size:11px;">
-		                    <td>&nbsp;<?php echo number_format($d_netotal,2);?>&nbsp;</td>
-		                    <td>&nbsp;<?php echo number_format($d_paid,2);?>&nbsp;</td>
-		                    <td>&nbsp;<?php echo number_format($d_balance,2);?>&nbsp;</td>
-		                 </tr>
-		               </tbody>
-		             </table>
+		           </table>
 		              <br>
 		              <?php echo $this->getFooter;?>
 		    		</td>
