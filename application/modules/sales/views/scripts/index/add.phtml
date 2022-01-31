@@ -18,21 +18,21 @@
 	    	</div>
 			<div class="card-box">
 				<form class="form-horizontal" enctype="multipart/form-data" method="post">
-					<div class="col-md-4">
-						<div class="form-group">
-							<div class="col-md-4">
-								<?php echo $tr->translate("CUSTOMER_NAME");?>
-							</div>
-							<div class="col-md-8">
-								<?php echo $form->getElement("customer_id");?>
-							</div>
-						</div>
+					<div class="col-md-3">
 						<div class="form-group">
 							<div class="col-md-4">
 								<?php echo $tr->translate("BRANCH_NAME");?>
 							</div>
 							<div class="col-md-8">
 								<?php echo $form->getElement('branch_id');?>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-4">
+								<?php echo $tr->translate("CUSTOMER_NAME");?>
+							</div>
+							<div class="col-md-8">
+								<?php echo $form->getElement("customer_id");?>
 							</div>
 						</div>
 						<div class="form-group">
@@ -125,7 +125,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-8">
+					<div class="col-md-9">
 						<div class="form-group">
 							<div class="col-md-2">
 								<button type="button" class="btn red delete" style="width:100%;">
@@ -134,12 +134,12 @@
 								</button>
 							</div>
 							<div class="col-md-8">
-								<select dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*" class="fullside" id="add_item" name="add_item" Onchange="getItemOrder();"  style="width:100% ;margin:0 auto;">
+								<select placeHolder="<?php echo $tr->translate("PLEASE_SELECT_PRODUCT");?>" dojoType="dijit.form.FilteringSelect" autoComplete="false" required="false" queryExpr="*${0}*" class="fullside" id="add_item" name="add_item" Onchange="getItemOrder();"  style="width:100% ;margin:0 auto;">
 									<?php echo $this->items; ?>
 								</select>
 							</div>
 							<div class="col-md-2">
-								<button type="button" class="btn red delete" style="width:100%;">
+									<button type="button" class="btn red delete" style="width:100%;">
 									<input type="checkbox" Onclick="Confirmmessage()" id="free" name="free" />
 									<span>&nbsp;&nbsp;Free</span>
 								</button>
@@ -202,7 +202,7 @@ $('#frm').submit(function() {
 	identity =$("#identity").val();
 	if(identity=='' || identity==-1){
 		alert("ទិន្នន័យមិនអាចរក្សាទុកបានទេ ។សូមត្រួតពិនិត្យមើលម្តងទៀត");
-		$('#add_item').select2('open');
+		//$('#add_item').select2('open');
 		return false;
 	}
 
@@ -258,61 +258,74 @@ function saleTermDefual(){
 	<?php } }?>
 }
 
-var index5 = 0;num=0;
+var col = 0;num=0;
 var option5 = '<?php echo $this->items; ?>';
 var baseUrl = '<?php echo BASE_URL; ?>';
 var template = '';
 var value = '';
 pqty = 1;
 var index=1;
+temp='';
 function addRow(item_id) {
-	index5++; //var first = index5;
+	col++; //var first = col;
 	index=index+1;
-	for(i=1; i<index5; i++){
+	/*for(i=1; i<col; i++){
 		new_item=parseInt(item_id);
 		items = parseInt($("#item_id_"+i).val());
-	}
-	template='<tr id="row_order_'+index5+'" style="height:33px;">';
+	}*/
+
+	item_label=dijit.byId("add_item").attr('displayedValue');
+	item_id=dijit.byId("add_item").get('value');
+	//$('#add_item').val('').trigger("liszt:updated");
+	
+	template='<tr id="row_order_'+col+'" style="height:33px;">';
 	var inp = '';
-	if(index5 == 1) {
+	if(col == 1) {
 		template+='<td >&nbsp;</td>';
 	} else {
-		template+='<td ><img onClick="deleteRecord('+index5+')" src="<?php echo BASE_URL; ?>/images/icon/delete.gif" /></td>';
+		template+='<td ><img onClick="deleteRecord('+col+')" src="<?php echo BASE_URL; ?>/images/icon/delete.gif" /></td>';
 	}
-	template+='<td  width="2%">'+index5+'</td>';
-	template+='<td width="30%"><select style="width:340px;" class="form-control select2me" Onchange="ShowPopupProduct('+ index5 + ');" id="item_id_'+index5+'" name="item_id_'+index5+'" >'+option5+'<option></option></select>'+inp+'</td>';
-	template+='<td><input style="background:#f5e1e1;" readonly type="text" class="form-control" id="lblcurrent_qty'+index5+'" name="lblcurrent_qty'+index5+'" /><input style="background:#f5e1e1;" readonly type="hidden" class="form-control" id="current_qty'+index5+'" name="current_qty'+index5+'" /></td>';
-	template+='<td ><input type="checkbox" onkeyup="getPriceFree('+index5+')" id="pricefree_'+index5+'" name="pricefree_'+index5+'"/> </td>';
-	template+='<td ><input type="text" onkeyup="calculatePrice('+index5+'),calculateQtyWarning('+index5+',1);" class="validate[required,custom[number]] input form-control" required="1" value="1" id="qty_unit_'+index5+'" name="qty_unit_'+index5+'" /></td>';
-	template+='<td ><input type="text" onkeyup="calculatePrice('+index5+'),calculateQtyWarning('+index5+',2);" class="validate[required,custom[number]] input form-control" value="0" id="qty_per_unit_'+index5+'" name="qty_per_unit_'+index5+'" /></td>';
-	template+='<td ><input type="text" onkeyup="calculatePrice('+index5+')" class="form-control" required="1" id="qty'+index5+'" name="qty'+index5+'"/><input type="hidden" readonly  class="form-control" required="1" id="qty_perunit'+index5+'" name="qty_perunit'+index5+'"/></td>';
-	template+='<td ><input type="text" onkeyup="calculatePrice('+index5+')" class="validate[required,custom[number]] input form-control" id="price'+index5+'" name="price'+index5+'" /><input type="hidden" id="oldprice_'+index5+'" name="oldprice_'+index5+'"/></td>';
-	template+='<td ><input type="text" onkeyup="calculatePrice('+index5+')" class="form-control" id="extra_price'+index5+'" name="extra_price'+index5+'" /><input type="hidden" id="oldprice_'+index5+'" name="oldprice_'+index5+'"/></td>';
-	template+='<td  width="5%"><input type="text" onkeyup="calculatePrice('+index5+')" value="0" id="dis_value'+index5+'" name="dis_value'+index5+'" class="form-control" /><input type="hidden" readonly="readonly" class="input70px" id="discount_type'+index5+'" name="discount_type'+index5+'" /></td>';
-	template+='<td ><input type="text" class="form-control" readonly="readonly" id="total'+index5+'" name="total'+index5+'" /><input type="hidden" name="cost_price_'+index5+'" id="cost_price_'+index5+'" /></td>';
+	template+='<td  width="2%">'+col+'</td>';
+	template+='<td width="30%"><input type="text" id="item_id_'+col+'" name="item_id_'+col+'" value="'+item_id+'" />'+item_label+'</td>';
+	template+='<td><input style="background:#f5e1e1;" readonly type="text" class="form-control" id="lblcurrent_qty'+col+'" name="lblcurrent_qty'+col+'" /><input style="background:#f5e1e1;" readonly type="hidden" class="form-control" id="current_qty'+col+'" name="current_qty'+col+'" /></td>';
+	template+='<td ><input type="checkbox" onkeyup="getPriceFree('+col+')" id="pricefree_'+col+'" name="pricefree_'+col+'"/> </td>';
+	template+='<td ><input type="text" dojoType="dijit.form.NumberTextBox" onkeyup="calculatePrice('+col+'),calculateQtyWarning('+col+',1);" class="validate[required,custom[number]] input form-control" required="1" value="1" id="qty_unit_'+col+'" name="qty_unit_'+col+'" /></td>';
+	template+='<td ><input type="text" dojoType="dijit.form.NumberTextBox" onkeyup="calculatePrice('+col+'),calculateQtyWarning('+col+',2);" class="validate[required,custom[number]] input form-control" value="0" id="qty_per_unit_'+col+'" name="qty_per_unit_'+col+'" /></td>';
+	template+='<td ><input type="text" dojoType="dijit.form.NumberTextBox" onkeyup="calculatePrice('+col+')" class="form-control" required="1" id="qty'+col+'" name="qty'+col+'"/><input type="hidden" readonly  class="form-control" required="1" id="qty_perunit'+col+'" name="qty_perunit'+col+'"/></td>';
+	template+='<td ><input type="text" dojoType="dijit.form.NumberTextBox" onkeyup="calculatePrice('+col+')" class="validate[required,custom[number]] input form-control" id="price'+col+'" name="price'+col+'" /><input type="hidden" id="oldprice_'+col+'" name="oldprice_'+col+'"/></td>';
+	template+='<td ><input type="text" dojoType="dijit.form.NumberTextBox" onkeyup="calculatePrice('+col+')" class="form-control" id="extra_price'+col+'" name="extra_price'+col+'" /><input type="hidden" id="oldprice_'+col+'" name="oldprice_'+col+'"/></td>';
+	template+='<td  width="5%"><input dojoType="dijit.form.NumberTextBox" type="text" onkeyup="calculatePrice('+col+')" value="0" id="dis_value'+col+'" name="dis_value'+col+'" class="form-control" /><input type="hidden" readonly="readonly" class="input70px" id="discount_type'+col+'" name="discount_type'+col+'" /></td>';
+	template+='<td ><input type="text" class="form-control" readonly="readonly" id="total'+col+'" name="total'+col+'" /><input type="hidden" name="cost_price_'+col+'" id="cost_price_'+col+'" /></td>';
 	template+="</tr>";
-	$('#table_order').append(template);
+	tmp='<tr id="row'+col+'" class="hover">';
+	tmp+="</tr>";
+	//$('#table_order').append(template);
+	dojo.query("#table_order").append(tmp);
+	
 	if($('#identity').val()!="") {
 		var identity = $('#identity').val();
-		$('#identity').val(identity+','+index5);
-	} else {$('#identity').val(index5);}
-	$("#item_id_"+index5).val(item_id);
-	$("#item_id_"+index5).select2();
-	getQtyById(index5);
+		$('#identity').val(identity+','+col);
+	} else {$('#identity').val(col);}
+
+	dojo.html.set(dojo.byId("row"+col),template , {
+	     parseContent: true,
+	});
+	
+	getQtyById(col);
 	if(free.checked){
-		$("#pricefree_"+index5).attr({checked:'checked'});  
-		$("#price"+index5).val(0);
-		$("#price"+index5).attr('readonly','readonly');
-		$("#dis-value"+index5).attr('readonly','readonly');
-		$("#dis-value"+index5).val(0);
+		$("#pricefree_"+col).attr({checked:'checked'});  
+		$("#price"+col).val(0);
+		$("#price"+col).attr('readonly','readonly');
+		$("#dis-value"+col).attr('readonly','readonly');
+		$("#dis-value"+col).val(0);
 	}
 	else{
 		
 		$("#paid").val(0);
 	}
-	getQtyById(index5);
+	getQtyById(col);
 	$("#row_order_0").remove();
-	$("#frm").validationEngine();
+	$("#add_item").val("");
 }
 term_option = '<?php echo $this->term_opt; ?>';
 index1 = 0;
@@ -402,13 +415,16 @@ $( document ).ready(function() {
 });
 function getItemOrder(){
 	item_ids=$("#add_item").val();
-	$('#add_item').val('').trigger("liszt:updated");
+	//$('#add_item').val('').trigger("liszt:updated");
 	if(item_ids==-1){
 		return false;
 	}
+	//item_label=dijit.byId("add_item").attr('displayedValue');
+	//item_id=dijit.byId("add_item").get('value');
+	//alert("text"+item_label);
+	
 	addRow(item_ids);
 	getProductPrice(item_ids);
-	$("#add_item").val("");
 }
 function getTermItem(){
 	termid=$("#term_item").val();

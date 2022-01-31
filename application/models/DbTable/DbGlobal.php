@@ -525,7 +525,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			(SELECT SUM(paid) FROM `tb_receipt_detail` WHERE invoice_id=s.id) AS paid
 			FROM tb_sales_order AS s 
 			WHERE s.customer_id = $post_id AND s.status=1  ";
-		$sql.="  AND s.balance>0 ";
+		$sql.="  AND s.all_totalafter>0 ";
 		$sql.=" ORDER BY s.id DESC ";
    }else{//by invoice
 		$sql=" SELECT s.*,s.id AS invoice_id,

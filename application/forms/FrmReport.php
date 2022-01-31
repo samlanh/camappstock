@@ -29,30 +29,24 @@ class Application_Form_FrmReport extends Zend_Form
     	$pro_id->setValue($proValue);
     	$this->addElement($pro_id);
     	
-    	
-    	/*$sql='SELECT DISTINCT name,id FROM tb_sublocation WHERE name!="" AND status=1 ';
-    	$user = $this->GetuserInfo();
-    	if($user["level"]!=1 AND $user["level"]!=2){
-    		$sql .= " AND location_id = ".$user["branch_id"];
-    			
-    	}
-    	$rs=$db->getGlobalDb($sql);*/
-    	//$options=array(''=>$tr->translate('Please_Select_Location'));
 		$options = $db->getAllLocation(1);
     	$locationValue = $request->getParam('branch_id');
-    	//foreach($rs as $read) $options[$read['id']]=$read['name'];
     	$location_id=new Zend_Form_Element_Select('branch_id');
     	$location_id->setMultiOptions($options);
     	$location_id->setAttribs(array(
-    			'id'=>'branch_id',
-    			'class'=>'form-control select2me'
+    		'id'=>'branch_id',
+    		'dojoType'=>"dijit.form.FilteringSelect",
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'class'=>'fullside',
     	));
     	$location_id->setValue($locationValue);
     	
 		$nameValue = $request->getParam('text_search');
     	$nameElement = new Zend_Form_Element_Text('text_search');
     	$nameElement->setAttribs(array(
-    			'class'=>'form-control'
+    		'dojoType'=>"dijit.form.TextBox",
+    		'class'=>'fullside',
     	));
     	$nameElement->setValue($nameValue);
     	$this->addElement($nameElement);
@@ -70,10 +64,7 @@ class Application_Form_FrmReport extends Zend_Form
     	$cate_element->setValue($cateValue);
     	$this->addElement($cate_element);
     	 
-    	//$rs=$db->getGlobalDb('SELECT id, name FROM tb_sublocation WHERE name!="" ORDER BY name');
-    	//$options=array(''=>$tr->translate('Please_Select'));
     	$branchValue = $request->getParam('branch_id');
-    	//foreach($rs as $read) $options[$read['branch_id']]=$read['Name'];
 		$options = $db->getAllLocation(1);
     	$branch_element=new Zend_Form_Element_Select('branch_id');
     	$branch_element->setMultiOptions($options);
@@ -84,29 +75,29 @@ class Application_Form_FrmReport extends Zend_Form
     	$branch_element->setValue($branchValue);
     	$this->addElement($branch_element);
     	
-    	$startDate = new Zend_Form_Element_Text("start_date");//echo date("Y-m-d");
+    	$startDate = new Zend_Form_Element_Text("start_date");
     	$startDatevalue = $request->getParam("start_date");
     	$startDate->setAttribs(array(
-    			'class'=>'form-control date-picker',
-    			'placeHolder'=>'Start Date',
-				'data-date-format'=>"dd-mm-yyyy"
+    			'dojoType'=>"dijit.form.DateTextBox",
+    			'class'=>'fullside',
+    			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
     			));
     	$startDate->setValue($startDatevalue);
     	 
     	$endDate = new Zend_Form_Element_Text("end_date");
     	$endDate->setAttribs(array(
-    			'class'=>'form-control date-picker',
-				'data-date-format'=>"dd-mm-yyyy"
+    			'dojoType'=>"dijit.form.DateTextBox",
+    			'class'=>'fullside',
+    			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
     	));
     	
     	$endDatevalue = $request->getParam("end_date");
-    	if(empty($endDatevalue)){$endDatevalue = date("d-m-Y");}
+    	if(empty($endDatevalue)){$endDatevalue = date("Y-m-d");}
     	$endDate->setValue($endDatevalue);
 
     	$this->addElements(array($startDate,$endDate,$location_id));
     	Application_Form_DateTimePicker::addDateField(array('start_date','end_date'));
      	return $this;
-    
     }
     
     
@@ -131,7 +122,10 @@ class Application_Form_FrmReport extends Zend_Form
     	$proValue = $request->getParam('item');
     	$pro_id->setAttribs(array(
     			'id'=>'item',
-    			'class'=>'form-control select2me'
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
     	));
     	$pro_id->setValue($proValue);
     	$this->addElement($pro_id);
@@ -148,27 +142,32 @@ class Application_Form_FrmReport extends Zend_Form
 		$this->addElement($saleagent_id);
 		
 		$rs=$db->getGlobalDb('SELECT id,CONCAT(cust_name,contact_name) AS cust_name,`phone`,`contact_phone` FROM tb_customer WHERE (contact_name!="" AND cust_name!="") AND status=1 ');
-		$options=array($tr->translate('Choose Customer'));
+		$options=array($tr->translate('SELECT_CLIENT'));
 		$vendorValue = $request->getParam('customer_id');
 		if(!empty($rs)) foreach($rs as $read) $options[$read['id']]=$read['cust_name']."-".$read['contact_phone'];
 		$vendor_element=new Zend_Form_Element_Select('customer_id');
 		$vendor_element->setMultiOptions($options);
 		$vendor_element->setAttribs(array(
 				'id'=>'customer_id',
-				'class'=>'form-control select2me'
+				'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
 		));
 		$vendor_element->setValue($vendorValue);
 		$this->addElement($vendor_element);
     	
     	$locationValue = $request->getParam('branch_id');
-    	//foreach($rs as $read) $options[$read['id']]=$read['name'];
     	$location_id=new Zend_Form_Element_Select('branch_id');
 		$options = $db->getAllLocation(1);
     	$location_id->setMultiOptions($options);
     	$location_id->setAttribs(array(
     			'id'=>'LocationId',
     			'onchange'=>'getProductFilter();',
-    			'class'=>'form-control select2me'
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
     	));
     	$location_id->setValue($locationValue);
     	
@@ -181,23 +180,26 @@ class Application_Form_FrmReport extends Zend_Form
     	$cate_element->setAttribs(array(
     			'id'=>'category_id',
     			'onchange'=>'getProductFilter()',
-    			'class'=>'form-control select2me'
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
     	));
     	$cate_element->setValue($cateValue);
     	$this->addElement($cate_element);
     
-    	//$rs=$db->getGlobalDb('SELECT id, name FROM tb_brand WHERE name!="" ORDER BY id ');
-    	//$options=array(''=>$tr->translate('CHOOSE_BRAND'));
         $options = $db->getAllLocation(1);
 		$branchValue = $request->getParam('branch_id');
-    	//foreach($rs as $read) $options[$read['id']]=$read['name'];
     	
     	$branch_element=new Zend_Form_Element_Select('brand_id');
     	$branch_element->setMultiOptions($options);
     	$branch_element->setAttribs(array(
     			'id'=>'branch_id',
     			'onchange'=>'getProductFilter()',
-    			'class'=>'form-control select2me'
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
     	));
     	$brandValue = $request->getParam('brand_id');
     	$branch_element->setValue($brandValue);
@@ -206,25 +208,30 @@ class Application_Form_FrmReport extends Zend_Form
     	$startDate = new Zend_Form_Element_Text("start_date");//echo date("Y-m-d");
     	$startDatevalue = $request->getParam("start_date");
     	$startDate->setAttribs(array(
-    			'class'=>'form-control date-picker',
-    			'placeHolder'=>'Start Date',
-				'data-date-format'=>"dd-mm-yyyy"
+    			'dojoType'=>"dijit.form.DateTextBox",
+				'class'=>'fullside',
+    			'placeHolder'=>$tr->translate('START_DATE'),
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
     			));
     	$startDate->setValue($startDatevalue);
     	 
     	$endDate = new Zend_Form_Element_Text("end_date");
     	$endDate->setAttribs(array(
-    			'class'=>'form-control date-picker',
-				'data-date-format'=>"dd-mm-yyyy"
+    		'dojoType'=>"dijit.form.DateTextBox",
+    		'class'=>'fullside',
+    		'required'=>true,
+    		'constraints'=>"{datePattern:'dd/MM/yyyy'}",
     	));
     	
     	$endDatevalue = $request->getParam("end_date");
-    	if(empty($endDatevalue)){$endDatevalue = date("d-m-Y");}
+    	if(empty($endDatevalue)){$endDatevalue = date("Y-m-d");}
     	$endDate->setValue($endDatevalue);
     	
     	$txt_search = new Zend_Form_Element_Text("txt_search");
     	$txt_search->setAttribs(array(
-    			'class'=>'form-control'));
+    			'dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside',
+    			));
     	$txt_searchvalue = $request->getParam("txt_search");
     	$txt_search->setValue($txt_searchvalue);
     	$this->addElements(array($txt_search,$startDate,$endDate,$location_id));
@@ -238,7 +245,10 @@ class Application_Form_FrmReport extends Zend_Form
     	$vendor_element->setMultiOptions($options);
     	$vendor_element->setAttribs(array(
     			'id'=>'suppliyer_id',
-    			'class'=>'form-control select2me'
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
     	));
     	$vendor_element->setValue($vendorValue);
     	$this->addElement($vendor_element);
@@ -253,7 +263,8 @@ class Application_Form_FrmReport extends Zend_Form
     	$nameValue = $request->getParam('text_search');
     	$nameElement = new Zend_Form_Element_Text('text_search');
     	$nameElement->setAttribs(array(
-    			'class'=>'form-control'
+    		'dojoType'=>"dijit.form.TextBox",
+			'class'=>'fullside',
     	));
     	$nameElement->setValue($nameValue);
     	$this->addElement($nameElement);
@@ -266,7 +277,10 @@ class Application_Form_FrmReport extends Zend_Form
     	$vendor_element->setMultiOptions($options);
     	$vendor_element->setAttribs(array(
     			'id'=>'suppliyer_id',
-    			'class'=>'form-control select2me'
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
     	));
     	$vendor_element->setValue($vendorValue);
     	$this->addElement($vendor_element);
@@ -275,15 +289,15 @@ class Application_Form_FrmReport extends Zend_Form
     	$endDateValue = $request->getParam('end_date');
     	
     	if($endDateValue==""){
-    		$endDateValue=date("d-m-Y");
+    		$endDateValue=date("Y-m-d");
     	}
     	
     	$startDateElement = new Zend_Form_Element_Text('start_date');
     	$startDateElement->setValue($startDateValue);
     	$startDateElement->setAttribs(array(
-    			'class'=>'form-control form-control-inline date-picker',
-    			'placeholder'=>'Start Date',
-				'data-date-format'=>"dd-mm-yyyy"
+    			'dojoType'=>"dijit.form.DateTextBox",
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
     	));
     	
     	$this->addElement($startDateElement);
@@ -292,8 +306,9 @@ class Application_Form_FrmReport extends Zend_Form
     	$endDateElement->setValue($endDateValue);
     	$this->addElement($endDateElement);
     	$endDateElement->setAttribs(array(
-    			'class'=>'form-control form-control-inline date-picker',
-				'data-date-format'=>"dd-mm-yyyy"
+    		'dojoType'=>"dijit.form.DateTextBox",
+    		'class'=>'fullside',
+    		'constraints'=>"{datePattern:'dd/MM/yyyy'}",
     	));
     	 
     	$statusCOValue=4;
@@ -302,37 +317,30 @@ class Application_Form_FrmReport extends Zend_Form
     	$statusCO=new Zend_Form_Element_Select('purchase_status');
     	$statusCO->setMultiOptions($optionsCOStatus);
     	$statusCO->setattribs(array(
-    			'id'=>'status',
-    			'class'=>'form-control'
+    		'id'=>'status',
+    		'dojoType'=>"dijit.form.FilteringSelect",
+    		'autoComplete'=>"false",
+    		'queryExpr'=>'*${0}*',
+    		'class'=>'fullside',
     	));
     	
     	$statusCO->setValue($statusCOValue);
     	$this->addElement($statusCO);
     	
-    	/*$sql='SELECT DISTINCT name,id FROM tb_sublocation WHERE name!="" AND status=1 ';
-    	$user = $this->GetuserInfo();
-    	if($user["level"]!=1 AND $user["level"]!=2){
-    		$sql .= " AND id= ".$user["branch_id"];
-    		 
-    	}
-    	$rs=$db->getGlobalDb($sql);*/
 		$options = $db->getAllLocation(1);
-    	//$options=array(''=>$tr->translate('CHOOSE_BRANCH'));
     	$locationValue = $request->getParam('branch_id');
-    	//foreach($rs as $read) $options[$read['id']]=$read['name'];
     	$location_id=new Zend_Form_Element_Select('branch_id');
     	$location_id->setMultiOptions($options);
     	$location_id->setAttribs(array(
     			'id'=>'LocationId',
     			'onchange'=>'getProductFilter();',
-    			'class'=>'form-control select2me'
+    			'dojoType'=>"dijit.form.FilteringSelect",
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside',
     	));
     	$location_id->setValue($locationValue);
     	$this->addElement($location_id);
-    	
-    	
     	return $this;
     }
-	
 }
-

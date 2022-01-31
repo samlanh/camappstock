@@ -28,6 +28,7 @@ class report_ProductController extends Zend_Controller_Action
     				'brand'		=>	'',
     				'category'	=>	'',
     				'model'		=>	-1,
+    				'type'		=>-1,
     				'color'		=>	'',
     				'size'		=>	'',
     				'status'	=>	1,
@@ -142,20 +143,6 @@ class report_ProductController extends Zend_Controller_Action
     		$this->view->branch = $brand;
     	}
     
-    
-    
-    
-    	// 		$_db = new report_Model_DbQuery();
-    	// 		$_rows=$_db->getTopTenProductSOByDate();
-    	// 		$_arr="";
-    	// 		foreach ($_rows As $i =>$row){
-    	// 			if($i==count($_rows)-1){
-    	// 				$_arr.= "['".$row["item_name"]."',".$row["qty"]."]";
-    	// 			}
-    	// 			else{
-    	// 				$_arr.= "['".$row["item_name"]."',".$row["qty"]."],";
-    	// 			}
-    	// 		}
     	$this->view->top_product = $_arr;
     	$frm = new Application_Form_FrmReport();
     	$form_search=$frm->salseReport();
@@ -251,37 +238,6 @@ class report_ProductController extends Zend_Controller_Action
     	$form_search=$frm->productDetailReport($data);
     	Application_Model_Decorator::removeAllDecorator($form_search);
     	$this->view->form_product = $form_search;
-    	// 		if($this->getRequest()->isPost()){
-    	// 			$data = $this->getRequest()->getPost();
-    
-    	// 			$start_date = $data["start_date"];
-    	// 			$end_date = $data["end_date"];
-    
-    	// 			if(strtotime($end_date)+86400 > strtotime($start_date)) {
-    	// 				$query = new report_Model_DbQuery();
-    	// 				//$vendor_sql .= " AND p.date_order BETWEEN '$start_date' AND '$end_date'";
-    	// 				$getSaleItem = $query->getProductSummary($data);
-    	// 				$this->view->getsales_item = $getSaleItem;
-    	// 				$this->view->start_date = $start_date;
-    	// 				$this->view->end_date = $end_date;
-    	// 				if(!empty($data["LocationId"])){
-    	// 					$branch=$query->getLocationName($data["LocationId"]);
-    	// 					$this->view-> branch = $branch;
-    	// 				}
-    	// 			}
-    	// 			else {
-    	// 				Application_Form_FrmMessage::message("End Date Must Greater Then Start Date");
-    	// 			}
-    	// 		}
-    	// 		$user = $this->GetuserInfo();
-    	// 		if($user["level"]!=1 AND $user["level"]!=2){
-    	// 			$this->_redirect("/default/index/home");
-    
-    	// 		}
-    	// 		$frm = new Application_Form_FrmReport();
-    	// 		$form_search=$frm->productDetailReport($data);
-    	// 		Application_Model_Decorator::removeAllDecorator($form_search);
-    	// 		$this->view->form_salse = $form_search;
     
     }
 }

@@ -1,12 +1,19 @@
 <?php 
-$tr=Application_Form_FrmLanguages::getCurrentlanguage();
-$brach_name =  $this->branch;
+	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	$brach_name =  $this->branch;
 ?>
 <title><?php echo $tr->translate("SALESBYCUSTOMER_REPORT");?></title>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content">
 		<div class="card-box">
-			<form method="post" autocomplete="off">
+			<form method="post" autocomplete="off" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+					<script type="dojo/method" event="onSubmit">   
+   						if(this.validate()) {
+    						return true;
+   						}else {
+    						return false;
+   						}
+					</script>
 				<div class="form-group">
 					<?php $formFilter = $this->form_purchase; ?>
 					<div class="col-md-2"><?php echo $formFilter->getElement('text_search');?></div>
@@ -36,6 +43,7 @@ $brach_name =  $this->branch;
 		  display: table-header-group;
 		  page-break-inside:avoid; page-break-after:auto;
 		}
+		.hidden{display: none;}
 		</style>
 		<table style="font-family: 'Khmer OS Content'; width:100%;">
 			<tbody>
@@ -44,7 +52,7 @@ $brach_name =  $this->branch;
                 	<ul>
                 		<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
                 		<li style="text-align:center; font-size:14px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("SALESBYCUSTOMER_REPORT");?></li>
-                		<li style="text-align:center; font-size:14px;"><?php echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
+                		<li style="text-align:center; font-size:14px;"><?php if(!empty($this->rssearch['start_date'])){echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php } echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
                 	</ul>
 		        </td>
 		    </tr>
@@ -52,7 +60,7 @@ $brach_name =  $this->branch;
 		    	<td class="table2excel" id="exportExcel">
 		            <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
 		                 <thead>
-			                 <tr bgcolor="#ccc" class="style" align="center" style="font-weight:bold; line-height: 25px; font-size:14px; padding:1px 0px; white-space: nowrap; ">
+			                 <tr bgcolor="#ccc" class="style" align="center" style="background:#ccd9ff;font-weight:bold; line-height: 25px; font-size:14px; padding:1px 0px; white-space: nowrap; ">
 			                    <td>&nbsp;<?php echo $tr->translate("NUM");?></td>
 								<td><?php echo $tr->translate("BRANCH_NAME");?></td>
 								<td>&nbsp;<?php echo $tr->translate("CUSTOMER_NAME");?></td>
@@ -80,36 +88,27 @@ $brach_name =  $this->branch;
 						   <td style="white-space: nowrap;">&nbsp;<?php echo number_format($rs["discount_value"],2);?></td>
 						   <td style="white-space: nowrap;">&nbsp;<?php echo number_format($rs["all_total"],2);?></td>
 						   <td style="white-space: nowrap;">&nbsp;<?php echo number_format($rs["paid"],2);?></td>
-						   <td>&nbsp;<?php echo number_format($rs["balance"],2);?></td>
+						   <td>&nbsp;<?php echo number_format($rs["all_total"]-$rs["paid"],2);?></td>
 						   <td>&nbsp;<?php echo $rs["user_name"];?></td>
 						</tr>
 						   <?php 
 							$d_netotal = $d_netotal+$rs["net_total"];
 							$d_paid = $d_paid+$rs["paid"];
 							$all_total = $all_total+$rs["all_total"];
-							$d_balance = $d_balance+$rs["balance"];
+							$d_balance = $d_balance+($rs["all_total"]-$rs["paid"]);
 							$discount=$discount +$rs["discount_value"];
                     }?>
+	                    	<tr style="background: #87acff;font-size:14px;line-height:25px;">
+	                    		<td colspan="3"></td>
+	                    		<td><label class="hidden">$</label>&nbsp;<?php echo number_format($d_netotal,2);?>&nbsp;</td>
+			                    <td><label class="hidden">$</label>&nbsp;<?php echo number_format($discount,2);?>&nbsp;</td>
+								<td><label class="hidden">$</label>&nbsp;<?php echo number_format($all_total,2);?>&nbsp;</td>
+			                    <td><label class="hidden">$</label>&nbsp;<?php echo number_format($d_paid,2);?>&nbsp;</td>
+			                    <td><label class="hidden">$</label>&nbsp;<?php echo number_format($d_balance,2);?>&nbsp;</td>
+	                    		<td></td>
+	                    	</tr>
 		                </tbody>
 		           </table>
-		            <br>
-		             <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
-		                <tbody><tr height="30px;" bgcolor="#ccc" class="style" align="center" style="floafont-weight:bold; line-height: 14px; font-size:12px; padding:2px 0px; ">
-		                    <td><strong><?php echo $tr->translate("AMOUNT");?></strong></td>
-		                    <td>&nbsp;<?php echo $tr->translate("DISCOUNT");?></td>
-		                    <td>&nbsp;<?php echo $tr->translate("GRAND_TOTAL");?></td>
-		                    <td><strong><?php echo $tr->translate("PAID");?></strong></td>
-		                    <td><strong><?php echo $tr->translate("BALANCE");?></strong></td>
-		                </tr>
-		                 <tr class="style" style=" line-height: 24px; font-size:12px;">
-		                    <td>&nbsp;<?php echo number_format($d_netotal,2);?>&nbsp;</td>
-		                    <td>&nbsp;<?php echo number_format($discount,2);?>&nbsp;</td>
-							<td>&nbsp;<?php echo number_format($all_total,2);?>&nbsp;</td>
-		                    <td>&nbsp;<?php echo number_format($d_paid,2);?>&nbsp;</td>
-		                    <td>&nbsp;<?php echo number_format($d_balance,2);?>&nbsp;</td>
-		                 </tr>
-		               </tbody>
-		             </table>
 		              <br>
 		              <table align="center" width="100%">
 						   <tbody>

@@ -56,6 +56,7 @@ class Application_Form_Frmsearch extends Zend_Form
 		$startDateElement->setAttribs(array(
 			'dojoType'=>"dijit.form.DateTextBox",
 			'class'=>'fullside',
+			'placeHolder'=>$tr->translate('START_DATE'),
 			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 		));
 		
@@ -67,6 +68,7 @@ class Application_Form_Frmsearch extends Zend_Form
 		$endDateElement->setAttribs(array(
 			'dojoType'=>"dijit.form.DateTextBox",
 			'class'=>'fullside',
+			'required'=>true,
 			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 		));
 		
@@ -163,7 +165,7 @@ class Application_Form_Frmsearch extends Zend_Form
 	function getFooterAction(){
 		$str='<table align="center" width="100%">
 			   <tbody>
-			   	<tr style="font-size: 14px;">
+			   	<tr style="font-size: 12px;">
 			        <td style="width:20%;text-align:center;font-family:Khmer OS Muol Light">យល់ព្រមដោយ</td>
 			        <td></td>
 			        <td style="width:20%;text-align:center; font-family:Khmer OS Muol Light">ត្រួតពិនិត្យដោយ</td>

@@ -7,12 +7,13 @@
 .fullside{ width:100%; height: 35px;}
 .fullblog{ width:100%; height: 30px;font-size: 15px !important;}
 td{padding: 1px !important;}
-.aligncenter{text-align: center;background:#eaeaea;
+.aligncenter{text-align: center;background:#0077c5;color:#fff;
 white-space: nowrap;font-size: 12px;line-height:33px;}
 .hover:hover{background: #eee;}
 .full_width{width:100%;}
 .form-group .col-md-6,
 .form-group .col-md-12{margin-top: 5px;}
+.hidden{display: none;}
 </style>
 <title>POS STOCK</title>
 
@@ -41,10 +42,10 @@ white-space: nowrap;font-size: 12px;line-height:33px;}
 					</script>
                  <div class="col-md-9">
 					 <div class="form-group">
-					 	<div class="col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i>
-							<?php echo $tr->translate("ទំនិញដែលបានទិញ");?> 
-                   		</div>
-                </div>
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i>
+	                   		<?php echo $tr->translate("ទំនិញដែលបានទិញ");?> 
+                   	  </label>
+                	</div>
                 <div class="form-group" style="background: #cccccc;">
 		    		<input id="product_id" />
 		    		<input type="hidden" name="identity" id="identity" />
@@ -59,7 +60,7 @@ white-space: nowrap;font-size: 12px;line-height:33px;}
 								<th class="aligncenter">#</th>
 								<th class="aligncenter">ឈ្មោះមុខទំនិញ</th>
 								<th class="aligncenter">ពណ៍នា</th>
-								<th class="aligncenter">ជាង</th>
+								<th class="aligncenter hidden">ជាង</th>
 								<th class="aligncenter">ស្តុក</th>
 								<th class="aligncenter">បរិ.ដុំ</th>
 								<th class="aligncenter">បរិ.រាយ</th>
@@ -115,19 +116,19 @@ white-space: nowrap;font-size: 12px;line-height:33px;}
 											<button style="font-size: 14px;" type="button" name="btnsavenew" onclick="getSuppliyer();" class="btn red btn-block btn-md"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;បន្ថែមអតិថិជន</button>
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group hidden">
 										<div class="col-md-6">JC#</div>
 										<div class="col-md-6">
 											<input type="text" class="full_width" name="cjnumber"  id="cjnumber"  dojoType="dijit.form.TextBox"/>
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group hidden">
 										<div class="col-md-6">Mileage</div>
 										<div class="col-md-6">
 											<input type="text" name="mileage" id="mileage"  class="full_width" dojoType="dijit.form.TextBox"/>
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group hidden">
 										<div class="col-md-6">
 											អាត្រាប្តូរប្រាក់ 1$=
 										</div>
@@ -137,7 +138,7 @@ white-space: nowrap;font-size: 12px;line-height:33px;}
 										</div>
 										<div class="form-group">
 											<div class="col-md-6">
-												សរុបរង $
+												សរុបរង
 											</div>
 											<div class="col-md-6">
 												<input readonly dojoType="dijit.form.NumberTextBox" class="full_width" type="text" name="sub_total" id="sub_total" />
@@ -152,13 +153,13 @@ white-space: nowrap;font-size: 12px;line-height:33px;}
 									 </div>
 									 <div class="form-group">
 										<div class="col-md-6">
-											សរុបរួមជាដុល្លារ
+											សរុបរួម
 										</div>
 										<div class="col-md-6">
 											<input readonly type="text" style="" dojoType="dijit.form.NumberTextBox" class="full_width" name="total_dollar" id="total_dollar" />
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group hidden">
 										<div class="col-md-6">
 											សរុបរួមជារៀល
 										</div>
@@ -177,22 +178,22 @@ white-space: nowrap;font-size: 12px;line-height:33px;}
 										</div>
 										<div class="col-md-6">
 											<input type="hidden" value="0" onkeyup="calCualtepaid();" dojoType="dijit.form.TextBox" class="full_width" name="receive_dollar" id="receive_dollar" />
-											<button type="button" name="btnsavenew" onclick="Fullpaid();" class="btn red btn-block btn-md"><i class="fa fa-usd" aria-hidden="true"></i>&nbsp;&nbsp;បង់គ្រប់</button>
+											<button type="button" name="btnsavenew" onclick="Fullpaid();" class="btn red btn-block btn-md"><i class="fa fa-usd hidden" aria-hidden="true"></i>&nbsp;&nbsp;បង់គ្រប់</button>
 											<input type="hidden" value="0"  onkeyup="calCualtepaid();" value="0" dojoType="dijit.form.TextBox" class="full_width" name="receive_riel" id="receive_riel" />
 										</div>
 									</div>
 									<div class="form-group">
 										<div class="col-md-6"></div>
 										<div class="col-md-6">
-											<input type="text" required="true" dojoType="dijit.form.NumberTextBox" class="full_width" name="total_paid" id="total_paid" />
+											<input type="text" onkeyup="calCualtepaid();"   required="true" dojoType="dijit.form.NumberTextBox" class="full_width" name="total_paid" id="total_paid" />
 										</div>
 									</div>
 									<div class="form-group">
-										<div class="col-md-6">ប្រាក់អាប់ដុល្លា</div>
+										<div class="col-md-6">ប្រាក់អាប់</div>
 										<div class="col-md-6"><input readonly type="text" value="0" dojoType="dijit.form.NumberTextBox" class="full_width" name="return_amount" id="return_amount" /></div>
 									</div>
 									<div class="form-group">
-										<div class="col-md-6">ជំពាក់ជាដុល្លា</div>
+										<div class="col-md-6">ប្រាក់ជំពាក់</div>
 										<div class="col-md-6"><input readonly type="text" value="0" dojoType="dijit.form.NumberTextBox" class="full_width" name="balance" id="balance" /></div>
 									</div>
 									<div class="form-group">
@@ -594,7 +595,7 @@ function initailize(){
 		template+='<td style="min-width:20px;text-align:center">'+col+'</td>';
 		template+='<td style="min-width:180px;font-size:13px;"><input type="hidden" value="'+product_name+'" id="product_name'+col+'">'+product_name+'<input type="hidden"  value="'+product_id+'" id="product_id'+col+'" name="product_id'+col+'" /></td>';
 		template+='<td style="min-width:130px;font-size:12px;" valign="top"><input class="fullblog" dojoType="dijit.form.TextBox" type="text" name="note'+col+'" id="note'+col+'"/></td>';
-		template+='<td style="min-width:80px;font-size:12px;" valign="top"><select queryExpr="*${0}*" autoComplete="false" required="false" dojoType="dijit.form.FilteringSelect" name="staff_'+col+'" id="staff_'+col+'">';<?php if(!empty($this->rs_staff))foreach($this->rs_staff as $rs){ ?>
+		template+='<td style="min-width:80px;font-size:12px;" valign="top" class="hidden"><select queryExpr="*${0}*" autoComplete="false" required="false" dojoType="dijit.form.FilteringSelect" name="staff_'+col+'" id="staff_'+col+'">';<?php if(!empty($this->rs_staff))foreach($this->rs_staff as $rs){ ?>
 			template+='<option value="<?php echo $rs["id"];?>"><?php echo $rs["name"];?></option>';
 			<?php }?>
 			template+='</select></td>';
@@ -627,6 +628,7 @@ function initailize(){
 	dijit.byId('qtydetail_'+col).attr('value',<?php echo $row['qty_detail']?>);
 	dijit.byId('qty_sold'+col).attr('value',<?php echo $row['qty_order']?>);
 	dijit.byId('price_'+col).attr('value',<?php echo $row['price']?>);
+	dijit.byId('cost_price'+col).attr('value',<?php echo $row['cost_price']?>);
 	dijit.byId('discount_'+col).attr('value',<?php echo $row['disc_value']?>);
 	dijit.byId('sub_total'+col).attr('value',<?php echo $row['sub_total']?>);
 	<?php } }?>
@@ -646,7 +648,7 @@ function addProductRow(){
 		template+='<td style="min-width:20px;text-align:center">'+col+'</td>';
 		template+='<td style="min-width:180px;font-size:13px;"><input type="hidden" value="'+product_name+'" id="product_name'+col+'">'+product_name+'<input type="hidden"  value="'+product_id+'" id="product_id'+col+'" name="product_id'+col+'" /></td>';
 		template+='<td style="min-width:130px;font-size:12px;" valign="top"><input class="fullblog" dojoType="dijit.form.TextBox" type="text" name="note'+col+'" id="note'+col+'"/></td>';
-		template+='<td style="min-width:80px;font-size:12px;" valign="top"><select queryExpr="*${0}*" autoComplete="false" required="false" dojoType="dijit.form.FilteringSelect" name="staff_'+col+'" id="staff_'+col+'">';<?php if(!empty($this->rs_staff))foreach($this->rs_staff as $rs){ ?>
+		template+='<td style="min-width:80px;font-size:12px;" valign="top" class="hidden"><select queryExpr="*${0}*" autoComplete="false" required="false" dojoType="dijit.form.FilteringSelect" name="staff_'+col+'" id="staff_'+col+'">';<?php if(!empty($this->rs_staff))foreach($this->rs_staff as $rs){ ?>
 			template+='<option value="<?php echo $rs["id"];?>"><?php echo $rs["name"];?></option>';
 				<?php }?>
 			template+='</select></td>';
@@ -735,26 +737,20 @@ function netTotal() {//use
 	calCualtepaid();
 }
 function calCualtepaid(){
-	receive_dollar = dijit.byId('receive_dollar').get('value');
-	receive_dollar = isNaN(receive_dollar)?0:receive_dollar;
-
-	exchange_rate = dijit.byId("exchange_rate").get("value");
-	exchange_rate = isNaN(exchange_rate)?0:exchange_rate;
-	
-	total_received = receive_dollar;
-	
-	total_dollar = dijit.byId('total_dollar').get('value');
-	return_amount = total_received-total_dollar;
 	dijit.byId('balance').attr('value',0);
-	if(return_amount<0){
-		return_amount = -return_amount;
+	total_paid = dijit.byId('total_paid').get('value');
+	total_paid = isNaN(total_paid)?0:total_paid;
+	dijit.byId('receive_dollar').attr('value',total_paid)
+
+	total_dollar = dijit.byId('total_dollar').get('value');
+	return_amount = total_dollar-total_paid;
+	if(return_amount>0){
 		dijit.byId('balance').attr('value',return_amount);
 		return_amount=0;
+	}else{
+		return_amount = abs(return_amount);
+		dijit.byId('balance').attr('value',0);
 	}
-	if(total_received>total_dollar){
-		total_received=total_dollar;
-	}
-	dijit.byId('total_paid').attr('value',total_received);
 	dijit.byId('return_amount').attr('value',return_amount);
 }
 function Fullpaid(){
@@ -784,6 +780,9 @@ function getProductinfo(index,product_id){
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
+		 	if(data.is_service==1){
+			   dijit.byId("price_"+index).set('readOnly',false)
+			}
 			dijit.byId("current_qty"+index).attr('value',data.qty);
 			dijit.byId("price_"+index).attr('value',data.price);
 			dijit.byId("cost_price"+index).attr('value',data.cost_price);

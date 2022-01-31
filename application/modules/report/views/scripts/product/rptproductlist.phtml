@@ -78,6 +78,7 @@
 			                <thead>
 				                 <tr class="style" align="center" style="background:#b0bdfd;font-weight:bold; line-height: 25px; font-size:12px; padding:1px 0px; white-space: nowrap; ">
 				                    <td>&nbsp;<?php echo $tr->translate("NUM");?></td>
+				                    <td>&nbsp;<?php echo $tr->translate("BRANCH_NAME");?></td>
 									<td><?php echo $tr->translate("ITEM_CODE");?></ts>
 									<td><?php echo $tr->translate("ITEM_NAME");?></td>
 									<td><?php echo $tr->translate("PRODUCT_CATEGORY");?></td>
@@ -113,7 +114,9 @@
 								$cost_price = $cost_price+($l_qty*$row["price"]);
 							?>
 								<tr class='row-format<?php echo $num; ?>' id="item_<?php echo $index; ?>">
+								
 									<td align="center" style="white-space: nowrap;">&nbsp;<?php echo $index+1; ?></td>
+									<td style="white-space: nowrap;">&nbsp;<?php echo $row["branch"]?></td>
 									<td style="white-space: nowrap;">&nbsp;<?php echo $row["item_code"]?></td>
 									<td style="">&nbsp;<?php echo $row["item_name"]?></td>
 									<td style="width:10% !important" class="center"><?php echo $row["cat"];?></td>

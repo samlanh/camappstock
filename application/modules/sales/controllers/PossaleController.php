@@ -53,7 +53,7 @@ class Sales_PossaleController extends Zend_Controller_Action
 				if(!empty($data['identity'])){
 					$sale_id = $db->addSaleOrder($data);
 				}
-				Application_Form_FrmMessage::Sucessfull(INSERT_SUCESS, "/sales/possale/invoice/id/".$sale_id);
+				Application_Form_FrmMessage::Sucessfull('INSERT_SUCESS', "/sales/possale/invoice/id/".$sale_id);
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message('INSERT_FAIL');
 				$err =$e->getMessage();

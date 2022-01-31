@@ -17,8 +17,6 @@ class report_indexController extends Zend_Controller_Action
     {
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
-    		$data['start_date']=date("Y-m-d",strtotime($data['start_date']));
-    		$data['end_date']=date("Y-m-d",strtotime($data['end_date']));
     	}else{
     		$data = array(
     				'text_search'=>'',
@@ -26,6 +24,7 @@ class report_indexController extends Zend_Controller_Action
     				'end_date'=>date("Y-m-d"),
     				'customer_id'=>0,
     				'branch_id'=>0,
+    				'sale_status'=>-1
     		);
     	}
     	$this->view->rssearch = $data;
@@ -43,8 +42,6 @@ class report_indexController extends Zend_Controller_Action
     {
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
-    		$data['start_date']=date("Y-m-d",strtotime($data['start_date']));
-    		$data['end_date']=date("Y-m-d",strtotime($data['end_date']));
     	}else{
     		$data = array(
     				'text_search'=>'',
@@ -77,8 +74,6 @@ class report_indexController extends Zend_Controller_Action
     function rptSaleitemAction(){
     	if($this->getRequest()->isPost()){
     		$search = $this->getRequest()->getPost();
-    		$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-    		$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
     	}else{
     		$search = array(
     				'txt_search'=>'',
@@ -106,8 +101,6 @@ class report_indexController extends Zend_Controller_Action
     function rptitemcustomerAction(){
     	if($this->getRequest()->isPost()){
     		$search = $this->getRequest()->getPost();
-    		$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-    		$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
     	}else{
     		$search = array(
     				'txt_search'=>'',
@@ -132,8 +125,6 @@ class report_indexController extends Zend_Controller_Action
     {
     	if($this->getRequest()->isPost()){
 			$search = $this->getRequest()->getPost();
-			$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-			$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
 		}else{
 			$search =array(
 					'text_search'=>'',
@@ -163,8 +154,6 @@ class report_indexController extends Zend_Controller_Action
     {
     	if($this->getRequest()->isPost()){
     		$search = $this->getRequest()->getPost();
-    		$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-    		$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
     	}else{
     		$search =array(
     				'text_search'=>'',
@@ -615,8 +604,6 @@ class report_indexController extends Zend_Controller_Action
 	function rptIncomestatementAction(){
        if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();
-    		$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-    		$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
     		$search['title']=-1;
     	}
     	else{
@@ -643,8 +630,6 @@ class report_indexController extends Zend_Controller_Action
 	function rptSaleitemqtyAction(){
     	if($this->getRequest()->isPost()){
     		$search = $this->getRequest()->getPost();
-    		$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-    		$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
     	}else{
     		$search = array(
     				'txt_search'=>'',
@@ -673,8 +658,6 @@ class report_indexController extends Zend_Controller_Action
     {
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
-    		$data['start_date']=date("Y-m-d",strtotime($data['start_date']));
-    		$data['end_date']=date("Y-m-d",strtotime($data['end_date']));
     	}else{
     		$data = array(
     				'text_search'=>'',
@@ -683,9 +666,11 @@ class report_indexController extends Zend_Controller_Action
     				'suppliyer_id'=>0,
     				'branch_id'=>-1,
     				'status_paid'=>-1,
-    				'saleagent_id'=>-1
+    				'saleagent_id'=>-1,
+    				'customer_id'=>0
     		);
     	}
+    	$this->view->search = $data;
     	$query = new report_Model_DbQuery();
     	$this->view->rsreceitp = $query->getAllReceipt($data);
     	
@@ -700,8 +685,6 @@ class report_indexController extends Zend_Controller_Action
 	function rptSalebystaffAction(){
     	if($this->getRequest()->isPost()){
     		$search = $this->getRequest()->getPost();
-    		$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-    		$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
     	}else{
     		$search = array(
     				'txt_search'=>'',
@@ -728,8 +711,6 @@ class report_indexController extends Zend_Controller_Action
     	$db  = new report_Model_DbQuery();
     	if($this->getRequest()->isPost()){
     		$search = $this->getRequest()->getPost();
-    		$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-    		$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
     	}
     	else{
     		$search = array(
@@ -879,8 +860,6 @@ class report_indexController extends Zend_Controller_Action
 	function rptCashflowAction(){
 		if($this->getRequest()->isPost()){
 			$search = $this->getRequest()->getPost();
-			$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-			$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
 		}else{
 			$search = array(
 					'txt_search'=>'',

@@ -17,7 +17,7 @@ public function init()
 		$this->addElement($nameElement);
 		
 		$rs=$db->getGlobalDb('SELECT id,cust_name,`phone`,`contact_phone` FROM tb_customer WHERE cust_name!="" AND status=1 ');
-		$options=array($tr->translate('Choose Customer'));
+		$options=array($tr->translate('SELECT_CLIENT'));
 		$vendorValue = $request->getParam('customer_id');
 		if(!empty($rs)) foreach($rs as $read) $options[$read['id']]=$read['cust_name']."-".$read['contact_phone'];
 		$vendor_element=new Zend_Form_Element_Select('customer_id');
@@ -44,6 +44,7 @@ public function init()
 		$startDateElement->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",
 				'class'=>'fullside',
+				'placeHolder'=>$tr->translate('START_DATE'),
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 		));
 		$this->addElement($startDateElement);
@@ -69,6 +70,7 @@ public function init()
 		$endDateElement->setAttribs(array(
 			'dojoType'=>"dijit.form.DateTextBox",
 			'class'=>'fullside',
+			'required'=>true,
 			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 		));
 		
@@ -102,5 +104,17 @@ public function init()
 			));
 		$customer_type->setMultiOptions($opt);
 		$this->addElement($customer_type);
+		
+		$salestatus = new Zend_Form_Element_Select('sale_status');
+		$salestatus->setAttribs(array(
+			'dojoType'=>"dijit.form.FilteringSelect",
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'class'=>'fullside',
+		));
+ 		$opt = array(-1=>'ជ្រើសរើសប្រភេទលក់',1=>'បានបង់ដាច់',2=>'មិនទាន់ដាច់');
+		$salestatus->setMultiOptions($opt);
+		$salestatus->setValue($request->getParam("sale_status"));
+		$this->addElement($salestatus);
 	}
 }

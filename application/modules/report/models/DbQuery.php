@@ -192,8 +192,11 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 		(SELECT CONCAT(cust_name,' ',contact_name) FROM `tb_customer` WHERE tb_customer.id=s.customer_id LIMIT 1 ) AS customer_name,
 		(SELECT name FROM `tb_sale_agent` WHERE id=s.saleagent_id LIMIT 1) AS agent_name,
 		s.sale_no,s.date_sold,s.all_total,s.tax,s.discount_value,
-		(s.net_total+s.transport_fee) as net_total,s.paid,s.balance,
-		(SELECT u.username FROM tb_acl_user AS u WHERE u.user_id = s.user_mod LIMIT 1 ) AS user_name
+		(s.net_total+s.transport_fee) as net_total,
+		
+		(SELECT SUM(paid) FROM `tb_receipt_detail` WHERE tb_receipt_detail.invoice_id =s.id LIMIT 1 ) as paid,
+		s.balance,
+		(SELECT u.fullname FROM tb_acl_user AS u WHERE u.user_id = s.user_mod LIMIT 1 ) AS user_name
 		FROM `tb_sales_order` AS s ";
 		$from_date =(empty($search['start_date']))? '1': " s.date_sold >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " s.date_sold <= '".$search['end_date']." 23:59:59'";
@@ -213,6 +216,14 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 		if($search['branch_id']>0){
 			$where .= " AND branch_id =".$search['branch_id'];
 		}
+		if($search['sale_status']>0){
+			if($search['sale_status']==1){
+				$where .= " AND s.balance <=0 ";
+			}else{
+				$where .= " AND s.balance >0 ";
+			}
+		}
+		
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbg->getAccessPermission();
 		$order=" ORDER BY s.date_sold ASC ";
@@ -229,8 +240,7 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 			SUM(s.tax) AS tax,
 			SUM(s.discount_value) AS discount_value,
 			SUM(s.net_total+s.transport_fee) as net_total,
-			SUM(s.paid) as paid,
-			SUM(s.balance) as balance,
+			SUM((SELECT SUM(r.paid) FROM tb_receipt_detail r WHERE r.invoice_id=s.id)) AS paid,
 			(SELECT u.username FROM tb_acl_user AS u WHERE u.user_id = s.user_mod LIMIT 1 ) AS user_name
 			FROM `tb_sales_order` AS s 
 			WHERE s.status=1 ";
@@ -301,10 +311,12 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 		so.cost_price,
 		so.sub_total,s.net_total,
 		s.id,s.sale_no,s.date_sold,s.remark,
-		s.paid,s.tax,
+		(SELECT SUM(paid) from `tb_receipt_detail` where status=1 and invoice_id=s.id LIMIT 1) AS paid,
+		s.tax,
 		s.balance
-		FROM `tb_sales_order` AS s,
-		`tb_salesorder_item` AS so,
+		FROM 
+			`tb_sales_order` AS s,
+			`tb_salesorder_item` AS so,
 		tb_product AS it
 		WHERE s.id=so.saleorder_id AND it.id=so.pro_id
 		AND s.status=1 ";
@@ -377,9 +389,6 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 		}
 		if($search['customer_id']>0){
 			$where .= " AND id = ".$search['customer_id'];
-		}
-		if($search['level']>0){
-			$where .= " AND customer_level = ".$search['level'];
 		}
 		$order=" ORDER BY id DESC ";
 		return $db->fetchAll($sql.$where.$order);
@@ -1159,7 +1168,8 @@ SUM(vp.paid) AS total_paid
 	}
 	function getAllExpenseType($search){
 		$db=$this->getAdapter();
-		$sql = "SELECT e.id,e.branch_id,e.title,e.desc,SUM(e.total_amount) as total_amount,e.curr_type,
+		$sql = "SELECT e.id,e.branch_id,e.title,e.desc,
+		SUM(e.total_amount) as total_amount,e.curr_type,
 		(SELECT tb_expensetitle.title FROM `tb_expensetitle` WHERE tb_expensetitle.id=e.title LIMIT 1) as title,
 		(SELECT tb_expensetitle.title_en FROM `tb_expensetitle` WHERE tb_expensetitle.id=e.title LIMIT 1) as title_en,
 		
@@ -1233,7 +1243,6 @@ SUM(vp.paid) AS total_paid
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbg->getAccessPermission();
 		$order=" ORDER BY date_order DESC ";
-		echo $sql.$where.$order;
 		return $db->fetchAll($sql.$where.$order);
 	}
 	
@@ -1372,7 +1381,7 @@ SUM(vp.paid) AS total_paid
 	function getProductSoldDetail($search){//6
 		$db = $this->getAdapter();
 		$sql=" SELECT
-		(SELECT name FROM `tb_sublocation` WHERE id=v.branch_id) AS branch_name,
+		(SELECT name FROM `tb_sublocation` WHERE id=s.branch_id) AS branch_name,
 		it.item_name,
 		it.item_code,
 		(SELECT tb_measure.name FROM `tb_measure` WHERE tb_measure.id=it.measure_id LIMIT 1) as measue_name,
@@ -1383,13 +1392,13 @@ SUM(vp.paid) AS total_paid
 		SUM(so.qty_order) AS qty_order,
 		SUM(so.qty_unit) AS qty_unit,
 		SUM(so.qty_detail) AS qty_detail
-		FROM `tb_invoice` AS v,
+		FROM `tb_sales_order` AS s,
 		`tb_salesorder_item` AS so,
 		tb_product AS it
-		WHERE v.sale_id=so.saleorder_id AND it.id=so.pro_id
-		AND v.status =1 ";
-		$from_date =(empty($search['start_date']))? '1': " v.invoice_date >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': " v.invoice_date <= '".$search['end_date']." 23:59:59'";
+		WHERE s.id=so.saleorder_id AND it.id=so.pro_id
+		AND s.status =1 ";
+		$from_date =(empty($search['start_date']))? '1': " s.date_sold >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " s.date_sold <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
 		if(!empty($search['txt_search'])){
 			$s_where = array();
@@ -1406,11 +1415,12 @@ SUM(vp.paid) AS total_paid
 			$where .= " AND it.cate_id =".$search['category_id'];
 		}
 		if($search['branch_id']>0){
-			$where .= " AND v.branch_id =".$search['branch_id'];
+			$where .= " AND s.branch_id =".$search['branch_id'];
 		}
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbg->getAccessPermission();
-		$order="  GROUP BY so.pro_id ORDER BY v.branch_id ,qty_order DESC ";
+		$order="  GROUP BY so.pro_id ORDER BY s.branch_id ,qty_order DESC ";
+		
 		return $db->fetchAll($sql.$where.$order);
 	}
 	function getProductSoldByStaff($search){//6

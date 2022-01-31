@@ -130,7 +130,7 @@ class Product_Form_FrmProduct extends Zend_Form
 		 
 		$qty_per_unit = new Zend_Form_Element_Text("qty_unit");
 		$qty_per_unit->setAttribs(array(
-				'dojoType'=>"dijit.form.TextBox",
+				'dojoType'=>"dijit.form.NumberTextBox",
 				'class'=>'fullside',
 				'required'=>'required',
 				'onKeyup'=>'doTotalQty()'

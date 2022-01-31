@@ -1,12 +1,19 @@
 <?php 
-$tr=Application_Form_FrmLanguages::getCurrentlanguage();
-$frm_sales_report = $this->form_search;
+	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	$frm_sales_report = $this->form_search;
 ?>
 <title>Sale Item Detail Report</title>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content">
 		<div class="card-box">
-			<form method="post" autocomplete="off">
+			<form method="post" autocomplete="off" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+					<script type="dojo/method" event="onSubmit">   
+   						if(this.validate()) {
+    						return true;
+   						}else {
+    						return false;
+   						}
+					</script>
 				<div class="form-group" >
 					<div class="control-label col-md-3"><?php echo $frm_sales_report->getElement("txt_search");?></div>
 					<div class="control-label col-md-3"><?php echo $frm_sales_report->getElement("branch_id");?></div>
@@ -32,6 +39,7 @@ $frm_sales_report = $this->form_search;
 				table tr td ul li{text-align: center;list-style: none;line-height: 25px; font-weight: bold;}
 				th{padding: 5px;}
 				.hover:hover{background: #ccc;}
+			   .hidden{display: none;}
 			</style>
 		<table style="font-family: 'Khmer OS Content'; width:100%;">
 			<tbody>
@@ -39,7 +47,7 @@ $frm_sales_report = $this->form_search;
 			    	<td align="center">
 	                	<ul>
 	                		<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'">របាយការណ៏ លក់លម្អិត</li>
-	                		<li style="text-align:center; font-size:14px;"><?php echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
+	                		<li style="text-align:center; font-size:14px;"><?php if(!empty($this->rssearch['start_date'])){echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php } echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
 	                	</ul>
 			        </td>
 			    </tr>
@@ -47,7 +55,7 @@ $frm_sales_report = $this->form_search;
 			    	<td class="table2excel" id="exportExcel">
 			            <table border="1"  style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
 			               <tbody>
-			                 <tr bgcolor="#ccc" class="style" align="center" style="font-weight:bold; line-height: 25px; font-size:12px; padding:1px 0px; white-space: nowrap; ">
+			                 <tr class="style" align="center" style="background:#ccd9ff;font-weight:bold; line-height: 25px; font-size:12px; padding:1px 0px; white-space: nowrap; ">
 			                    <td>&nbsp;<?php echo $tr->translate("NUM");?></td>
 			                    <td><?php echo $tr->translate("BRANCH_NAME");?></td>
 								<td>&nbsp;<?php echo $tr->translate("CUSTOMER_NAME");?></td>
@@ -110,24 +118,16 @@ $frm_sales_report = $this->form_search;
 								$total_sale = $total_sale+$rs["sub_total"];
 								$total_cost = $total_cost+($rs["cost_price"]*$raw_qty);
 	                    	 }?>
+	                    	 	<tr style="background: #87acff; font-weight: bold;font-size: 14px;line-height: 25px;text-align: center;">
+	                    	 		<td colspan="9"></td>
+	                    	 		<td><label class="hidden">$</label>&nbsp;<?php echo number_format($total_cost,2);?>&nbsp;</td>
+	                    	 		<td></td>
+				                    <td><label class="hidden">$</label>&nbsp;<?php echo number_format($total_sale,2);?>&nbsp;</td>
+				                    <td><label class="hidden">$</label>&nbsp;<?php echo number_format($total_sale-$total_cost,2);?>&nbsp;</td>
+	                    	 	</tr>
 			                </tbody>
 			           </table>
 			            <br>
-			             <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
-			                <tbody>
-				                <tr height="30px;" bgcolor="#ccc" class="style" align="center" style="floafont-weight:bold; line-height: 14px; font-size:12px; padding:2px 0px; ">
-				                    <td><strong><?php echo $tr->translate("សរុបថ្លៃដើម");?></strong></td>
-				                    <td><strong><?php echo $tr->translate("សរុបចំណូលលក់បាន");?></strong></td>
-				                    <td><strong><?php echo $tr->translate("TOTAL_INCOME");?></strong></td>
-				                </tr>
-				                <tr class="style" style=" line-height: 24px; font-size:11px;">
-				                	<td>&nbsp;<?php echo number_format($total_cost,2);?>&nbsp;</td>
-				                    <td>&nbsp;<?php echo number_format($total_sale,2);?>&nbsp;</td>
-				                    <td>&nbsp;<?php echo number_format($total_sale-$total_cost,2);?>&nbsp;</td>
-				                 </tr>
-			               </tbody>
-			             </table>
-			             <br>
 			             	<?php echo $this->getFooter;?>	
 			    		</td>
 			    	</tr>

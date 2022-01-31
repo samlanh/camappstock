@@ -51,7 +51,9 @@
 						</div>
 						<div class="form-group">
 							<div class="col-md-4"><?php echo $tr->translate("EXPENSE_TITLE")?></div>
-							<div class="col-md-6"><?php echo $frm->getElement('title');?></div>
+							<div class="col-md-6">
+								<input id="title" />
+							</div>
 							<div class="col-md-2">
 								<input iconClass="dijitIconUndo" type="button" label="Refresh" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
 							</div>
@@ -61,14 +63,14 @@
 							<div class="col-md-8"><?php echo $frm->getElement('currency_type'); ?></div>
 						</div>
 						<div class="form-group">
-							<div class="col-md-4"><?php echo $tr->translate("EXCHANGE_RATE")?>($-B)</div>
+							<div class="col-md-4"><?php echo $tr->translate("EXCHANGE_RATE")?>($-R)</div>
 							<div class="col-md-4"><?php echo $frm->getElement('dollar');?></div>
 							<div class="col-md-4"><?php echo $frm->getElement('exchangetobath');?></div>
 						</div>
 						<div class="form-group">
 							<div class="col-md-4"><?php echo $tr->translate("EXPENSE_AMOUNT")?></div>
-							<div class="col-md-4"><?php echo $frm->getElement('received_dollar'); ?></div>
-							<div class="col-md-4"><?php echo $frm->getElement('received_bath'); ?></div>
+							<div class="col-md-8"><?php echo $frm->getElement('received_dollar'); ?></div>
+							<div style="display: none;"><?php echo $frm->getElement('received_bath'); ?></div>
 						</div>
 						<div class="form-group">
 							<label class="col-md-4"><?php echo $tr->translate("TOTAL_EXPENSE")?></label>
@@ -93,19 +95,50 @@
 </div>
 <script>
 dojo.require("dojo.data.ItemFileWriteStore"); 
+function filterClient(){
+	
+}
+var category_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->all_category));?> );
+require(["dojo/ready"], function(ready){
+	new dijit.form.FilteringSelect({
+		name: "title",
+		id: "title",
+		store: category_store,
+		autoComplete: false,
+		queryExpr: "*${0}*", 
+		required: false,
+		searchAttr: "name",
+		class: 'fullside',
+		onChange: function() {
+			title=dijit.byId('title').get('value');
+			if(title==-1){
+			}
+			
+	    }
+		}, "title");
+
+	
+});
+
 function CalculateReceived(){
-	received_dollar = $("#received_dollar").val();
+
+	received_dollar = dijit.byId("received_dollar").get('value');
+	
 	if(isNaN(received_dollar) || received_dollar==''){received_dollar=0;}
-	received_bath= $("#received_bath").val();
-	if(isNaN(received_bath)  || received_bath==''){received_bath=0;}
-	exchagne_rate = $("#exchangetobath").val();
+	exchagne_rate = dijit.byId("exchangetobath").get('value');
 	if(isNaN(exchagne_rate) || exchagne_rate==''){exchagne_rate=0;}
-	if(exchagne_rate==0){
+	currency_type = dijit.byId("currency_type").get('value');
+	if(currency_type==2){//riel
+		if(exchagne_rate==0){
+			dijit.byId("total_amount").attr('value',received_dollar);
+		}else{
+			total_amount = ((received_dollar/exchagne_rate)).toFixed(2);
+			dijit.byId('total_amount').attr('value',total_amount);
+			$("#total_amount").val(total_amount);
+		}
+	}else if(currency_type==1){
 		$("#total_amount").val(received_dollar);
-	}else{
-		total_amount = parseFloat((received_bath/exchagne_rate))+parseFloat(received_dollar);
-		$("#total_amount").val(total_amount.toFixed(2));
-	}
+	}	
 }
 function showexpense(){
 	title = dijit.byId("title").get('value');

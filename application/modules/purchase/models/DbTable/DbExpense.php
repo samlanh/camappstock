@@ -65,7 +65,7 @@ function getAllExpense($search=null){
 	
 	$sql=" SELECT id,
 	(SELECT name FROM `tb_sublocation` WHERE id=branch_id) AS branch_name,
-	invoice,(SELECT tb_expensetitle.title FROM `tb_expensetitle` WHERE tb_expensetitle.id=tb_income_expense.title LIMIT 1) as title,
+	invoice,expense_title,(SELECT tb_expensetitle.title FROM `tb_expensetitle` WHERE tb_expensetitle.id=tb_income_expense.title LIMIT 1) as category,
 	(SELECT description FROM tb_currency WHERE tb_currency.id = curr_type LIMIT 1) as currency_type,
 	total_amount,`desc`,for_date,
 	(SELECT fullname FROM `tb_acl_user` WHERE user_id=$this->_name.user_id LIMIT 1) as user_name,

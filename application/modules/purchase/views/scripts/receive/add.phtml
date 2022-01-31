@@ -144,10 +144,12 @@ function initList() {
 		foreach($this->item AS $i=>$r){?>
 	index5++; 
 	index=index+1;
+	item_name='<?php echo preg_replace("/'/", "\&#39;", $r['item_name']);?>';
+		
 	template='<tr id="row_order_'+index5+'" style="height:33px;">';
 	var inp = '';
 	template+='<td  width="1%">'+index5+'</td>';
-	template+='<td width="30%"><?php echo $r['item_name'];?><input type="hidden" name="item_id_'+index5+'" id="item_id_'+index5+'" /></td>';
+	template+='<td width="30%">'+item_name+'<input type="hidden" name="item_id_'+index5+'" id="item_id_'+index5+'" /></td>';
 	template+='<td ><input type="text" class="form-control" required="1" readOnly="readOnly" value="" id="qty_order_'+index5+'" name="qty_order_'+index5+'" /></td>';
 	template+='<td ><input type="text" readOnly="readOnly" onkeyup="doTotalQty('+index5+')" class="validate[required,custom[number]] input form-control" required="1" value="1" id="qty_unit_'+index5+'" name="qty_unit_'+index5+'" /></td>';
 	template+='<td ><input type="text" readOnly="readOnly" onkeyup="doTotalQty('+index5+')" class="validate[required,custom[number]] input form-control" value="0" id="qty_per_unit_'+index5+'" name="qty_per_unit_'+index5+'" /><input type="hidden" name="unit_measure_'+index5+'" id="unit_measure_'+index5+'" /></td>';

@@ -31,11 +31,11 @@ class Purchase_ExpenseController extends Zend_Controller_Action
 			$rs_rows= $db->getAllExpense($formdata);//call frome model
     		$glClass = new Application_Model_GlobalClass();
     		$list = new Application_Form_Frmlist();
-    		$collumns = array("BRANCH_NAME","INVOICE_NO","EXPENSE_TITLE","CURRENCY_TYPE","TOTAL_EXPENSE","NOTE","DATE","BY_USER","STATUS");
+    		$collumns = array("BRANCH_NAME","INVOICE_NO","TITLE","EXPENSE_TITLE","CURRENCY_TYPE","TOTAL_EXPENSE","NOTE","DATE","BY_USER","STATUS");
     		$link=array(
     				'module'=>'purchase','controller'=>'expense','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('branch_name'=>$link,'title'=>$link,'invoice'=>$link,'total_amount'=>$link));
+    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('branch_name'=>$link,'expense_title'=>$link,'category'=>$link,'invoice'=>$link,'total_amount'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -61,6 +61,15 @@ class Purchase_ExpenseController extends Zend_Controller_Action
     	$frm = $pructis->FrmAddExpense();
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
+    	
+    	$db = new Purchase_Model_DbTable_Dbexpensetitle();
+    	$result = $db->getParentCateExpense();
+    	
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	
+    	array_unshift($result, array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
+    	$this->view->all_category = $result;
+    	
     }
     public function editAction()
     {
@@ -86,5 +95,13 @@ class Purchase_ExpenseController extends Zend_Controller_Action
     	$frm = $pructis->FrmAddExpense($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
+    	
+    	$db = new Purchase_Model_DbTable_Dbexpensetitle();
+    	$result = $db->getParentCateExpense();
+    	 
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	 
+    	array_unshift($result, array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
+    	$this->view->all_category = $result;
     }
 }

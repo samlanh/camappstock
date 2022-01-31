@@ -163,6 +163,9 @@
 function paidtotal(type){//1=dollar,2=riel
 	paid_dollar = dijit.byId("paid_dollar").get('value');
 	paid_riel = dijit.byId("paid_riel").get('value');
+	
+	if(isNaN(paid_riel)){paid_riel=0;};
+	
 	dollar_fromriel = parseFloat(paid_riel/dijit.byId("exchange_rate").get('value'));
 	all_paid =  parseFloat(paid_dollar) + parseFloat(dollar_fromriel);
 	all_paid = (all_paid).toFixed(2);
@@ -196,7 +199,6 @@ function getInvoice(type){
 			success: function(data){	
 				$('#identity').val("");
 				data = $.parseJSON(data);
-				
 				for(i=0;i<data.length;i++){
 					if(i==0){
 						dijit.byId("customer_id").attr('value',data[i].customer_id);
@@ -212,19 +214,22 @@ function getInvoice(type){
 						data[i].paid=0;
 					}
 					template+='<td>'+data[i].paid+'<input type="hidden" value='+data[i].paid+' id="paid_amount'+index+'" name="paid_amount'+index+'"/></td>';
-					template+='<td>'+data[i].balance+'<input type="hidden" value='+data[i].balance+' id="balance_after'+index+'" name="balance_after'+index+'"/></td>';
+					template+='<td>'+data[i].all_totalafter+'<input type="hidden" value='+data[i].all_totalafter+' id="balance_after'+index+'" name="balance_after'+index+'"/></td>';
 					
 					if($('#identity').val()!="") {
 						var identity = $('#identity').val();
 						$('#identity').val(identity+','+index);
 					} else {$('#identity').val(index);}
+					
+					tmp='<tr id="row_order_'+index+'">';
+					tmp+="</tr>";
+					$('#table_row').append(tmp);
+					
+					dojo.html.set(dojo.byId('row_order_'+index),template , {
+					     parseContent: true,
+					});
 				}
-				tmp='<tr id="row_order_'+index+'">';
-				tmp+="</tr>";
-				$('#table_row').append(tmp);
-				dojo.html.set(dojo.byId('row_order_'+index),template , {
-				     parseContent: true,
-				});
+				netTotal();
 			},
 			error:function(e){
 			}

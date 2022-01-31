@@ -127,9 +127,9 @@ Class report_Model_DbProduct extends Zend_Db_Table_Abstract{
 // 			//$s_where[]= " cate LIKE '%{$s_search}%'";
 // 			$where.=' AND ('.implode(' OR ', $s_where).')';
 // 		}
-		if($data["pro_id"]!=""){
-			$where.=' AND m.pro_id='.$data["pro_id"];
-		}
+// 		if($data["pro_id"]!=""){
+// 			$where.=' AND m.pro_id='.$data["pro_id"];
+// 		}
 		$location = $db_globle->getAccessPermission('m.`location_id`');
 		//echo $location;
 		return $db->fetchAll($sql.$where.$location);

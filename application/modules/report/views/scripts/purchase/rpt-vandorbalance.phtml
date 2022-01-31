@@ -8,12 +8,12 @@ $brach_name =  $this->branch;
 			<form method="post" autocomplete="off">
 				<div class="form-group" style="padding-top: 6px;">
 					<?php $formFilter = $this->form_purchase; ?>
-					<div class="control-label col-md-2"><?php echo $formFilter->getElement('text_search');?></div>
-					<div class="control-label col-md-2"><?php echo $formFilter->getElement('branch_id');?></div>
-					<div class="control-label col-md-2"><?php echo $formFilter->getElement('suppliyer_id');?></div>
-					<div class="control-label col-md-2"><?php echo $formFilter->getElement('start_date');?></div>
-					<div class="control-label col-md-2"><?php echo $formFilter->getElement('end_date');?></div>
-					<div class="control-label col-md-2">
+					<div class="col-md-2"><?php echo $formFilter->getElement('text_search');?></div>
+					<div class="col-md-2"><?php echo $formFilter->getElement('branch_id');?></div>
+					<div class="col-md-2"><?php echo $formFilter->getElement('suppliyer_id');?></div>
+					<div class="col-md-2"><?php echo $formFilter->getElement('start_date');?></div>
+					<div class="col-md-2"><?php echo $formFilter->getElement('end_date');?></div>
+					<div class="col-md-2">
 						<input type="submit" value="btnsavenew" id="btnsavenew" name="save_close" label="<?php echo $tr->translate("REFRESH")?>" dojoType="dijit.form.Button" 
 							iconClass="dijitIconSearch" />
 					</div>
@@ -26,7 +26,7 @@ $brach_name =  $this->branch;
 			font-family: 'Khmer OS Battambang';
 		}
 		ul{margin: 0;padding:0;}
-		table tr td ul li{text-align: center;list-style: none;line-height: 25px; font-weight: bold;}
+		table tr td ul li{text-align: center;list-style: none;line-height: 25px;}
 		th{padding: 5px;}
 		.hover:hover{background: #ccc;}
 	</style>
@@ -35,36 +35,25 @@ $brach_name =  $this->branch;
 			<tr>
 		    	<td align="center">
 		        	<table width="100%" style="font-family: 'Khmer OS Battambang';" cellpadding="0" cellpadding="0">
-		            	<tbody><tr>
-		                	<td width="20%" valign="top"></td>
-		                	<td width="60%" valign="top">
-		                		<ul>
-		                			<li style="text-align:center; font-size:13px; font-family:'Khmer OS Muol Light'">របាយការណ៏ ទិញចូលមិនទាន់ទូទាត់(ជំពាក់)</li>
-		                			<li style="text-align:center; font-size:13px;"><?php echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
-		                		</ul>
-		                	</td>
-		                    <td width="20%"></td>
-		                </tr> 
-		                <tr>
-		                	<td colspan="3" valign="top">
-		                		<table width="100%" cellpadding="0" cellspacing="0">
-		                			<tbody><tr>
-		                				<td style="font-size: 11px;">
-		                				    <span style="white-space: nowrap;"><?php //echo $tr->translate("ADDRESS_COMPANY");?></span>
-		                					<br><?php //echo $tr->translate("TEL_COMPANY");?> 
-		                				</td>
-		                				<td width="65%"></td>
-		                			</tr>
-				                </tbody></table>
-				              </td>
-				           </tr>   
-		            </tbody></table>
+		            	<tbody>
+		            		<tr>
+			                	<td width="20%" valign="top"></td>
+			                	<td width="60%" valign="top">
+			                		<ul>
+			                			<li style="text-align:center; font-size:14px; font-family:'Khmer OS Muol Light'">របាយការណ៏ ទិញចូលមិនទាន់ទូទាត់(ជំពាក់)</li>
+			                			<li style="text-align:center; font-size:14px;"><?php if(!empty($this->rssearch['start_date'])){echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php } echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
+			                		</ul>
+			                	</td>
+			                    <td width="20%"></td>
+			                </tr> 
+			            </tbody>
+		            </table>
 		        </td>
 		    </tr>
 		    <tr>
 		    	<td class="table2excel" id="exportExcel">
 		            <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
-		                 <tbody><tr bgcolor="#ccc" class="style" align="center" style="font-weight:bold; line-height: 26px; font-size:12px; padding:1px 0px; white-space: nowrap; ">
+		                 <tbody><tr class="style" align="center" style="background:#ccd9ff;font-weight:bold; line-height: 25px; font-size:12px; padding:1px 0px; white-space: nowrap;">
 		                    <td>&nbsp;<?php echo $tr->translate("NUM");?></td>
 							<td><?php echo $tr->translate("BRANCH_NAME");?></td>
 							<td>&nbsp;<?php echo $tr->translate("VENDOR_NAME");?></td>
@@ -101,20 +90,21 @@ $brach_name =  $this->branch;
 								$d_balance = $d_balance+$rs["balance"];
                     }?>
 		                </tbody>
-		           </table>
-		            <br>
-		             <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
-		                <tbody><tr height="30px;" bgcolor="#ccc" class="style" align="center" style="floafont-weight:bold; line-height: 14px; font-size:12px; padding:2px 0px; ">
-		                    <td><?php echo $tr->translate("CURRENCY_TYPE");?></td>
-		                    <td><strong><?php echo $tr->translate("BALANCE");?></strong></td>
+		                <tr style="height: 30px; font-weight:bold; text-align: center;font-size: 14px; background:#87acff;">
+		                	<td colspan="7"></td>
+		                	<td>
+		                		<?php echo number_format($d_netotal,2);?>
+		                	</td>
+		                	<td>
+		                		<?php echo number_format($d_paid,2);?>
+		                	</td>
+		                	<td>
+		                		<?php echo number_format($d_balance,2);?>
+		                	</td>
+		                	<td></td>
 		                </tr>
-		                 <tr class="style" style=" line-height: 24px; font-size:11px;">
-		                    <td align="center">&nbsp;<?php echo $tr->translate("DOLLAR");?></td>
-		                    <td style="font-family:'Open Sans', sans-serif;font-size: 12px; font-weight: bold;">&nbsp;<?php echo number_format($d_balance,2);?>&nbsp;$</td>
-		                 </tr>
-		               </tbody>
-		             </table>
-		             <br>
+		           	</table>
+		           	<br />
 		              <?php echo $this->getFooter;?>
 		    		</td>
 		    	</tr>

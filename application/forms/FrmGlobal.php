@@ -525,21 +525,21 @@ class Application_Form_FrmGlobal
 					<img style="margin-bottom:2px;max-height:85px" src="'.BASE_URL.'/images/logo.jpg" >
 				</td>
 				<td width="65%" align="center" valign="top" style=""><div ></div>
-				<table width="100%" style="line-height:16px;">
+				<table width="100%" style="line-height:16px;margin-top: 10px;">
 					<tr>
 						<td colspan="2" style="line-height:20px;font-size: 14px;font-family:Khmer OS Muol Light;">'.$tr->translate("COMPANY_CUSTOMER").'</td>
 					</tr>
 					<tr>
 						<td colspan="2" style="font-size: 12px;font-family:khmer os battambang;white-space:nowrap;">'.$tr->translate("ADDRESS_COMPANY").'</td>
 					</tr>
-					<tr>
+					<tr style="display:none;">
 						<td colspan="2" style="font-size: 12px;font-family:arial;">'.$tr->translate("COMPANY_WEBSITE").'</td>
 					</tr>
-					<tr>
+					<tr  style="display:none;">
 						<td colspan="2" style="font-size: 12px;font-family:arial">'.$tr->translate("COMPANY_EMAIL").'</td>
 					</tr>
 					<tr>
-						<td width="100%" style="font-size: 12px;font-family:arial;white-space:nowrap;">'.$tr->translate("TEL_COMPANY").'</td>
+						<td width="100%" style="font-size: 12px;font-family:khmer os battambang,arial;white-space:nowrap;">'.$tr->translate("TEL_COMPANY").'</td>
 					</tr>
 				</table>
 				</td>

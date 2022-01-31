@@ -49,9 +49,9 @@ $frm_sales_report = $this->form_search;
 		                	<td width="20%" valign="top"></td>
 		                	<td width="60%" valign="top">
 		                		<ul>
-		                			<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
-		                			<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("RPT_PRODUCT_SOLD");?></li>
-		                			<li style="text-align:center; font-size:16px;"><?php echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
+		                			<li style="text-align:center; font-size:14px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
+		                			<li style="text-align:center; font-size:14px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("RPT_PRODUCT_SOLD");?></li>
+		                			<li style="text-align:center; font-size:14px;"><?php if(!empty($this->rssearch['start_date'])){echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php } echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
 		                		</ul>
 		                	</td>
 		                    <td width="20%"></td>
@@ -65,7 +65,7 @@ $frm_sales_report = $this->form_search;
 		    <tr>
 		    	<td class="table2excel" id="exportExcel">
 		            <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
-		                 <thead><tr bgcolor="#ccc" class="style" align="center" style="font-weight:bold; line-height: 25px; font-size:12px; padding:1px 0px; white-space: nowrap; ">
+		                 <thead><tr class="style" align="center" style="background:#ccd9ff;font-weight:bold; line-height: 25px; font-size:12px; padding:1px 0px; white-space: nowrap; ">
 		                    <td>&nbsp;<?php echo $tr->translate("NUM");?></td>
 							<td><?php echo $tr->translate("CATE_NAME");?></td>
 							<td>&nbsp;<?php echo $tr->translate("BRAND_NAME");?></td>

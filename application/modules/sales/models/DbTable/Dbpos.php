@@ -22,10 +22,10 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 					p.qty_perunit,
 					(SELECT tb_measure.name FROM `tb_measure` WHERE tb_measure.id=p.measure_id) as measue_name,
 					(SELECT qty FROM `tb_prolocation` WHERE pro_id=ag.pro_id AND location_id=$branch_id LIMIT 1) AS qty
-				FROM `tb_agreement` AS a,
+			FROM `tb_agreement` AS a,
 				`tb_agreement_detail`  AS ag,
 				`tb_product` AS p
-				WHERE
+			WHERE
 				a.id=ag.agreement_id
 				AND p.id=ag.pro_id
 				AND a.id=$agreement_id
@@ -85,18 +85,18 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 					"sale_no"       => $so,//$data['txt_order'],
 					"date_sold"     => $data['sale_date'],
 					"all_total"     => $data['total_dollar'],
-					'all_totalafter'=> $data['total_dollar'],
-					//"currency_id"    => 1,//$data['currency'],
 					'discount_value' =>empty($data['discount'])?0:$data['discount'],
 					//"discount_type"  => 	$data['discount_type'],
 					//"saleagent_id"  => 	$data['saleagent_id'],
 					//"tax"			 =>     $data["total_tax"],
 					//"remark"       => 	$data['remark'],
+					//"currency_id"    => 1,//$data['currency'],
 					"jcnumber"    => $data['cjnumber'],
 					"mileage"    => $data['mileage'],
 					'paid_dollar'=>$data['total_paid'],
 					"paid"           => $data['total_paid'],
 					"balance"        => $data['balance'],
+					'all_totalafter'=> $data['balance'],
 					"net_total"      => $data['sub_total'],
 					"user_mod"       => $GetUserId,
 					'term_condition' => $data['term_condition'],
@@ -182,7 +182,6 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 			$db->rollBack();
 			Application_Form_FrmMessage::message('INSERT_FAIL');
 			$err =$e->getMessage();
-			echo $err;exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($err);
 		}
 	}
@@ -256,7 +255,7 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 				$db_global = new Application_Model_DbTable_DbGlobal();
 				$data['receipt'] = $db_global->getReceiptNumber(1);
 				$info_purchase_order=array(
-						"branch_id"   	=> 	1,//$branch_id['branch_id'],
+						"branch_id"   	=> 	$data["branch_id"],
 						"customer_id"   => 	$data["customer_id"],
 						"payment_type"  => 	1,//payment by customer/invoice
 						"payment_id"    => 	1,	//payment by cash/paypal/cheque
@@ -311,7 +310,7 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 						'qty_order'	  => $data['qty_sold'.$i],
 						'price'		  => $data['price_'.$i],
 						'old_price'   => $data['price_'.$i],
-						'cost_price'  => $data['cost_price'.$i],
+						//'cost_price'  => $data['cost_price'.$i],
 						'sub_total'	  => $data['sub_total'.$i],
 						'note'	  	  => $data['note'.$i],
 						'staff_id'	  => $data['staff_'.$i],

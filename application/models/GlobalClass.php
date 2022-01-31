@@ -266,9 +266,9 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		$user_info = new Application_Model_DbTable_DbGetUserInfo();
 		$result = $user_info->getUserInfo();
 		$option="";		
-		if($result["level"]==1 OR $result["level"]==2){
-			$option .= '<option value="-1">Please Select Product</option>';
-		}
+// 		if($result["level"]==1 OR $result["level"]==2){
+// 			$option .= '<option value="-1"></option>';
+// 		}
 		
 		$db_g = new Application_Model_DbTable_DbGlobal();
 		foreach($row_cate as $cate){

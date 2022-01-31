@@ -41,97 +41,6 @@ class Sales_Model_DbTable_Dbpayment extends Zend_Db_Table_Abstract
 			$order=" ORDER BY id DESC ";
 			return $db->fetchAll($sql.$where.$order);
 	}
-	public function addReceiptPayment($data)
-	{
-		$db = $this->getAdapter();
-		$db->beginTransaction();
-		try{
-			$db_global = new Application_Model_DbTable_DbGlobal();
-			$session_user=new Zend_Session_Namespace('auth');
-			$userName=$session_user->user_name;
-			$GetUserId= $session_user->user_id;
-			
-			$ids=explode(',',$data['identity']);
-			$branch_id = '';
-			
-			foreach ($ids as $key => $row){
-				$branch_id = $this->getBranchByInvoice($data['invoice_no'.$row]);
-				break;
-			}
-			$data['receipt'] = $db_global->getReceiptNumber(1);
-			
-			$info_purchase_order=array(
-					"branch_id"   	=> 	1,//$branch_id['branch_id'],
-					"customer_id"   => 	$data["customer_id"],
-					"payment_type"  => 	1,//payment by customer/invoice
-					"payment_id"    => 	$data["payment_name"],
-					"receipt_no"    => 	$data['receipt'],
-					"receipt_date"  =>  date("Y-m-d",strtotime($data['date_in'])),
-					"date_input"    =>  date("Y-m-d"),
-					"total"         => 	$data['all_total'],
-					"paid"          => 	$data['paid'],
-					"paid_dollar"   => 	$data['paid_dollar'],
-					"paid_riel"     => 	$data['paid_riel'],
-					"balance"       => 	$data['balance'],
-					"remark"        => 	$data['remark'],
-					"user_id"       => 	$GetUserId,
-					'status'        =>1,
-					"bank_name"     => 	$data['bank_name'],
-					"cheque_number" => 	$data['cheque'],
-					"exchange_rate" => 	$data['exchange_rate'],
-			);
-			$this->_name="tb_receipt";
-			$reciept_id = $this->insert($info_purchase_order); 
-			unset($info_purchase_order);
-			
-			$count = count($ids);
-			$paid = $data['paid'];
-			$compelted = 0;
-			foreach ($ids as $key => $i)
-			{
-				$paid = $paid -($data['balance_after'.$i]);
-				$recipt_paid = 0;
-				if ($paid>=0){
-					$paided = $data['balance_after'.$i];
-					$balance=0;
-					$compelted=1;
-				}else{
-					$paided = abs($paid);
-					$balance= $data['balance_after'.$i]-abs($paid);
-					$compelted=0;
-				}
-				
-				$data_item= array(
-						'receipt_id'=> $reciept_id,
-						'invoice_id'=> $data['invoice_no'.$i],
-						'total'     => $data['balance_after'.$i],
-						'paid'	    => $paided,
-						'balance'	=> $balance,
-						'is_completed'=> $compelted,
-						'status'      => 1,
-						'date_input'  => date("Y-m-d"),
-				);
-				$this->_name='tb_receipt_detail';
-				$this->insert($data_item);
-				
-				$rsinvoice = $this->getSaleById($data['invoice_no'.$i]);
-				if(!empty($rsinvoice)){
-					$data_invoice = array(
-						'all_totalafter'=>$rsinvoice['all_totalafter']-$paided,
-					);
-					$this->_name='tb_sales_order';
-					$where = 'id = '.$rsinvoice['id'];
-					$this->update($data_invoice, $where);
-				}
-			 }
-			$db->commit();
-		}catch(Exception $e){
-			$db->rollBack();
-			Application_Form_FrmMessage::message('INSERT_FAIL');
-			$err =$e->getMessage();
-			Application_Model_DbTable_DbUserLog::writeMessageError($err);
-		}
-	}
 	public function updatePayment($data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
@@ -188,80 +97,8 @@ class Sales_Model_DbTable_Dbpayment extends Zend_Db_Table_Abstract
 			foreach ($ids as $key => $i)
 			{
 				$invoice = $this->getBranchByInvoice($data['invoice_no'.$i]);
-				//print_r($invoice);exit();
-// 				$paid = $paid -$invoice['paid_amount'];
-// 				$recipt_paid = 0;
-// 				if ($paid>=0){
-// 					$paided = 0;
-// 					$recipt_paid = $invoice['paid_amount'];
-// 					$balance= $invoice['balance'];
-// 				}else{
-// 					$paided = ($invoice['paid_amount']- abs($paid));
-// 					$recipt_paid = ($invoice['paid_amount']- abs($paid));
-// 					$balance= $invoice['balance']+abs($paid);
-// 					$paid  = 0;
-// 				}
-// 				$data_item= array(
-// 						'receipt_id'=> $id,
-// 						'invoice_id'	  => 	$data['invoice_no'.$i],
-// 						'total'=>$invoice['sub_total'],
-// 						'discount'  => 	$invoice['discount'],
-// 						'paid'	  => 	$recipt_paid,
-// 						'balance'		  => 	$balance,
-// 						'is_completed'   =>    1,
-// 						'status'  => 1,
-// 						'date_input'	  => date("Y-m-d"),
-// 				);
-// 				$this->_name='tb_receipt_detail';
-// 				$this->insert($data_item);
-				
-// 				$data_invoice = array(
-// 						'discount_after'	  => 	0,
-// 						'paid_after'	  => 	$paided,
-// 						'balance_after'	  => 	$balance,
-// 						'is_fullpaid'	  => 	1,
-// 				);
-// 				$this->_name='tb_invoice';
-// 				$where = 'id = '.$data['invoice_no'.$i];
-// 				$this->update($data_invoice, $where);
-				
-// 				if ($key== ($count-1)){
-// 					if ($paid>0){
-// 						$idss= explode(',',$data['identity']);
-// 						foreach ($idss as $k)
-// 						{
-// 							$paid = $paid - $invoice['balance'];
-// 							if ($paid>=0){
-// 								$paided = 0;
-// 								$recipt_paid =$invoice['balance']+$invoice['paid_amount'];
-// 							}else{
-// 								$paided = abs($paid);
-// 								$recipt_paid = $invoice['paid_amount']+($invoice['balance'] - $paided);
-// 								$paid=0;
-// 							}
-// 							$data_item= array(
-// 									'paid'	  => 	$recipt_paid,
-// 									'balance'		  => 	$paided,
-// 									'is_completed'   =>    1,
-// 									'status'  => 1,
-// 							);
-// 							$this->_name='tb_receipt_detail';
-// 							$wheres = 'invoice_id = '.$data['invoice_no'.$k];
-// 							$this->update($data_item, $wheres);
-				
-// 							$data_invoice = array(
-// 									'balance_after'	  => 	$paided,
-// 									'is_fullpaid'	  => 	1,
-// 							);
-// 							$this->_name='tb_invoice';
-// 							$where = 'id = '.$data['invoice_no'.$k];
-// 							$this->update($data_invoice, $where);
-// 						}
-// 					}
-// 				}
 
 			}
-				
 		
 			$db->commit();
 		}catch(Exception $e){
@@ -325,6 +162,104 @@ class Sales_Model_DbTable_Dbpayment extends Zend_Db_Table_Abstract
 		$sql=" SELECT * FROM `tb_quoatation_termcondition` WHERE quoation_id=$id AND term_type=2 ";
 		return $db->fetchAll($sql);
 	} 
+	public function addReceiptPayment($data)
+	{
+		$db = $this->getAdapter();
+		$db->beginTransaction();
+		try{
+			$db_global = new Application_Model_DbTable_DbGlobal();
+			$session_user=new Zend_Session_Namespace('auth');
+			$userName=$session_user->user_name;
+			$GetUserId= $session_user->user_id;
+				
+			$ids=explode(',',$data['identity']);
+			$branch_id = '1';
+			foreach ($ids as $key => $row){
+				$rs =  $this->getSaleById($data['invoice_no'.$row]);
+				$branch_id = $rs['branch_id'];
+				break;
+			}
+			
+			$data['receipt'] = $db_global->getReceiptNumber($branch_id);
+				
+			$info_purchase_order=array(
+					"branch_id"   	=> 	$branch_id,
+					"customer_id"   => 	$data["customer_id"],
+					"payment_type"  => 	1,//payment by customer/invoice
+					"payment_id"    => 	$data["payment_name"],
+					"receipt_no"    => 	$data['receipt'],
+					"receipt_date"  =>  date("Y-m-d",strtotime($data['date_in'])),
+					"date_input"    =>  date("Y-m-d"),
+					"total"         => 	$data['all_total'],
+					"paid"          => 	$data['paid'],
+					"paid_dollar"   => 	$data['paid_dollar'],
+					"paid_riel"     => 	$data['paid_riel'],
+					"balance"       => 	$data['balance'],
+					"remark"        => 	$data['remark'],
+					"user_id"       => 	$GetUserId,
+					'status'        =>1,
+					"bank_name"     => 	$data['bank_name'],
+					"cheque_number" => 	$data['cheque'],
+					"exchange_rate" => 	$data['exchange_rate'],
+			);
+			$this->_name="tb_receipt";
+			$reciept_id = $this->insert($info_purchase_order);
+			unset($info_purchase_order);
+			$is_update=0;
+				
+			$count = count($ids);
+			$paid = $data['paid'];
+			$compelted = 0;
+			foreach ($ids as $key => $i)
+			{
+				$paid = $paid -($data['balance_after'.$i]);
+				$recipt_paid = 0;
+				if ($paid>=0){
+					$paided = $data['balance_after'.$i];
+					$balance=0;
+					$compelted=1;
+				}else{
+					$paided = $data['balance_after'.$i] - abs($paid);
+					$balance= $data['balance_after'.$i]-($paided);
+					$compelted=0;
+				}
+	
+				$data_item= array(
+						'receipt_id'=> $reciept_id,
+						'invoice_id'=> $data['invoice_no'.$i],
+						'total'     => $data['balance_after'.$i],
+						'paid'	    => $paided,
+						'balance'	=> $balance,
+						'is_completed'=> $compelted,
+						'status'      => 1,
+						'date_input'  => date("Y-m-d"),
+				);
+				$this->_name='tb_receipt_detail';
+				$this->insert($data_item);
+	
+				$rsinvoice = $this->getSaleById($data['invoice_no'.$i]);
+				
+				if(!empty($rsinvoice)){
+					$data_invoice = array(
+							'all_totalafter'=>$rsinvoice['all_totalafter']-$paided,
+							'balance'=>$rsinvoice['balance']-$paided,
+					);
+					$this->_name='tb_sales_order';
+					$where = 'id = '.$rsinvoice['id'];
+					$this->update($data_invoice, $where);
+				}
+				if($paid<=0){
+					break;
+				}
+			}
+			$db->commit();
+		}catch(Exception $e){
+			$db->rollBack();
+			Application_Form_FrmMessage::message('INSERT_FAIL');
+			$err =$e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+		}
+	}
 	function delettePayment($id){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
@@ -344,7 +279,8 @@ class Sales_Model_DbTable_Dbpayment extends Zend_Db_Table_Abstract
 					$rssale = $this->getSaleById($r['invoice_id']);
 					if(!empty($rssale)){
 						$data= array(
-								'balance'=>$rssale['balance']+$rs['paid'],
+								'all_totalafter'=>$r['total'],
+								'paid' =>0
 								);
 						$this->_name="tb_sales_order";
 						$where = " id = ".$r['invoice_id'];
@@ -352,11 +288,14 @@ class Sales_Model_DbTable_Dbpayment extends Zend_Db_Table_Abstract
 					}
 				}
 			}
+			
+			$this->_name="tb_receipt_detail";
+			$where = "receipt_id =  ".$id;
+			$this->delete($where);
+			
 			$db->commit();
 		}Catch(Exception $e){
 			$db->rollBack();
 		}	
-			
 	}
-	
 }

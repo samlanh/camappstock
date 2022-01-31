@@ -125,7 +125,7 @@ class Sales_PaymentController extends Zend_Controller_Action
 		$db = new Sales_Model_DbTable_Dbpos();
 		echo "<script language='javascript'>
 		var txt;
-		var r = confirm('តើលោកអ្នកពិតចង់លុបប្រតិបត្តិការណ៍នេះឫ!')​​;
+		var r = confirm('do you want to delete?');
 		if (r == true) {";
 		//$db->deleteSale($id);
 		echo "window.location ='".Zend_Controller_Front::getInstance()->getBaseUrl()."/sales/payment/deleteitem/id/".$id."'";

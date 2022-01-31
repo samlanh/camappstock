@@ -20,8 +20,6 @@ class Report_PurchaseController extends Zend_Controller_Action
     {
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
-    		$data['start_date']=date("Y-m-d",strtotime($data['start_date']));
-    		$data['end_date']=date("Y-m-d",strtotime($data['end_date']));
     	}else{
     		$data = array(
     				'text_search'=>'',
@@ -48,8 +46,6 @@ class Report_PurchaseController extends Zend_Controller_Action
     {
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
-    		$data['start_date']=date("Y-m-d",strtotime($data['start_date']));
-    		$data['end_date']=date("Y-m-d",strtotime($data['end_date']));
     	}else{
     		$data = array(
     				'text_search'=>'',
@@ -75,8 +71,6 @@ class Report_PurchaseController extends Zend_Controller_Action
     function rptPurchaseitemAction(){
     	if($this->getRequest()->isPost()){
     		$search = $this->getRequest()->getPost();
-    		$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-    		$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
     	}else{
     		$search = array(
     				'txt_search'=>'',
@@ -114,8 +108,6 @@ class Report_PurchaseController extends Zend_Controller_Action
     {
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
-    		$data['start_date']=date("Y-m-d",strtotime($data['start_date']));
-    		$data['end_date']=date("Y-m-d",strtotime($data['end_date']));
     	}else{
     		$data = array(
     				'text_search'=>'',
@@ -185,8 +177,6 @@ class Report_PurchaseController extends Zend_Controller_Action
     	try{
     		if($this->getRequest()->isPost()){
     			$search=$this->getRequest()->getPost();
-    			$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-    			$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
     		}
     		else{
     			$search = array(
@@ -220,8 +210,6 @@ class Report_PurchaseController extends Zend_Controller_Action
     	try{
     		if($this->getRequest()->isPost()){
     			$search=$this->getRequest()->getPost();
-    			$search['start_date']=date("Y-m-d",strtotime($search['start_date']));
-    			$search['end_date']=date("Y-m-d",strtotime($search['end_date']));
     		}
     		else{
     			$search = array(

@@ -11,12 +11,12 @@
 			<form method="post" autocomplete="off">
 				<div class="form-group" style="padding-top: 6px;">
 					<?php $formFilter = $this->formFilter; ?>
-					<div class="control-label col-md-2"><?php echo $formFilter->getElement('text_search');?></div>
-					<div class="control-label col-md-2"><?php echo $formFilter->getElement('branch_id');?></div>
-					<div class="control-label col-md-2"><?php echo $formFilter->getElement('title');?></div>
-					<div class="control-label col-md-2"><?php echo $formFilter->getElement('start_date');?></div>
-					<div class="control-label col-md-2"><?php echo $formFilter->getElement('end_date');?></div>
-					<div class="control-label col-md-2">
+					<div class="col-md-2"><?php echo $formFilter->getElement('text_search');?></div>
+					<div class="col-md-2"><?php echo $formFilter->getElement('branch_id');?></div>
+					<div class="col-md-2"><?php echo $formFilter->getElement('title');?></div>
+					<div class="col-md-2"><?php echo $formFilter->getElement('start_date');?></div>
+					<div class="col-md-2"><?php echo $formFilter->getElement('end_date');?></div>
+					<div class="col-md-2">
 						<input type="submit" value="SAVE_NEW" tabindex="1" label="<?php echo $tr->translate("REFRESH")?>" id="save_new" dojoType="dijit.form.Button" name="save_new"
 						iconClass="dijitEditorIcon dijitEditorIconSave"/> 
 					</div>
@@ -26,14 +26,13 @@
 			<table style="background:#fff; margin: 0 auto; width: 100%; padding: 0px 10px 1cm 10px;font-family: 'khmer os battambang';">
 							<tr style="font-size: 12px;">
 								<td colspan="3" align="center">
-									<span style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("COMPANY_CUSTOMER");?></span><br />
+									<span style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("COMPANY_CUSTOMER");?></span><br />
 									<span style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_EXPENSE_TYPE");?></span><br />
 									<span style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></span>
 								</td>
 							</tr>
 							<tr>
-								<td width="20%" align="left">
-								</td>
+								<td width="20%" align="left"></td>
 								<td align="center">
 									<span style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Muol Light';"></span>
 								</td>
@@ -45,7 +44,7 @@
 							<tr>
 								<td colspan="3">
 									<table class="table2excel" border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
-		            					<tr style="font-family:'khmer os battambang';font-size:12px; height: 20px;border: 1px solid #000;white-space: nowrap;background-color: #ccc;line-height:30px;font-weight: bold;" align="center" >
+		            					<tr style="font-size:12px; height: 20px;border: 1px solid #000;white-space: nowrap;background:#ccd9ff;line-height:30px;font-weight: bold;" align="center" >
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('NUM')?></td>
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH_NAME')?></td>
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('EXPENSE_TITLE')?></td>

@@ -1,6 +1,6 @@
 <?php 
-$tr=Application_Form_FrmLanguages::getCurrentlanguage();
-$frm_sales_report = $this->form_search;
+	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	$frm_sales_report = $this->form_search;
 ?>
 <title>របាយការណ៍ ទូទាត់សាច់ប្រាក់</title>
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -39,8 +39,8 @@ $frm_sales_report = $this->form_search;
 			<tr>
 		    	<td align="center">
                 	<ul>
-                		<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'">របាយការណ៍ ទូទាត់សាច់ប្រាក់</li>
-                		<li style="text-align:center; font-size:14px;"><?php echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
+                		<li style="text-align:center; font-size:14px; font-family:'Khmer OS Muol Light'">របាយការណ៍ ទូទាត់សាច់ប្រាក់</li>
+                		<li style="text-align:center; font-size:14px;"><?php if(!empty($this->rssearch['start_date'])){echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php } echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></li>
                 	</ul>
 		        </td>
 		    </tr>
@@ -52,7 +52,7 @@ $frm_sales_report = $this->form_search;
 			                 <tr bgcolor="#98a4fa" class="style" align="center" style="font-weight:bold; line-height: 25px; font-size:12px; padding:1px 0px; white-space: nowrap; ">
 			                    <td>&nbsp;<?php echo $tr->translate("NUM");?></td>
 			                    <td><?php echo $tr->translate("BRANCH_NAME");?></td>
-								<td>&nbsp;<?php //echo $tr->translate("CUSTOMER_NAME");?></td>
+								<td>&nbsp;</td>
 								<td width="10%">&nbsp;<?php echo $tr->translate("SALE_DATE");?></td>
 								<td><?php echo $tr->translate("CATE_NAME");?></td>
 								<td><?php echo $tr->translate("ITEM_NAME");?></td>
@@ -115,7 +115,7 @@ $frm_sales_report = $this->form_search;
 		           	ចំណាយផ្សេងៗ
 		            <table border="1"  style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
 		                 <tbody>
-		                   <tr style="font-family:'khmer os battambang';font-size:12px; height: 20px;border: 1px solid #000;white-space: nowrap;background-color: #98a4fa;line-height:30px;font-weight: bold;" align="center" >
+		                   	<tr style="font-family:'khmer os battambang';font-size:12px; height: 20px;border: 1px solid #000;white-space: nowrap;background-color: #98a4fa;line-height:30px;font-weight: bold;" align="center" >
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('NUM')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH_NAME')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('EXPENSE_TITLE')?></td>
@@ -128,19 +128,19 @@ $frm_sales_report = $this->form_search;
 								<td style="border: 1px solid #000;"><?php echo $row['branch_name'];?></td>
 								<td style="border: 1px solid #000;text-align: left;padding:0px 2px;"><span style="width:120px;font-family:'Khmer OS Content'"></span><?php echo $row['title'];?></td>
 								<td align="canter" style="border: 1px solid #000;padding:1px;"><?php echo $row['title_en'];?></td>
-								<td style="border: 1px solid #000;background: #c6e2fb;"><?php echo number_format($row['total_amount'],2);?><?php if($row['curr_type']==1){echo ' $';}else{echo ' រៀល​ ';}?></td>
+								<td style="border: 1px solid #000;background: #c6e2fb;"><?php echo number_format($row['total_amount'],2);?></td>
 							</tr>
 								<?php 
 									$total_expense_dollar = $total_expense_dollar + $row['total_amount'];
 								?> 
-							 <?php } ?>
-							  <?php if(!empty($this->expense_po))foreach($this->expense_po as $row){ $i++;?>
+							<?php } ?>
+							<?php if(!empty($this->expense_po))foreach($this->expense_po as $row){ $i++;?>
 							<tr class="hover" style="font-size:12px; height: 20px;border: 1px solid #000; white-space: nowrap;" align="center" >
 								<td style="border: 1px solid #000;"><?php echo $i;?></td>
 								<td style="border: 1px solid #000;"><?php echo $row['branch_name'];?></td>
 								<td style="border: 1px solid #000;text-align: left;"><span style="width:120px;font-family:'Khmer OS Content'"></span><?php echo "ចំណាយលើអ្នកផ្គត់ផ្គង់".$row['title_kh'];?></td>
 								<td align="center" style="border: 1px solid #000;"><?php echo "Supplier's Expense".$row['title_en'];?></td>
-								<td style="border: 1px solid #000;background: #c6e2fb;"><?php echo number_format($row['total_paid'],2);?>&nbsp;$<?php //if($row['curr_type']==1){echo ' $';}else{echo ' រៀល​ ';}?></td>
+								<td style="border: 1px solid #000;background: #c6e2fb;"><?php echo number_format($row['total_paid'],2);?>&nbsp;</td>
 							</tr>
 								<?php 
 									$total_expense_dollar = $total_expense_dollar + $row['total_paid'];

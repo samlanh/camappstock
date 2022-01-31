@@ -89,7 +89,7 @@ public function viewAction()
     			INNER JOIN tb_acl_acl AS acl ON (acl.acl_id = ua.acl_id) WHERE ut.user_type_id =".$id . $where;
     		}
     		
-    		$order = " order by acl.module ASC, acl.rank ASC,acl.controller ASC,acl.is_menu DESC ";
+    		$order = " order by ordering ASC,acl.module ASC, acl.rank ASC,acl.controller ASC,acl.is_menu DESC ";
     		$acl=$db_acl->getGlobalDb($sql.$order);
     		$acl = (is_null($acl))? array(): $acl;
 //     		$this->view->acl=$acl;
@@ -132,10 +132,6 @@ public function viewAction()
     		}
     		
     		$this->view->rows = $rows;
-//     		$list = new Application_Form_Frmlist();
-//     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-//     		$columns=array("Label",$tr->translate('URL'), $tr->translate('STATUS'));
-//     		$this->view->list = $list->getCheckList('radio', $columns, $rows);
     	}  	 
     }
 	public function addAction()

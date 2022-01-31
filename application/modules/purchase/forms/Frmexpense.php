@@ -102,11 +102,11 @@ Class Purchase_Form_Frmexpense extends Zend_Form {
 		
 		$exchangetobath=new Zend_Form_Element_Text('exchangetobath');
 		$exchangetobath->setAttribs(array(
-				'dojoType'=>"dijit.form.TextBox",
+				'dojoType'=>"dijit.form.NumberTextBox",
 				'class'=>'fullside',	
 				'onkeyup'=>'CalculateReceived();'
 		));
-		$exchangetobath->setValue(34.86);
+		$exchangetobath->setValue(1);
 		
 		$convert_to_dollar=new Zend_Form_Element_Text('convert_to_dollar');
 		$convert_to_dollar->setAttribs(array(
@@ -116,10 +116,9 @@ Class Purchase_Form_Frmexpense extends Zend_Form {
 		
 		$received_dollar=new Zend_Form_Element_Text('received_dollar');
 		$received_dollar->setAttribs(array(
-				'dojoType'=>"dijit.form.TextBox",
+				'dojoType'=>"dijit.form.NumberTextBox",
 				'class'=>'fullside',	
 				'onkeyup'=>'CalculateReceived();',
-				'placeholder'=>'amount in dollar'
 		));
 		
 		$received_bath=new Zend_Form_Element_Text('received_bath');
@@ -148,6 +147,7 @@ Class Purchase_Form_Frmexpense extends Zend_Form {
 		$_currency_type->setMultiOptions($opt);
 		
 		if($data!=null){
+			$_branch_id->setValue($data['branch_id']);
 			$expense_title->setValue($data['expense_title']);
 			$exchangetobath->setValue($data['exchangetobath']);
 			$received_bath->setValue($data['received_bath']);
@@ -155,11 +155,15 @@ Class Purchase_Form_Frmexpense extends Zend_Form {
 			$_currency_type->setValue($data['curr_type']);
 			$title->setValue($data['title']);
 			$total_amount->setValue($data['total_amount']);
+			
 			$originalDate = $data['for_date'];
-			$newDate = date("m/d/Y", strtotime($originalDate));
+			$newDate = date("Y/m/d", strtotime($originalDate));
+			
+			$_Date->setValue($originalDate);
+			
 			$for_date->setValue($data['for_date']);
 			$_Description->setValue($data['desc']);
-			$_Date->setValue($newDate);
+			
 			$_stutas->setValue($data['status']);
 			$invoice->setValue($data['invoice']);
 			$id->setValue($data['id']);

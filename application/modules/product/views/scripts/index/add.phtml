@@ -406,9 +406,9 @@ function AllRefresh(){
 get_urlbrand = '<?php echo $this->url(array('module'=>'product','controller'=>'index','action'=>'get-brand'));?>';
 function fillterBrand(){
 	brand = dijit.byId('brand').get('value');
-	if(brand==-1){
+	/*if(brand==-1){
 		return false;
-	}
+	}*/
 	dojo.xhrPost({
 		url:get_urlbrand,	
 		content:{ 
@@ -425,10 +425,10 @@ function fillterBrand(){
 }
 url_getcategory = '<?php echo $this->url(array('module'=>'product','controller'=>'index','action'=>'get-category')); ?>';
 function filtterCategory(){
-	category = dijit.byId('category').get('value');
+	/*category = dijit.byId('category').get('value');
 	if(category==-1){
 		return false;
-	}
+	}*/
 	dojo.xhrPost({
 		url:url_getcategory,	
 		content:{ 
@@ -454,7 +454,9 @@ function fillterMeasure(){
 	dojo.xhrPost({
 		url:get_mesure,	
 		content:{ 
-			'get_data':1
+			'get_data':1,
+			'ad_search':'',
+			'status':''
 		},
 		handleAs:"json",
 		load: function(data) {	

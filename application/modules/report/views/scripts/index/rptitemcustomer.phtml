@@ -1,12 +1,19 @@
 <?php 
-$tr=Application_Form_FrmLanguages::getCurrentlanguage();
-$frm_sales_report = $this->form_search;
+	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	$frm_sales_report = $this->form_search;
 ?>
 <title>Sale Item Detail Report</title>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content">
 		<div class="card-box">
-			<form method="post" action="" autocomplete="off">
+			<form method="post" autocomplete="off" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+					<script type="dojo/method" event="onSubmit">   
+   						if(this.validate()) {
+    						return true;
+   						}else {
+    						return false;
+   						}
+					</script>
 				<div class="form-group">
 					<div class="control-label col-md-3"><?php echo $frm_sales_report->getElement("txt_search");?></div>
 					<div class="control-label col-md-3"><?php echo $frm_sales_report->getElement("branch_id");?></div>
@@ -100,7 +107,7 @@ $frm_sales_report = $this->form_search;
 								   <?php 
 									$d_netotal = $d_netotal+$rs["sub_total"];
 									$d_paid = $d_paid+$rs["paid"];
-									$d_balance = $d_balance+$rs["sub_total"];
+									$d_balance = $d_balance+($rs["sub_total"]-$rs["paid"]);
 		                    	 }?>
 			                </tbody>
 			                <tr>
@@ -134,14 +141,16 @@ $frm_sales_report = $this->form_search;
 </div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
 <script>
-function doPrint() {var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();}
-
-$(document).ready(function() { 
-	customer_id = $("#customer_id").val();
-	if(customer_id>0){
-		customer_id = $("#customer_id option:selected").text();
-		$("#lbl_customer").html(customer_id);
-	}
-});
-
+	dojo.require("dijit.form.DateTextBox");
+	function doPrint() {
+		var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();
+		}
+	
+	$(document).ready(function() { 
+		customer_id = $("#customer_id").val();
+		if(customer_id>0){
+			customer_id = $("#customer_id option:selected").text();
+			$("#lbl_customer").html(customer_id);
+		}
+	});
 </script>
