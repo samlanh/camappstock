@@ -1,6 +1,7 @@
 <?php 
 	$frm = $this->form_search;
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	
 ?>
 <title><?php echo $tr->translate("OTHER_INCOME")?></title>
 <script>
@@ -18,7 +19,7 @@
     		</div>
 	    </div>
 		<div class="card-box">
-			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'incomeexpense','controller'=>'income','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
 	            	<div class="col-md-3 col-sm-3 col-xs-12">
 	            		<?php echo $frm->getElement("adv_search");?>
@@ -52,29 +53,3 @@
 		</div>
 	</div>
 </div>
-<script>
-var row=0;
-var url="";
-$(function(){
-	$.contextMenu({
-		selector: '.context-menu-one', 
-		callback: function(key, options) {
-			var m = "clicked: " + key;
-			if(key=="receipt"){
-				url='<?php echo $this->baseUrl()."/allreport/accounting/reprint-other-income/id/";?>';
-			}
-			gotoAction();
-		},
-		items: {
-			"receipt": {name: "<?php echo $tr->translate("RECEIPT");?>", icon: "fa-money", accesskey: "c"},
-		}
-	});
-});
-function setrowdata(index){
-	row = index;
-}
-var recordid ='';
-function gotoAction(){
-	 window.open(url+row, '_blank');
-}
-</script>

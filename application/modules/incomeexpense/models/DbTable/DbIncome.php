@@ -98,15 +98,12 @@ class Incomeexpense_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		
 		
 		$sql=" SELECT id,
-				(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
-				(select cate.category_name from rms_cate_income_expense as cate where cate.id = cate_income) AS cate_name,
-				title,
-				invoice,
-				(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
-				total_amount,
-				cheqe_no,
-				description,
-				date
+		(SELECT NAME FROM `tb_sublocation` WHERE tb_sublocation.id =branch_id LIMIT 1) AS branch_name,
+		(SELECT cate.category_name FROM rms_cate_income_expense AS cate WHERE cate.id = cate_income) AS cate_name,
+		title,
+		invoice,
+		(SELECT payment_name FROM `tb_paymentmethod` WHERE tb_paymentmethod.payment_typeId=payment_method ) AS payment_method,
+		total_amount,cheqe_no,description,DATE,status
 		";
 		
 		//$sql.=$dbp->caseStatusShowImage("ln_income.status");
@@ -137,6 +134,7 @@ class Incomeexpense_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
         $order=" order by id desc ";
 		return $db->fetchAll($sql.$where.$order);
 	}
+
 	function getAllExpenseReport($search=null){
 		$db = $this->getAdapter();
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);

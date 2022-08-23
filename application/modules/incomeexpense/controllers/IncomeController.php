@@ -8,8 +8,8 @@ class Incomeexpense_IncomeController extends Zend_Controller_Action
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
-    public function indexAction()
- 	{
+	public function indexAction()
+    { 
     	try{
     		$db = new Incomeexpense_Model_DbTable_DbIncome();
     		if($this->getRequest()->isPost()){
@@ -29,11 +29,11 @@ class Incomeexpense_IncomeController extends Zend_Controller_Action
     		
     		$this->view->adv_search = $search;
     		$_db = new Application_Model_DbTable_DbGlobal();
-			$rs_rows= $db->getAllIncome($search);//call frome model
+			$rs_rows= $db->getAllIncome($search);
     		$list = new Application_Form_Frmtable();
     		$collumns = array("BRANCH","INCOME_CATEGORY","INCOME_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_INCOME","CHEQUE_NO","NOTE","PAID_DATE","STATUS");
     		$link=array(
-    				'module'=>'registrar','controller'=>'income','action'=>'edit',
+    				'module'=>'incomeexpense','controller'=>'income','action'=>'edit',
     		);
     		$this->view->list=$list->getCheckList(10, $collumns,$rs_rows,array('branch_name'=>$link,'cate_name'=>$link,'title'=>$link,'invoice'=>$link,'payment_method'=>$link));
     	}catch (Exception $e){
@@ -41,18 +41,19 @@ class Incomeexpense_IncomeController extends Zend_Controller_Action
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
 		
+		
     	$form=new Incomeexpense_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
 		
     }
+   
     public function addAction()
     {
 
-
     	if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();	
+			$data=$this->getRequest()->getPost();
 			$db = new Incomeexpense_Model_DbTable_DbIncome();				
 			try {
 				$db->addIncome($data);
@@ -94,10 +95,10 @@ class Incomeexpense_IncomeController extends Zend_Controller_Action
     		$id = $this->getRequest()->getParam('id');
 			$data=$this->getRequest()->getPost();	
 			$data['id']=$id;
-			$db = new Registrar_Model_DbTable_DbIncome();				
+			$db = new Incomeexpense_Model_DbTable_DbIncome();				
 			try {
 				$db->updateIncome($data);				
-				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', "/registrar/income");		
+				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', "/incomeexpense/income");		
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("APPLICATION_ERRRO");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -106,10 +107,10 @@ class Incomeexpense_IncomeController extends Zend_Controller_Action
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$id = $this->getRequest()->getParam('id');
-		$db = new Registrar_Model_DbTable_DbIncome();
+		$db = new Incomeexpense_Model_DbTable_DbIncome();
 		$row  = $db->getIncomeById($id);
 		
-		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+		$session_user=new Zend_Session_Namespace('auth');
 		$user_type_id = $session_user->level;
 		$payment_date = date("Y-m-d",strtotime($row['date']));
 		$current_date = date("Y-m-d");
@@ -118,11 +119,11 @@ class Incomeexpense_IncomeController extends Zend_Controller_Action
 		}
 		
 		$this->view->rs = $row;
-    	$db = new Registrar_Model_DbTable_DbIncome();
-    	$payment_method = $db->getPaymentMethod(8); // 8 = rms_view type
-    	$this->view->payment_method = $payment_method;
+    	$db = new Incomeexpense_Model_DbTable_DbIncome();
+    	$rs = $db->getPaymentMethod(); 
+    	$this->view->payment_method = $rs;
     	 
-    	$_db = new Registrar_Model_DbTable_DbCateIncome();
+    	$_db = new Incomeexpense_Model_DbTable_DbCateIncome();
     	$cate_income = $_db->getParentCateIncome();
     	array_unshift($cate_income, array('id'=>'-1','name'=>$this->tr->translate("ADD_NEW")));
     	array_unshift($cate_income, array('id'=>'0','name'=>$this->tr->translate("SELECT_CATEGORY")));
@@ -131,15 +132,15 @@ class Incomeexpense_IncomeController extends Zend_Controller_Action
     	
     	
     	
-    	$db = new Application_Model_DbTable_DbGlobal();
+    	$db = new Incomeexpense_Model_DbTable_DbIncome();
     	$branch_income= $db->getAllBranch();
     	$this->view->branch_name = $branch_income;
     	
-    	$frmpopup = new Application_Form_FrmPopupGlobal();
-    	$this->view->officailreceipt = $frmpopup->receiptOtherIncome();
+    	//$frmpopup = new Application_Form_FrmPopupGlobal();
+    	//$this->view->officailreceipt = $frmpopup->receiptOtherIncome();
     	
-    	$key = new Application_Model_DbTable_DbKeycode();
-    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    	//$key = new Application_Model_DbTable_DbKeycode();
+    //	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }
     function getReceiptNumberAction(){
     	if($this->getRequest()->isPost()){
@@ -160,4 +161,16 @@ class Incomeexpense_IncomeController extends Zend_Controller_Action
     		exit();
     	}
     }
+
+/*
+	function getbranchinfoAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Form_FrmGlobal();
+			$rows = $db->getHeaderReceipt($data['branch_id']);
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
+	*/
 }

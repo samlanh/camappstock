@@ -11,7 +11,7 @@ $frm = $this->frm_expense;
 </style>
  <div class="card">
 	<div class="card-content collapse show">
-		<form id="frm_add_tran" action="<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form id="frm_add_tran" action="<?php echo $this->url(array('module'=>'incomeexpense','controller'=>'income','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">
 			if(this.validate()) {
 				branch_id=dijit.byId('branch_id').get('value');
@@ -109,7 +109,7 @@ $frm = $this->frm_expense;
 	                   		<select name="payment_method" id="payment_method" class="fullside" onchange="setReadonlyCheqe();" dojoType="dijit.form.FilteringSelect" >
 								<option value="-1"><?php echo $tr->translate("SELECT_PAYMENT_METHOD");//ជ្រើសរើសប្រភេទបង់ប្រាក់?></option>
 								<?php if(!empty($this->payment_method)){foreach ($this->payment_method as $payment_method){?>
-									<option value="<?php echo $payment_method['id']?>" <?php if($payment_method['id']==$this->rs['payment_method']){echo 'selected="selected"';}?>><?php echo $payment_method['name']?></option>
+									<option value="<?php echo $payment_method['payment_typeId']?>" <?php if($payment_method['payment_typeId']==$this->rs['payment_method']){echo 'selected="selected"';}?>><?php echo $payment_method['payment_name']?></option>
 								<?php }}?>
 							</select>
 								
@@ -138,9 +138,7 @@ $frm = $this->frm_expense;
 									 iconClass="dijitIconClear"/>
 						<input type="submit" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button"
 							 iconClass="dijitEditorIcon dijitEditorIconSave"/>
-					   <input type="button" label="<?php echo $tr->translate("PRINT")?>" name='print' value='print' dojoType="dijit.form.Button"
-						 iconClass="dijitIconNewTask"  onclick="cloneReceipt(); printReceipt('');"   />
-				</div>
+					  
 	    	</div>
 		</form>
 	</div>
@@ -175,7 +173,7 @@ dojo.require("dojo.data.ObjectStore");
 		dijit.byId('cate_income').attr('value',<?php echo $this->rs['cate_income']?>);
 	});
 	
-	var url_add_cate_income = '<?php echo $this->url(array("module"=>"registrar","controller"=>"income","action"=>"add-cate-income")); ?>';
+	var url_add_cate_income = '<?php echo $this->url(array("module"=>"incomeexpense","controller"=>"income","action"=>"add-cate-income")); ?>';
 	function addCateIncome(){
 		if(dijit.byId('frm_add_cate_income').validate()){
 			dijit.byId('save_ajax').set('disabled',true);
@@ -296,10 +294,11 @@ require(["dojo/ready"], function(ready){
 		getbranchinfo();
 	});
 });	
+/*
 function filterClient(){
 	getbranchinfo();
 }
-var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
+var url_getbranch = "<?php echo $this->url(array('module'=>'incomeexpense','controller'=>'income','action'=>'getbranchinfo')); ?>";
 function getbranchinfo(){
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id != ""){
@@ -318,6 +317,7 @@ function getbranchinfo(){
 		});	
 	} 
 }
+*/
 </script>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 	<div data-dojo-type="dijit.Dialog" style="width:24cm;height: 14cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'" id="payment_transaction" >

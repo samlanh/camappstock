@@ -13,7 +13,7 @@
 </style>
  <div class="card">
 	<div class="card-content collapse show">
-		<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'incomeexpense','controller'=>'income','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">	
 			if(this.validate()) {			
 				branch=dijit.byId('branch_id').get('value');
@@ -129,7 +129,7 @@
 							 iconClass="dijitIconNewTask"/>
 						<input  label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' type="submit" dojoType="dijit.form.Button"
 							 iconClass="dijitIconNewTask"/>
-						<input type="button" label="<?php echo $tr->translate("PRINT")?>" name='print' value='print' dojoType="dijit.form.Button" iconClass="dijitIconNewTask"  onclick="cloneReceipt(); printReceipt('');"   />
+						
 	    		</div>
 	    	</div>
 		</form>
@@ -313,7 +313,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		if(dijit.byId('frm_add_tran').validate()) {
 			dijit.byId("save_new").attr("disabled",true);	
 			dijit.byId("save_close").attr("disabled",true);	
-			var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'add')); ?>';
+			var url_submit = '<?php echo $this->url(array('module'=>'incomeexpense','controller'=>'income','action'=>'add')); ?>';
 			loading();
 			dojo.xhrPost({
 				url: url_submit,	
@@ -321,7 +321,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 				load: function(data) {
 					document.getElementsByClassName("overlay")[0].style.display="none";	
 					alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-					window.location.href ="<?php echo $this->baseUrl();?>/registrar/income";
+					window.location.href ="<?php echo $this->baseUrl();?>/incomeexpense/income";
 				},
 				error: function(e) {
 				}
@@ -332,7 +332,7 @@ function submitDataAddNew(){
 		if(dijit.byId('frm_add_tran').validate()) {
 			dijit.byId('savenew').set('disabled',true);
 			
-			var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'add')); ?>';
+			var url_submit = '<?php echo $this->url(array('module'=>'incomeexpense','controller'=>'income','action'=>'add')); ?>';
 			loading();
 			dojo.xhrPost({
 				url: url_submit,	
@@ -340,7 +340,7 @@ function submitDataAddNew(){
 				load: function(data) {
 					document.getElementsByClassName("overlay")[0].style.display="none";		
 					alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-					window.location.href ="<?php echo $this->baseUrl();?>/registrar/income/add";
+					window.location.href ="<?php echo $this->baseUrl();?>/incomeexpense/income/add";
 				},
 				error: function(e) {
 				}
@@ -360,7 +360,7 @@ require(["dojo/ready"], function(ready){
 function filterClient(){
 	getbranchinfo();
 }
-var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
+var url_getbranch = "<?php echo $this->url(array('module'=>'incomeexpense','controller'=>'register','action'=>'getbranchinfo')); ?>";
 function getbranchinfo(){
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id != ""){
