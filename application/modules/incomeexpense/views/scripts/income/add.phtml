@@ -1,8 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$rows =$this->branch;
-	
-	
 ?>
 <title><?php echo $tr->translate("ADD_OTHER_INCOME")?></title>
 <style>	
@@ -221,7 +219,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 	}
 	function setReadonlyCheqe(){
 		payment_method = dijit.byId('payment_method').get('value');
-		if(payment_method == 3){
+		if(payment_method == 2){
 			dijit.byId("cheqe_no").set('readOnly',false);
 		}else{
 			dijit.byId('cheqe_no').attr('value','');

@@ -106,7 +106,7 @@ class Incomeexpense_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		total_amount,cheqe_no,description,DATE,status
 		";
 		
-		//$sql.=$dbp->caseStatusShowImage("ln_income.status");
+		$sql.=$dbp->caseStatusShowImage("ln_income.status");
 		$sql.=" FROM ln_income ";
 		
 		$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";

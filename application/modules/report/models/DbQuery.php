@@ -1060,7 +1060,7 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
 		(SELECT category_name FROM rms_cate_income_expense WHERE rms_cate_income_expense.id = cate_income LIMIT 1) AS cate_income, 
 		(SELECT category_name FROM rms_cate_income_expense WHERE rms_cate_income_expense.id = cate_income LIMIT 1) AS income_category,
 		(SELECT payment_name FROM `tb_paymentmethod` WHERE payment_typeId=payment_method LIMIT 1) AS paymentmethod,
-		(SELECT fullname FROM `tb_acl_user`  WHERE id = user_id LIMIT 1)  AS user_name
+		(SELECT fullname FROM `tb_acl_user`  WHERE user_id= user_id LIMIT 1)  AS user_name
 	  	 FROM ln_income 
     			WHERE 
     				1 ";
