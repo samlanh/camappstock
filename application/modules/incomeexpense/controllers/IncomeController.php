@@ -1,0 +1,176 @@
+<?php
+
+class Incomeexpense_IncomeController extends Zend_Controller_Action
+{
+    public function init()
+    {
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	header('content-type: text/html; charset=utf8');
+    	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    }
+	public function indexAction()
+    { 
+    	try{
+    		$db = new Incomeexpense_Model_DbTable_DbIncome();
+    		if($this->getRequest()->isPost()){
+    			$search=$this->getRequest()->getPost();
+    		}
+    		else{
+    			$search = array(
+    					"adv_search"=>'',
+    					"cate_income"=>'',
+    					"currency_type"=>-1,
+    					"branch_id"=>'',
+    					"status"=>-1,
+    					'start_date'=> date('Y-m-d'),
+    					'end_date'=>date('Y-m-d'),
+    			);
+    		}
+    		
+    		$this->view->adv_search = $search;
+    		$_db = new Application_Model_DbTable_DbGlobal();
+			$rs_rows= $db->getAllIncome($search);
+    		$list = new Application_Form_Frmtable();
+    		$collumns = array("BRANCH","INCOME_CATEGORY","INCOME_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_INCOME","CHEQUE_NO","NOTE","PAID_DATE","STATUS");
+    		$link=array(
+    				'module'=>'incomeexpense','controller'=>'income','action'=>'edit',
+    		);
+    		$this->view->list=$list->getCheckList(10, $collumns,$rs_rows,array('branch_name'=>$link,'cate_name'=>$link,'title'=>$link,'invoice'=>$link,'payment_method'=>$link));
+    	}catch (Exception $e){
+    		Application_Form_FrmMessage::message("Application Error");
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+		
+		
+    	$form=new Incomeexpense_Form_FrmSearchInfor();
+    	$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($form);
+    	$this->view->form_search=$form;
+		
+    }
+   
+    public function addAction()
+    {
+
+    	if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Incomeexpense_Model_DbTable_DbIncome();				
+			try {
+				$db->addIncome($data);
+				if(!empty($data['saveclose'])){
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/incomeexpense/income");
+				}else{
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/incomeexpense/income/add");
+				}				
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/incomeexpense/income/add");
+			} catch (Exception $e) {
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+		
+
+    	$db = new Incomeexpense_Model_DbTable_DbIncome();
+    	$rs = $db->getPaymentMethod(); 
+
+    	$this->view->payment_method = $rs;
+    	
+      	$_db = new Incomeexpense_Model_DbTable_DbCateIncome();
+    	$cate_income = $_db->getParentCateIncome();
+    	array_unshift($cate_income, array('id'=>'-1','name'=>$this->tr->translate("ADD_NEW")));
+    	array_unshift($cate_income, array('id'=>'0','name'=>$this->tr->translate("SELECT_CATEGORY")));
+    	$this->view->cate_income = $cate_income;
+    	$this->view->parent = $_db->getParentCateIncome();
+			
+    	
+    	$db = new Incomeexpense_Model_DbTable_DbIncome();
+    	$rs= $db->getAllBranch();
+    	$this->view->branch= $rs;
+
+    	
+    }
+    public function editAction()
+    {
+    	if($this->getRequest()->isPost()){
+    		$id = $this->getRequest()->getParam('id');
+			$data=$this->getRequest()->getPost();	
+			$data['id']=$id;
+			$db = new Incomeexpense_Model_DbTable_DbIncome();				
+			try {
+				$db->updateIncome($data);				
+				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', "/incomeexpense/income");		
+			} catch (Exception $e) {
+				Application_Form_FrmMessage::message("APPLICATION_ERRRO");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+		
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$id = $this->getRequest()->getParam('id');
+		$db = new Incomeexpense_Model_DbTable_DbIncome();
+		$row  = $db->getIncomeById($id);
+		
+		$session_user=new Zend_Session_Namespace('auth');
+		$user_type_id = $session_user->level;
+		$payment_date = date("Y-m-d",strtotime($row['date']));
+		$current_date = date("Y-m-d");
+		if($user_type_id!=1 AND $current_date>$payment_date){
+			Application_Form_FrmMessage::Sucessfull("you data is more then a day.so can not edit",'/registrar/income');
+		}
+		
+		$this->view->rs = $row;
+    	$db = new Incomeexpense_Model_DbTable_DbIncome();
+    	$rs = $db->getPaymentMethod(); 
+    	$this->view->payment_method = $rs;
+    	 
+    	$_db = new Incomeexpense_Model_DbTable_DbCateIncome();
+    	$cate_income = $_db->getParentCateIncome();
+    	array_unshift($cate_income, array('id'=>'-1','name'=>$this->tr->translate("ADD_NEW")));
+    	array_unshift($cate_income, array('id'=>'0','name'=>$this->tr->translate("SELECT_CATEGORY")));
+    	$this->view->cate_income = $cate_income;
+    	$this->view->parent = $_db->getParentCateIncome();
+    	
+    	
+    	
+    	$db = new Incomeexpense_Model_DbTable_DbIncome();
+    	$branch_income= $db->getAllBranch();
+    	$this->view->branch_name = $branch_income;
+    	
+    	//$frmpopup = new Application_Form_FrmPopupGlobal();
+    	//$this->view->officailreceipt = $frmpopup->receiptOtherIncome();
+    	
+    	//$key = new Application_Model_DbTable_DbKeycode();
+    //	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    }
+    function getReceiptNumberAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+	    	$db = new Incomeexpense_Model_DbTable_DbIncome();
+	    	$branch_id = empty($data['branch_id'])?null:$data['branch_id'];
+	    	$receipt = $db->getRecieptNo($branch_id);
+	    	print_r(Zend_Json::encode($receipt));
+	    	exit();
+    	}
+    }
+    function addCateIncomeAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    		$db = new Incomeexpense_Model_DbTable_DbIncome();
+    		$cate_income = $db->addNewCateIncome($data);
+    		print_r(Zend_Json::encode($cate_income));
+    		exit();
+    	}
+    }
+
+/*
+	function getbranchinfoAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Form_FrmGlobal();
+			$rows = $db->getHeaderReceipt($data['branch_id']);
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
+	*/
+}

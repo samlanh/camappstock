@@ -126,6 +126,19 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 //     	if(!$row) return false;
 //     	return $row;    	
 //     }
+
+
+public  function caseStatusShowImage($status="status"){
+	$base_url = Zend_Controller_Front::getInstance()->getBaseUrl();
+		$imgnone='<img src="'.$base_url.'/images/icon/cross.png"/>';
+		$imgtick='<img src="'.$base_url.'/images/icon/apply2.png"/>';
+		$string=", CASE
+			WHEN  $status = 1 THEN '$imgtick'
+			WHEN  $status = 0 THEN '$imgnone'
+			END AS status ";
+	return $string;
+}
+
     function getPurchaseCode(){
     	$db = $this->getAdapter();
     	$sql="SELECT COUNT(id) FROM `tb_purchase_order` LIMIT 1";

@@ -1,0 +1,219 @@
+<?php
+class Incomeexpense_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
+{
+	protected $_name = 'ln_income';
+	
+	public function getUserId(){
+		$session_user=new Zend_Session_Namespace('auth');
+		return $session_user->user_id;
+	}
+	public function getBranchId(){
+		$session_user=new Zend_Session_Namespace('auth');
+		return $session_user->branch_id;
+	}	
+
+	function getAllBranch(){
+    	$db = $this->getAdapter();
+    	$sql="SELECT * FROM `tb_sublocation` WHERE STATUS=1 ";
+    	return $db->fetchAll($sql);
+    } 
+
+	function addIncome($data){
+		
+		
+	    $receipt_no = $this->getRecieptNo($data['branch_id']);
+		
+		$array = array(
+				'branch_id'		=>$data['branch_id'],
+				'title'			=>$data['title'],
+				'cate_income'	=>$data['cate_income'],
+				'total_amount'	=>$data['total_income'],
+				'invoice'		=>$receipt_no,
+				'payment_method'=>$data['payment_method'],
+				'cheqe_no'		=>$data['cheqe_no'],
+				'description'	=>$data['note'],
+				'date'			=>$data['date'],
+				'user_id'		=>$this->getUserId(),
+				'create_date'	=>date('Y-m-d'),
+			);
+		$this->insert($array);
+ 	} 	
+	
+	
+	 public function getRecieptNo($branch=0){
+    	$db = $this->getAdapter();
+    	if($branch==0){
+    		$_db = new Application_Model_DbTable_DbGlobal();
+    		$branch_id = $_db->getAccessPermission();
+    	}else{
+    		$branch_id = " and branch_id = $branch ";
+    	}
+    	
+    	$sql1="SELECT count(id)  FROM ln_income where 1 $branch_id LIMIT 1 ";
+    	$income_no = $db->fetchOne($sql1);
+    	$new_acc_no= (int)$income_no +  1;
+    	$acc_length = strlen((int)$new_acc_no+1);
+    	$pre=0;
+    	for($i = $acc_length;$i<5;$i++){
+    		$pre.='0';
+    	}
+    	return $pre.$new_acc_no;
+    }
+
+	function updateIncome($data){
+		$arr = array(
+				'branch_id'		=>$data['branch_id'],
+				'title'			=>$data['title'],
+				'cate_income'	=>$data['cate_income'],
+				'total_amount'	=>$data['total_income'],
+				'invoice'		=>$data['invoice'],
+				'payment_method'=>$data['payment_method'],
+				'cheqe_no'		=>$data['cheqe_no'],
+				'description'	=>$data['note'],
+				'date'			=>$data['date'],
+				'status'		=>$data['status'],
+				'user_id'		=>$this->getUserId(),
+			);
+		$where=" id = ".$data['id'];
+		$this->update($arr, $where);
+	}
+	
+	function getIncomeById($id){
+		$db = $this->getAdapter();
+		$sql=" SELECT * FROM ln_income where id=$id ";
+		return $db->fetchRow($sql);
+	}
+	function getAllIncome($search=null){
+		$db = $this->getAdapter();
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$lang = $dbp->currentlang();
+		if($lang==1){// khmer
+			$label = "name_kh";
+			$branch = "branch_namekh";
+		}else{ // English
+			$label = "name_en";
+			$branch = "branch_nameen";
+		}
+		
+		
+		$sql=" SELECT id,
+		(SELECT NAME FROM `tb_sublocation` WHERE tb_sublocation.id =branch_id LIMIT 1) AS branch_name,
+		(SELECT cate.category_name FROM rms_cate_income_expense AS cate WHERE cate.id = cate_income) AS cate_name,
+		title,
+		invoice,
+		(SELECT payment_name FROM `tb_paymentmethod` WHERE tb_paymentmethod.payment_typeId=payment_method ) AS payment_method,
+		total_amount,cheqe_no,description,DATE,status
+		";
+		
+		$sql.=$dbp->caseStatusShowImage("ln_income.status");
+		$sql.=" FROM ln_income ";
+		
+		$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
+		$where = " WHERE ".$from_date." AND ".$to_date;
+		
+		if (!empty($search['adv_search'])){
+			$s_where = array();
+			$s_search = trim(addslashes($search['adv_search']));
+			//$s_where[] = " account_id LIKE '%{$s_search}%'";
+			$s_where[] = " title LIKE '%{$s_search}%'";
+			$s_where[] = " total_amount LIKE '%{$s_search}%'";
+			$s_where[] = " invoice LIKE '%{$s_search}%'";
+			$where .=' AND ('.implode(' OR ',$s_where).')';
+		}
+		if(!empty($search['cate_income'])){
+			$where.= " AND cate_income = ".$search['cate_income'];
+		}
+		if(!empty($search['branch_id'])){
+			$where.= " AND branch_id = ".$search['branch_id'];
+		}
+		if($search['status']>-1){
+			$where.= " AND status = ".$search['status'];
+		}
+        $order=" order by id desc ";
+		return $db->fetchAll($sql.$where.$order);
+	}
+
+	function getAllExpenseReport($search=null){
+		$db = $this->getAdapter();
+		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+		$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
+		$where = " WHERE ".$from_date." AND ".$to_date;
+	
+		$sql=" SELECT id,
+		(SELECT branch_namekh FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
+		account_id,
+		(SELECT symbol FROM `ln_currency` WHERE ln_currency.id =curr_type) AS currency_type,invoice,
+		curr_type,
+		total_amount,disc,date,status FROM $this->_name ";
+	
+		if (!empty($search['adv_search'])){
+			$s_where = array();
+			$s_search = trim(addslashes($search['adv_search']));
+			$s_where[] = " account_id LIKE '%{$s_search}%'";
+			$s_where[] = " title LIKE '%{$s_search}%'";
+			$s_where[] = " total_amount LIKE '%{$s_search}%'";
+			$s_where[] = " invoice LIKE '%{$s_search}%'";
+			
+			$where .=' AND ('.implode(' OR ',$s_where).')';
+		}
+		if($search['status']>-1){
+			$where.= " AND status = ".$search['status'];
+		}
+		if($search['currency_type']>-1){
+			$where.= " AND curr_type = ".$search['currency_type'];
+		}
+		$order=" order by id desc ";
+		return $db->fetchAll($sql.$where.$order);
+	}
+
+	function getReceiptNumber($branch_id,$type){  // $type==1 => select from rms_income , $type==2 => select from rms_expense
+		$db = $this->getAdapter();
+		if($type==1){
+			$table = 'ln_income';
+		}else{
+			$table = 'ln_expense';
+		}
+		$sql="select count(id) from $table where branch_id = $branch_id limit 1 ";
+		$id = $db->fetchOne($sql);
+		$id = $id + 1;
+		$length = strlen($id) + 1;
+		$pre = '';
+		for($i=$length;$i<=6;$i++){
+			$pre.='0';
+		}
+		return $pre.$id;
+	}
+	function getInvoiceNo(){
+		$db = $this->getAdapter();
+		$sql = " select count(id) from ln_income ";
+		$amount = $db->fetchOne($sql);
+	}
+
+	
+	function getPaymentMethod(){ 
+		$db=$this->getAdapter();
+		$sql="SELECT * FROM `tb_paymentmethod`";
+		return $db->fetchAll($sql);
+	}
+	
+	function getCateIncome(){ // $type = rms_view type
+		$db=$this->getAdapter();
+		$sql="SELECT id,category_name as name FROM rms_cate_income_expense WHERE status=1 AND parent=1 and category_name!='' ";
+		return $db->fetchAll($sql);
+	}
+	
+	function addNewCateIncome($data){
+		$this->_name="rms_cate_income_expense";
+		$array = array(
+				'category_name'	=>$data['cate_title'],
+				'parent'		=>$data['parent'],
+				'account_code'	=>$data['acc_code'],
+				'create_date'	=>date('Y-m-d'),
+				'user_id'		=>$this->getUserId(),
+				);
+		return $this->insert($array);
+	}
+}
