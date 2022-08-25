@@ -1090,6 +1090,46 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
     	$where.= $_db->getAccessPermission();
     	return $db->fetchAll($sql.$where.$order);
 	}
+
+	function getAllIncomebycate($search){
+		$db=$this->getAdapter();
+    	$_db  = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	$sql = "SELECT
+		(SELECT category_name FROM rms_cate_income_expense WHERE rms_cate_income_expense.id = cate_income LIMIT 1) AS cate_income,
+		SUM(total_amount) AS total_income
+	   	FROM 
+			ln_income 
+		WHERE status=1 ";
+    	
+    	$where= ' ';
+    	
+    	
+    	$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
+    	$where .= "  AND ".$from_date." AND ".$to_date;
+
+		
+
+    	if(!empty($search['cate_income'])){
+    		$where.=" AND cate_income = ".$search['cate_income'] ;
+    	}
+    	
+    	if(!empty($search['txtsearch'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['txtsearch']));
+    		$s_search = str_replace(' ', '', addslashes(trim($search['txtsearch'])));
+    		$s_where[] = " REPLACE(title,' ','') LIKE '%{$s_search}%'";
+    		$s_where[] = " REPLACE(invoice,' ','') LIKE '%{$s_search}%'";
+    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+		
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$where.= $_db->getAccessPermission();
+		$order=" GROUP BY cate_income";
+		
+    	return $db->fetchAll($sql.$where.$order);
+	}
 	function getAllExpense($search){
 		$db=$this->getAdapter();
 		$sql = "SELECT e.*,
