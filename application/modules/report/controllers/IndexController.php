@@ -609,7 +609,8 @@ class report_indexController extends Zend_Controller_Action
     	else{
     		$search = array(
     				"adv_search"=>'',
-    				"branch_id"=>-1,
+    				"branch_id"=>'',
+					'cate_income'=>'',
     				'title'=>-1,
     				"status"=>-1,
     				'start_date'=> date('Y-m-d'),
@@ -622,10 +623,13 @@ class report_indexController extends Zend_Controller_Action
     	$this->view->rstransport = $db->getAllTransportfee($search);
     	
      	$this->view->rscost = $db->getAllCostPrice($search);
+		$this->view->incomebycate = $db->getAllIncomebycate($search);
     	$this->view->list_end_date = $search;
-    	$formFilter = new Application_Form_Frmsearch();
-    	$this->view->formFilter = $formFilter;
-    	Application_Model_Decorator::removeAllDecorator($formFilter);
+    	
+		$form = new Application_Form_FrmSearchGb();
+    	$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
     }
 	function rptSaleitemqtyAction(){
     	if($this->getRequest()->isPost()){
