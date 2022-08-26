@@ -1,0 +1,14 @@
+<?php 					
+	$url_new = $this->url(array('module'=>'incomeexpense','controller'=>'expensetitle','action'=>'add',));
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$formFilter = $this->formFilter;
+?>
+<title><?php echo $tr->translate("EXPENSE_TITLE");?></title>
+<meta charset="utf-8" />
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+			<?php echo $this->list; ?>
+		</div>
+	</div>
+</div>

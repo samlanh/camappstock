@@ -1,0 +1,177 @@
+<?php 
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$frm = $this->frm_expense;
+?>
+<title><?php echo $tr->translate("EDIT_EXPENSE");?></title>
+<script src="<?php echo $this->baseUrl()?>/js/help.js"  type="text/javascript"></script>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content">
+		<div class="card-box">
+            <div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-cube" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_EXPENSE');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right"></div>
+    		</div>
+    	</div>
+		<div class="card-box">
+			<form dojoType="dijit.form.Form" id="frm"  class="form-horizontal" enctype="multipart/form-data" method="post">
+				<script type="dojo/method" event="onSubmit">			
+					if(this.validate()) {
+						expense_type=dijit.byId("title").get('value');
+						if(expense_type=='' || expense_type==-1 || expense_type==0){
+							alert("Please select expense type");
+							dijit.byId('title').focus();
+							return false;	
+						}
+               			loadingBlock();
+						return true;
+					}else{
+						return false;
+					}
+				</script>
+				<div class="col-md-6">
+					<div class="form-group">
+						<div class=" col-md-4"><?php echo $tr->translate("BRANCH_NAME");?></div>
+						<div class="col-md-8"><?php echo $frm->getElement("branch_id");?>
+							<?php echo $frm->getElement('id');?>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class=" col-md-4"><?php echo $tr->translate("DATE")?></div>
+						<div class="col-md-8"><?php echo $frm->getElement('Date');?></div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"><?php echo $tr->translate("INVOICE_NO")?></div>
+						<div class="col-md-8"><?php echo $frm->getElement('invoice');?></div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"><?php echo $tr->translate("TITLE")?></div>
+						<div class="col-md-8"><?php echo $frm->getElement('expense_title');?></div>
+					</div>
+					
+					<div class="form-group">
+						<div class="col-md-4"><?php echo $tr->translate("EXPENSE_TITLE")?></div>
+						<div class="col-md-6">
+							<input id="title" />
+						</div>
+						<div class="col-md-2">
+							<input iconClass="dijitIconUndo" type="button" label="Refresh" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"><?php echo $tr->translate("CURRENCY_TYPE")?></div>
+						<div class="col-md-8"><?php echo $frm->getElement('currency_type'); ?></div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"><?php echo $tr->translate("EXCHANGE_RATE")?>($-B)</div>
+						<div class="col-md-4"><?php echo $frm->getElement('dollar');?></div>
+						<div class="col-md-4"><?php echo $frm->getElement('exchangetobath');?></div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"><?php echo $tr->translate("EXPENSE_AMOUNT")?></div>
+						<div class="col-md-8"><?php echo $frm->getElement('received_dollar'); ?></div>
+						<div style="display: none;"><?php echo $frm->getElement('received_bath'); ?></div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4"><?php echo $tr->translate("TOTAL_EXPENSE")?></label>
+						<div class="col-md-8"><?php echo $frm->getElement('total_amount');?></div>
+					</div>
+					<div class="form-group">
+						<div class=" col-md-4"><?php echo $tr->translate("NOTE")?></div>
+						<div class="col-md-8"><?php echo $frm->getElement('Description');?></div>
+					</div>
+					<div class="form-group">
+						<div class=" col-md-4"><?php echo $tr->translate("STATUS")?></div>
+						<div class="col-md-8"><?php echo $frm->getElement('Stutas');?></div>
+					</div>
+					<div class="form-group">
+						<div class="form-group">
+							<label  class="col-md-12 col-md-offset-4 col-md-8">
+								<button type="submit" name="btnsavenew" class="btn btn-primary"><i class="fa fa-save"></i> រក្សាទុក/បន្ថែមថ្មី </button>
+							</label>
+						</div>
+					</div>
+					</div>
+					<div class="col-md-6"></div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+dojo.require("dojo.data.ItemFileWriteStore"); 
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.NumberTextBox");
+
+function filterClient(){
+}
+var category_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->all_category));?> );
+require(["dojo/ready"], function(ready){
+	ready(function(){
+			dijit.byId('title').attr('value','<?php echo $this->row['title'];?>');
+	  });
+	  
+	new dijit.form.FilteringSelect({
+		name: "title",
+		id: "title",
+		store: category_store,
+		autoComplete: false,
+		queryExpr: "*${0}*", 
+		required: false,
+		searchAttr: "name",
+		class: 'fullside',
+		onChange: function(){
+			title=dijit.byId('title').get('value');
+			if(title==-1){
+			}
+			
+	    }
+		}, "title");
+
+	
+});
+
+function CalculateReceived(){
+	received_dollar = dijit.byId("received_dollar").get('value');
+	
+	if(isNaN(received_dollar) || received_dollar==''){received_dollar=0;}
+	exchagne_rate = dijit.byId("exchangetobath").get('value');
+	if(isNaN(exchagne_rate) || exchagne_rate==''){exchagne_rate=0;}
+	currency_type = dijit.byId("currency_type").get('value');
+	if(currency_type==2){//riel
+		if(exchagne_rate==0){
+			dijit.byId("total_amount").attr('value',received_dollar);
+		}else{
+			total_amount = ((received_dollar/exchagne_rate)).toFixed(2);
+			dijit.byId('total_amount').attr('value',total_amount);
+			$("#total_amount").val(total_amount);
+		}
+	}else if(currency_type==1){
+		$("#total_amount").val(received_dollar);
+	}	
+}
+function showexpense(){
+	title = dijit.byId("title").get('value');
+	if(title==-1){
+		window.open('<?php echo $this->baseUrl();?>/incomeexpense/expensetitle/add?rightclick=true','_blank');
+	}
+}
+<?php $url_add_new =  $this->url(array('module'=>'incomeexpense','controller'=>'expensetitle','action'=>'getexpensecate')); ?>
+function AllRefresh(){
+	loadingBlock();
+	$.ajax({
+        url: "<?php echo $url_add_new;?>",
+        type: "post",
+        data:'',
+        success: function(data){
+	      data = $.parseJSON(data);
+	      cate_store  = getDataStorefromJSON('id','name',data);
+		  dijit.byId('title').set('store',cate_store); 
+		  HideloadingBlock(); 
+        },
+        error:function(){
+        }
+    });	
+}
+
+</script>
