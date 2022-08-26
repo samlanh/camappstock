@@ -66,7 +66,6 @@ class Sales_PossaleController extends Zend_Controller_Action
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_agreement = $db->getAllSaleAgreement();
 		$this->view->rs_staff = $db->getSaleAgent();
-		//print_r($db->getSaleAgent());exit();
 		
 // 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->invoice = $db->getSalesNumber(1);
@@ -121,6 +120,11 @@ class Sales_PossaleController extends Zend_Controller_Action
 		$rs = $query->getInvoiceById($id);
 		$this->view->rs = $rs;
 		$this->view->rsdetail =  $query->getInvoiceDetailById($id);
+		
+		$receiptId = $query->getCountReceiptbySale($id);
+		if($receiptId>1){
+			Application_Form_FrmMessage::Sucessfull("ធ្លាប់បានទទួលប្រាក់ច្រើនដងរួមមកហើយ មិនអាចកែបានទេ", "/sales/index");
+		}
 		if(empty($rs)){
 			$this->_redirect("/sales/index");
 		}
