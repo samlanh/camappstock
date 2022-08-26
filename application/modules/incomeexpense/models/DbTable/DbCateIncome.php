@@ -4,13 +4,21 @@ class Incomeexpense_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
 	protected $_name = 'rms_cate_income_expense';
 	
 	public function getUserId(){
-		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+		$session_user=new Zend_Session_Namespace('auth');
 		return $session_user->user_id;
 	}
 	
 	public function getBranchId(){
-		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+		$session_user=new Zend_Session_Namespace('auth');
 		return $session_user->branch_id;
+	}
+
+	public function getCateIcome(){
+		$db = $this->getAdapter();
+		$sql = "SELECT id, category_name, account_code,
+		(SELECT category_name FROM `rms_cate_income_expense` WHERE rms_cate_income_expense.id = parent LIMIT 1) AS parent_name, status
+		 FROM `rms_cate_income_expense` WHERE STATUS=1 ";
+		return $db->fetchAll($sql);
 	}
 	
 	function getAllCateIncome($search=null,$parent = 0, $spacing = '', $cate_tree_array = ''){
@@ -80,7 +88,7 @@ class Incomeexpense_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
 			$arr = array(
 					'category_name'	=>$data['title'],
 					'parent'		=>$data['parent'],
-					'account_code'	=>$data['acc_code'],
+					'account_code'	=>$data['account_code'],
 					'status'		=>$data['status'],
 					'user_id'		=>$this->getUserId(),
 				);
