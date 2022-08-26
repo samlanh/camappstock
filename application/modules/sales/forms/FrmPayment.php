@@ -131,7 +131,7 @@ class Sales_Form_FrmPayment extends Zend_Form
     			'dojoType'=>"dijit.form.NumberTextBox",
     			'class'=>'fullside',
     			"onkeyup"=>"paidtotal(1);",
-    			'require'=>true,"placeHolder"=>"Paid in Dollar"));
+    			'require'=>true));
     	$this->addElement($paid_dollar);
     	
     	$paid_riel = new Zend_Form_Element_Text('paid_riel');
@@ -147,7 +147,7 @@ class Sales_Form_FrmPayment extends Zend_Form
     			'dojoType'=>"dijit.form.TextBox",
 				'class'=>'fullside',	
     			'readonly'=>'readonly'));
-    	$exchange_value = 4100;
+    	$exchange_value = 1;
     	$exchange_rate->setValue($exchange_value);
     	$this->addElement($exchange_rate);
     	

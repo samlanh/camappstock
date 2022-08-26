@@ -185,6 +185,12 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 			Application_Model_DbTable_DbUserLog::writeMessageError($err);
 		}
 	}
+	function getCountReceiptbySale($saleId){
+		$sql="SELECT COUNT(id) 
+			FROM tb_receipt_detail 
+				WHERE invoice_id=$saleId ";
+		return $this->getAdapter()->fetchOne($sql);
+	}
 	function editSale($data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();

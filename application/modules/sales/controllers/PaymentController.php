@@ -58,11 +58,7 @@ class Sales_PaymentController extends Zend_Controller_Action
 				if(!empty($data['identity'])){
 					$dbq->addReceiptPayment($data);
 				}
-				Application_Form_FrmMessage::message("INSERT_SUCESS");
-				if(!empty($data['btnsavenew'])){
-					Application_Form_FrmMessage::redirectUrl("/sales/payment/add");
-				}
-				Application_Form_FrmMessage::redirectUrl("/sales/payment/index");
+				Application_Form_FrmMessage::Sucessfull('INSERT_SUCESS', "/sales/payment/add");
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message('INSERT_FAIL');
 				$err =$e->getMessage();
