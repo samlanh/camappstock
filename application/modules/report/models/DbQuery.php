@@ -1109,6 +1109,7 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
     	$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
     	$where .= "  AND ".$from_date." AND ".$to_date;
 
+
 		
 
     	if(!empty($search['cate_income'])){
@@ -1127,7 +1128,7 @@ Class report_Model_DbQuery extends Zend_Db_Table_Abstract{
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$where.= $_db->getAccessPermission();
 		$order=" GROUP BY cate_income";
-		
+	
     	return $db->fetchAll($sql.$where.$order);
 	}
 	function getAllExpense($search){
@@ -1277,7 +1278,7 @@ SUM(vp.paid) AS total_paid
 		if(!empty($search['user'])){
 			$where.=" AND e.user_id = ".$search['user'] ;
 		}
-		if($search['branch_id']>-1){
+		if(!empty($search['branch_id'])){
 			$where.= " AND branch_id = ".$search['branch_id'];
 		}
 		if($search['title']>-0){

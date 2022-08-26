@@ -26,8 +26,8 @@ class Report_IncomereportController extends Zend_Controller_Action
     		else{
     			$search = array(
     					"adv_search"=>'',
-    					"branch_id"=>-1,
-    					'cate_income'=>-1,
+    					"branch_id"=>'',
+    					'cate_income'=>'',
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),
     			);
