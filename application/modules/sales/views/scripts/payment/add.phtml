@@ -15,7 +15,27 @@
     			<div class="col-sm-4 text-right"></div>
     		</div>
     	</div>
-			<form id="frm" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post">
+			<form dojoType="dijit.form.Form"  id="frm" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post">
+				
+			<script type="dojo/method" event="onSubmit">   
+   	if(this.validate()) {
+		customer_id = dijit.byId("customer_id").get("value");
+		if(customer_id==0){
+			alert("Select Cutomer");
+			dijit.byId('customer_id').focus();
+			return false;
+		}
+		identity = $("#identity").val();
+		if(identity==''){
+			alert('No record');
+			return false;
+		}
+		dijit.byId('btnsavenew').set('Disabled',true);
+    	return true;
+   }else {
+    	return false;
+   }
+	</script>
 				<div class="col-md-4">	
 					<div class="form-group">
 						<div class="col-md-4">
@@ -72,7 +92,7 @@
 						<div class="col-md-4">
 								<?php echo $form->getElement("paid_dollar");?>
 						</div>	
-						<div class="col-md-4">
+						<div class="col-md-4" style="display: none;">
 								<?php echo $form->getElement("paid_riel");?>
 						</div>
 					</div>
@@ -213,8 +233,9 @@ function getInvoice(type){
 					if(data[i].paid==null){
 						data[i].paid=0;
 					}
+					balance = data[i].net_total - data[i].paid;
 					template+='<td>'+data[i].paid+'<input type="hidden" value='+data[i].paid+' id="paid_amount'+index+'" name="paid_amount'+index+'"/></td>';
-					template+='<td>'+data[i].all_totalafter+'<input type="hidden" value='+data[i].all_totalafter+' id="balance_after'+index+'" name="balance_after'+index+'"/></td>';
+					template+='<td>'+balance+'<input type="hidden" value='+balance+' id="balance_after'+index+'" name="balance_after'+index+'"/></td>';
 					
 					if($('#identity').val()!="") {
 						var identity = $('#identity').val();
