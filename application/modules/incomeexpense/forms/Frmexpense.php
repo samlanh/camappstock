@@ -134,6 +134,8 @@ Class Incomeexpense_Form_Frmexpense extends Zend_Form {
 			'dojoType'=>"dijit.form.TextBox",
 			'class'=>'fullside',	
 		));
+		$invoiceNO = $db->getExpenseCode();
+		$invoice->setValue($invoiceNO);
 		
 		$id = new Zend_Form_Element_Hidden("id");
 		$_currency_type = new Zend_Form_Element_Select('currency_type');
