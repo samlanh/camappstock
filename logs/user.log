@@ -13,3 +13,9 @@
 [2022-08-26 17:15:33] user name=>admin module=>incomeexpensecontroller name=>:cateincome action =>index error name=>SQLSTATE[42S22]: Column not found: 1054 Unknown column 't.title' in 'field list'
 [2022-08-26 17:16:13] user name=>admin module=>incomeexpensecontroller name=>:cateincome action =>index error name=>SQLSTATE[42S22]: Column not found: 1054 Unknown column 't.title' in 'field list'
 [2022-08-26 17:16:16] user name=>admin module=>incomeexpensecontroller name=>:cateincome action =>index error name=>SQLSTATE[42S22]: Column not found: 1054 Unknown column 't.title' in 'field list'
+[2022-09-05 10:56:13] user name=>admin module=>incomeexpensecontroller name=>:income action =>index error name=>SQLSTATE[42S02]: Base table or view not found: 1146 Table 'db_stocknew.ln_income' doesn't exist
+[2022-09-05 11:00:19] user name=>admin module=>incomeexpensecontroller name=>:income action =>index error name=>SQLSTATE[42S02]: Base table or view not found: 1146 Table 'db_stocknew.rms_cate_income_expense' doesn't exist
+[2022-09-05 11:00:22] user name=>admin module=>incomeexpensecontroller name=>:income action =>index error name=>SQLSTATE[42S02]: Base table or view not found: 1146 Table 'db_stocknew.rms_cate_income_expense' doesn't exist
+[2022-09-05 11:00:25] user name=>admin module=>incomeexpensecontroller name=>:income action =>index error name=>SQLSTATE[42S02]: Base table or view not found: 1146 Table 'db_stocknew.rms_cate_income_expense' doesn't exist
+[2022-09-05 11:01:06] user name=>admin module=>incomeexpensecontroller name=>:income action =>index error name=>SQLSTATE[42S02]: Base table or view not found: 1146 Table 'db_stocknew.rms_cate_income_expense' doesn't exist
+[2022-09-05 11:01:10] user name=>admin module=>incomeexpensecontroller name=>:income action =>index error name=>SQLSTATE[42S02]: Base table or view not found: 1146 Table 'db_stocknew.rms_cate_income_expense' doesn't exist
