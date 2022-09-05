@@ -116,7 +116,7 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 						"payment_type"  => 	1,
 						"payment_id"    => 	1,
 						"receipt_no"    => 	$data['receipt'],
-						"receipt_date"  =>  date("Y-m-d"),
+						"receipt_date"  =>  $data['sale_date'],////date("Y-m-d"),//
 						"date_input"    =>  date("Y-m-d"),
 						"total"         => 	$data['total_dollar'],
 						"paid"          => 	$data["total_paid"],
@@ -266,7 +266,7 @@ class Sales_Model_DbTable_Dbpos extends Zend_Db_Table_Abstract
 						"payment_type"  => 	1,//payment by customer/invoice
 						"payment_id"    => 	1,	//payment by cash/paypal/cheque
 						"receipt_no"    => 	$data['receipt'],
-						"receipt_date"  =>  date("Y-m-d"),
+						"receipt_date"  =>  $data['sale_date'],
 						"date_input"    =>  date("Y-m-d"),
 						"total"         => 	$data['total_dollar'],
 						"paid"          => 	$data["total_paid"],

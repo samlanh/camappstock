@@ -76,7 +76,8 @@ function getAllExpense($search=null){
 	(SELECT description FROM tb_currency WHERE tb_currency.id = curr_type LIMIT 1) as currency_type,
 	total_amount,`desc`,for_date,
 	(SELECT fullname FROM `tb_acl_user` WHERE user_id=$this->_name.user_id LIMIT 1) as user_name,
-	(SELECT tb_view.name_en FROM `tb_view` WHERE tb_view.type=5 AND tb_view.key_code=$this->_name.status LIMIT 1) as status FROM $this->_name ";
+	(SELECT tb_view.name_en FROM `tb_view` WHERE tb_view.type=5 AND tb_view.key_code=$this->_name.status LIMIT 1) as status 
+	FROM $this->_name ";
 	
 	if (!empty($search['adv_search'])){
 			$s_where = array();
@@ -89,9 +90,9 @@ function getAllExpense($search=null){
 		if($search['branch_id']>-1){
 			$where.= " AND branch_id = ".$search['branch_id'];
 		}
-// 		if($search['currency_type']>-1){
-// 			$where.= " AND curr_type = ".$search['currency_type'];
-// 		}
+		if(!empty($search['title'])){
+			$where.= " AND title = ".$search['title'];
+		}
 		$dbg = new Application_Model_DbTable_DbGlobal();
 			$where.=$dbg->getAccessPermission();
        $order=" order by id desc ";
