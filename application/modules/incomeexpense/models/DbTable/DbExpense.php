@@ -9,6 +9,13 @@ class Incomeexpense_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 	function addexpense($data){
 		$originalDate = $data['Date'];
 		$newDate = date("Y-m-d", strtotime($originalDate));
+		
+		$sql=" SELECT id FROM $this->_name WHERE invoice='".$data['invoice']."' LIMIT 1";
+		$existing = $this->getAdapter()->fetchOne($sql);
+		if(!empty($existing)){
+			$db = new Application_Model_DbTable_DbGlobal();
+			$data['invoice'] = $db->getExpenseCode();
+		}
 		$data = array(
 				'expense_title'=>$data['expense_title'],
 				'title'=>$data['title'],

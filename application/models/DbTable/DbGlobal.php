@@ -138,7 +138,19 @@ public  function caseStatusShowImage($status="status"){
 			END AS status ";
 	return $string;
 }
-
+		function getExpenseCode(){
+			$db = $this->getAdapter();
+			$sql="SELECT COUNT(id) FROM `tb_income_expense` LIMIT 1";
+			$acc_no = $db->fetchOne($sql);
+			$PO = "N";
+			$new_acc_no= (int)$acc_no+1;
+			$acc_no= strlen((int)$acc_no+1);
+			$pre='';
+			for($i = $acc_no;$i<6;$i++){
+				$pre.='0';
+			}
+			return $PO.$pre.$new_acc_no;
+		}
     function getPurchaseCode(){
     	$db = $this->getAdapter();
     	$sql="SELECT COUNT(id) FROM `tb_purchase_order` LIMIT 1";
