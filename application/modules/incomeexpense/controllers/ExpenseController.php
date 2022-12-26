@@ -22,7 +22,7 @@ class Incomeexpense_ExpenseController extends Zend_Controller_Action
     			$formdata = array(
     					"adv_search"=>'',
     					"branch_id"=>-1,
-    					'title'=>-1,
+    					'title'=>'',
     					"status"=>-1,
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),

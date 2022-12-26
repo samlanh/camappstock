@@ -1278,7 +1278,7 @@ SUM(vp.paid) AS total_paid
 		if(!empty($search['user'])){
 			$where.=" AND e.user_id = ".$search['user'] ;
 		}
-		if(!empty($search['branch_id'])){
+		if($search['branch_id']>-1){
 			$where.= " AND branch_id = ".$search['branch_id'];
 		}
 		if($search['title']>-0){
